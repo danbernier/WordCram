@@ -1,3 +1,5 @@
+package wordcram;
+
 /*
 Copyright 2010 Daniel Bernier
 
@@ -14,9 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package wordcram;
-
 public interface WordColorer {
 	public int colorFor(Word w);
 }
-

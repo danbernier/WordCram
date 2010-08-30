@@ -1,3 +1,5 @@
+package wordcram;
+
 /*
 Copyright 2010 Daniel Bernier
 
@@ -14,12 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package wordcram;
-
 import processing.core.PGraphics;
 import processing.core.PVector;
 
 public interface WordPlacer {
 	public abstract PVector place(Word word, int wordIndex, int wordsCount, int gsize, PGraphics applet);
 }
-

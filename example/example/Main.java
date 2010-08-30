@@ -1,3 +1,5 @@
+package example;
+
 /*
 Copyright 2010 Daniel Bernier
 
@@ -13,8 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-package example;
 
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -99,9 +99,9 @@ public class Main extends PApplet {
 			return w;
 		}
 		else {
-			boolean linux = true;
+			boolean linux = false;
 			String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
-			String path = projDir + "eclipse/wordler/raw/raw/tao-te-ching.txt";
+			String path = projDir + "eclipse/wordcram/trunk/example/tao-te-ching.txt";
 			return new TextSplitter().split(loadStrings(path));
 		}
 	}

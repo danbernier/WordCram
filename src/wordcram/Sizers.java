@@ -1,3 +1,5 @@
+package wordcram;
+
 /*
 Copyright 2010 Daniel Bernier
 
@@ -13,8 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-package wordcram;
 
 public class Sizers {
 	public static WordSizer byWeight(final int minSize, final int maxSize) {
@@ -38,4 +38,3 @@ public class Sizers {
 	
 	// TODO try exponent scales, rather than linear.
 }
-

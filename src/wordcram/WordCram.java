@@ -1,3 +1,5 @@
+package wordcram;
+
 /*
 Copyright 2010 Daniel Bernier
 
@@ -13,8 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-package wordcram;
 
 import processing.core.*;
 
@@ -43,7 +43,7 @@ public class WordCram {
 	 * TODO fix that offset problem, where it seems to leave swaths of empty space -- related to SpiralGenerator for offset?  
 	 * 		draw a sep. image, w/ dots for each placement.  trend hue through rank or weight, and sat. for, um, how long the 
 	 * 		search runs.  :)
-	 * TODO pick some really nice default fonts & colors for demos
+	 * TODO pick some really nice default fonts & colors for demos: check http://www.colourlovers.com/palette/1281472/Hybrid?widths=1
 	 * TODO try the other perf. improvements in the paper & book
 	 * TODO remember each Word's WordPlacement, so you can re-render easily
 	 * TODO scale the window (somehow) to fit words in, when they run off-screen 
