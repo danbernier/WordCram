@@ -29,23 +29,25 @@ limitations under the License.
 
 	<target name="compile" depends="clean">
 		<mkdir dir="build/classes" />
-		<javac srcdir="src" destdir="build/classes" classpath="${classpath}" />
+		<javac srcdir="src" destdir="build/classes" classpath="${classpath}" includeantruntime="false" />
 	</target>
 
 	<target name="test" depends="compile">
 		<mkdir dir="build/tests" />
-		<javac srcdir="test" destdir="build/tests" classpath="${classpath};${junit.jar.path};build/classes" />
-		<junit dir="build/tests" />
+		<javac srcdir="test" destdir="build/tests" classpath="${classpath};${junit.jar.path};build/classes" includeantruntime="false" />
+		<junit dir="build/tests">
+			<classpath path="${junit.jar.path}" />
+		</junit>
 	</target>
 
 	<target name="deploy" depends="test">
 		<mkdir dir="build/jar/wordcram/library" />
 		<jar destfile="build/jar/wordcram/library/wordcram.jar" basedir="build/classes" />
-		<tar destfile="build/wordcram.tar" basedir="build/jar" />
-		<zip destfile="build/wordcram.zip" basedir="build/jar" />
 	</target>
 
 	<target name="publish" depends="deploy">
+		<tar destfile="build/wordcram.tar" basedir="build/jar" />
+		<zip destfile="build/wordcram.zip" basedir="build/jar" />
 		<tstamp>
 			<format property="date" pattern="yyyyMMdd" />
 		</tstamp>
