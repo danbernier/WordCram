@@ -15,27 +15,26 @@ limitations under the License.
 -->
 
 <project default="deploy">
+
+	<property file="build.credentials.properties" />
+	<property file="build.properties" />
 	
-	<property name="classpath" value="/usr/local/lib/processing-1.1/lib/core.jar"/>
+	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${ant.googlecode.jar.path}" name="gcupload" />
 	
-	<!-- ick: -->
-	<!--<property name="junit.classpath" value="/usr/share/ant/lib/ant-junit.jar"/>-->
-	<property name="junit.classpath" value="/usr/lib/eclipse/plugins/org.junit4_4.5.0.v20090824/junit.jar"/>
-	
-	<property name="myProcessingLib" value="/home/dan/projects/javap5/libraries" />
+	<property name="classpath" value="${processing.home}/lib/core.jar" />
 
 	<target name="clean">
 		<delete dir="build" />
 	</target>
-	
+
 	<target name="compile" depends="clean">
 		<mkdir dir="build/classes" />
 		<javac srcdir="src" destdir="build/classes" classpath="${classpath}" />
 	</target>
-	
+
 	<target name="test" depends="compile">
 		<mkdir dir="build/tests" />
-		<javac srcdir="test" destdir="build/tests" classpath="${classpath};${junit.classpath};build/classes" />
+		<javac srcdir="test" destdir="build/tests" classpath="${classpath};${junit.jar.path};build/classes" />
 		<junit dir="build/tests" />
 	</target>
 
@@ -43,10 +42,28 @@ limitations under the License.
 		<mkdir dir="build/jar/wordcram/library" />
 		<jar destfile="build/jar/wordcram/library/wordcram.jar" basedir="build/classes" />
 		<tar destfile="build/wordcram.tar" basedir="build/jar" />
+		<zip destfile="build/wordcram.zip" basedir="build/jar" />
 	</target>
-	
-	<target name="updatep5" depends="deploy">
-		<copy todir="${myProcessingLib}/wordcram">
+
+	<target name="publish" depends="deploy">
+		<tstamp>
+			<format property="date" pattern="yyyyMMdd" />
+		</tstamp>
+		<input message="Give us a quick summary for Google Code:" addproperty="publish.summary" />
+		<gcupload
+			username="${gc.username}" password="${gc.password}"
+			projectname="wordcram" filename="build/wordcram.tar" 
+			targetfilename="wordcram.${date}.tar" 
+			summary="${publish.summary}" labels="development, unstable" />
+		<gcupload 
+			username="${gc.username}" password="${gc.password}"
+			projectname="wordcram" filename="build/wordcram.zip" 
+			targetfilename="wordcram.${date}.zip" 
+			summary="${publish.summary}" labels="development, unstable" />
+	</target>
+
+	<target name="deploy.local" depends="deploy">
+		<copy todir="${processing.sketchFolder}/libraries/wordcram">
 			<fileset dir="build/jar/wordcram" />
 		</copy>
 	</target>
