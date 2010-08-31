@@ -56,7 +56,11 @@ public class Main extends PApplet {
 		*/
 		
 		wordcram = new WordCram(this, loadWords(), fonter, Sizers.byWeight(5, 70), Colorers.TwoHuesRandomSats(this), 
-				Anglers.MostlyHoriz, new CenterClumpWordPlacer(), new RandomWordNudger());
+				Anglers.MostlyHoriz, new CenterClumpWordPlacer(), 
+				//new PlottingWordNudger(this, 
+						new RandomWordNudger()
+				//)
+		);
 	}
 	
 	public void draw() {

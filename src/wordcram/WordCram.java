@@ -156,12 +156,6 @@ public class WordCram {
 	private void placeWord(PImage wordImage, Word word) {
 		WordPlacement wordPlacement = wordPlacements[wordIndex];
 		int wordImageSize = wordImage.width;
-		
-		PGraphics spiralTrace = parent.createGraphics(parent.width, parent.height, PApplet.JAVA2D);
-		spiralTrace.beginDraw();
-		spiralTrace.background(0, 0);
-		spiralTrace.fill(255, 0, 0, 100);
-		spiralTrace.noStroke();
 
 		// TODO does it make sense to COMBINE wordplacer & wordnudger, the way you (sort of) orig. had it?  i think it does...
 		PVector place = placer.place(word, wordIndex, words.length, wordImageSize, destination);
@@ -169,8 +163,7 @@ public class WordCram {
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
 		for (int attempt = 0; attempt < maxAttempts; attempt++) {
 
-			wordPlacement.setLocation(PVector.add(place, nudger.nudge(word, attempt)));
-			//spiralTrace.ellipse(wordPlacement.getLocation().x, wordPlacement.getLocation().y, 1, 1);
+			word.setLocation(PVector.add(place, nudger.nudge(word, attempt)));
 			
 			boolean fits = true;
 			for (int i = 0; i < wordPlacements.length; i++) {
@@ -181,14 +174,11 @@ public class WordCram {
 			}
 			
 			if (fits) {
-				place = wordPlacement.getLocation();
+				place = word.getLocation();
 				destination.image(wordImage, place.x, place.y);
 				return;
 			}
 		}
-		
-		spiralTrace.endDraw();
-		parent.image(spiralTrace, 0, 0);
 		
 		couldntPlace++;
 		System.out.println("couldn't place: " + word.word + ", " + word.weight);

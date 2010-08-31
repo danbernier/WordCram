@@ -21,24 +21,19 @@ import processing.core.PVector;
 public class WordPlacement {
 	private Word word;
 	private BBTree bbTree;
-	private PVector location;
 	
 	// TODO move the BBTreeBuilder into here?  We'll need to pass the Word, and the bgColor, which would be weird...
 	public WordPlacement(Word _word, BBTree _bbTree) {
 		word = _word;
 		bbTree = _bbTree;
-		location = new PVector(0, 0);
 	}
 	
-	public void setLocation(PVector loc) {
-		location.set(loc);
-	}
-	public PVector getLocation() {
-		return location.get();
+	public Word getWord() {
+		return word;
 	}
 	
 	public boolean overlaps(WordPlacement other) {
-		return overlaps(bbTree, location, other.bbTree, other.location);
+		return overlaps(bbTree, word.getLocation(), other.bbTree, other.getWord().getLocation());
 	}
 	
 

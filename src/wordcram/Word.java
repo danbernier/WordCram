@@ -1,5 +1,7 @@
 package wordcram;
 
+import processing.core.PVector;
+
 /*
 Copyright 2010 Daniel Bernier
 
@@ -19,9 +21,13 @@ limitations under the License.
 public class Word implements Comparable<Word> {
 	public String word;
 	public double weight;
+	private PVector location; 
+	
 	public Word(String word, double weight) {
 		this.word = word;
 		this.weight = weight;
+		
+		location = new PVector(0, 0);
 	}
 
 	@Override
@@ -30,5 +36,12 @@ public class Word implements Comparable<Word> {
 			return (int)(w.weight - weight);
 		}
 		return w.word.compareTo(word);
+	}
+	
+	public void setLocation(PVector loc) {
+		location.set(loc);
+	}
+	public PVector getLocation() {
+		return location.get();
 	}
 }
