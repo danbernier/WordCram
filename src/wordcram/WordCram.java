@@ -37,6 +37,8 @@ public class WordCram {
     // some people on P5 forums wanted a wordle library: http://processing.org/discourse/yabb2/YaBB.pl?num=1237544659
 	
 	/*
+	 * TODO have WordCram take words w/ arbitrary weights, & scale them inself -- rather than relying on the TextSplitter.
+	 *       (so it's easier to toss in arbitrary Words)
 	 * TODO don't forget about (?) drawing to an off-screen buffer, rather than assuming it'll always be a PApplet. (really?)
 	 * TODO palette support?
 	 * TODO render transparently, so you can overlay it, or use it as a mask
@@ -168,7 +170,7 @@ public class WordCram {
 		for (int attempt = 0; attempt < maxAttempts; attempt++) {
 
 			wordPlacement.setLocation(PVector.add(place, nudger.nudge(word, attempt)));
-			spiralTrace.ellipse(wordPlacement.getLocation().x, wordPlacement.getLocation().y, 1, 1);
+			//spiralTrace.ellipse(wordPlacement.getLocation().x, wordPlacement.getLocation().y, 1, 1);
 			
 			boolean fits = true;
 			for (int i = 0; i < wordPlacements.length; i++) {
