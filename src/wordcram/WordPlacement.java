@@ -16,8 +16,6 @@ package wordcram;
  limitations under the License.
  */
 
-import processing.core.PVector;
-
 public class WordPlacement {
 	private Word word;
 	private BBTree bbTree;
@@ -36,55 +34,6 @@ public class WordPlacement {
 	public boolean overlaps(WordPlacement other) {
 		bbTree.setLocation(word.getLocation());
 		other.bbTree.setLocation(other.getWord().getLocation());
-		return overlaps(bbTree, other.bbTree);
-	}
-
-	private boolean overlaps(BBTree a, BBTree b) {
-
-		if (rectCollide(a, b)) {
-			if (a.isLeaf() && b.isLeaf()) {
-				return true;
-			}
-
-			if (a.isLeaf()) {
-				for (BBTree bKid : b.getKids()) {
-					if (overlaps(a, bKid)) {
-						return true;
-					}
-				}
-				return false; // a is leaf, but doesn't overlap w/ any b.kids
-			}
-
-			if (b.isLeaf()) {
-				for (BBTree aKid : a.getKids()) {
-					if (overlaps(b, aKid)) {
-						return true;
-					}
-				}
-				return false; // b is leaf, but doesn't overlap w/ any a.kids
-			}
-
-			// now, we know NEITHER a & b are leaves
-			// Hmm...just noticed this for-loop is JUST LIKE the if(b.isLeaf())
-			// one above. TODO fix that.
-			for (BBTree aKid : a.getKids()) {
-				if (overlaps(b, aKid)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	private static boolean rectCollide(BBTree a, BBTree b) {
-		PVector[] aPoints = a.getPoints();
-		PVector[] bPoints = b.getPoints();
-		PVector aTopLeft = aPoints[0];
-		PVector aBottomRight = aPoints[1];
-		PVector bTopLeft = bPoints[0];
-		PVector bBottomRight = bPoints[1];
-
-		return aBottomRight.y > bTopLeft.y && aTopLeft.y < bBottomRight.y
-				&& aBottomRight.x > bTopLeft.x && aTopLeft.x < bBottomRight.x;
+		return bbTree.overlaps(other.bbTree);
 	}
 }

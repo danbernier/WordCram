@@ -65,6 +65,55 @@ class BBTree {
 				PVector.add(new PVector(x2, y2), location) };
 	}
 
+	public boolean overlaps(BBTree b) {
+
+		if (rectCollide(this, b)) {
+			if (this.isLeaf() && b.isLeaf()) {
+				return true;
+			}
+
+			if (this.isLeaf()) {
+				for (BBTree bKid : b.getKids()) {
+					if (this.overlaps(bKid)) {
+						return true;
+					}
+				}
+				return false; // this is leaf, but doesn't overlap w/ any b.kids
+			}
+
+			if (b.isLeaf()) {
+				for (BBTree myKid : this.getKids()) {
+					if (b.overlaps(myKid)) {
+						return true;
+					}
+				}
+				return false; // b is leaf, but doesn't overlap w/ any this.kids
+			}
+
+			// now, we know NEITHER this or b are leaves
+			// Hmm...just noticed this for-loop is JUST LIKE the if(b.isLeaf())
+			// one above. TODO fix that.
+			for (BBTree myKid : this.getKids()) {
+				if (b.overlaps(myKid)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean rectCollide(BBTree a, BBTree b) {
+		PVector[] aPoints = a.getPoints();
+		PVector[] bPoints = b.getPoints();
+		PVector aTopLeft = aPoints[0];
+		PVector aBottomRight = aPoints[1];
+		PVector bTopLeft = bPoints[0];
+		PVector bBottomRight = bPoints[1];
+
+		return aBottomRight.y > bTopLeft.y && aTopLeft.y < bBottomRight.y
+				&& aBottomRight.x > bTopLeft.x && aTopLeft.x < bBottomRight.x;
+	}
+
 	public boolean isLeaf() {
 		return kids == null;
 	}
