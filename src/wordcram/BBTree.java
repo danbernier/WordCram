@@ -1,5 +1,7 @@
 package wordcram;
 
+import java.util.ArrayList;
+
 import processing.core.PVector;
 
 /*
@@ -23,7 +25,7 @@ class BBTree {
 	private int y1;
 	private int x2;
 	private int y2;
-	public BBTree[] kids;
+	private BBTree[] kids;
 	
 	private PVector location = new PVector(0, 0);
 	
@@ -32,6 +34,20 @@ class BBTree {
 		y1 = _y1;
 		x2 = _x2;
 		y2 = _y2;
+	}
+	
+	public void addKids(BBTree... _kids) {
+		ArrayList<BBTree> kidList = new ArrayList<BBTree>();
+		for (BBTree kid :_kids) {			if (kid != null) {
+				kidList.add(kid);
+			}	
+		}
+		
+		kids = kidList.toArray(new BBTree[0]);
+	}
+	
+	public BBTree[] getKids() {
+		return kids;
 	}
 	
 	public void setLocation(PVector _location) {

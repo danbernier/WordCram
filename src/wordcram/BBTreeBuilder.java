@@ -53,18 +53,8 @@ class BBTreeBuilder {
 					// lower right
 					BBTree t3 = makeTree(buffer, bgColor, minBoxSize, newX, newY, x2, y2);
 										
-					ArrayList<BBTree> kids = new ArrayList<BBTree>();
 
-					if (t0 != null)
-						kids.add(t0);
-					if (t1 != null)
-						kids.add(t1);
-					if (t2 != null)
-						kids.add(t2);
-					if (t3 != null)
-						kids.add(t3);
-					
-					tree.kids = kids.toArray(new BBTree[0]);
+					tree.addKids(t0, t1, t2, t3);
 				}
 			}
 

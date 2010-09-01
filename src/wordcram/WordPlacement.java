@@ -47,8 +47,8 @@ public class WordPlacement {
 		    if (a.isLeaf() && b.isLeaf()) { return true; }
 		    
 		    if (a.isLeaf()) {
-		      for (int bi = 0; bi < b.kids.length; bi++) {
-		        if (overlaps(a, b.kids[bi])) {
+		      for (BBTree bKid : b.getKids()) {
+		        if (overlaps(a, bKid)) {
 		          return true;
 		        }
 		      }
@@ -56,8 +56,8 @@ public class WordPlacement {
 		    }
 		    
 		    if (b.isLeaf()) {
-		      for (int ai = 0; ai < a.kids.length; ai++) {
-		        if (overlaps(b, a.kids[ai])) {
+		      for (BBTree aKid : a.getKids()) {
+		        if (overlaps(b, aKid)) {
 		          return true;
 		        }
 		      }
@@ -65,8 +65,9 @@ public class WordPlacement {
 		    }
 		    
 		    // now, we know NEITHER a & b are leaves
-		    for (int ai = 0; ai < a.kids.length; ai++) {
-		      if (overlaps(b, a.kids[ai])) {
+		    // Hmm...just noticed this for-loop is JUST LIKE the if(b.isLeaf()) one above. TODO fix that.
+		    for (BBTree aKid : a.getKids()) {
+		      if (overlaps(b, aKid)) {
 		        return true;
 		      }
 		    }
