@@ -40,7 +40,7 @@ public class WordCram {
 	 * TODO have WordCram take words w/ arbitrary weights, & scale them inself -- rather than relying on the TextSplitter.
 	 *       (so it's easier to toss in arbitrary Words)
 	 * TODO don't forget about (?) drawing to an off-screen buffer, rather than assuming it'll always be a PApplet. (really?)
-	 * TODO palette support?
+	 * TODO palette support?  Colorers based on http://colorschemedesigner.com's Mono(hue), Complement(hue), Triad(hue, offsetAngle), etc
 	 * TODO render transparently, so you can overlay it, or use it as a mask
 	 * TODO pick some really nice default fonts & colors for demos: check http://www.colourlovers.com/palette/1281472/Hybrid?widths=1
 	 * TODO try the other perf. improvements in the paper & book
