@@ -158,12 +158,13 @@ public class WordCram {
 		int wordImageSize = wordImage.width;
 
 		// TODO does it make sense to COMBINE wordplacer & wordnudger, the way you (sort of) orig. had it?  i think it does...
-		PVector place = placer.place(word, wordIndex, words.length, wordImageSize, destination);
+		word.setDesiredLocation(placer.place(word, wordIndex, words.length, wordImageSize, destination));
+		PVector origSpot = word.getLocation();
 		
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
 		for (int attempt = 0; attempt < maxAttempts; attempt++) {
 
-			word.setLocation(PVector.add(place, nudger.nudge(word, attempt)));
+			word.nudge(nudger.nudgeFor(word, attempt));
 			
 			boolean fits = true;
 			for (int i = 0; i < wordPlacements.length; i++) {
@@ -174,8 +175,13 @@ public class WordCram {
 			}
 			
 			if (fits) {
-				place = word.getLocation();
-				destination.image(wordImage, place.x, place.y);
+				PVector location = word.getLocation();
+				destination.image(wordImage, location.x, location.y);
+				//destination.pushStyle();
+				//destination.strokeWeight(PApplet.map(attempt, 0, 700, 1, 30));
+				//destination.stroke(0, 255, 255, 50);
+				//destination.line(origSpot.x, origSpot.y, location.x, location.y);
+				//destination.popStyle();
 				return;
 			}
 		}

@@ -21,13 +21,12 @@ limitations under the License.
 public class Word implements Comparable<Word> {
 	public String word;
 	public double weight;
-	private PVector location; 
+	private PVector desiredLocation;
+	private PVector currentLocation;
 	
 	public Word(String word, double weight) {
 		this.word = word;
 		this.weight = weight;
-		
-		location = new PVector(0, 0);
 	}
 
 	@Override
@@ -38,10 +37,14 @@ public class Word implements Comparable<Word> {
 		return w.word.compareTo(word);
 	}
 	
-	public void setLocation(PVector loc) {
-		location.set(loc);
+	public void setDesiredLocation(PVector loc) {
+		desiredLocation = new PVector(loc.x, loc.y);
+		currentLocation = new PVector(loc.x, loc.y);
+	}
+	public void nudge(PVector nudge) {
+		currentLocation = PVector.add(desiredLocation, nudge);
 	}
 	public PVector getLocation() {
-		return location.get();
+		return currentLocation.get();
 	}
 }

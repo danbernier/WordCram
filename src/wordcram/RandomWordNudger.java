@@ -25,7 +25,7 @@ public class RandomWordNudger implements WordNudger {
 	private Random r = new Random();
 	
 	@Override
-	public PVector nudge(Word w, int attempt) {
+	public PVector nudgeFor(Word w, int attempt) {
 		return new PVector(next(attempt), next(attempt));
 	}
 	

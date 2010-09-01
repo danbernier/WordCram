@@ -14,13 +14,13 @@ public class PlottingWordNudger implements WordNudger {
 	}
 
 	@Override
-	public PVector nudge(Word word, int attempt) {
-		PVector v = wrappedNudger.nudge(word, attempt);
+	public PVector nudgeFor(Word word, int attempt) {
+		PVector v = wrappedNudger.nudgeFor(word, attempt);
 		parent.pushStyle();
 		parent.noStroke();
 		parent.fill(0, 255, 255, 100);
 		PVector wordLoc = PVector.add(v, word.getLocation());
-		parent.ellipse(wordLoc.x, wordLoc.y, 1, 1);
+		parent.ellipse(wordLoc.x, wordLoc.y, 3, 3);
 		parent.popStyle();
 		return v;
 	}

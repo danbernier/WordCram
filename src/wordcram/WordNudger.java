@@ -20,6 +20,6 @@ import processing.core.PVector;
 
 public interface WordNudger {
 	
-	public PVector nudge(Word w, int attempt);
+	public PVector nudgeFor(Word w, int attempt);
 	
 }

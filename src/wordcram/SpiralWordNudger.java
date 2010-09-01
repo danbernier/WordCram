@@ -25,10 +25,10 @@ public class SpiralWordNudger implements WordNudger {
 	private float b;
 	
 	// Who knows? this seems to be good, but it seems to depend on the font -- bigger fonts need a bigger thetaIncrement.
-	private float thetaIncrement = (float)(Math.PI * 0.07);
+	private float thetaIncrement = (float)(Math.PI * 0.03);
 
 	public SpiralWordNudger() {
-		this(1, 10);
+		this(1, 1);
 	}
 
 	public SpiralWordNudger(float _a, float _b) {
@@ -37,7 +37,8 @@ public class SpiralWordNudger implements WordNudger {
 	}
 
 	@Override
-	public PVector nudge(Word w, int attempt) {
+	public PVector nudgeFor(Word w, int attempt) {
+		b = PApplet.map(attempt, 0, 600, 1, 10);
 		float theta = thetaIncrement * attempt;
 		float rad = a + b * theta;
 		float x = PApplet.cos(theta) * rad;
