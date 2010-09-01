@@ -25,8 +25,7 @@ class BBTreeBuilder {
 		return makeTree(buffer, bgColor, minBoxSize, 0, 0, buffer.width, buffer.height);
 	}
 
-	private BBTree makeTree(PImage buffer, int bgColor, int minBoxSize, int x1, int y1, int x2,
-			int y2) {
+	private BBTree makeTree(PImage buffer, int bgColor, int minBoxSize, int x1, int y1, int x2, int y2) {
 
 		int colorInfo = getColorInfo(buffer, bgColor, x1, y1, x2, y2);
 
@@ -53,7 +52,7 @@ class BBTreeBuilder {
 					BBTree t2 = makeTree(buffer, bgColor, minBoxSize, x1, newY, newX, y2);
 					// lower right
 					BBTree t3 = makeTree(buffer, bgColor, minBoxSize, newX, newY, x2, y2);
-					
+										
 					ArrayList<BBTree> kids = new ArrayList<BBTree>();
 
 					if (t0 != null)

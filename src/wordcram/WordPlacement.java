@@ -33,21 +33,22 @@ public class WordPlacement {
 	}
 	
 	public boolean overlaps(WordPlacement other) {
-		return overlaps(bbTree, word.getLocation(), other.bbTree, other.getWord().getLocation());
+		bbTree.setLocation(word.getLocation());
+		other.bbTree.setLocation(other.getWord().getLocation());
+		return overlaps(bbTree, other.bbTree);
 	}
 	
 
 	
-	private boolean overlaps(BBTree a, PVector av, BBTree b, PVector bv) {
-		  
-		  if (rectCollide(a.x1+av.x, a.y1+av.y, a.x2+av.x, a.y2+av.y, 
-		                  b.x1+bv.x, b.y1+bv.y, b.x2+bv.x, b.y2+bv.y))
+	private boolean overlaps(BBTree a, BBTree b) {
+		
+		  if (rectCollide(a, b))
 		  {
 		    if (a.isLeaf() && b.isLeaf()) { return true; }
 		    
 		    if (a.isLeaf()) {
 		      for (int bi = 0; bi < b.kids.length; bi++) {
-		        if (overlaps(a, av, b.kids[bi], bv)) {
+		        if (overlaps(a, b.kids[bi])) {
 		          return true;
 		        }
 		      }
@@ -56,7 +57,7 @@ public class WordPlacement {
 		    
 		    if (b.isLeaf()) {
 		      for (int ai = 0; ai < a.kids.length; ai++) {
-		        if (overlaps(b, bv, a.kids[ai], av)) {
+		        if (overlaps(b, a.kids[ai])) {
 		          return true;
 		        }
 		      }
@@ -65,19 +66,25 @@ public class WordPlacement {
 		    
 		    // now, we know NEITHER a & b are leaves
 		    for (int ai = 0; ai < a.kids.length; ai++) {
-		      if (overlaps(b, bv, a.kids[ai], av)) {
+		      if (overlaps(b, a.kids[ai])) {
 		        return true;
 		      }
 		    }
 		  }
 		  return false;
 		}
-
-		private static boolean rectCollide(float ax1, float ay1, float ax2, float ay2,
-		                    float bx1, float by1, float bx2, float by2) {
-		  return ay2 > by1 &&
-		         ay1 < by2 &&
-		         ax2 > bx1 &&
-		         ax1 < bx2;
+	
+		private static boolean rectCollide(BBTree a, BBTree b) {
+			PVector[] aPoints = a.getPoints();
+			PVector[] bPoints = b.getPoints();
+			PVector aTopLeft = aPoints[0];
+			PVector aBottomRight = aPoints[1];
+			PVector bTopLeft = bPoints[0];
+			PVector bBottomRight = bPoints[1];
+			
+			return aBottomRight.y > bTopLeft.y &&
+			 aTopLeft.y < bBottomRight.y &&
+			 aBottomRight.x > bTopLeft.x &&
+			 aTopLeft.x < bBottomRight.x;
 		}
 }

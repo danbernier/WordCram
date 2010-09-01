@@ -1,5 +1,7 @@
 package wordcram;
 
+import processing.core.PVector;
+
 /*
 Copyright 2010 Daniel Bernier
 
@@ -17,19 +19,37 @@ limitations under the License.
 */
 
 class BBTree {
-	public int x1;
-	public int y1;
-	public int x2;
-	public int y2;
+	private int x1;
+	private int y1;
+	private int x2;
+	private int y2;
 	public BBTree[] kids;
-
+	
+	private PVector location = new PVector(0, 0);
+	
 	BBTree(int _x1, int _y1, int _x2, int _y2) {
 		x1 = _x1;
 		y1 = _y1;
 		x2 = _x2;
 		y2 = _y2;
 	}
-
+	
+	public void setLocation(PVector _location) {
+		location = _location;
+		if (!isLeaf()) {
+			for (BBTree kid : kids) {
+				kid.setLocation(_location);
+			}
+		}
+	}
+	
+	public PVector[] getPoints() {
+		return new PVector[] {
+				PVector.add(new PVector(x1, y1), location),
+				PVector.add(new PVector(x2, y2), location)
+		};
+	}
+	
 	public boolean isLeaf() {
 		return kids == null;
 	}
