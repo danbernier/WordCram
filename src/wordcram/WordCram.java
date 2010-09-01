@@ -42,15 +42,16 @@ public class WordCram {
 	 * TODO don't forget about (?) drawing to an off-screen buffer, rather than assuming it'll always be a PApplet. (really?)
 	 * TODO palette support?
 	 * TODO render transparently, so you can overlay it, or use it as a mask
-	 * TODO fix that offset problem, where it seems to leave swaths of empty space -- related to SpiralGenerator for offset?  
-	 * 		draw a sep. image, w/ dots for each placement.  trend hue through rank or weight, and sat. for, um, how long the 
-	 * 		search runs.  :)
 	 * TODO pick some really nice default fonts & colors for demos: check http://www.colourlovers.com/palette/1281472/Hybrid?widths=1
 	 * TODO try the other perf. improvements in the paper & book
 	 * TODO remember each Word's WordPlacement, so you can re-render easily
 	 * TODO scale the window (somehow) to fit words in, when they run off-screen 
 	 * TODO try changing the color scheme AFTER rendering it -- should work fine
 	 * TODO provide a way to print out the config: font, hues, etc
+	 * TODO new DeliciousTagsTextLoader(username), new RssTextLoader(url), new HtmlTextLoader(url), new TwitterStreamTextLoader(twitterer)
+	 * TODO WordCram wc = new WordCramBuilder().rotateWith(myRotater).colorWith(#ff0000, #00ff00).buildIt();
+	 *      ... pass in WordFooers, and have sensible overrides (with varargs where appropriate) to build WordCrams more easily.
+	 *      ... WordCramBuilder will have sensible defaults for what's not specified.
 	 * 
 	 * notes on building a P5 library: http://code.google.com/p/processing/wiki/LibraryBasics
 	 */
@@ -99,10 +100,6 @@ public class WordCram {
 	
 	public boolean hasMore() {
 		return wordIndex < words.length-1;
-	}
-	
-	public void recolor(WordColorer colorer) {
-		
 	}
 	
 	/* methods JUST for off-screen drawing. */
