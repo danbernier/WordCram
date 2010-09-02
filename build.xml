@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<!-- TODO put in a step to warn about files that are missing the ASL notice -->
-
 <project default="deploy">
 
 	<property file="build.credentials.properties" />
 	<property file="build.properties" />
-	
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${ant.googlecode.jar.path}" name="gcupload" />
 	
 	<property name="classpath" value="${processing.home}/lib/core.jar" />
@@ -28,8 +27,46 @@ limitations under the License.
 	<target name="clean">
 		<delete dir="build" />
 	</target>
+	
+	<target name="checkAllForLicenseNotice">
+		
+		<foreach target="checkForLicenseNotice" param="srcFile">
+			<fileset dir=".">
+				<include name="**/*.java" />
+				<include name="**/*.xml" />
+			</fileset>
+		</foreach>
+		
+		<!-- TODO figure out why the <for> task isn't found.  It's in the ant-contrib jar...
+		<for param="srcFile">
+			<fileset dir=".">
+				<include name="**/*.java" />
+				<include name="**/*.xml" />
+			</fileset>
+			<sequential>
+				<loadfile srcFile="${srcFile}" property="src" />
+				<if>
+					<not><contains string="${src}" substring="Copyright" /></not>
+					<then>
+						<echo>File ${srcFile} is missing its license notice!</echo>
+					</then>
+				</if>
+			</sequential>
+		</for>
+		-->
+	</target>
+	
+	<target name="checkForLicenseNotice">
+		<loadfile srcFile="${srcFile}" property="src" />
+		<if>
+			<not><contains string="${src}" substring="Copyright" /></not>
+			<then>
+				<echo>File ${srcFile} is missing its license notice!</echo>
+			</then>
+		</if>
+	</target>
 
-	<target name="compile" depends="clean">
+	<target name="compile" depends="clean, checkAllForLicenseNotice">
 		<mkdir dir="build/classes" />
 		<javac srcdir="src" destdir="build/classes" classpath="${classpath}" includeantruntime="false" />
 	</target>
