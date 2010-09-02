@@ -54,8 +54,12 @@ public class Main extends PApplet {
 		};
 		*/
 		
-		wordcram = new WordCram(this, loadWords(), fonter, Sizers.byWeight(5, 70), Colorers.TwoHuesRandomSats(this), 
-				Anglers.MostlyHoriz, new CenterClumpWordPlacer(), 
+		//WordColorer colorer = Colorers.twoHuesRandomSats(this);
+		WordColorer colorer = Colorers.palette(color(0, 200, 255), color(30, 200, 255), color(200, 200, 255));
+		
+		wordcram = new WordCram(this, loadWords(), fonter, Sizers.byWeight(5, 70), colorer, 
+				Anglers.MostlyHoriz, 
+				Placers.horizLine(), //new CenterClumpWordPlacer(), 
 				//new PlottingWordNudger(this, 
 						new SpiralWordNudger()
 				//)

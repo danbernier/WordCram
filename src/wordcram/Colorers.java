@@ -16,11 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import java.util.Random;
+
 import processing.core.PApplet;
 
 public class Colorers {
 
-	public static WordColorer TwoHuesRandomSats(final PApplet host) {
+	public static WordColorer twoHuesRandomSats(final PApplet host) {
 
 		final float[] hues = new float[] { host.random(256), host.random(256) };
 
@@ -32,6 +34,15 @@ public class Colorers {
 				float val = host.random(100, 256);
 
 				return host.color(hue, sat, val);
+			}
+		};
+	}
+	
+	public static WordColorer palette(final int... colors) {
+		final Random r = new Random();
+		return new WordColorer() {
+			public int colorFor(Word w) {
+				return colors[r.nextInt(colors.length)];
 			}
 		};
 	}

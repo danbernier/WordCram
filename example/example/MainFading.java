@@ -38,7 +38,7 @@ public class MainFading extends PApplet {
 	private void initWordCram() {
 		WordFonter fonter = Fonters.FonterFor(createFont(fonts[(int)random(fonts.length)], 1));
 	
-		wordcram = new WordCram(this, loadWords(), fonter, Sizers.byWeight(5, 70), Colorers.TwoHuesRandomSats(this), Anglers.MostlyHoriz, new CenterClumpWordPlacer(), new RandomWordNudger());
+		wordcram = new WordCram(this, loadWords(), fonter, Sizers.byWeight(5, 70), Colorers.twoHuesRandomSats(this), Anglers.MostlyHoriz, new CenterClumpWordPlacer(), new RandomWordNudger());
 	}
 	
 	public void draw() {
