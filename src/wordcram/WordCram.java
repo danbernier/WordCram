@@ -159,16 +159,21 @@ public class WordCram {
 		PVector origSpot = word.getLocation();
 		
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
+		WordPlacement lastCollidedWith = null;
 		for (int attempt = 0; attempt < maxAttempts; attempt++) {
 
 			word.nudge(nudger.nudgeFor(word, attempt));
+			if (lastCollidedWith != null && lastCollidedWith.overlaps(wordPlacement)) { continue; }
 			
 			boolean fits = true;
 			for (int i = 0; i < wordPlacements.length; i++) {
 				if (i == wordIndex || wordPlacements[i] == null) continue;
 				
 				WordPlacement otherPlacement = wordPlacements[i];
-				if (otherPlacement.overlaps(wordPlacement)) { fits = false; }
+				if (otherPlacement.overlaps(wordPlacement)) {
+					fits = false;
+					lastCollidedWith = otherPlacement;
+				}
 			}
 			
 			if (fits) {
