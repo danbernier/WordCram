@@ -38,7 +38,7 @@ public class Colorers {
 		};
 	}
 	
-	public static WordColorer palette(final int... colors) {
+	public static WordColorer pickFrom(final int... colors) {
 		final Random r = new Random();
 		return new WordColorer() {
 			public int colorFor(Word w) {

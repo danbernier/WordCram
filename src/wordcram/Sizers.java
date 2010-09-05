@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 public class Sizers {
+	
 	public static WordSizer byWeight(final int minSize, final int maxSize) {
 		final int diff = maxSize - minSize;
 		return new WordSizer() {

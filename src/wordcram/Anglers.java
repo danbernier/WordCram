@@ -21,13 +21,8 @@ import java.util.Random;
 import processing.core.PConstants;
 
 public class Anglers implements PConstants {
-	public static WordAngler Horiz = constant(0f);
-	public static WordAngler UpAndDown = fromArray(
-			HALF_PI, -HALF_PI);
-	public static WordAngler MostlyHoriz = fromArray(0f, 0f,
-			0f, 0f, 0f, HALF_PI, -HALF_PI);
 
-	public static WordAngler Random() {
+	public static WordAngler random() {
 		final Random r = new Random();
 		return new WordAngler() {
 			public float angleFor(Word w) {
@@ -35,25 +30,39 @@ public class Anglers implements PConstants {
 			}
 		};
 	}
-
-	private static float oneSixth = TWO_PI / 6f;
-	public static WordAngler Hexes = fromArray(0f, oneSixth,
-			2 * oneSixth, 3 * oneSixth, 4 * oneSixth, 5 * oneSixth);
 	
-	private static WordAngler constant(final float angle) {
+	public static WordAngler alwaysUse(final float angle) {
 		return new WordAngler() {
 			public float angleFor(Word w) {
 				return angle;
 			}
 		};
 	}
-	
-	private static WordAngler fromArray(final float... angles) {
+
+	public static WordAngler pickFrom(final float... angles) {
 		final Random r = new Random();
 		return new WordAngler() {
 			public float angleFor(Word w) {
 				return angles[r.nextInt(angles.length)];
 			}
 		};
+	}
+
+
+	public static WordAngler hexes() {
+		float oneSixth = TWO_PI / 6f;
+		return pickFrom(0f, oneSixth, 2 * oneSixth, 3 * oneSixth, 4 * oneSixth, 5 * oneSixth);
+	}
+	
+	public static WordAngler horiz() {
+		return alwaysUse(0f);
+	}
+	
+	public static WordAngler upAndDown() {
+		return pickFrom(HALF_PI, -HALF_PI);
+	}
+	
+	public static WordAngler mostlyHoriz() { 
+		return pickFrom(0f, 0f, 0f, 0f, 0f, HALF_PI, -HALF_PI);
 	}
 }

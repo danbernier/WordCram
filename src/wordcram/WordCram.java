@@ -44,7 +44,6 @@ public class WordCram {
 	 * TODO render transparently, so you can overlay it, or use it as a mask
 	 * TODO pick some really nice default fonts & colors for demos: check http://www.colourlovers.com/palette/1281472/Hybrid?widths=1
 	 * TODO try the other perf. improvements in the paper & book
-	 * TODO remember each Word's WordPlacement, so you can re-render easily
 	 * TODO scale the window (somehow) to fit words in, when they run off-screen 
 	 * TODO try changing the color scheme AFTER rendering it -- should work fine
 	 * TODO provide a way to print out the config: font, hues, etc
