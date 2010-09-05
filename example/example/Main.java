@@ -33,7 +33,7 @@ public class Main extends PApplet {
 		size(1200, 600); //1200, 675); //1600, 900);
 		smooth();
 		colorMode(HSB);
-		background(0);
+		background(255);
 		initWordCram();
 	}
 	
@@ -56,13 +56,15 @@ public class Main extends PApplet {
 		
 		//WordColorer colorer = Colorers.twoHuesRandomSats(this);
 		WordColorer colorer = Colorers.palette(color(0, 200, 255), color(30, 200, 255), color(200, 200, 255));
+		//colorer = Colorers.twoHuesRandomSats(this);
+		colorer = Colorers.palette(color(0, 0, 0));
 		
 		wordcram = new WordCram(this, loadWords(), fonter, Sizers.byWeight(5, 70), colorer, 
-				Anglers.MostlyHoriz, 
+				Anglers.MostlyHoriz,
 				Placers.horizLine(), //new CenterClumpWordPlacer(), 
-				//new PlottingWordNudger(this, 
+				new PlottingWordNudger(this, 
 						new SpiralWordNudger()
-				//)
+				)
 		);
 	}
 	
@@ -75,17 +77,18 @@ public class Main extends PApplet {
 			noLoop();
 		}
 		else {
-			if (wordcram.hasMore()) {
+			int wordsPerFrame = 10;
+			while (wordcram.hasMore() && wordsPerFrame-- > 0) {
 				wordcram.drawNext();
 			}
-			else {
+			if (!wordcram.hasMore()) {
 				noLoop();
 			}
 		}
 	}
 	
 	public void mouseClicked() {
-		background(0);
+		background(255);
 		initWordCram();
 		loop();
 	}

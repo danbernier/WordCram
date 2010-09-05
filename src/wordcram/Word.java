@@ -21,9 +21,11 @@ limitations under the License.
 public class Word implements Comparable<Word> {
 	public String word;
 	public double weight;
+	
 	private PVector desiredLocation;
 	private PVector currentLocation;
-	
+	private BBTree bbTree;
+		
 	public Word(String word, double weight) {
 		this.word = word;
 		this.weight = weight;
@@ -37,12 +39,21 @@ public class Word implements Comparable<Word> {
 		return w.word.compareTo(word);
 	}
 	
+	public void setBBTree(BBTree _bbTree) {
+		bbTree = _bbTree;
+	}
+
+	public boolean overlaps(Word other) {
+		return bbTree.overlaps(other.bbTree);
+	}
+	
 	public void setDesiredLocation(PVector loc) {
 		desiredLocation = new PVector(loc.x, loc.y);
 		currentLocation = new PVector(loc.x, loc.y);
 	}
 	public void nudge(PVector nudge) {
 		currentLocation = PVector.add(desiredLocation, nudge);
+		bbTree.setLocation(currentLocation.get());
 	}
 	public PVector getLocation() {
 		return currentLocation.get();

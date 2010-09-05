@@ -78,7 +78,6 @@ public class WordCram {
 	
 	private Word[] words;
 	private BBTreeBuilder bbTreeBuilder;
-	private WordPlacement[] wordPlacements;
 	private int wordIndex;
 	
 	// PApplet parent is only for 2 things: to get its PGraphics g (aka destination), and 
@@ -95,7 +94,6 @@ public class WordCram {
 		words = _words;
 		wordIndex = -1;
 		bbTreeBuilder = new BBTreeBuilder();
-		wordPlacements = new WordPlacement[words.length];
 	}
 	
 	public boolean hasMore() {
@@ -145,13 +143,12 @@ public class WordCram {
 			wordImage.popMatrix();
 		wordImage.endDraw();
 		
-		wordPlacements[wordIndex] = new WordPlacement(word, bbTreeBuilder.makeTree(wordImage, bgColor, 10));
+		word.setBBTree(bbTreeBuilder.makeTree(wordImage, bgColor, 3));
 		
 		return wordImage;
 	}
 	
 	private void placeWord(PImage wordImage, Word word) {
-		WordPlacement wordPlacement = wordPlacements[wordIndex];
 		int wordImageSize = wordImage.width;
 
 		// TODO does it make sense to COMBINE wordplacer & wordnudger, the way you (sort of) orig. had it?  i think it does...
@@ -159,20 +156,18 @@ public class WordCram {
 		PVector origSpot = word.getLocation();
 		
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
-		WordPlacement lastCollidedWith = null;
+		Word lastCollidedWith = null;
 		for (int attempt = 0; attempt < maxAttempts; attempt++) {
 
 			word.nudge(nudger.nudgeFor(word, attempt));
-			if (lastCollidedWith != null && lastCollidedWith.overlaps(wordPlacement)) { continue; }
+			if (lastCollidedWith != null && word.overlaps(lastCollidedWith)) { continue; }
 			
 			boolean fits = true;
-			for (int i = 0; i < wordPlacements.length; i++) {
-				if (i == wordIndex || wordPlacements[i] == null) continue;
-				
-				WordPlacement otherPlacement = wordPlacements[i];
-				if (otherPlacement.overlaps(wordPlacement)) {
+			for (int i = 0; i < wordIndex && i < words.length; i++) {
+				Word otherWord = words[i];
+				if (word.overlaps(otherWord)) {
 					fits = false;
-					lastCollidedWith = otherPlacement;
+					lastCollidedWith = otherWord;
 				}
 			}
 			
