@@ -57,9 +57,10 @@ public class MainOffScreen extends PApplet {
 		Word[] words = loadWords();
 		numberOfWords = words.length - 1;
 		buffer.background(0);
-		WordFonter fonter = Fonters.FonterFor(createFont(fonts[(int)random(fonts.length)], 1));
+		WordFonter fonter = Fonters.alwaysUse(createFont(fonts[(int)random(fonts.length)], 1));
 	
-		wordcram = new WordCram(this, loadWords(), fonter, Sizers.byWeight(5, 70), Colorers.twoHuesRandomSats(this), Anglers.MostlyHoriz, new SwirlWordPlacer(), new RandomWordNudger());
+		wordcram = new WordCram(this, loadWords(), fonter, Sizers.byWeight(5, 70), Colorers.twoHuesRandomSats(this), 
+				Anglers.mostlyHoriz(), Placers.swirl(), new RandomWordNudger());
 	}
 	
 	public void draw() {

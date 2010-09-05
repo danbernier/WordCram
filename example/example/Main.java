@@ -33,15 +33,15 @@ public class Main extends PApplet {
 		size(1200, 600); //1200, 675); //1600, 900);
 		smooth();
 		colorMode(HSB);
-		background(255);
 		initWordCram();
 	}
 	
+	private PFont randomFont() {
+		return createFont(fonts[(int)random(fonts.length)], 1);
+	}
 	
 	private void initWordCram() {
-		//WordFonter fonter = new BasicWordFonter(createFont(fonts[(int)random(fonts.length)], 1));
-		//WordFonter fonter = new GrabBagWordFonter(createFont("Impact", 1), createFont("Times New Roman", 1));
-		WordFonter fonter = Fonters.FonterFor(createFont(fonts[(int)random(fonts.length)], 1));
+		background(55);
 		
 		/*
 		WordColorer redBlue = new WordColorer() {
@@ -55,20 +55,26 @@ public class Main extends PApplet {
 		*/
 		
 		//WordColorer colorer = Colorers.twoHuesRandomSats(this);
-		WordColorer colorer = Colorers.palette(color(0, 200, 255), color(30, 200, 255), color(200, 200, 255));
+		WordColorer colorer = Colorers.pickFrom(color(0, 200, 255), color(30, 200, 255), color(200, 200, 255));
 		//colorer = Colorers.twoHuesRandomSats(this);
-		colorer = Colorers.palette(color(0, 0, 0));
+		colorer = Colorers.pickFrom(color(0, 0, 175));
 		
-		wordcram = new WordCram(this, loadWords(), fonter, Sizers.byWeight(5, 70), colorer, 
-				Anglers.MostlyHoriz,
-				Placers.horizLine(), //new CenterClumpWordPlacer(), 
-				new PlottingWordNudger(this, 
+		wordcram = new WordCram(this, loadWords(), 
+				Fonters.alwaysUse(randomFont()),
+				Sizers.byWeight(5, 100),
+				colorer, 
+				Anglers.mostlyHoriz(),
+				Placers.horizLine(),
+				//new PlottingWordNudger(this, 
 						new SpiralWordNudger()
-				)
+				//)
 		);
 	}
 	
 	public void draw() {
+		//fill(55, 20);
+		//rect(0, 0, width, height);
+		
 		boolean allAtOnce = false;
 		if (allAtOnce) {
 			while(wordcram.hasMore()) {
@@ -88,7 +94,6 @@ public class Main extends PApplet {
 	}
 	
 	public void mouseClicked() {
-		background(255);
 		initWordCram();
 		loop();
 	}
