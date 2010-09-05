@@ -77,9 +77,8 @@ public class Main extends PApplet {
 		
 		boolean allAtOnce = false;
 		if (allAtOnce) {
-			while(wordcram.hasMore()) {
-				wordcram.drawNext();
-			}
+			wordcram.draw();
+			println("Done");
 			noLoop();
 		}
 		else {
@@ -88,6 +87,7 @@ public class Main extends PApplet {
 				wordcram.drawNext();
 			}
 			if (!wordcram.hasMore()) {
+				println("Done");
 				noLoop();
 			}
 		}

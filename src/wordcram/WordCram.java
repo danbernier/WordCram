@@ -51,6 +51,7 @@ public class WordCram {
 	 * TODO WordCram wc = new WordCramBuilder().rotateWith(myRotater).colorWith(#ff0000, #00ff00).buildIt();
 	 *      ... pass in WordFooers, and have sensible overrides (with varargs where appropriate) to build WordCrams more easily.
 	 *      ... WordCramBuilder will have sensible defaults for what's not specified.
+	 * TODO detect when words will be drawn TOO small, and stop rendering.
 	 * 
 	 * notes on building a P5 library: http://code.google.com/p/processing/wiki/LibraryBasics
 	 */
@@ -93,6 +94,10 @@ public class WordCram {
 		words = _words;
 		wordIndex = -1;
 		bbTreeBuilder = new BBTreeBuilder();
+	}
+	
+	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
+		this(_parent, _words, _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
 	}
 	
 	public boolean hasMore() {
@@ -182,21 +187,20 @@ public class WordCram {
 			}
 		}
 		
-		couldntPlace++;
 		System.out.println("couldn't place: " + word.word + ", " + word.weight);
 	}
-	private int couldntPlace = 0;
 
 	public void drawNext() {
-		
 		Word word = words[++wordIndex];
 		PImage wordImage = renderWordToBuffer(word);
-		if (wordImage == null) return;
+		if (wordImage != null) {
+			placeWord(wordImage, word);
+		}
+	}
 	
-		placeWord(wordImage, word);
-		
-		if (!hasMore()) {
-			System.out.println("Done: placed " + (words.length-couldntPlace) + "/" + words.length + " words");
+	public void draw() {
+		while(hasMore()) {
+			drawNext();
 		}
 	}
 }
