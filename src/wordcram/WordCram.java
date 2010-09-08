@@ -187,7 +187,7 @@ public class WordCram {
 			}
 		}
 		
-		System.out.println("couldn't place: " + word.word + ", " + word.weight);
+		//System.out.println("couldn't place: " + word.word + ", " + word.weight);
 	}
 
 	public void drawNext() {
