@@ -92,13 +92,13 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 	</target>
 
 	<target name="deploy" depends="test">
-		<mkdir dir="build/jar/wordcram/library" />
-		<jar destfile="build/jar/wordcram/library/wordcram.jar" basedir="build/classes" />
+		<mkdir dir="build/p5lib/wordcram/library" />
+		<jar destfile="build/p5lib/wordcram/library/wordcram.jar" basedir="build/classes" />
 	</target>
 
 	<target name="publish.local" depends="deploy">
 		<copy todir="${processing.sketchFolder}/libraries/wordcram">
-			<fileset dir="build/jar/wordcram" />
+			<fileset dir="build/p5lib/wordcram" />
 		</copy>
 	</target>
 
@@ -110,8 +110,8 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 		</tstamp>
 		
 		<property name="pub.file" value="wordcram.${date}"/>
-		<tar destfile="build/${pub.file}.tar" basedir="build/jar" />
-		<zip destfile="build/${pub.file}.zip" basedir="build/jar" />
+		<tar destfile="build/${pub.file}.tar" basedir="build/p5lib" />
+		<zip destfile="build/${pub.file}.zip" basedir="build/p5lib" />
 
 		<gcupload
 			username="${gc.username}" password="${gc.password}" projectname="wordcram" 
@@ -132,8 +132,8 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 		<input message="...and the release number:" addproperty="publish.releaseNumber" />
 		
 		<property name="pub.file" value="wordcram.${publish.releaseNumber}"/>
-		<tar destfile="build/${pub.file}.tar" basedir="build/jar" />
-		<zip destfile="build/${pub.file}.zip" basedir="build/jar" />
+		<tar destfile="build/${pub.file}.tar" basedir="build/p5lib" />
+		<zip destfile="build/${pub.file}.zip" basedir="build/p5lib" />
 
 		<gcupload
 			username="${gc.username}" password="${gc.password}" projectname="wordcram" 
