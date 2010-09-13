@@ -16,8 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
-
 import java.util.*;
 
 import wordcram.Word;
@@ -47,7 +45,7 @@ public class TextSplitter {
 	}
 
 	public Word[] split(String text) {
-		return rank(count(splitIntoWords(text))).toArray(new Word[0]);
+		return weight(count(splitIntoWords(text))).toArray(new Word[0]);
 	}
 
 	protected String[] splitIntoWords(String text) {
@@ -71,19 +69,19 @@ public class TextSplitter {
 		return counts;
 	}
 
-	protected SortedSet<Word> rank(Map<String, Integer> counts) {
-		SortedSet<Word> ranks = new TreeSet<Word>();
+	protected SortedSet<Word> weight(Map<String, Integer> counts) {
+		SortedSet<Word> words = new TreeSet<Word>();
 
 		for (String word : counts.keySet()) {
 			int count = counts.get(word);
-			ranks.add(new Word(word, count));
+			words.add(new Word(word, count));
 		}
 
-		double max = ranks.first().weight;
-		for (Word word : ranks) {
+		double max = words.first().weight;
+		for (Word word : words) {
 			word.weight = word.weight / max;
 		}
 
-		return ranks;
+		return words;
 	}
 }

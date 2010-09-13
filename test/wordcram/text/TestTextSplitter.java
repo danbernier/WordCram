@@ -63,7 +63,7 @@ public class TestTextSplitter {
 		String[] words = ts
 				.splitIntoWords("biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words");
 		Map<String, Integer> counts = ts.count(words);
-		SortedSet<Word> ranks = ts.rank(counts);
+		SortedSet<Word> ranks = ts.weight(counts);
 		Assert.assertEquals(3, ranks.size());
 
 		Word[] ranksArray = ranks.toArray(new Word[0]);

@@ -94,6 +94,8 @@ public class WordCram {
 		words = _words;
 		wordIndex = -1;
 		bbTreeBuilder = new BBTreeBuilder();
+		
+		// TODO sort & rank words appropriately, and remove that from TextSplitter
 	}
 	
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
