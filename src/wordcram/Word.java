@@ -30,6 +30,11 @@ public class Word implements Comparable<Word> {
 		this.word = word;
 		this.weight = weight;
 	}
+	
+	@Override
+	public String toString() {
+		return word + " (" + weight + ")";
+	}
 
 	@Override
 	public int compareTo(Word w) {
