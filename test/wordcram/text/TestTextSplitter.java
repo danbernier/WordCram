@@ -1,23 +1,22 @@
 package wordcram.text;
 
 /*
-Copyright 2010 Daniel Bernier
+ Copyright 2010 Daniel Bernier
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+ http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 
 import java.util.Map;
-import java.util.SortedSet;
 
 import org.junit.*;
 
@@ -59,20 +58,21 @@ public class TestTextSplitter {
 	}
 
 	@Test
-	public void testRankingAndStopWords() {
+	public void testCountingAndStopWords() {
 		String[] words = ts
 				.splitIntoWords("biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words");
 		Map<String, Integer> counts = ts.count(words);
-		Word[] ranks = ts.weight(counts);
-		Assert.assertEquals(3, ranks.length);
+		Word[] weightedWords = ts.weight(counts);
+		
+		Assert.assertEquals(3, weightedWords.length);
 
-		Assert.assertEquals("cherry", ranks[0].word);
-		Assert.assertEquals("biscuit", ranks[1].word);
-		Assert.assertEquals("cocoa", ranks[2].word);
+		Assert.assertEquals("cherry", weightedWords[0].word);
+		Assert.assertEquals("biscuit", weightedWords[1].word);
+		Assert.assertEquals("cocoa", weightedWords[2].word);
 
-		Assert.assertEquals(3, ranks[0].weight, epsilon);
-		Assert.assertEquals(2, ranks[1].weight, epsilon);
-		Assert.assertEquals(1, ranks[2].weight, epsilon);
+		Assert.assertEquals(3, weightedWords[0].weight, epsilon);
+		Assert.assertEquals(2, weightedWords[1].weight, epsilon);
+		Assert.assertEquals(1, weightedWords[2].weight, epsilon);
 	}
 
 	@Test
