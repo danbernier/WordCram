@@ -64,7 +64,9 @@ public class Main extends PApplet {
 				Sizers.byWeight(5, 1000),
 				colorer, 
 				Anglers.mostlyHoriz(),
-				Placers.horizLine(),
+				//new PlottingWordPlacer(this,
+						Placers.horizLine(),
+				//),
 				//new PlottingWordNudger(this, 
 						new SpiralWordNudger()
 				//)

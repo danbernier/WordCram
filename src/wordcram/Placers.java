@@ -28,12 +28,13 @@ public class Placers {
 		return new WordPlacer() {
 			public PVector place(Word word, int wordIndex, int wordsCount,
 					int gsize, PGraphics applet) {
-				int centerHorizLine = (int) (applet.height * 0.5);
+				int centerHorizLine = (int) ((applet.height-gsize) * 0.5);
 				int centerVertLine = (int) (applet.width * 0.5);
 
-				float xOff = (float) r.nextGaussian() * (applet.width * 0.125f);
+				float xOff = (float) r.nextGaussian() * ((applet.width-gsize) * 0.2f);
+				float yOff = (float) r.nextGaussian() * 50;
 
-				return new PVector(centerVertLine + xOff, centerHorizLine);
+				return new PVector(centerVertLine + xOff, centerHorizLine + yOff);
 			}
 		};
 	}
