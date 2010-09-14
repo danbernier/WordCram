@@ -184,16 +184,17 @@ public class WordCram {
 			word.nudge(nudger.nudgeFor(word, attempt));
 			if (lastCollidedWith != null && word.overlaps(lastCollidedWith)) { continue; }
 			
-			boolean fits = true;
-			for (int i = 0; i < wordIndex && i < words.length; i++) {
+			boolean noOverlapFound = true;
+			for (int i = 0; noOverlapFound && i < wordIndex && i < words.length; i++) {
 				Word otherWord = words[i];
 				if (word.overlaps(otherWord)) {
-					fits = false;
+					noOverlapFound = false;
 					lastCollidedWith = otherWord;
 				}
 			}
 			
-			if (fits) {
+			if (noOverlapFound) {
+				//System.out.println("finished early: " + attempt + "/" + maxAttempts + " (" + ((float)100*attempt/maxAttempts) + ")");
 				PVector location = word.getLocation();
 				destination.image(wordImage, location.x, location.y);
 				//destination.pushStyle();
