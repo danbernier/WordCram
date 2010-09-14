@@ -41,9 +41,9 @@ public class TestTextSplitter {
 		Assert.assertEquals("mango", results[0].word);
 		Assert.assertEquals("biscuit", results[1].word);
 		Assert.assertEquals("avocado", results[2].word);
-		Assert.assertEquals(3 / 3d, results[0].weight, epsilon);
-		Assert.assertEquals(2 / 3d, results[1].weight, epsilon);
-		Assert.assertEquals(1 / 3d, results[2].weight, epsilon);
+		Assert.assertEquals(3, results[0].weight, epsilon);
+		Assert.assertEquals(2, results[1].weight, epsilon);
+		Assert.assertEquals(1, results[2].weight, epsilon);
 	}
 
 	@Test
@@ -53,9 +53,9 @@ public class TestTextSplitter {
 		Assert.assertEquals("mango", results[0].word);
 		Assert.assertEquals("biscuit", results[1].word);
 		Assert.assertEquals("avocado", results[2].word);
-		Assert.assertEquals(3 / 3d, results[0].weight, epsilon);
-		Assert.assertEquals(2 / 3d, results[1].weight, epsilon);
-		Assert.assertEquals(1 / 3d, results[2].weight, epsilon);
+		Assert.assertEquals(3, results[0].weight, epsilon);
+		Assert.assertEquals(2, results[1].weight, epsilon);
+		Assert.assertEquals(1, results[2].weight, epsilon);
 	}
 
 	@Test
@@ -63,18 +63,16 @@ public class TestTextSplitter {
 		String[] words = ts
 				.splitIntoWords("biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words");
 		Map<String, Integer> counts = ts.count(words);
-		SortedSet<Word> ranks = ts.weight(counts);
-		Assert.assertEquals(3, ranks.size());
+		Word[] ranks = ts.weight(counts);
+		Assert.assertEquals(3, ranks.length);
 
-		Word[] ranksArray = ranks.toArray(new Word[0]);
+		Assert.assertEquals("cherry", ranks[0].word);
+		Assert.assertEquals("biscuit", ranks[1].word);
+		Assert.assertEquals("cocoa", ranks[2].word);
 
-		Assert.assertEquals("cherry", ranksArray[0].word);
-		Assert.assertEquals("biscuit", ranksArray[1].word);
-		Assert.assertEquals("cocoa", ranksArray[2].word);
-
-		Assert.assertEquals(3 / 3d, ranksArray[0].weight, epsilon);
-		Assert.assertEquals(2 / 3d, ranksArray[1].weight, epsilon);
-		Assert.assertEquals(1 / 3d, ranksArray[2].weight, epsilon);
+		Assert.assertEquals(3, ranks[0].weight, epsilon);
+		Assert.assertEquals(2, ranks[1].weight, epsilon);
+		Assert.assertEquals(1, ranks[2].weight, epsilon);
 	}
 
 	@Test
