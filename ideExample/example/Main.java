@@ -116,7 +116,7 @@ public class Main extends PApplet {
 		else {
 			boolean linux = true;
 			String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
-			String path = projDir + "eclipse/wordcram/trunk/example/tao-te-ching.txt";
+			String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
 			return new TextSplitter().split(loadStrings(path));
 		}
 	}
