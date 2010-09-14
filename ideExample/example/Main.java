@@ -61,7 +61,7 @@ public class Main extends PApplet {
 		
 		wordcram = new WordCram(this, loadWords(), 
 				Fonters.alwaysUse(randomFont()),
-				Sizers.byWeight(5, 100),
+				Sizers.byWeight(5, 1000),
 				colorer, 
 				Anglers.mostlyHoriz(),
 				Placers.horizLine(),
@@ -105,11 +105,11 @@ public class Main extends PApplet {
 	}
 	
 	private Word[] loadWords() {
-		boolean loadFile = true;
+		boolean loadFile = false;
 		if (!loadFile) {
 			Word[] w = new Word[26];
 			for (int i = 0; i < w.length; i++) {
-				w[i] = new Word(new String(new char[]{(char)(i+65)}), (float)(26-i)/26f);
+				w[i] = new Word(new String(new char[]{(char)(i+65)}), 26-i);
 			}
 			return w;
 		}
