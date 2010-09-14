@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import java.util.*;
+
 import processing.core.*;
 
 public class WordCram {
@@ -91,15 +93,29 @@ public class WordCram {
 		angler = _angler;
 		placer = _wordPlacer;
 		nudger = _wordNudger;
-		words = _words;
+		words = weight(_words);
 		wordIndex = -1;
 		bbTreeBuilder = new BBTreeBuilder();
-		
-		// TODO sort & rank words appropriately, and remove that from TextSplitter
 	}
 	
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
 		this(_parent, _words, _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
+	}
+
+	private Word[] weight(Word[] rawWords) {
+		SortedSet<Word> sortedWords = new TreeSet<Word>();
+
+		double wordWeightSum = 0;
+		for (Word word : rawWords) {
+			wordWeightSum += word.weight;
+			sortedWords.add(word);
+		}
+
+		for (Word word : sortedWords) {
+			word.weight = word.weight / wordWeightSum;
+		}
+
+		return sortedWords.toArray(new Word[0]);
 	}
 	
 	public boolean hasMore() {
@@ -160,7 +176,7 @@ public class WordCram {
 		// TODO does it make sense to COMBINE wordplacer & wordnudger, the way you (sort of) orig. had it?  i think it does...
 		word.setDesiredLocation(placer.place(word, wordIndex, words.length, wordImageSize, destination));
 		PVector origSpot = word.getLocation();
-		
+				
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
 		Word lastCollidedWith = null;
 		for (int attempt = 0; attempt < maxAttempts; attempt++) {
