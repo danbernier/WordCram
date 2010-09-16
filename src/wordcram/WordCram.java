@@ -198,7 +198,7 @@ public class WordCram {
 		}
 	}
 	
-	public void draw() {
+	public void drawAll() {
 		while(hasMore()) {
 			drawNext();
 		}

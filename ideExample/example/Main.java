@@ -79,7 +79,7 @@ public class Main extends PApplet {
 		
 		boolean allAtOnce = false;
 		if (allAtOnce) {
-			wordcram.draw();
+			wordcram.drawAll();
 			println("Done");
 			noLoop();
 		}
