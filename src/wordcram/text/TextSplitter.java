@@ -45,7 +45,7 @@ public class TextSplitter {
 	}
 
 	public Word[] split(String text) {
-		return weight(count(splitIntoWords(text)));
+		return toWords(count(splitIntoWords(text)));
 	}
 
 	protected String[] splitIntoWords(String text) {
@@ -69,8 +69,8 @@ public class TextSplitter {
 		return counts;
 	}
 
-	protected Word[] weight(Map<String, Integer> counts) {
-		SortedSet<Word> words = new TreeSet<Word>();
+	protected Word[] toWords(Map<String, Integer> counts) {
+		List<Word> words = new ArrayList<Word>();
 
 		for (String word : counts.keySet()) {
 			int count = counts.get(word);

@@ -62,7 +62,7 @@ public class TestTextSplitter {
 		String[] words = ts
 				.splitIntoWords("biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words");
 		Map<String, Integer> counts = ts.count(words);
-		Word[] weightedWords = ts.weight(counts);
+		Word[] weightedWords = ts.toWords(counts);
 		
 		Assert.assertEquals(3, weightedWords.length);
 
