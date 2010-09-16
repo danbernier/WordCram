@@ -38,10 +38,13 @@ public class Word implements Comparable<Word> {
 
 	@Override
 	public int compareTo(Word w) {
-		if (w.weight != weight) {
-			return (int)(w.weight - weight);
+		if (w.weight < weight) {
+			return -1;
 		}
-		return w.word.compareTo(word);
+		else if (w.weight > weight) {
+			return 1;
+		}
+		else return 0;
 	}
 	
 	public void setBBTree(BBTree _bbTree) {

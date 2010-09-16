@@ -16,10 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import processing.core.*;
+import wordcram.text.WordSorterAndScaler;
 
 public class WordCram {
 	
@@ -92,29 +90,13 @@ public class WordCram {
 		angler = _angler;
 		placer = _wordPlacer;
 		nudger = _wordNudger;
-		words = weight(_words);
+		words = new WordSorterAndScaler().sortAndScale(_words);
 		wordIndex = -1;
 		bbTreeBuilder = new BBTreeBuilder();
 	}
-	
+
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
 		this(_parent, _words, _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
-	}
-
-	private Word[] weight(Word[] rawWords) {
-		SortedSet<Word> sortedWords = new TreeSet<Word>();
-
-		double wordWeightSum = 0;
-		for (Word word : rawWords) {
-			wordWeightSum += word.weight;
-			sortedWords.add(word);
-		}
-
-		for (Word word : sortedWords) {
-			word.weight = word.weight / wordWeightSum;
-		}
-
-		return sortedWords.toArray(new Word[0]);
 	}
 	
 	public boolean hasMore() {

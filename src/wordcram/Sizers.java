@@ -1,5 +1,7 @@
 package wordcram;
 
+import processing.core.PApplet;
+
 /*
 Copyright 2010 Daniel Bernier
 
@@ -19,10 +21,9 @@ limitations under the License.
 public class Sizers {
 	
 	public static WordSizer byWeight(final int minSize, final int maxSize) {
-		final int diff = maxSize - minSize;
 		return new WordSizer() {
 			public float sizeFor(Word word, int wordRank, int wordCount) {
-				return (float)(word.weight * diff) + minSize;
+				return PApplet.map((float)word.weight, 0, 1, minSize, maxSize);
 			}
 		};
 	}
@@ -31,8 +32,7 @@ public class Sizers {
 		final int diff = maxSize - minSize;
 		return new WordSizer() {
 			public float sizeFor(Word word, int wordRank, int wordCount) {
-				float multiple = (wordCount-wordRank)/(float)wordCount;
-				return (multiple * diff) + minSize;
+				return PApplet.map(wordRank, 0, wordCount, maxSize, minSize);
 			}
 		};
 	}
