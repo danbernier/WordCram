@@ -78,7 +78,7 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 		</if>
 	</target>
 
-	<target name="compile" depends="clean, checkAllForLicenseNotice">
+	<target name="compile" depends="clean"> <!--, checkAllForLicenseNotice"> -->
 		<mkdir dir="build/classes" />
 		<javac srcdir="src" destdir="build/classes" classpath="${classpath}" includeantruntime="false" />
 	</target>
@@ -86,8 +86,15 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 	<target name="test" depends="compile">
 		<mkdir dir="build/tests" />
 		<javac srcdir="test" destdir="build/tests" classpath="${classpath};${junit.jar.path};build/classes" includeantruntime="false" />
-		<junit dir="build/tests">
-			<classpath path="${junit.jar.path}" />
+		<junit dir="build/tests" haltonfailure="true">
+			<classpath path="${junit.jar.path};build/classes;build/tests" />
+			<formatter type="brief" usefile="false" />
+			
+			<batchtest fork="yes">
+		        <fileset dir="test">
+		            <include name="**/*Test*.java"/>
+		        </fileset>
+		    </batchtest>
 		</junit>
 	</target>
 

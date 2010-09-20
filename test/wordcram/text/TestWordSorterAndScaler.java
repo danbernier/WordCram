@@ -35,12 +35,12 @@ public class TestWordSorterAndScaler {
 		};
 		
 		Word[] weighted = new WordSorterAndScaler().sortAndScale(tinyWords);
-		
+				
 		Assert.assertEquals("Didn't get out 3 Words", 3, weighted.length);
 		
-		Assert.assertEquals(3/6f, weighted[0].weight, epsilon);
-		Assert.assertEquals(2/6f, weighted[1].weight, epsilon);
-		Assert.assertEquals(1/6f, weighted[2].weight, epsilon);
+		Assert.assertEquals(3/3f, weighted[0].weight, epsilon);
+		Assert.assertEquals(2/3f, weighted[1].weight, epsilon);
+		Assert.assertEquals(1/3f, weighted[2].weight, epsilon);
 		
 		Assert.assertEquals("things", weighted[0].word);
 		Assert.assertEquals("little", weighted[1].word);
@@ -59,9 +59,9 @@ public class TestWordSorterAndScaler {
 		
 		Assert.assertEquals("Didn't get out 3 Words", 3, weighted.length);
 		
-		Assert.assertEquals(3/6f, weighted[0].weight, epsilon);
-		Assert.assertEquals(2/6f, weighted[1].weight, epsilon);
-		Assert.assertEquals(1/6f, weighted[2].weight, epsilon);
+		Assert.assertEquals(3/3f, weighted[0].weight, epsilon);
+		Assert.assertEquals(2/3f, weighted[1].weight, epsilon);
+		Assert.assertEquals(1/3f, weighted[2].weight, epsilon);
 		
 		Assert.assertEquals("croyter", weighted[0].word);
 		Assert.assertEquals("crayter", weighted[1].word);

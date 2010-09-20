@@ -16,6 +16,7 @@ package wordcram.text;
  limitations under the License.
  */
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.junit.*;
@@ -37,6 +38,7 @@ public class TestTextSplitter {
 		String[] stringArray = new String[] { "BISCUIT biscuit, ",
 				"mango, mAngO,", " MaNgO! Avocado." };
 		Word[] results = ts.split(stringArray);
+		Arrays.sort(results);
 		Assert.assertEquals("mango", results[0].word);
 		Assert.assertEquals("biscuit", results[1].word);
 		Assert.assertEquals("avocado", results[2].word);
@@ -49,6 +51,7 @@ public class TestTextSplitter {
 	public void testFrontDoor() {
 		Word[] results = ts
 				.split("BISCUIT biscuit, mango, mAngO, MaNgO! Avocado.");
+		Arrays.sort(results);
 		Assert.assertEquals("mango", results[0].word);
 		Assert.assertEquals("biscuit", results[1].word);
 		Assert.assertEquals("avocado", results[2].word);
@@ -63,6 +66,7 @@ public class TestTextSplitter {
 				.splitIntoWords("biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words");
 		Map<String, Integer> counts = ts.count(words);
 		Word[] weightedWords = ts.toWords(counts);
+		Arrays.sort(weightedWords);
 		
 		Assert.assertEquals(3, weightedWords.length);
 
