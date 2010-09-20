@@ -21,50 +21,6 @@ import wordcram.text.WordSorterAndScaler;
 
 public class WordCram {
 	
-	/*
-	 * Other ideas, things to wordcram:
-	 * - beatles lyrics: http://www.beatleslyricsarchive.com/albums.php
-	 * - us constitution: http://www.usconstitution.net/const.txt
-	 * - baby names by decade: http://www.census.gov/genealogy/names/names_files.html
-	 */
-
-    // Inspirations:
-    // http://www.wordle.net/ and http://blog.wordle.net
-    // http://www.tagxedo.com/gallery.html -- arbitrary shapes, cool
-    // http://worditout.com/ -- lame, but looks like javascript
-    // http://code.google.com/p/wordookie/
-    // http://tagul.com/ -- similar, but w/ arbitrary shapes (how?), and clickable words (meh)
-	//
-    // some people on P5 forums wanted a wordle library: http://processing.org/discourse/yabb2/YaBB.pl?num=1237544659
-	
-	/*
-	 * TODO don't forget about (?) drawing to an off-screen buffer, rather than assuming it'll always be a PApplet. (really?)
-	 * TODO palette support?  Colorers based on http://colorschemedesigner.com's Mono(hue), Complement(hue), Triad(hue, offsetAngle), etc
-	 * TODO render transparently, so you can overlay it, or use it as a mask
-	 * TODO pick some really nice default fonts & colors for demos: check http://www.colourlovers.com/palette/1281472/Hybrid?widths=1
-	 * TODO try the other perf. improvements in the paper & book
-	 * TODO scale the window (somehow) to fit words in, when they run off-screen 
-	 * TODO try changing the color scheme AFTER rendering it -- should work fine
-	 * TODO provide a way to print out the config: font, hues, etc
-	 * TODO new DeliciousTagsTextLoader(username), new RssTextLoader(url), new HtmlTextLoader(url), new TwitterStreamTextLoader(twitterer)
-	 * TODO WordCram wc = new WordCramBuilder().rotateWith(myRotater).colorWith(#ff0000, #00ff00).buildIt();
-	 *      ... pass in WordFooers, and have sensible overrides (with varargs where appropriate) to build WordCrams more easily.
-	 *      ... WordCramBuilder will have sensible defaults for what's not specified.
-	 * TODO detect when words will be drawn TOO small, and stop rendering.
-	 * 
-	 * notes on building a P5 library: http://code.google.com/p/processing/wiki/LibraryBasics
-	 */
-	
-	/*
-	 * thought: to decide whether to rotate a word or not, grab the screen's width:height ratio.
-	 * if it's wide & short, longer words will be horiz
-	 * if it's tall & narrow, longer words will be vert
-	 * short words will be either
-	 * double aspect = width / height;
-	 * double lenPercentile = maxWordLen / thisWordLen;
-	 * ...not sure of the math here, work it out
-	 */
-	
 	private PApplet parent;
 	private PGraphics destination;
 	
