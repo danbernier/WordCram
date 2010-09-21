@@ -25,16 +25,16 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 	<property file="build.properties" />
 
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${ant.googlecode.jar.path}" name="gcupload" />
+	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="lib/ant-googlecode/ant-googlecode-0.0.2.jar" name="gcupload" />
 	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
 		<classpath>
-			<fileset dir="${svnant.home}">
-				<include name="**/*.jar"/>
+			<fileset dir="lib/svnant">
+				<include name="*.jar"/>
 			</fileset>
 		</classpath>
 	</typedef> 
 	
-	<property name="classpath" value="${processing.home}/lib/core.jar" />
+	<property name="classpath" value="lib/processing/core.jar" />
 
 	<target name="clean">
 		<delete dir="build" />
@@ -85,9 +85,9 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 
 	<target name="test" depends="compile">
 		<mkdir dir="build/tests" />
-		<javac srcdir="test" destdir="build/tests" classpath="${classpath};${junit.jar.path};build/classes" includeantruntime="false" />
+		<javac srcdir="test" destdir="build/tests" classpath="${classpath};lib/junit/junit-4.8.2.jar;build/classes" includeantruntime="false" />
 		<junit dir="build/tests" haltonfailure="true">
-			<classpath path="${junit.jar.path};build/classes;build/tests" />
+			<classpath path="lib/junit/junit-4.8.2.jar;build/classes;build/tests" />
 			<formatter type="brief" usefile="false" />
 			
 			<batchtest fork="yes">
