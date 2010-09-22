@@ -29,7 +29,7 @@ public class Placers {
 			public PVector place(Word word, int wordIndex, int wordsCount,
 					int gsize, PGraphics applet) {
 				int centerHorizLine = (int) ((applet.height-gsize) * 0.5);
-				int centerVertLine = (int) (applet.width * 0.5);
+				int centerVertLine = (int) ((applet.width-gsize) * 0.5);
 
 				float xOff = (float) r.nextGaussian() * ((applet.width-gsize) * 0.2f);
 				float yOff = (float) r.nextGaussian() * 50;
