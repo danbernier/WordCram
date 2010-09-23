@@ -69,6 +69,30 @@ public class WordCram {
 		return wordIndex < words.length-1;
 	}
 	
+	public void drawAll() {
+		while(hasMore()) {
+			drawNext();
+		}
+	}
+
+	public void drawNext() {
+		Word word = words[++wordIndex];
+		Shape wordShape = wordToShape(word);
+		if (wordShape != null) {
+			PImage wordImage = shapeToImage(wordShape, colorer.colorFor(word));
+			PVector wordLocation = placeWord(word, wordImage);
+			if (wordLocation != null) {
+				drawWordImage(wordImage, wordLocation);
+			}
+			else {
+				//System.out.println("couldn't place: " + word.word + ", " + word.weight);
+			}
+		}
+		else {
+			wordIndex = words.length;
+		}
+	}
+	
 	/* methods JUST for off-screen drawing. */
 	/* Replace these w/ a callback functor to drawNext()? */
 	public Word currentWord() {
@@ -77,27 +101,7 @@ public class WordCram {
 	public int currentWordIndex() {
 		return wordIndex;
 	}
-	/* END OF methods JUST for off-screen drawing. */	
-	
-	private PImage shapeToImage(Shape shape, int color) {
-
-		Rectangle wordRect = shape.getBounds();
-
-		PGraphics wordImage = parent.createGraphics(wordRect.width-wordRect.x, wordRect.height-wordRect.y,
-				PApplet.JAVA2D);
-		wordImage.beginDraw();
-		
-			PathIterator pi = shape.getPathIterator(null); //font.getFont().getTransform()); // TODO do we need this? If so, need to cache the PFont. 
-			GeneralPath polyline = new GeneralPath(shape);
-			Graphics2D g2 = (Graphics2D)wordImage.image.getGraphics();
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setPaint(new Color(color, true));
-			g2.fill(polyline);
-		
-		wordImage.endDraw();
-		
-		return wordImage;
-	}
+	/* END OF methods JUST for off-screen drawing. */
 
 	private Shape wordToShape(Word word) {
 		
@@ -126,6 +130,26 @@ public class WordCram {
 		word.setBBTree(bbTreeBuilder.makeTree(shape, 3));  // TODO extract config setting for minBoundingBox, and add swelling option 
 
 		return shape;
+	}	
+	
+	private PImage shapeToImage(Shape shape, int color) {
+
+		Rectangle wordRect = shape.getBounds();
+
+		PGraphics wordImage = parent.createGraphics(wordRect.width-wordRect.x, wordRect.height-wordRect.y,
+				PApplet.JAVA2D);
+		wordImage.beginDraw();
+		
+			PathIterator pi = shape.getPathIterator(null); //font.getFont().getTransform()); // TODO do we need this? If so, need to cache the PFont. 
+			GeneralPath polyline = new GeneralPath(shape);
+			Graphics2D g2 = (Graphics2D)wordImage.image.getGraphics();
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setPaint(new Color(color, true));
+			g2.fill(polyline);
+		
+		wordImage.endDraw();
+		
+		return wordImage;
 	}
 
 	private PVector placeWord(Word word, PImage wordImage) {
@@ -174,29 +198,5 @@ public class WordCram {
 		//destination.stroke(0, 255, 255, 50);
 		//destination.line(origSpot.x, origSpot.y, location.x, location.y);
 		//destination.popStyle();
-	}
-
-	public void drawNext() {
-		Word word = words[++wordIndex];
-		Shape wordShape = wordToShape(word);
-		if (wordShape != null) {
-			PImage wordImage = shapeToImage(wordShape, colorer.colorFor(word));
-			PVector wordLocation = placeWord(word, wordImage);
-			if (wordLocation != null) {
-				drawWordImage(wordImage, wordLocation);
-			}
-			else {
-				//System.out.println("couldn't place: " + word.word + ", " + word.weight);
-			}
-		}
-		else {
-			wordIndex = words.length;
-		}
-	}
-	
-	public void drawAll() {
-		while(hasMore()) {
-			drawNext();
-		}
 	}
 }
