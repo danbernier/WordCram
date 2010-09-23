@@ -35,9 +35,11 @@ public class WordCram {
 	private WordAngler angler;
 	private WordPlacer placer;
 	private WordNudger nudger;
+
+	private BBTreeBuilder bbTreeBuilder;
+	private FontRenderContext frc;
 	
 	private Word[] words;
-	private BBTreeBuilder bbTreeBuilder;
 	private int wordIndex;
 	
 	// PApplet parent is only for 2 things: to get its PGraphics g (aka destination), and 
@@ -51,9 +53,12 @@ public class WordCram {
 		angler = _angler;
 		placer = _wordPlacer;
 		nudger = _wordNudger;
+		
+		bbTreeBuilder = new BBTreeBuilder();
+		frc = new FontRenderContext(null, true, true);
+		
 		words = new WordSorterAndScaler().sortAndScale(_words);
 		wordIndex = -1;
-		bbTreeBuilder = new BBTreeBuilder();
 	}
 
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
@@ -74,24 +79,15 @@ public class WordCram {
 	}
 	/* END OF methods JUST for off-screen drawing. */	
 	
-	private PImage renderWordToBuffer(Word word) {
+	private PImage shapeToImage(Shape shape, int color) {
 
-		float fontSize = sizer.sizeFor(word, wordIndex, words.length);
-		PFont font = fonter.fontFor(word);
-		float rotation = angler.angleFor(word);
-		int color = colorer.colorFor(word);
-		
-		Shape shape = wordToShape(word, font, fontSize, rotation); 
 		Rectangle wordRect = shape.getBounds();
-		if (wordRect.width < 2 || wordRect.height < 2) { return null; }
 
-	    int bgColor = destination.color(255, 0);
-		
 		PGraphics wordImage = parent.createGraphics(wordRect.width-wordRect.x, wordRect.height-wordRect.y,
 				PApplet.JAVA2D);
 		wordImage.beginDraw();
 		
-			PathIterator pi = shape.getPathIterator(font.getFont().getTransform());
+			PathIterator pi = shape.getPathIterator(null); //font.getFont().getTransform()); // TODO do we need this? If so, need to cache the PFont. 
 			GeneralPath polyline = new GeneralPath(shape);
 			Graphics2D g2 = (Graphics2D)wordImage.image.getGraphics();
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -100,39 +96,43 @@ public class WordCram {
 		
 		wordImage.endDraw();
 		
-		word.setBBTree(bbTreeBuilder.makeTree(shape, 3));
-		
 		return wordImage;
 	}
 
-	private Shape wordToShape(Word word, PFont pFont, float size, 
-			float rotation) {
-		FontRenderContext frc = new FontRenderContext(null, true, true);
+	private Shape wordToShape(Word word) {
+		
+		float size = sizer.sizeFor(word, wordIndex, words.length);
+		PFont pFont = fonter.fontFor(word);
+		float rotation = angler.angleFor(word);		
+		
 		Font font = pFont.getFont().deriveFont(size);
 		char[] chars = word.word.toCharArray();
 
 		GlyphVector gv = font.layoutGlyphVector(frc, chars, 0, chars.length,
 				Font.LAYOUT_LEFT_TO_RIGHT);
 
-		Shape result = gv.getOutline();
+		Shape shape = gv.getOutline();
 
 		if (rotation != 0.0) {
-			result = AffineTransform.getRotateInstance(rotation)
-					.createTransformedShape(result);
+			shape = AffineTransform.getRotateInstance(rotation)
+					.createTransformedShape(shape);
 		}
 		
-		Rectangle2D rect = result.getBounds2D();
-		result = AffineTransform.getTranslateInstance(-rect.getX(), -rect.getY()).createTransformedShape(result);
+		Rectangle2D rect = shape.getBounds2D();
+		if (rect.getWidth() < 2 || rect.getHeight() < 2) { return null; }  // TODO extract config setting for minWordSize
+		
+		shape = AffineTransform.getTranslateInstance(-rect.getX(), -rect.getY()).createTransformedShape(shape);
+		
+		word.setBBTree(bbTreeBuilder.makeTree(shape, 3));  // TODO extract config setting for minBoundingBox, and add swelling option 
 
-		return result;
+		return shape;
 	}
 
-	private void placeWord(PImage wordImage, Word word) {
-		int wordImageSize = wordImage.width;
+	private PVector placeWord(Word word, PImage wordImage) {
+		int wordImageSize = wordImage.width;  // TODO bug here: should pass img.width AND img.height to placer, since they won't always be the same now.
 
 		// TODO does it make sense to COMBINE wordplacer & wordnudger, the way you (sort of) orig. had it?  i think it does...
 		word.setDesiredLocation(placer.place(word, wordIndex, words.length, wordImageSize, destination));
-		PVector origSpot = word.getLocation();
 				
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
 		Word lastCollidedWith = null;
@@ -151,27 +151,43 @@ public class WordCram {
 			}
 			
 			if (noOverlapFound) {
-				//System.out.println("finished early: " + attempt + "/" + maxAttempts + " (" + ((float)100*attempt/maxAttempts) + ")");
-				PVector location = word.getLocation();
-				destination.image(wordImage, location.x, location.y);
-				//word.getBBTree().draw(destination);
-				//destination.pushStyle();
-				//destination.strokeWeight(PApplet.map(attempt, 0, 700, 1, 30));
-				//destination.stroke(0, 255, 255, 50);
-				//destination.line(origSpot.x, origSpot.y, location.x, location.y);
-				//destination.popStyle();
-				return;
+				return word.getLocation();
 			}
 		}
 		
-		//System.out.println("couldn't place: " + word.word + ", " + word.weight);
+		return null;
+	}
+	
+	private void drawWordImage(PImage wordImage, PVector location) {
+		//System.out.println("finished early: " + attempt + "/" + maxAttempts + " (" + ((float)100*attempt/maxAttempts) + ")");
+		destination.image(wordImage, location.x, location.y);
+		
+//		destination.pushStyle();
+//		destination.stroke(30, 255, 255, 50);
+//		destination.noFill();
+//		word.getBBTree().draw(destination);
+//		destination.rect(location.x, location.y, wordImage.width, wordImage.height);
+//		destination.popStyle();
+		
+		//destination.pushStyle();
+		//destination.strokeWeight(PApplet.map(attempt, 0, 700, 1, 30));
+		//destination.stroke(0, 255, 255, 50);
+		//destination.line(origSpot.x, origSpot.y, location.x, location.y);
+		//destination.popStyle();
 	}
 
 	public void drawNext() {
 		Word word = words[++wordIndex];
-		PImage wordImage = renderWordToBuffer(word);
-		if (wordImage != null) {
-			placeWord(wordImage, word);
+		Shape wordShape = wordToShape(word);
+		if (wordShape != null) {
+			PImage wordImage = shapeToImage(wordShape, colorer.colorFor(word));
+			PVector wordLocation = placeWord(word, wordImage);
+			if (wordLocation != null) {
+				drawWordImage(wordImage, wordLocation);
+			}
+			else {
+				//System.out.println("couldn't place: " + word.word + ", " + word.weight);
+			}
 		}
 		else {
 			wordIndex = words.length;
