@@ -165,6 +165,9 @@ public class WordCram {
 			word.nudge(nudger.nudgeFor(word, attempt));
 			if (lastCollidedWith != null && word.overlaps(lastCollidedWith)) { continue; }
 			
+			PVector loc = word.getLocation();
+			if (loc.x < 0 || loc.y < 0 || loc.x + wordImage.width > destination.width || loc.y + wordImage.height > destination.height) { continue; }
+			
 			boolean noOverlapFound = true;
 			for (int i = 0; noOverlapFound && i < wordIndex && i < words.length; i++) {
 				Word otherWord = words[i];
