@@ -66,4 +66,8 @@ public class Word implements Comparable<Word> {
 	public PVector getLocation() {
 		return currentLocation.get();
 	}
+	
+	BBTree getBBTree() {
+		return bbTree;
+	}
 }

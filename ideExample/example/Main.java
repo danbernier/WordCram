@@ -34,6 +34,7 @@ public class Main extends PApplet {
 		smooth();
 		colorMode(HSB);
 		initWordCram();
+		frameRate(1);
 	}
 	
 	private PFont randomFont() {
@@ -58,6 +59,7 @@ public class Main extends PApplet {
 		WordColorer colorer = Colorers.pickFrom(color(0, 200, 255), color(30, 200, 255), color(200, 200, 255));
 		//colorer = Colorers.twoHuesRandomSats(this);
 		colorer = Colorers.pickFrom(color(0, 0, 175));
+		//colorer = Colorers.twoHuesRandomSats(this);
 		
 		wordcram = new WordCram(this, loadWords(), 
 				Fonters.alwaysUse(randomFont()),
@@ -67,15 +69,15 @@ public class Main extends PApplet {
 				//new PlottingWordPlacer(this,
 						Placers.horizLine(),
 				//),
-				//new PlottingWordNudger(this, 
+				new PlottingWordNudger(this, 
 						new SpiralWordNudger()
-				//)
+				)
 		);
 	}
 	
 	public void draw() {
-		//fill(55, 20);
-		//rect(0, 0, width, height);
+		fill(55);
+		rect(0, 0, width, height);
 		
 		boolean allAtOnce = false;
 		if (allAtOnce) {
@@ -84,7 +86,7 @@ public class Main extends PApplet {
 			noLoop();
 		}
 		else {
-			int wordsPerFrame = 10;
+			int wordsPerFrame = 1;
 			while (wordcram.hasMore() && wordsPerFrame-- > 0) {
 				wordcram.drawNext();
 			}

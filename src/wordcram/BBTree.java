@@ -2,7 +2,7 @@ package wordcram;
 
 import java.util.ArrayList;
 
-import processing.core.PVector;
+import processing.core.*;
 
 /*
  Copyright 2010 Daniel Bernier
@@ -129,5 +129,60 @@ class BBTree {
 				kids[i].swellLeaves(extra);
 			}
 		}
+	}
+
+	void draw(PGraphics g) {
+		g.pushStyle();
+		g.rectMode(PConstants.CORNERS);
+		g.noFill();
+		
+			//g.stroke(255);
+			//drawBounds(g, getPoints());
+			
+//			g.stroke(0, 255, 255);
+//			g.pushMatrix();
+//			g.translate(location.x, location.y);
+//			drawBounds(g, getBounds());
+//			g.popMatrix();
+
+			g.stroke(30, 255, 255, 50);
+			drawLeaves(g);
+			
+		g.popStyle();
+	}
+
+	private void drawLeaves(PGraphics g) {
+		if (this.isLeaf()) {
+			drawBounds(g, getPoints());
+		} else {
+			for (int i = 0; i < kids.length; i++) {
+				kids[i].drawLeaves(g);
+			}
+		}
+	}
+
+	PVector[] getBounds() {
+		if (this.isLeaf()) {
+			return new PVector[] { new PVector(x1, y1), new PVector(x2, y2) };
+		} else {
+			float minX = Float.MAX_VALUE;
+			float minY = Float.MAX_VALUE;
+			float maxX = Float.MIN_VALUE;
+			float maxY = Float.MIN_VALUE;
+
+			PVector[] kb;
+			for (int i = 0; i < kids.length; i++) {
+				kb = kids[i].getBounds();
+				if (kb[0].x < minX) minX = kb[0].x;
+				if (kb[0].y < minY) minY = kb[0].y;
+				if (kb[1].x > maxX) maxX = kb[1].x;
+				if (kb[1].y > maxY) maxY = kb[1].y;
+			}
+			return new PVector[] { new PVector(minX, minY), new PVector(maxX, maxY) };
+		}
+	}
+
+	private void drawBounds(PGraphics g, PVector[] rect) {
+		g.rect(rect[0].x, rect[0].y, rect[1].x, rect[1].y);
 	}
 }

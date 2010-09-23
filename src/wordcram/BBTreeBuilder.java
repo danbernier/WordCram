@@ -16,9 +16,55 @@ package wordcram;
  limitations under the License.
  */
 
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
+
 import processing.core.PImage;
 
 class BBTreeBuilder {
+	public BBTree makeTree(Shape shape, int minBoxSize) {
+		Rectangle2D bounds = shape.getBounds2D();
+		int x = (int) bounds.getX();
+		int y = (int) bounds.getY();
+		int x2 = x + (int) bounds.getWidth();
+		int y2 = y + (int) bounds.getHeight();
+		return makeTree(shape, minBoxSize, x, y, x2, y2);
+	}
+
+	private BBTree makeTree(Shape shape, int minBoxSize, int x1, int y1,
+			int x2, int y2) {
+
+		boolean intersects = shape.intersects(x1, y1, x2 - x1, y2 - y1);
+		boolean contains = shape.contains(x1, y1, x2 - x1, y2 - y1);
+
+		if (!intersects && !contains) {
+			return null;
+		} else {
+			BBTree tree = new BBTree(x1, y1, x2, y2);
+			if (!contains) {
+				boolean smallEnoughToStop = x2 - x1 <= minBoxSize;
+				if (!smallEnoughToStop) {
+					int newX = avg(x1, x2);
+					int newY = avg(y1, y2);
+
+					// upper left
+					BBTree t0 = makeTree(shape, minBoxSize, x1, y1, newX, newY);
+					// upper right
+					BBTree t1 = makeTree(shape, minBoxSize, newX, y1, x2, newY);
+					// lower left
+					BBTree t2 = makeTree(shape, minBoxSize, x1, newY, newX, y2);
+					// lower right
+					BBTree t3 = makeTree(shape, minBoxSize, newX, newY, x2, y2);
+
+					tree.addKids(t0, t1, t2, t3);
+				}
+			}
+
+			return tree;
+		}
+	}
+		  
+		  
 	public BBTree makeTree(PImage buffer, int bgColor, int minBoxSize) {
 		return makeTree(buffer, bgColor, minBoxSize, 0, 0, buffer.width,
 				buffer.height);
