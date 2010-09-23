@@ -117,7 +117,7 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 		</tstamp>
 		
 		<property name="pub.file" value="wordcram.${date}"/>
-		<tar destfile="build/${pub.file}.tar" basedir="build/p5lib" />
+		<tar destfile="build/${pub.file}.tar.gz" basedir="build/p5lib" compression="gzip" />
 		<zip destfile="build/${pub.file}.zip" basedir="build/p5lib" />
 
 		<gcupload
@@ -139,7 +139,7 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 		<input message="...and the release number:" addproperty="publish.releaseNumber" />
 		
 		<property name="pub.file" value="wordcram.${publish.releaseNumber}"/>
-		<tar destfile="build/${pub.file}.tar" basedir="build/p5lib" />
+		<tar destfile="build/${pub.file}.tar.gz" basedir="build/p5lib" compression="gzip" />
 		<zip destfile="build/${pub.file}.zip" basedir="build/p5lib" />
 
 		<gcupload
@@ -154,7 +154,7 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 			targetfilename="${pub.file}.zip"
 			summary="${publish.summary}"
 			labels="release, stable" />
-		
+
 		<svn>
 			<info target="../trunk" propPrefix="trunk" />
 		</svn>
