@@ -144,16 +144,16 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 
 		<gcupload
 			username="${gc.username}" password="${gc.password}" projectname="wordcram" 
-			filename="build/${pub.file}.tar"
-			targetfilename="${pub.file}.tar"  
+			filename="build/${pub.file}.tar.gz"
+			targetfilename="${pub.file}.tar.gz"  
 			summary="${publish.summary}" 
-			labels="release, stable" />
+			labels="release, stable, Featured" />
 		<gcupload
 			username="${gc.username}" password="${gc.password}" projectname="wordcram"
 			filename="build/${pub.file}.zip"
 			targetfilename="${pub.file}.zip"
 			summary="${publish.summary}"
-			labels="release, stable" />
+			labels="release, stable, Featured" />
 
 		<svn>
 			<info target="../trunk" propPrefix="trunk" />
