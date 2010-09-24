@@ -29,7 +29,6 @@ public class Sizers {
 	}
 	
 	public static WordSizer byRank(final int minSize, final int maxSize) {
-		final int diff = maxSize - minSize;
 		return new WordSizer() {
 			public float sizeFor(Word word, int wordRank, int wordCount) {
 				return PApplet.map(wordRank, 0, wordCount, maxSize, minSize);
