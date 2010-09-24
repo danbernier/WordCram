@@ -16,9 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import processing.core.PGraphics;
 import processing.core.PVector;
 
 public interface WordPlacer {
-	public abstract PVector place(Word word, int wordIndex, int wordsCount, int gsize, PGraphics applet);
+	public abstract PVector place(Word word, int wordIndex, int wordsCount, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight);
 }

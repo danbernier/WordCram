@@ -23,26 +23,26 @@ public class WaveWordPlacer implements WordPlacer, PConstants {
 	private java.util.Random r = new java.util.Random();
 	
 	@Override
-	public PVector place(Word word, int wordIndex, int wordsCount, int gsize, PGraphics p) {
-		return new PVector(getX(p, wordIndex, wordsCount), 
-							getY(p, wordIndex, wordsCount));
+	public PVector place(Word word, int wordIndex, int wordsCount, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
+		return new PVector(getX(fieldWidth, wordIndex, wordsCount), 
+							getY(fieldHeight, wordIndex, wordsCount));
 	}
 	
-	private int getX(PGraphics p, int wordIndex, int wordsCount) {
+	private int getX(int fieldWidth, int wordIndex, int wordsCount) {
 		return PApplet.round(
-					PApplet.map(wordIndex, 0, wordsCount, 0, p.width) 
+					PApplet.map(wordIndex, 0, wordsCount, 0, fieldWidth) 
 					+ (float)(r.nextGaussian() * 20)
 				);		
 	}
 	
-	private int getY(PGraphics p, int wordIndex, int wordsCount) {
+	private int getY(int fieldHeight, int wordIndex, int wordsCount) {
 
 		float sinOffset = PApplet.map((float)Math.sin(PApplet.map(wordIndex, 0, wordsCount, PI, -PI)),
-				0, 1, 0, p.height/3);
+				0, 1, 0, fieldHeight/3);
 //		sinOffset = 0.0f;
 
 		return PApplet.round(
-					PApplet.map(wordIndex, 0, wordsCount, 0, p.height) 
+					PApplet.map(wordIndex, 0, wordsCount, 0, fieldHeight) 
 					+ (float)(r.nextGaussian() * 20) 
 					+ sinOffset
 				);		

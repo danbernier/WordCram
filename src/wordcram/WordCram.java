@@ -153,10 +153,8 @@ public class WordCram {
 	}
 
 	private PVector placeWord(Word word, PImage wordImage) {
-		int wordImageSize = wordImage.width;  // TODO bug here: should pass img.width AND img.height to placer, since they won't always be the same now.
-
 		// TODO does it make sense to COMBINE wordplacer & wordnudger, the way you (sort of) orig. had it?  i think it does...
-		word.setDesiredLocation(placer.place(word, wordIndex, words.length, wordImageSize, destination));
+		word.setDesiredLocation(placer.place(word, wordIndex, words.length, wordImage.width, wordImage.height, destination.width, destination.height));
 				
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
 		Word lastCollidedWith = null;

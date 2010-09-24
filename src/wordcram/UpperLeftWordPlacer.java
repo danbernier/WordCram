@@ -18,16 +18,17 @@ limitations under the License.
 
 import java.util.Random;
 
-import processing.core.*;
+import processing.core.PApplet;
+import processing.core.PVector;
 
 public class UpperLeftWordPlacer implements WordPlacer {
 
 	private Random r = new Random();
 	
 	@Override
-	public PVector place(Word word, int wordIndex, int wordsCount, int gsize, PGraphics p) {
-		int x = getOneUnder(p.width-gsize);
-		int y = getOneUnder(p.height-gsize);
+	public PVector place(Word word, int wordIndex, int wordsCount, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
+		int x = getOneUnder(fieldWidth - wordImageWidth);
+		int y = getOneUnder(fieldHeight - wordImageHeight);
 		return new PVector(x, y);
 	}
 	

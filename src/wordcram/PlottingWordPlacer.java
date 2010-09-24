@@ -29,9 +29,8 @@ public class PlottingWordPlacer implements WordPlacer {
 	}
 	
 	@Override
-	public PVector place(Word word, int wordIndex, int wordsCount, int gsize,
-			PGraphics applet) {
-		PVector v = wrappedPlacer.place(word, wordIndex, wordsCount, gsize, applet);
+	public PVector place(Word word, int wordIndex, int wordsCount, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
+		PVector v = wrappedPlacer.place(word, wordIndex, wordsCount, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
 		parent.pushStyle();
 		parent.noFill();
 		

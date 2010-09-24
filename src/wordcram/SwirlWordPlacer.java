@@ -16,24 +16,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import processing.core.*;
+import processing.core.PApplet;
+import processing.core.PVector;
 
 public class SwirlWordPlacer implements WordPlacer {
 
 	private java.util.Random r = new java.util.Random();
 	
 	@Override
-	public PVector place(Word word, int wordIndex, int wordsCount, int gsize,	PGraphics applet) {
+	public PVector place(Word word, int wordIndex, int wordsCount, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
 
 		float theta = PApplet.map(wordIndex, 0, wordsCount, 0, 6 * PApplet.TWO_PI);
 		
 		// TODO applet.width/2 -> max = triggy, based on sin/cos, so if height is short, it stays onscreen 
-		float radius = PApplet.map(wordIndex, 0, wordsCount, 0, applet.width/2);
+		float radius = PApplet.map(wordIndex, 0, wordsCount, 0, fieldWidth/2);
 //		float radius = PApplet.map((float)word.weight, 0, 1.0f, 0, applet.width/2);
 //		radius = radius * (float)word.weight * 100;
 		
-		float cx = applet.width/2;
-		float cy = applet.height/2;
+		float cx = fieldWidth/2;
+		float cy = fieldHeight/2;
 		
 		float x = PApplet.cos(theta) * radius;
 		float y = PApplet.sin(theta) * radius;

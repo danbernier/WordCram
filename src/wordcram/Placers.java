@@ -27,11 +27,11 @@ public class Placers {
 
 		return new WordPlacer() {
 			public PVector place(Word word, int wordIndex, int wordsCount,
-					int gsize, PGraphics applet) {
-				int centerHorizLine = (int) ((applet.height-gsize) * 0.5);
-				int centerVertLine = (int) ((applet.width-gsize) * 0.5);
+					int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
+				int centerHorizLine = (int) ((fieldHeight - wordImageHeight) * 0.5);
+				int centerVertLine = (int) ((fieldWidth - wordImageWidth) * 0.5);
 
-				float xOff = (float) r.nextGaussian() * ((applet.width-gsize) * 0.2f);
+				float xOff = (float) r.nextGaussian() * ((fieldWidth - wordImageWidth) * 0.2f);
 				float yOff = (float) r.nextGaussian() * 50;
 
 				return new PVector(centerVertLine + xOff, centerHorizLine + yOff);
@@ -46,9 +46,9 @@ public class Placers {
 		return new WordPlacer() {
 
 			public PVector place(Word word, int wordIndex, int wordsCount,
-					int gsize, PGraphics p) {
-				return new PVector(getOneUnder(p.width - gsize),
-						getOneUnder(p.height - gsize));
+					int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
+				return new PVector(getOneUnder(fieldWidth - wordImageWidth),
+						getOneUnder(fieldHeight - wordImageHeight));
 			}
 
 			private int getOneUnder(float upperLimit) {
