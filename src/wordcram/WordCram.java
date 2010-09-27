@@ -79,10 +79,11 @@ public class WordCram {
 		Word word = words[++wordIndex];
 		Shape wordShape = wordToShape(word);
 		if (wordShape != null) {
-			PImage wordImage = shapeToImage(wordShape, colorer.colorFor(word));
-			PVector wordLocation = placeWord(word, wordImage);
+			Rectangle2D rect = wordShape.getBounds2D();
+			PVector wordLocation = placeWord(word, (int)rect.getWidth(), (int)rect.getHeight());
+			
 			if (wordLocation != null) {
-				drawWordImage(wordImage, wordLocation);
+				drawWordImage(word, wordShape, wordLocation);
 			}
 			else {
 				//System.out.println("couldn't place: " + word.word + ", " + word.weight);
@@ -140,7 +141,6 @@ public class WordCram {
 				PApplet.JAVA2D);
 		wordImage.beginDraw();
 		
-			PathIterator pi = shape.getPathIterator(null); //font.getFont().getTransform()); // TODO do we need this? If so, need to cache the PFont. 
 			GeneralPath polyline = new GeneralPath(shape);
 			Graphics2D g2 = (Graphics2D)wordImage.image.getGraphics();
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -152,9 +152,9 @@ public class WordCram {
 		return wordImage;
 	}
 
-	private PVector placeWord(Word word, PImage wordImage) {
+	private PVector placeWord(Word word, int wordImageWidth, int wordImageHeight) {
 		// TODO does it make sense to COMBINE wordplacer & wordnudger, the way you (sort of) orig. had it?  i think it does...
-		word.setDesiredLocation(placer.place(word, wordIndex, words.length, wordImage.width, wordImage.height, destination.width, destination.height));
+		word.setDesiredLocation(placer.place(word, wordIndex, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height));
 				
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
 		Word lastCollidedWith = null;
@@ -164,7 +164,7 @@ public class WordCram {
 			if (lastCollidedWith != null && word.overlaps(lastCollidedWith)) { continue; }
 			
 			PVector loc = word.getLocation();
-			if (loc.x < 0 || loc.y < 0 || loc.x + wordImage.width > destination.width || loc.y + wordImage.height > destination.height) { continue; }
+			if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth > destination.width || loc.y + wordImageHeight > destination.height) { continue; }
 			
 			boolean noOverlapFound = true;
 			for (int i = 0; noOverlapFound && i < wordIndex && i < words.length; i++) {
@@ -183,9 +183,27 @@ public class WordCram {
 		return null;
 	}
 	
-	private void drawWordImage(PImage wordImage, PVector location) {
-		//System.out.println("finished early: " + attempt + "/" + maxAttempts + " (" + ((float)100*attempt/maxAttempts) + ")");
-		destination.image(wordImage, location.x, location.y);
+	private void drawWordImage(Word word, Shape wordShape, PVector location) {
+		
+		boolean useJavaGeom = true;
+		
+		if (useJavaGeom) {
+
+			GeneralPath polyline = new GeneralPath(wordShape);
+			polyline.transform(AffineTransform.getTranslateInstance(location.x, location.y));
+			
+			boolean drawToParent = false;
+			
+			Graphics2D g2 = (Graphics2D)(drawToParent ? parent.getGraphics() : destination.image.getGraphics());
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setPaint(new Color(colorer.colorFor(word), true));
+			g2.fill(polyline);
+		
+		}
+		else {
+			PImage wordImage = shapeToImage(wordShape, colorer.colorFor(word));
+			destination.image(wordImage, location.x, location.y);
+		}
 		
 //		destination.pushStyle();
 //		destination.stroke(30, 255, 255, 50);
