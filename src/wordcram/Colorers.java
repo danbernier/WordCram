@@ -46,4 +46,7 @@ public class Colorers {
 			}
 		};
 	}
+
+    // TODO add alwaysUse, for consistency, and add an overload that takes
+    // 1 int (greyscale), 2 ints (greyscale/alpha), etc
 }
