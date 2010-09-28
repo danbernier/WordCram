@@ -32,4 +32,4 @@ WordCram wordcram = new WordCram(this,
   Placers.centerClump()
 );
  
-wordcram.draw();
+wordcram.drawAll();
