@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <!--
-googlecode upload task: http://code.google.com/p/ant-googlecode/
+ngooglecode upload task: http://code.google.com/p/ant-googlecode/
 svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 -->
 
@@ -54,6 +54,7 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 			<fileset dir=".">
 				<include name="**/*.java" />
 				<include name="**/*.xml" />
+				<include name="**/*.pde" />
 			</fileset>
 			<sequential>
 				<loadfile srcFile="${srcFile}" property="src" />
@@ -101,6 +102,11 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 	<target name="deploy" depends="test">
 		<mkdir dir="build/p5lib/wordcram/library" />
 		<jar destfile="build/p5lib/wordcram/library/wordcram.jar" basedir="build/classes" />
+		
+		<mkdir dir="build/p5lib/wordcram/examples" />
+		<copy todir="build/p5lib/wordcram/examples">
+			<fileset dir="example" />
+		</copy>
 	</target>
 
 	<target name="publish.local" depends="deploy">
