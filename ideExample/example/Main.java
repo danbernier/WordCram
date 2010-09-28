@@ -30,7 +30,7 @@ public class Main extends PApplet {
 	WordCram wordcram;
 	
 	public void setup() {
-		size(1200, (int)random(300, 800)); //1200, 675); //1600, 900);
+		size(1200, 700); //(int)random(300, 800)); //1200, 675); //1600, 900);
 		smooth();
 		colorMode(HSB);
 		initWordCram();
@@ -67,7 +67,7 @@ public class Main extends PApplet {
 				colorer, 
 				Anglers.random(),
 				//new PlottingWordPlacer(this,
-						Placers.wave(),
+						Placers.horizLine(),
 				//),
 				//new PlottingWordNudger(this, 
 						new SpiralWordNudger()
@@ -118,7 +118,7 @@ public class Main extends PApplet {
 			return w;
 		}
 		else {
-			boolean linux = false;
+			boolean linux = true;
 			String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
 			String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
 			return new TextSplitter().split(loadStrings(path));
