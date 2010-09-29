@@ -81,7 +81,7 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 
 	<target name="compile" depends="clean"> <!--, checkAllForLicenseNotice"> -->
 		<mkdir dir="build/classes" />
-		<javac srcdir="src" destdir="build/classes" classpath="${classpath}" includeantruntime="false" />
+		<javac srcdir="src" destdir="build/classes" classpath="${classpath}" source="1.5" target="1.5" includeantruntime="false" />
 	</target>
 
 	<target name="test" depends="compile">
@@ -128,8 +128,8 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html#copy
 
 		<gcupload
 			username="${gc.username}" password="${gc.password}" projectname="wordcram" 
-			filename="build/${pub.file}.tar"
-			targetfilename="${pub.file}.tar" 
+			filename="build/${pub.file}.tar.gz"
+			targetfilename="${pub.file}.tar.gz" 
 			summary="${publish.summary}" 
 			labels="development, daily" />
 		<gcupload 
