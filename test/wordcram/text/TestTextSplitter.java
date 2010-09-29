@@ -25,7 +25,6 @@ import wordcram.Word;
 
 public class TestTextSplitter {
 
-	private double epsilon = 0.00001;
 	private TextSplitter ts;
 
 	@Before
@@ -42,9 +41,9 @@ public class TestTextSplitter {
 		Assert.assertEquals("mango", results[0].word);
 		Assert.assertEquals("biscuit", results[1].word);
 		Assert.assertEquals("avocado", results[2].word);
-		Assert.assertEquals(3, results[0].weight, epsilon);
-		Assert.assertEquals(2, results[1].weight, epsilon);
-		Assert.assertEquals(1, results[2].weight, epsilon);
+		Assert.assertEquals(3, (int) results[0].weight);
+		Assert.assertEquals(2, (int) results[1].weight);
+		Assert.assertEquals(1, (int) results[2].weight);
 	}
 
 	@Test
@@ -55,38 +54,9 @@ public class TestTextSplitter {
 		Assert.assertEquals("mango", results[0].word);
 		Assert.assertEquals("biscuit", results[1].word);
 		Assert.assertEquals("avocado", results[2].word);
-		Assert.assertEquals(3, results[0].weight, epsilon);
-		Assert.assertEquals(2, results[1].weight, epsilon);
-		Assert.assertEquals(1, results[2].weight, epsilon);
-	}
-
-	@Test
-	public void testCountingAndStopWords() {
-		String[] words = ts
-				.splitIntoWords("biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words");
-		Map<String, Integer> counts = ts.count(words);
-		Word[] weightedWords = ts.toWords(counts);
-		Arrays.sort(weightedWords);
-		
-		Assert.assertEquals(3, weightedWords.length);
-
-		Assert.assertEquals("cherry", weightedWords[0].word);
-		Assert.assertEquals("biscuit", weightedWords[1].word);
-		Assert.assertEquals("cocoa", weightedWords[2].word);
-
-		Assert.assertEquals(3, weightedWords[0].weight, epsilon);
-		Assert.assertEquals(2, weightedWords[1].weight, epsilon);
-		Assert.assertEquals(1, weightedWords[2].weight, epsilon);
-	}
-
-	@Test
-	public void testCounts() {
-		String[] words = ts.splitIntoWords("a b c a");
-		Map<String, Integer> counts = ts.count(words);
-		Assert.assertEquals(new Integer(2), (Integer) counts.get("a"));
-		Assert.assertEquals(new Integer(1), (Integer) counts.get("b"));
-		Assert.assertEquals(new Integer(1), (Integer) counts.get("c"));
-		Assert.assertNull(counts.get("d"));
+		Assert.assertEquals(3, (int) results[0].weight);
+		Assert.assertEquals(2, (int) results[1].weight);
+		Assert.assertEquals(1, (int) results[2].weight);
 	}
 
 	@Test
