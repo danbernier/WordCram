@@ -19,7 +19,7 @@ limitations under the License.
 import processing.core.PApplet;
 import processing.core.PFont;
 import wordcram.*;
-import wordcram.text.TextSplitter;
+import wordcram.text.*;
 
 public class Main extends PApplet {
 	
@@ -118,10 +118,13 @@ public class Main extends PApplet {
 			return w;
 		}
 		else {
-			boolean linux = true;
+			boolean linux = false;
 			String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
 			String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
-			return new TextSplitter().split(loadStrings(path));
+			//String text = loadStrings(path);
+			
+			String html = join(loadStrings("http://wordcram.wordpress.com"), " ");
+			return new TextSplitter().split(new Html2Text().text(html));
 		}
 	}
 }
