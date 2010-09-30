@@ -23,10 +23,6 @@ import wordcram.text.*;
 
 public class Main extends PApplet {
 	
-	String[] fonts = PFont.list();
-					 //new String[] { "Molengo", "Liberation Sans" }; 
-					 // "Impact", "Century Gothic", "Century Gothic Bold", "SansSerfi.plain", "Nina Bold", "Segoe UI", "LilyUPC Italic", "LilyUPC Bold", "LilyUPC"};
-	
 	WordCram wordcram;
 	
 	public void setup() {
@@ -38,47 +34,22 @@ public class Main extends PApplet {
 	}
 	
 	private PFont randomFont() {
+		String[] fonts = PFont.list();
 		return createFont(fonts[(int)random(fonts.length)], 1);
 	}
 	
 	private void initWordCram() {
 		background(55);
 		
-		/*
-		WordColorer redBlue = new WordColorer() {
-			public int colorFor(Word w) {
-				if (w.word.length() % 2 == 0) {
-					return color(0, 255, 255);
-				}
-				return color(150, 255, 255);
-			}
-		};
-		*/
-		
-		//WordColorer colorer = Colorers.twoHuesRandomSats(this);
-		WordColorer colorer = Colorers.pickFrom(color(0, 200, 255), color(30, 200, 255), color(200, 200, 255));
-		//colorer = Colorers.twoHuesRandomSats(this);
-		colorer = Colorers.pickFrom(color(0, 0, 175));
-		//colorer = Colorers.twoHuesRandomSats(this);
-		
-		wordcram = new WordCram(this, 
-				
-				//alphabet(),
-				//loadWords(),
-				new TextFile(textFilePath(), this),
-				//url("http://invisibleblocks.wordpress.com"),
-				
-				Fonters.alwaysUse(randomFont()),
-				Sizers.byWeight(15, 100),
-				colorer, 
-				Anglers.random(),
-				//new PlottingWordPlacer(this,
-						Placers.horizLine(),
-				//),
-				//new PlottingWordNudger(this, 
-						new SpiralWordNudger()
-				//)
-		);
+		wordcram = new WordCram(this).forWords( 
+						//alphabet(),
+						//loadWords(),
+						new TextFile(textFilePath(), this)
+						//url("http://invisibleblocks.wordpress.com"),
+					)
+					.withFonts(randomFont())
+					.withColors(color(0, 0, 175))
+					.withAngler(Anglers.random());
 	}
 	
 	public void draw() {

@@ -64,13 +64,78 @@ public class WordCram {
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
 		this(_parent, _words, _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
 	}
-
-	public WordCram(PApplet _parent, TextSource _textSource, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
-		this(_parent, new TextSplitter().split(_textSource.getText()), _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
+	
+	public WordCram(PApplet _parent) {
+		parent = _parent;
+		destination = parent.g;
 	}
+	
+	// TODO need more overloads!
+	public WordCram forWords(TextSource textSource) {
+		Word[] words = new TextSplitter().split(textSource.getText());
+		return forWords(words);
+	}	
+	public WordCram forWords(Word[] _words) {
+		words = new WordSorterAndScaler().sortAndScale(_words);
+		wordIndex = -1;
+		return this;
+	}
+	
+	public WordCram withFonts(String... fontNames) {
+		PFont[] fonts = new PFont[fontNames.length];
+		for (int i = 0; i < fontNames.length; i++) {
+			fonts[i] = parent.createFont(fontNames[i], 1);
+		}
+		
+		return withFonts(fonts);
+	}
+	public WordCram withFonts(PFont... fonts) {
+		return withFonter(Fonters.pickFrom(fonts));
+	}
+	public WordCram withFonter(WordFonter fonter) {
+		this.fonter = fonter;
+		return this;
+	}
+	
+	public WordCram withSizer(WordSizer sizer) {
+		this.sizer = sizer;
+		return this;
+	}
+	
+	public WordCram withColors(int... colors) {
+		return withColorer(Colorers.pickFrom(colors));
+	}
+	public WordCram withColorer(WordColorer colorer) {
+		this.colorer = colorer;
+		return this;
+	}
+	
+	public WordCram withAngler(WordAngler angler) {
+		this.angler = angler;
+		return this;
+	}
+	
+	public WordCram withPlacer(WordPlacer placer) {
+		this.placer = placer;
+		return this;
+	}
+	
+	public WordCram withNudger(WordNudger nudger) {
+		this.nudger = nudger;
+		return this;
+	}
+	
+	private void setDefaultsAndPrepareToDraw() {
 
-	public WordCram(PApplet _parent, TextSource _textSource, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer, WordNudger wordNudger) {
-		this(_parent, new TextSplitter().split(_textSource.getText()), _fonter, _sizer, _colorer, _angler, _wordPlacer, wordNudger);
+		if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
+		if (sizer == null) sizer = Sizers.byWeight(10, 70);
+		if (colorer == null) colorer = Colorers.twoHuesRandomSats(parent);
+		if (angler == null) angler = Anglers.mostlyHoriz();
+		if (placer == null) placer = Placers.horizLine();
+		if (nudger == null) nudger = new SpiralWordNudger();
+		
+		bbTreeBuilder = new BBTreeBuilder();
+		frc = new FontRenderContext(null, true, true);
 	}
 	
 	public boolean hasMore() {
@@ -84,6 +149,8 @@ public class WordCram {
 	}
 
 	public void drawNext() {
+		setDefaultsAndPrepareToDraw();
+		
 		Word word = words[++wordIndex];
 		Shape wordShape = wordToShape(word);
 		if (wordShape != null) {
