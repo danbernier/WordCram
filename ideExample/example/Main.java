@@ -61,7 +61,13 @@ public class Main extends PApplet {
 		colorer = Colorers.pickFrom(color(0, 0, 175));
 		//colorer = Colorers.twoHuesRandomSats(this);
 		
-		wordcram = new WordCram(this, loadWords(), 
+		wordcram = new WordCram(this, 
+				
+				//alphabet(),
+				//loadWords(),
+				new TextFile(textFilePath(), this),
+				//url("http://invisibleblocks.wordpress.com"),
+				
 				Fonters.alwaysUse(randomFont()),
 				Sizers.byWeight(15, 100),
 				colorer, 
@@ -109,22 +115,27 @@ public class Main extends PApplet {
 	}
 	
 	private Word[] loadWords() {
-		boolean loadFile = true;
-		if (!loadFile) {
-			Word[] w = new Word[26];
-			for (int i = 0; i < w.length; i++) {
-				w[i] = new Word(new String(new char[]{(char)(i+65)}), 26-i);
-			}
-			return w;
+		String[] text = loadStrings(textFilePath());
+		return new TextSplitter().split(text);
+	}
+	
+	private String textFilePath() {
+		boolean linux = true;
+		String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
+		String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
+		return path;		
+	}
+	
+	private Word[] url(String url) {
+		String html = join(loadStrings(url), " ");
+		return new TextSplitter().split(new Html2Text().text(html));
+	}
+	
+	private Word[] alphabet() {
+		Word[] w = new Word[26];
+		for (int i = 0; i < w.length; i++) {
+			w[i] = new Word(new String(new char[]{(char)(i+65)}), 26-i);
 		}
-		else {
-			boolean linux = false;
-			String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
-			String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
-			//String text = loadStrings(path);
-			
-			String html = join(loadStrings("http://wordcram.wordpress.com"), " ");
-			return new TextSplitter().split(new Html2Text().text(html));
-		}
+		return w;
 	}
 }

@@ -22,7 +22,7 @@ import java.awt.font.GlyphVector;
 import java.awt.geom.*;
 
 import processing.core.*;
-import wordcram.text.WordSorterAndScaler;
+import wordcram.text.*;
 
 public class WordCram {
 	
@@ -63,6 +63,14 @@ public class WordCram {
 
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
 		this(_parent, _words, _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
+	}
+
+	public WordCram(PApplet _parent, TextSource _textSource, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
+		this(_parent, new TextSplitter().split(_textSource.getText()), _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
+	}
+
+	public WordCram(PApplet _parent, TextSource _textSource, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer, WordNudger wordNudger) {
+		this(_parent, new TextSplitter().split(_textSource.getText()), _fonter, _sizer, _colorer, _angler, _wordPlacer, wordNudger);
 	}
 	
 	public boolean hasMore() {

@@ -20,6 +20,7 @@ import java.util.*;
 
 import wordcram.Word;
 
+// TODO if we move all .text.* classes into WordCram, we can make this pkg-local...
 public class WordCounter {
 
 	private Set<String> stopWords;

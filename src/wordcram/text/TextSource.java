@@ -16,22 +16,6 @@ package wordcram.text;
  limitations under the License.
  */
 
-import java.util.*;
-
-import wordcram.Word;
-
-public class WordSorterAndScaler {
-
-	public Word[] sortAndScale(Word[] rawWords) {
-		
-		Word[] words = Arrays.copyOf(rawWords, rawWords.length);
-		Arrays.sort(words);
-		double maxWeight = words[0].weight;
-		
-		for (Word word : words) {
-			word.weight = word.weight / maxWeight;
-		}
-		
-		return words;
-	}
+public interface TextSource {
+	public String getText();
 }

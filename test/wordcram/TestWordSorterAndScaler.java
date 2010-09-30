@@ -1,4 +1,4 @@
-package wordcram.text;
+package wordcram;
 
 import junit.framework.Assert;
 
