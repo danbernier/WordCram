@@ -41,12 +41,14 @@ public class Main extends PApplet {
 	private void initWordCram() {
 		background(55);
 		
-		wordcram = new WordCram(this).forWords( 
-						//alphabet(),
-						//loadWords(),
-						new TextFile(textFilePath(), this)
-						//url("http://invisibleblocks.wordpress.com"),
-					)
+		wordcram = new WordCram(this)
+					//.forWebPage("http://cnn.com")
+					//.forWords(alphabet())
+					//.forWords(loadWords())
+					.forTextFile(textFilePath())
+					//.forHtmlFile("webPage.html")
+					//.forHtml("<html><b>Hippolyta Hall</b> and <i>The Kindly Ones</i> for Congress!</html>")
+					//.forText("Cthulhu for President! Why choose the lesser of two evils?")
 					.withFonts(randomFont())
 					.withColors(color(0, 0, 175))
 					.withAngler(Anglers.random());
@@ -95,11 +97,6 @@ public class Main extends PApplet {
 		String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
 		String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
 		return path;		
-	}
-	
-	private Word[] url(String url) {
-		String html = join(loadStrings(url), " ");
-		return new TextSplitter().split(new Html2Text().text(html));
 	}
 	
 	private Word[] alphabet() {

@@ -71,11 +71,27 @@ public class WordCram {
 	}
 	
 	// TODO need more overloads!
+	public WordCram forWebPage(String url) {
+		return forWords(new WebPage(url, parent));
+	}
+	public WordCram forHtmlFile(String path) {
+		return forWords(new HtmlFile(path, parent));
+	}
+	public WordCram forHtml(String html) {
+		return forWords(new Html(html));
+	}
+	public WordCram forTextFile(String path) {
+		return forWords(new TextFile(path, parent));
+	}
+	public WordCram forText(String text) {
+		return forWords(new Text(text));
+	}
 	public WordCram forWords(TextSource textSource) {
 		Word[] words = new TextSplitter().split(textSource.getText());
 		return forWords(words);
-	}	
+	}
 	public WordCram forWords(Word[] _words) {
+		// TODO move this to setDefaultsAndPrepareToDraw(), so accidentally using >1 textsource doesn't load extra stuff?
 		words = new WordSorterAndScaler().sortAndScale(_words);
 		wordIndex = -1;
 		return this;
