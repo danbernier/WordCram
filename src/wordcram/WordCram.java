@@ -24,6 +24,52 @@ import java.awt.geom.*;
 import processing.core.*;
 import wordcram.text.*;
 
+/**
+ * WordCram is both the main API for WordCram, and the place where all the rendering
+ * happens.  There are two phases to using a WordCram: constructing, and drawing.
+ * 
+ * <p>Constructing a WordCram is done with the fluent API -- first, construct a WordCram,
+ * then call configuring methods on it.  Like this:
+ * <pre>
+ * WordCram wc = new WordCram(this)                           // Construct the WordCram...
+ *   .forWords(new WebPage("http://wordcram.wordpress.com"))  // set its words... 
+ *   .withFonts("serif")                                      // set its font...
+ *   .withColors(color(255,0,0), color(0,0,255));             // set its colors.
+ * </pre>
+ * 
+ * <p>Creating a WordCram comes down to two parts:
+ * <ul>
+ * 	 <li>Give it your text or word list.  All these methods start with "for...": 
+ * 		 {@link #forWebPage(String)}, {@link #forTextFile(String)}, {@link #forWords(Word[])}, etc.
+ *   </li>
+ *   <li>Tell it how to display your words.  All these methods start with "with...": 
+ *       {@link #withFonts(PFont...)}, {@link #withColors(int...)}, etc.
+ *   </li>
+ * </ul>
+ * 
+ * <p>After all that, actually rendering the WordCram is simple.  There are two typical ways:
+ * <ul>
+ * 	 <li>repeatedly call {@link #drawNext()} while the WordCram {@link #hasMore()} words
+ *       to draw (probably once per Processing frame):
+ *       <pre>
+ *       void draw() {
+ *           if (wordCram.hasMore()) {
+ *               wordCram.drawNext();
+ *           }
+ *       }
+ *       </pre>
+ *   </li>
+ *   <li>call {@link #drawAll()} once, and let it loop for you:
+ *       <pre>
+ *       void draw() {
+ *           wordCram.drawAll();
+ *       }
+ *       </pre>
+ *   </li>
+ * </ul>
+ * 
+ * @author Dan Bernier
+ */
 public class WordCram {
 	
 	private PApplet parent;
@@ -44,6 +90,21 @@ public class WordCram {
 	
 	// PApplet parent is only for 2 things: to get its PGraphics g (aka destination), and 
 	// for createGraphics, for drawing the words.  host should be used for nothing else.
+	/**
+	 * This was the old way to build a WordCram: you have to specify <i>everything</i>.
+	 * The new way, {@link #WordCram(PApplet)}, is much easier, but this will be left
+	 * around for a while. 
+	 * 
+	 * @param _parent Your Processing sketch. You'll probably pass it as <code>this</code>.
+	 * @param _words The array of words to put into the word cloud.
+	 * @param _fonter says which font to use for each word.
+	 * @param _sizer says which size to draw each word at.
+	 * @param _colorer says which color to draw each word in.
+	 * @param _angler says how to rotate each word.
+	 * @param _wordPlacer says (approximately) where to place each word.
+	 * @param _wordNudger says how to nudge a word, when it doesn't initially fit.
+	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the builder fluent API instead.
+	 */
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer, WordNudger _wordNudger) {
 		parent = _parent;
 		destination = parent.g;
@@ -61,35 +122,91 @@ public class WordCram {
 		wordIndex = -1;
 	}
 
+	/**
+	 * This was the old way to build a WordCram: you have to specify <i>everything</i> 
+	 * (except the WordNudger, which defaults to a {@link SpiralWordNudger}). 
+	 * The new way, {@link #WordCram(PApplet)}, is much easier, but this will be left
+	 * around for a while. 
+	 * 
+	 * @param _parent Your Processing sketch. You'll probably pass it as <code>this</code>.
+	 * @param _words The array of words to put into the word cloud.
+	 * @param _fonter says which font to use for each word.
+	 * @param _sizer says which size to draw each word at.
+	 * @param _colorer says which color to draw each word in.
+	 * @param _angler says how to rotate each word.
+	 * @param _wordPlacer says (approximately) where to place each word.
+	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the builder fluent API instead.
+	 */
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
 		this(_parent, _words, _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
 	}
 	
+	/**
+	 * Make a new WordCram.
+	 * <p>
+	 * When constructed this way, it's the starting point of the fluent API for building WordCrams.
+	 * @param _parent Your Processing sketch. You'll probably pass it as <code>this</code>.
+	 */
 	public WordCram(PApplet _parent) {
 		parent = _parent;
 		destination = parent.g;
 	}
 	
 	// TODO need more overloads!
+	
+	/**
+	 * This WordCram will be based on word frequencies in the text of the given web page.
+	 * @return The WordCram, for further setup. 
+	 */
 	public WordCram forWebPage(String url) {
 		return forWords(new WebPage(url, parent));
 	}
+	
+	/**
+	 * This WordCram will be based on word frequencies in the text of the given html file.
+	 * @return The WordCram, for further setup. 
+	 */
 	public WordCram forHtmlFile(String path) {
 		return forWords(new HtmlFile(path, parent));
 	}
+	
+	/**
+	 * This WordCram will be based on word frequencies in the text of the given html String.
+	 * @return The WordCram, for further setup. 
+	 */
 	public WordCram forHtml(String html) {
 		return forWords(new Html(html));
 	}
+	
+	/**
+	 * This WordCram will be based on word frequencies in the text of the given text file.
+	 * @return The WordCram, for further setup. 
+	 */
 	public WordCram forTextFile(String path) {
 		return forWords(new TextFile(path, parent));
 	}
+	
+	/**
+	 * This WordCram will be based on word frequencies in the text of the given text String.
+	 * @return The WordCram, for further setup. 
+	 */
 	public WordCram forText(String text) {
 		return forWords(new Text(text));
 	}
+	
+	/**
+	 * This WordCram will be based on word frequencies in the text of the given {@link TextSource}.
+	 * @return The WordCram, for further setup.
+	 */
 	public WordCram forWords(TextSource textSource) {
 		Word[] words = new TextSplitter().split(textSource.getText());
 		return forWords(words);
 	}
+	
+	/**
+	 * This WordCram will be based on the given {@link Word} array.
+	 * @return The WordCram, for further setup. 
+	 */
 	public WordCram forWords(Word[] _words) {
 		// TODO move this to setDefaultsAndPrepareToDraw(), so accidentally using >1 textsource doesn't load extra stuff?
 		words = new WordSorterAndScaler().sortAndScale(_words);
@@ -97,6 +214,14 @@ public class WordCram {
 		return this;
 	}
 	
+	//----------------------------------------------
+	
+	/**
+	 * This WordCram will get a PFont for each fontName, via
+	 * <a href="http://processing.org/reference/createFont_.html" target="blank">createFont</a>,
+	 * and will render words in one of those PFonts. 
+	 * @return The WordCram, for further setup. 
+	 */
 	public WordCram withFonts(String... fontNames) {
 		PFont[] fonts = new PFont[fontNames.length];
 		for (int i = 0; i < fontNames.length; i++) {
@@ -105,6 +230,11 @@ public class WordCram {
 		
 		return withFonts(fonts);
 	}
+	
+	/**
+	 * This WordCram will render words in one of the given fonts. 
+	 * @return The WordCram, for further setup.
+	 */
 	public WordCram withFonts(PFont... fonts) {
 		return withFonter(Fonters.pickFrom(fonts));
 	}
@@ -142,7 +272,7 @@ public class WordCram {
 	}
 	
 	private void setDefaultsAndPrepareToDraw() {
-
+		// TODO put some kind of "hey i already ran once, thx" flag in here
 		if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
 		if (sizer == null) sizer = Sizers.byWeight(10, 70);
 		if (colorer == null) colorer = Colorers.twoHuesRandomSats(parent);
@@ -187,9 +317,23 @@ public class WordCram {
 	
 	/* methods JUST for off-screen drawing. */
 	/* Replace these w/ a callback functor to drawNext()? */
+	
+	/**
+	 * This method, and {@link #currentWordIndex()}, are probably just a bad
+	 * idea waiting to be removed.  They're only here in case you want to display
+	 * info about how the WordCram is progressing.  I wouldn't count on them
+	 * being around for long -- if you really need them, please let me know. 
+	 */
 	public Word currentWord() {
 		return hasMore() ? words[wordIndex] : null;
 	}
+	
+	/**
+	 * This method, and {@link #currentWord()}, are probably just a bad
+	 * idea waiting to be removed.  They're only here in case you want to display
+	 * info about how the WordCram is progressing.  I wouldn't count on them
+	 * being around for long -- if you really need them, please let me know.
+	 */
 	public int currentWordIndex() {
 		return wordIndex;
 	}
