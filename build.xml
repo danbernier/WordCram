@@ -19,10 +19,11 @@ ngooglecode upload task: http://code.google.com/p/ant-googlecode/
 svnant task: http://subclipse.tigris.org/svnant/svn.html
 -->
 
-<project default="deploy">
+<project default="test">
 
 	<property file="build.credentials.properties" />
 	<property file="build.properties" />
+	<property name="svnroot" value="https://wordcram.googlecod.com/svn" />
 
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
 	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="lib/ant-googlecode/ant-googlecode-0.0.2.jar" name="gcupload" />
@@ -40,49 +41,7 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 		<delete dir="build" />
 	</target>
 
-	<target name="checkAllForLicenseNotice">
-
-		<foreach target="checkForLicenseNotice" param="srcFile">
-			<fileset dir=".">
-				<include name="**/*.java" />
-				<include name="**/*.xml" />
-			</fileset>
-		</foreach>
-
-		<!-- TODO figure out why the <for> task isn't found.  It's in the ant-contrib jar...
-		<for param="srcFile">
-			<fileset dir=".">
-				<include name="**/*.java" />
-				<include name="**/*.xml" />
-				<include name="**/*.pde" />
-			</fileset>
-			<sequential>
-				<loadfile srcFile="${srcFile}" property="src" />
-				<if>
-					<not><contains string="${src}" substring="Copyright" /></not>
-					<then>
-						<echo>File ${srcFile} is missing its license notice!</echo>
-					</then>
-				</if>
-			</sequential>
-		</for>
-		-->
-	</target>
-
-	<target name="checkForLicenseNotice">
-		<loadfile srcFile="${srcFile}" property="src" />
-		<if>
-			<not>
-				<contains string="${src}" substring="Copyright" />
-			</not>
-			<then>
-				<echo>File ${srcFile} is missing its license notice!</echo>
-			</then>
-		</if>
-	</target>
-
 	<target name="compile" depends="clean">
-		<!--, checkAllForLicenseNotice"> -->
 		<mkdir dir="build/classes" />
 		<javac srcdir="src" destdir="build/classes" classpath="${classpath}" source="1.5" target="1.5" includeantruntime="false" />
 	</target>
@@ -102,7 +61,7 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 		</junit>
 	</target>
 
-	<target name="deploy" depends="test">
+	<target name="bundleForProcessing" depends="test">
 		<mkdir dir="build/p5lib/wordcram/library" />
 		<jar destfile="build/p5lib/wordcram/library/wordcram.jar" basedir="build/classes" />
 		<copy file="lib/jsoup-1.3.3.jar" todir="build/p5lib/wordcram/library" />
@@ -126,13 +85,13 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 		</javadoc>
 	</target>
 
-	<target name="publish.local" depends="deploy">
+	<target name="publish.local" depends="bundleForProcessing">
 		<copy todir="${processing.sketchFolder}/libraries/wordcram">
 			<fileset dir="build/p5lib/wordcram" />
 		</copy>
 	</target>
 
-	<target name="publish.daily" depends="deploy">
+	<target name="publish.daily" depends="bundleForProcessing">
 		<input message="Give us a quick summary for Google Code:" addproperty="publish.summary" />
 
 		<tstamp>
@@ -146,11 +105,20 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 		<gcupload username="${gc.username}" password="${gc.password}" projectname="wordcram" filename="build/${pub.file}.tar.gz" targetfilename="${pub.file}.tar.gz" summary="${publish.summary}" labels="development, daily" />
 		<gcupload username="${gc.username}" password="${gc.password}" projectname="wordcram" filename="build/${pub.file}.zip" targetfilename="${pub.file}.zip" summary="${publish.summary}" labels="development, daily" />
 	</target>
+	
+	<target name="makeReleaseBranch"> <!-- description="Make a release branch from the trunk." -->
+		<input message="What's the release number?:" addproperty="publish.releaseNumber" />
+		
+		<svn><copy srcUrl="${svnroot}/trunk" 
+				destUrl="${svnroot}/branches/RB-${publish.releaseNumber}" 
+				message="Added release branch ${publish.releaseNumber}" />
+		</svn>
+	</target>
 
-	<target name="publish.release" depends="deploy">
+	<target name="publish.release" depends="bundleForProcessing">  <!-- run this from a RELEASE branch, NOT TRUNK -->
 		<input message="Give us a quick summary for Google Code:" addproperty="publish.summary" />
-		<input message="...and the release number:" addproperty="publish.releaseNumber" />
-
+		<input message="...and the release number (should match the branch you're on):" addproperty="publish.releaseNumber" />
+		
 		<property name="pub.file" value="wordcram.${publish.releaseNumber}" />
 		<tar destfile="build/${pub.file}.tar.gz" basedir="build/p5lib" compression="gzip" />
 		<zip destfile="build/${pub.file}.zip" basedir="build/p5lib" />
@@ -158,18 +126,11 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 		<gcupload username="${gc.username}" password="${gc.password}" projectname="wordcram" filename="build/${pub.file}.tar.gz" targetfilename="${pub.file}.tar.gz" summary="${publish.summary}" labels="release, stable, Featured" />
 		<gcupload username="${gc.username}" password="${gc.password}" projectname="wordcram" filename="build/${pub.file}.zip" targetfilename="${pub.file}.zip" summary="${publish.summary}" labels="release, stable, Featured" />
 
-		<svn>
-			<info target="../trunk" propPrefix="trunk" />
-		</svn>
-		<svn>
-			<info target="../tags" propPrefix="tags" />
+		<svn><info target="." propprefix="branch" /></svn>
+		<svn username="${gc.username}" password="${gc.password}">
+			<copy srcUrl="${branch.url}" destUrl="${svnroot}/tags/REL_${publish.releaseNumber}" message="Added release ${publish.releaseNumber}" />
 		</svn>
 
-		<svn username="${gc.username}" password="${gc.password}">
-			<copy srcUrl="${trunk.url}" destUrl="${tags.url}/REL_${publish.releaseNumber}" message="Added release ${publish.releaseNumber}" />
-		</svn>
-		
-		
 		<copy todir="javadoc">
 			<fileset dir="build/p5lib/wordcram/reference" />
 		</copy>
