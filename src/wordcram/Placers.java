@@ -35,6 +35,17 @@ public class Placers {
 				float yOff = (float) r.nextGaussian() * 50;
 
 				return new PVector(centerVertLine + xOff, centerHorizLine + yOff);
+/*
+				int adjFieldWidth = fieldWidth - wordImageWidth;
+				int adjFieldHeight = fieldHeight - wordImageHeight;
+				
+				float xOff = (float) r.nextGaussian();// * 0.2f;
+				float yOff = (float) r.nextGaussian();// * 0.5f;
+				yOff = (float)Math.pow(yOff, 3) * 1.5f;
+				
+				return new PVector(PApplet.map(xOff, -2, 2, 0, adjFieldWidth),
+									PApplet.map(yOff, -2, 2, 0, adjFieldHeight));
+*/
 			}
 		};
 	}
