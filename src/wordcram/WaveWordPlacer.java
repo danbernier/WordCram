@@ -31,7 +31,7 @@ public class WaveWordPlacer implements WordPlacer, PConstants {
 	private int getX(int fieldWidth, int wordIndex, int wordsCount) {
 		return PApplet.round(
 					PApplet.map(wordIndex, 0, wordsCount, 0, fieldWidth) 
-					+ (float)(r.nextGaussian() * 20)
+					//+ (float)(r.nextGaussian() * 20)
 				);		
 	}
 	
@@ -43,7 +43,7 @@ public class WaveWordPlacer implements WordPlacer, PConstants {
 
 		return PApplet.round(
 					PApplet.map(wordIndex, 0, wordsCount, 0, fieldHeight) 
-					+ (float)(r.nextGaussian() * 20) 
+					//+ (float)(r.nextGaussian() * 20) 
 					+ sinOffset
 				);		
 	}
