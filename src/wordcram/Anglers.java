@@ -18,6 +18,7 @@ limitations under the License.
 
 import java.util.Random;
 
+import processing.core.PApplet;
 import processing.core.PConstants;
 
 /**
@@ -38,6 +39,17 @@ public class Anglers implements PConstants {
 		return new WordAngler() {
 			public float angleFor(Word w) {
 				return r.nextFloat() * TWO_PI;
+			}
+		};
+	}
+	
+	public static WordAngler heaped() {
+		final Random r = new Random();
+		final float angle = PApplet.radians(7);
+		final float doubleAngle = angle * 2;
+		return new WordAngler() {
+			public float angleFor(Word w) {
+				return (r.nextFloat() * doubleAngle) - angle;
 			}
 		};
 	}

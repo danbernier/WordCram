@@ -69,6 +69,19 @@ public class Placers {
 		};
 	}
 
+	public static WordPlacer horizBandAnchoredLeft() {
+		final Random r = new Random();
+		return new WordPlacer() {
+			public PVector place(Word word, int wordIndex, int wordsCount,
+					int wordImageWidth, int wordImageHeight, int fieldWidth,
+					int fieldHeight) {
+				float x = (float) (1 - word.weight) * fieldWidth * r.nextFloat(); // big=left, small=right
+				float y = ((float) fieldHeight) * 0.5f;
+				return new PVector(x, y);
+			}
+		};
+	}
+
 	public static WordPlacer swirl() {
 		return new SwirlWordPlacer();
 	}
