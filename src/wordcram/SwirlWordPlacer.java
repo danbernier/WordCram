@@ -42,8 +42,8 @@ public class SwirlWordPlacer implements WordPlacer {
 		x += cx;
 		y += cy;
 		
-		x += r.nextGaussian() * 20;
-		y += r.nextGaussian() * 20;
+		//x += r.nextGaussian() * 20;
+		//y += r.nextGaussian() * 20;
 		
 		return new PVector(x, y);		
 	}
