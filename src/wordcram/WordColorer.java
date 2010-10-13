@@ -17,5 +17,5 @@ limitations under the License.
 */
 
 public interface WordColorer {
-	public int colorFor(Word w);
+	public int colorFor(Word word);
 }

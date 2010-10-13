@@ -19,5 +19,5 @@ limitations under the License.
 import processing.core.PFont;
 
 public interface WordFonter {
-	public PFont fontFor(Word w);
+	public PFont fontFor(Word word);
 }
