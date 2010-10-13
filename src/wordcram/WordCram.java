@@ -277,36 +277,6 @@ public class WordCram {
 	
 
 	
-	/*
-	 * All this readyToDraw and PrepareToDraw stuff really only has to be
-	 * separate a) because the builder API means we don't know when the user
-	 * is ready to draw (until they call drawAll() or drawNext()), and 
-	 * b) because we're letting users draw words one-at-a-time.
-	 * If they only had the constructors, this could come at the end of that.
-	 * If they could only use drawAll(), this could be a preamble to that.
-	 * 
-	 * TODO move this stuff underneath/closer to drawNext()
-	 */
-	private boolean readyToDraw;
-	private void setDefaultsAndPrepareToDraw() {
-		if (readyToDraw) return;
-		readyToDraw = true;
-
-		if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
-		if (sizer == null) sizer = Sizers.byWeight(5, 70);
-		if (colorer == null) colorer = Colorers.twoHuesRandomSats(parent);
-		if (angler == null) angler = Anglers.mostlyHoriz();
-		if (placer == null) placer = Placers.horizLine();
-		if (nudger == null) nudger = new SpiralWordNudger();
-		
-		bbTreeBuilder = new BBTreeBuilder();
-		frc = new FontRenderContext(null, true, true);
-		
-		shapes = wordsToShapes(); // ONLY returns shapes for words that are big enough to see
-		words = Arrays.copyOf(words, shapes.length);  // Trim down the list of words
-		wordIndex = -1;
-	}
-	
 	public boolean hasMore() {
 		return wordIndex < words.length-1;
 	}
@@ -339,30 +309,33 @@ public class WordCram {
 		}
 	}
 	
-	/* methods JUST for off-screen drawing. */
-	// TODO move these to the bottom
-	/* Replace these w/ a callback functor to drawNext()? */
-	
-	/**
-	 * This method, and {@link #currentWordIndex()}, are probably just a bad
-	 * idea waiting to be removed.  They're only here in case you want to display
-	 * info about how the WordCram is progressing.  I wouldn't count on them
-	 * being around for long -- if you really need them, please let me know. 
+	/*
+	 * All this readyToDraw and PrepareToDraw stuff really only has to be
+	 * separate a) because the builder API means we don't know when the user
+	 * is ready to draw (until they call drawAll() or drawNext()), and 
+	 * b) because we're letting users draw words one-at-a-time.
+	 * If they only had the constructors, this could come at the end of that.
+	 * If they could only use drawAll(), this could be a preamble to that.
 	 */
-	public Word currentWord() {
-		return hasMore() ? words[wordIndex] : null;
+	private boolean readyToDraw;
+	private void setDefaultsAndPrepareToDraw() {
+		if (readyToDraw) return;
+		readyToDraw = true;
+
+		if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
+		if (sizer == null) sizer = Sizers.byWeight(5, 70);
+		if (colorer == null) colorer = Colorers.twoHuesRandomSats(parent);
+		if (angler == null) angler = Anglers.mostlyHoriz();
+		if (placer == null) placer = Placers.horizLine();
+		if (nudger == null) nudger = new SpiralWordNudger();
+		
+		bbTreeBuilder = new BBTreeBuilder();
+		frc = new FontRenderContext(null, true, true);
+		
+		shapes = wordsToShapes(); // ONLY returns shapes for words that are big enough to see
+		words = Arrays.copyOf(words, shapes.length);  // Trim down the list of words
+		wordIndex = -1;
 	}
-	
-	/**
-	 * This method, and {@link #currentWord()}, are probably just a bad
-	 * idea waiting to be removed.  They're only here in case you want to display
-	 * info about how the WordCram is progressing.  I wouldn't count on them
-	 * being around for long -- if you really need them, please let me know.
-	 */
-	public int currentWordIndex() {
-		return wordIndex;
-	}
-	/* END OF methods JUST for off-screen drawing. */
 	
 	/*
 	 * TODO question here: you want to eliminate as many words as possible, so FIRST rip through & render all their shapes,
@@ -410,7 +383,7 @@ public class WordCram {
 		
 		Rectangle2D rect = shape.getBounds2D();
 		int minWordRenderedSize = 5; // TODO try 4
-		if (rect.getWidth() < minWordRenderedSize || rect.getHeight() < minWordRenderedSize) { return null; }  // TODO extract config setting for minWordSize
+		if (rect.getWidth() < minWordRenderedSize || rect.getHeight() < minWordRenderedSize) { return null; }  // TODO extract config setting for minWordRenderedSize
 		
 		shape = AffineTransform.getTranslateInstance(-rect.getX(), -rect.getY()).createTransformedShape(shape);
 		
@@ -420,26 +393,6 @@ public class WordCram {
 		//timer.log("end wordToShape and bbTreeBuilder.makeTree()");
 
 		return shape;
-	}
-	
-	// TODO move this down to the bottom (BEFORE the currentWordIndex() accessors)
-	private PImage shapeToImage(Shape shape, int color) {
-
-		Rectangle wordRect = shape.getBounds();
-
-		PGraphics wordImage = parent.createGraphics(wordRect.width-wordRect.x, wordRect.height-wordRect.y,
-				PApplet.JAVA2D);
-		wordImage.beginDraw();
-		
-			GeneralPath polyline = new GeneralPath(shape);
-			Graphics2D g2 = (Graphics2D)wordImage.image.getGraphics();
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setPaint(new Color(color, true));
-			g2.fill(polyline);
-		
-		wordImage.endDraw();
-		
-		return wordImage;
 	}
 
 	private PVector placeWord(Word word, int wordImageWidth, int wordImageHeight) {
@@ -525,4 +478,47 @@ public class WordCram {
 		//destination.line(origSpot.x, origSpot.y, location.x, location.y);
 		//destination.popStyle();
 	}
+	
+	private PImage shapeToImage(Shape shape, int color) {
+
+		Rectangle wordRect = shape.getBounds();
+
+		PGraphics wordImage = parent.createGraphics(wordRect.width-wordRect.x, wordRect.height-wordRect.y,
+				PApplet.JAVA2D);
+		wordImage.beginDraw();
+		
+			GeneralPath polyline = new GeneralPath(shape);
+			Graphics2D g2 = (Graphics2D)wordImage.image.getGraphics();
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setPaint(new Color(color, true));
+			g2.fill(polyline);
+		
+		wordImage.endDraw();
+		
+		return wordImage;
+	}
+	
+	/* methods JUST for off-screen drawing. */
+	/* Replace these w/ a callback functor to drawNext()? */
+	
+	/**
+	 * This method, and {@link #currentWordIndex()}, are probably just a bad
+	 * idea waiting to be removed.  They're only here in case you want to display
+	 * info about how the WordCram is progressing.  I wouldn't count on them
+	 * being around for long -- if you really need them, please let me know. 
+	 */
+	public Word currentWord() {
+		return hasMore() ? words[wordIndex] : null;
+	}
+	
+	/**
+	 * This method, and {@link #currentWord()}, are probably just a bad
+	 * idea waiting to be removed.  They're only here in case you want to display
+	 * info about how the WordCram is progressing.  I wouldn't count on them
+	 * being around for long -- if you really need them, please let me know.
+	 */
+	public int currentWordIndex() {
+		return wordIndex;
+	}
+	/* END OF methods JUST for off-screen drawing. */
 }
