@@ -282,10 +282,12 @@ public class WordCram {
 	}
 	
 	public void drawAll() {
+		timer.start("drawAll");
 		while(hasMore()) {
 			drawNext();
 		}
-		//System.out.println(timer.report());
+		timer.end("drawAll");
+		System.out.println(timer.report());
 	}
 
 	public void drawNext() {
@@ -295,14 +297,14 @@ public class WordCram {
 		Shape wordShape = shapes[wordIndex];
 
 		Rectangle2D rect = wordShape.getBounds2D();
-		//timer.log("start placeWord");
+		timer.start("placeWord");
 		PVector wordLocation = placeWord(word, (int)rect.getWidth(), (int)rect.getHeight());
-		//timer.log("end placeWord");
+		timer.end("placeWord");
 			
 		if (wordLocation != null) {
-			//timer.log("start drawWordImage");
+			timer.start("drawWordImage");
 			drawWordImage(word, wordShape, wordLocation);
-			//timer.log("end drawWordImage");
+			timer.end("drawWordImage");
 		}
 		else {
 			//System.out.println("couldn't place: " + word.word + ", " + word.weight);
@@ -366,7 +368,7 @@ public class WordCram {
 	}
 
 	private Shape wordToShape(Word word, float fontSize, PFont pFont, float rotation) {
-		//timer.log("start wordToShape");
+		timer.start("wordToShape");
 		Font font = pFont.getFont().deriveFont(fontSize);
 		char[] chars = word.word.toCharArray();
 		
@@ -382,15 +384,18 @@ public class WordCram {
 		}
 		
 		Rectangle2D rect = shape.getBounds2D();
-		int minWordRenderedSize = 5; // TODO try 4
-		if (rect.getWidth() < minWordRenderedSize || rect.getHeight() < minWordRenderedSize) { return null; }  // TODO extract config setting for minWordRenderedSize
+		int minWordRenderedSize = 7; // TODO extract config setting for minWordRenderedSize
+		if (rect.getWidth() < minWordRenderedSize || rect.getHeight() < minWordRenderedSize) {
+			timer.end("wordToShape");
+			return null;		
+		}
 		
 		shape = AffineTransform.getTranslateInstance(-rect.getX(), -rect.getY()).createTransformedShape(shape);
 		
-		//timer.log("start bbTreeBuilder.makeTree()");
+		timer.start("bbTreeBuilder.makeTree()");
 		word.setBBTree(bbTreeBuilder.makeTree(shape, 7));  // TODO extract config setting for minBoundingBox, and add swelling option
-		
-		//timer.log("end wordToShape and bbTreeBuilder.makeTree()");
+		timer.end("bbTreeBuilder.makeTree()");
+		timer.end("wordToShape"); 
 
 		return shape;
 	}
@@ -404,38 +409,35 @@ public class WordCram {
 		Word lastCollidedWith = null;
 		for (int attempt = 0; attempt < maxAttempts; attempt++) {
 
-			//timer.log("start 1 nudge");
 			word.nudge(nudger.nudgeFor(word, attempt));
 			
 			if (lastCollidedWith != null && word.overlaps(lastCollidedWith)) {
-				//timer.count("CACHE COLLISION");
-				continue; 
-			}
-			
-			PVector loc = word.getLocation();
-			if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth > destination.width || loc.y + wordImageHeight > destination.height) {
-				//timer.count("OUT OF BOUNDS");
+				timer.count("CACHE COLLISION");
 				continue;
 			}
 			
-			boolean noOverlapFound = true;
-			for (int i = 0; noOverlapFound && i < wordIndex && i < words.length; i++) {
+			PVector loc = word.getLocation();
+			if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= destination.width || loc.y + wordImageHeight >= destination.height) {
+				timer.count("OUT OF BOUNDS");
+				continue;
+			}
+			
+			boolean foundOverlap = false;
+			for (int i = 0; !foundOverlap && i < wordIndex; i++) {
 				Word otherWord = words[i];
 				if (word.overlaps(otherWord)) {
-					noOverlapFound = false;
+					foundOverlap = true;
 					lastCollidedWith = otherWord;
 				}
 			}
 			
-			//timer.log("end 1 nudge");
-			
-			if (noOverlapFound) {
-				//timer.count("placed a word");
+			if (!foundOverlap) {
+				timer.count("placed a word");
 				return word.getLocation();
 			}
 		}
 		
-		//timer.count("couldn't place a word");
+		timer.count("couldn't place a word");
 		return null;
 	}
 	
