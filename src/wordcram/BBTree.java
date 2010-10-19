@@ -21,19 +21,19 @@ import processing.core.*;
  */
 
 class BBTree {
-	private int x1;
-	private int y1;
-	private int x2;
-	private int y2;
+	private int left;
+	private int top;
+	private int right;
+	private int bottom;
 	private BBTree[] kids;
 
 	private PVector location = new PVector(0, 0);
 
-	BBTree(int _x1, int _y1, int _x2, int _y2) {
-		x1 = _x1;
-		y1 = _y1;
-		x2 = _x2;
-		y2 = _y2;
+	BBTree(int _left, int _top, int _right, int _bottom) {
+		left = _left;
+		top = _top;
+		right = _right;
+		bottom = _bottom;
 	}
 
 	public void addKids(BBTree... _kids) {
@@ -47,10 +47,6 @@ class BBTree {
 		kids = kidList.toArray(new BBTree[0]);
 	}
 
-	public BBTree[] getKids() {
-		return kids;
-	}
-
 	public void setLocation(PVector _location) {
 		location = _location;
 		if (!isLeaf()) {
@@ -60,46 +56,39 @@ class BBTree {
 		}
 	}
 
-	public PVector[] getPoints() {
-		return new PVector[] { PVector.add(new PVector(x1, y1), location),
-				PVector.add(new PVector(x2, y2), location) };
+	private BBTree[] getKids() {
+		return kids;
 	}
 
-	public boolean overlaps(BBTree b) {
+	public boolean overlaps(BBTree otherTree) {
 
-		if (rectCollide(this, b)) {
-			if (this.isLeaf() && b.isLeaf()) {
+		if (rectCollide(this, otherTree)) {
+			if (this.isLeaf() && otherTree.isLeaf()) {
 				return true;
 			}
 
-			if (this.isLeaf()) {
-				for (BBTree bKid : b.getKids()) {
-					if (this.overlaps(bKid)) {
+			if (this.isLeaf()) {  // Then otherTree isn't a leaf.
+				for (BBTree otherKid : otherTree.getKids()) {
+					if (this.overlaps(otherKid)) {
 						return true;
 					}
 				}
-				return false; // this is leaf, but doesn't overlap w/ any b.kids
+				return false; // This isLeaf, but doesn't overlap w/ any otherTree's kids.
 			}
-
-			if (b.isLeaf()) {
-				for (BBTree myKid : this.getKids()) {
-					if (b.overlaps(myKid)) {
-						return true;
-					}
-				}
-				return false; // b is leaf, but doesn't overlap w/ any this.kids
-			}
-
-			// now, we know NEITHER this or b are leaves
-			// Hmm...just noticed this for-loop is JUST LIKE the if(b.isLeaf())
-			// one above. TODO fix that.
+			
+			// Now we know that neither this nor otherTree are leaves.
 			for (BBTree myKid : this.getKids()) {
-				if (b.overlaps(myKid)) {
+				if (otherTree.overlaps(myKid)) {
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+
+	private PVector[] getPoints() {
+		return new PVector[] { PVector.add(new PVector(left, top), location),
+				PVector.add(new PVector(right, bottom), location) };
 	}
 
 	private boolean rectCollide(BBTree a, BBTree b) {
@@ -120,10 +109,10 @@ class BBTree {
 
 	void swellLeaves(int extra) {
 		if (isLeaf()) {
-			x1 -= extra;
-			x2 += extra;
-			y1 -= extra;
-			y2 += extra;
+			left -= extra;
+			right += extra;
+			top -= extra;
+			bottom += extra;
 		} else {
 			for (int i = 0; i < kids.length; i++) {
 				kids[i].swellLeaves(extra);
@@ -135,18 +124,9 @@ class BBTree {
 		g.pushStyle();
 		g.rectMode(PConstants.CORNERS);
 		g.noFill();
-		
-			//g.stroke(255);
-			//drawBounds(g, getPoints());
-			
-//			g.stroke(0, 255, 255);
-//			g.pushMatrix();
-//			g.translate(location.x, location.y);
-//			drawBounds(g, getBounds());
-//			g.popMatrix();
-
-			g.stroke(30, 255, 255, 50);
-			drawLeaves(g);
+	
+		g.stroke(30, 255, 255, 50);
+		drawLeaves(g);
 			
 		g.popStyle();
 	}
@@ -158,27 +138,6 @@ class BBTree {
 			for (int i = 0; i < kids.length; i++) {
 				kids[i].drawLeaves(g);
 			}
-		}
-	}
-
-	PVector[] getBounds() {
-		if (this.isLeaf()) {
-			return new PVector[] { new PVector(x1, y1), new PVector(x2, y2) };
-		} else {
-			float minX = Float.MAX_VALUE;
-			float minY = Float.MAX_VALUE;
-			float maxX = Float.MIN_VALUE;
-			float maxY = Float.MIN_VALUE;
-
-			PVector[] kb;
-			for (int i = 0; i < kids.length; i++) {
-				kb = kids[i].getBounds();
-				if (kb[0].x < minX) minX = kb[0].x;
-				if (kb[0].y < minY) minY = kb[0].y;
-				if (kb[1].x > maxX) maxX = kb[1].x;
-				if (kb[1].y > maxY) maxY = kb[1].y;
-			}
-			return new PVector[] { new PVector(minX, minY), new PVector(maxX, maxY) };
 		}
 	}
 
