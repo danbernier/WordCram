@@ -124,8 +124,6 @@ class WordCramEngine {
 			return null;		
 		}
 		
-		shape = AffineTransform.getTranslateInstance(-rect.getX(), -rect.getY()).createTransformedShape(shape);
-		
 		timer.start("bbTreeBuilder.makeTree()");
 		word.setBBTree(bbTreeBuilder.makeTree(shape, 7));  // TODO extract config setting for minBoundingBox, and add swelling option
 		timer.end("bbTreeBuilder.makeTree()");
