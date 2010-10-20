@@ -139,7 +139,7 @@ public class WordCram {
 	
 	/**
 	 * This WordCram will be based on word frequencies in the text of the given web page.
-	 * @return The WordCram, for further setup. 
+	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram forWebPage(String url) {
 		return forWords(new WebPage(url, parent));
@@ -147,7 +147,7 @@ public class WordCram {
 	
 	/**
 	 * This WordCram will be based on word frequencies in the text of the given html file.
-	 * @return The WordCram, for further setup. 
+	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram forHtmlFile(String path) {
 		return forWords(new HtmlFile(path, parent));
@@ -155,7 +155,7 @@ public class WordCram {
 	
 	/**
 	 * This WordCram will be based on word frequencies in the text of the given html String.
-	 * @return The WordCram, for further setup. 
+	 * @return The WordCram, for further setup or drawing. 
 	 */
 	public WordCram forHtml(String html) {
 		return forWords(new Html(html));
@@ -163,7 +163,7 @@ public class WordCram {
 	
 	/**
 	 * This WordCram will be based on word frequencies in the text of the given text file.
-	 * @return The WordCram, for further setup. 
+	 * @return The WordCram, for further setup or drawing. 
 	 */
 	public WordCram forTextFile(String path) {
 		return forWords(new TextFile(path, parent));
@@ -171,7 +171,7 @@ public class WordCram {
 	
 	/**
 	 * This WordCram will be based on word frequencies in the text of the given text String.
-	 * @return The WordCram, for further setup. 
+	 * @return The WordCram, for further setup or drawing. 
 	 */
 	public WordCram forText(String text) {
 		return forWords(new Text(text));
@@ -179,7 +179,7 @@ public class WordCram {
 	
 	/**
 	 * This WordCram will be based on word frequencies in the text of the given {@link TextSource}.
-	 * @return The WordCram, for further setup.
+	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram forWords(TextSource textSource) {
 		Word[] words = new TextSplitter().split(textSource.getText());
@@ -188,7 +188,7 @@ public class WordCram {
 	
 	/**
 	 * This WordCram will be based on the given {@link Word} array.
-	 * @return The WordCram, for further setup. 
+	 * @return The WordCram, for further setup or drawing. 
 	 */
 	public WordCram forWords(Word[] _words) {
 		// TODO move this to drawNext(), so accidentally using >1 textsource doesn't load extra stuff?
@@ -202,7 +202,7 @@ public class WordCram {
 	 * This WordCram will get a PFont for each fontName, via
 	 * <a href="http://processing.org/reference/createFont_.html" target="blank">createFont</a>,
 	 * and will render words in one of those PFonts. 
-	 * @return The WordCram, for further setup. 
+	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram withFonts(String... fontNames) {
 		PFont[] fonts = new PFont[fontNames.length];
@@ -214,15 +214,62 @@ public class WordCram {
 	}
 	
 	/**
-	 * This WordCram will render words in one of the given fonts. 
-	 * @return The WordCram, for further setup.
+	 * Make the WordCram render all words in the font that matches
+	 * the given name, via Processing's 
+	 * <a href="http://processing.org/reference/createFont_.html" target="blank">createFont</a>.
+	 * @param fontName the font name to pass to createFont.
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram withFont(String fontName) {
+		PFont font = parent.createFont(fontName, 1);
+		return withFont(font);
+	}
+	
+	/**
+	 * This WordCram will render words in one of the given PFonts.
+	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram withFonts(PFont... fonts) {
 		return withFonter(Fonters.pickFrom(fonts));
 	}
+	
+	/**
+	 * Make the WordCram render all words in the given PFont.
+	 * @param font the PFont to render the words in.
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram withFont(PFont font) {
+		return withFonter(Fonters.pickFrom(font));
+	}
+	
+	/**
+	 * Use the given WordFonter to pick fonts for each word.
+	 * You'll probably only use this if you're making a custom WordFonter.
+	 * @param fonter the WordFonter to use.
+	 * @return The WordCram, for further setup or drawing.
+	 */
 	public WordCram withFonter(WordFonter fonter) {
 		this.fonter = fonter;
 		return this;
+	}
+	
+	/**
+	 * Make the WordCram size words by their weight, where the "heaviest"
+	 * word will be sized at <code>maxSize</code>.
+	 * <p>
+	 * To be specific, the font size for each word will be calculated with:
+	 * <pre>PApplet.lerp(minSize, maxSize, (float)word.weight)</pre>
+	 * word.weight 
+	 * @param minSize
+	 * @param maxSize
+	 * @return
+	 */
+	public WordCram sizedByWeight(int minSize, int maxSize) {
+		return withSizer(Sizers.byWeight(minSize, maxSize));
+	}
+	
+	public WordCram sizedByRank(int minSize, int maxSize) {
+		return withSizer(Sizers.byRank(minSize, maxSize));
 	}
 	
 	public WordCram withSizer(WordSizer sizer) {

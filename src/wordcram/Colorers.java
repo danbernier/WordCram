@@ -37,6 +37,22 @@ public class Colorers {
 			}
 		};
 	}
+
+	public static WordColorer twoHuesRandomSatsOnWhite(final PApplet host) {
+
+		final float[] hues = new float[] { host.random(256), host.random(256) };
+
+		return new WordColorer() {
+			public int colorFor(Word w) {
+
+				float hue = hues[(int)host.random(hues.length)];
+				float sat = host.random(256);
+				float val = host.random(156);
+
+				return host.color(hue, sat, val);
+			}
+		};
+	}
 	
 	public static WordColorer pickFrom(final int... colors) {
 		final Random r = new Random();
