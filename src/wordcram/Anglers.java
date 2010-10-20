@@ -61,7 +61,7 @@ public class Anglers implements PConstants {
 	 * If you want all your words to be drawn at the same angle, use this. For
 	 * example,
 	 * 
-	 * @{link {@link #horiz()} is basically implemented as
+	 * {@link #horiz()} is basically implemented as
 	 *        <code>return alwaysUse(0f);</code>.
 	 * 
 	 * @see #horiz()
