@@ -119,7 +119,7 @@ class WordCramEngine {
 		}
 		
 		Rectangle2D rect = shape.getBounds2D();
-		int minWordRenderedSize = 7; // TODO extract config setting for minWordRenderedSize
+		int minWordRenderedSize = 4; // TODO extract config setting for minWordRenderedSize
 		if (rect.getWidth() < minWordRenderedSize || rect.getHeight() < minWordRenderedSize) {
 			return null;		
 		}
@@ -206,11 +206,10 @@ class WordCramEngine {
 	
 	private void drawWordImage(Word word, Shape wordShape, PVector location) {
 		
-		boolean useJavaGeom = true;
+		GeneralPath polyline = new GeneralPath(wordShape);
 		
+		boolean useJavaGeom = true;		
 		if (useJavaGeom) {
-
-			GeneralPath polyline = new GeneralPath(wordShape);
 			polyline.transform(AffineTransform.getTranslateInstance(location.x, location.y));
 			
 			//wordShape = AffineTransform.getTranslateInstance(location.x, location.y).createTransformedShape(wordShape);
@@ -220,13 +219,27 @@ class WordCramEngine {
 			//System.out.println(parent.getGraphics().getClass().getName());
 			
 			Graphics2D g2 = (Graphics2D)(drawToParent ? parent.getGraphics() : destination.image.getGraphics());
+			
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setPaint(new Color(colorer.colorFor(word), true));
 			g2.fill(polyline);
 		
 		}
 		else {
-			PImage wordImage = shapeToImage(wordShape, colorer.colorFor(word));
+
+			Rectangle wordRect = wordShape.getBounds();
+			PGraphics wordImage = parent.createGraphics(wordRect.width-wordRect.x, wordRect.height-wordRect.y,
+					PApplet.JAVA2D);
+			wordImage.beginDraw();
+			
+				Graphics2D g2 = (Graphics2D)wordImage.image.getGraphics();
+				
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setPaint(new Color(colorer.colorFor(word), true));
+				g2.fill(polyline);
+			
+			wordImage.endDraw();
+			
 			destination.image(wordImage, location.x, location.y);
 		}
 		
@@ -242,25 +255,6 @@ class WordCramEngine {
 		//destination.stroke(0, 255, 255, 50);
 		//destination.line(origSpot.x, origSpot.y, location.x, location.y);
 		//destination.popStyle();
-	}
-
-	private PImage shapeToImage(Shape shape, int color) {
-
-		Rectangle wordRect = shape.getBounds();
-
-		PGraphics wordImage = parent.createGraphics(wordRect.width-wordRect.x, wordRect.height-wordRect.y,
-				PApplet.JAVA2D);
-		wordImage.beginDraw();
-		
-			GeneralPath polyline = new GeneralPath(shape);
-			Graphics2D g2 = (Graphics2D)wordImage.image.getGraphics();
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setPaint(new Color(color, true));
-			g2.fill(polyline);
-		
-		wordImage.endDraw();
-		
-		return wordImage;
 	}
 	
 
