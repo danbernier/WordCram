@@ -27,9 +27,9 @@ public class SpiralWordNudger implements WordNudger {
 
 	@Override
 	public PVector nudgeFor(Word w, int attempt) {
-		float rad = powerMap(2, attempt, 0, 600, 1, 100);
+		float rad = powerMap(0.6f, attempt, 0, 600, 1, 100);
 
-		thetaIncrement = powerMap(1, attempt, 0, 600, 0.5f, 0.1f);
+		thetaIncrement = powerMap(1, attempt, 0, 600, 0.5f, 0.3f);
 		float theta = thetaIncrement * attempt;
 		float x = PApplet.cos(theta) * rad;
 		float y = PApplet.sin(theta) * rad;
