@@ -141,7 +141,7 @@ class WordCramEngine {
 			drawNext();
 		}
 		timer.end("drawAll");
-		System.out.println(timer.report());
+		//System.out.println(timer.report());
 	}
 	
 	public void drawNext() {
@@ -226,7 +226,6 @@ class WordCramEngine {
 		
 		}
 		else {
-
 			Rectangle wordRect = wordShape.getBounds();
 			PGraphics wordImage = parent.createGraphics(wordRect.width-wordRect.x, wordRect.height-wordRect.y,
 					PApplet.JAVA2D);
