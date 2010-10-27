@@ -16,6 +16,8 @@ package wordcram.text;
  limitations under the License.
  */
 
+import java.util.ArrayList;
+
 import wordcram.Word;
 
 public class TextSplitter {
@@ -44,7 +46,39 @@ public class TextSplitter {
 	}
 
 	protected String[] splitIntoWords(String text) {
-		return text.trim().toLowerCase().replaceAll("--", " ")
-				.replaceAll("[^a-z\\s]+", "").split("\\s+");
+		text = text.toLowerCase();
+
+		String[] tokens = splitIntoTokens(text);
+
+		for (int i = 0; i < tokens.length; i++) {
+			String token = tokens[i];
+			token = removePunctuationFromStringBeginning(token);
+			token = removePunctuationFromStringEnd(token);
+			token = removePunctuationFromBeginningOfWords(token);
+			token = removePunctuationFromEndOfWords(token);
+			tokens[i] = token;
+		}
+
+		return tokens; 
+	}
+
+	private String removePunctuationFromEndOfWords(String token) {
+		return token.replaceAll("\\W+\\s+", " ");
+	}
+
+	private String removePunctuationFromBeginningOfWords(String token) {
+		return token.replaceAll("\\s+\\W+", " ");
+	}
+
+	private String removePunctuationFromStringEnd(String token) {
+		return token.replaceAll("\\W+$", "");
+	}
+
+	private String removePunctuationFromStringBeginning(String token) {
+		return token.replaceAll("^\\W+", "");
+	}
+
+	private String[] splitIntoTokens(String text) {
+		return text.trim().split("(\\s+|--)");
 	}
 }

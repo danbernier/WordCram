@@ -17,7 +17,7 @@ package wordcram.text;
  */
 
 import java.util.Arrays;
-import java.util.Map;
+import java.util.Comparator;
 
 import org.junit.*;
 
@@ -30,6 +30,29 @@ public class TestTextSplitter {
 	@Before
 	public void setup() {
 		ts = new TextSplitter("these are stop words");
+	}
+
+	@Test
+	public void testFrontDoorWithPunctuationInStopWords() {
+		ts = new TextSplitter("don't i'll");
+		Word[] words = ts
+				.split("I don't want any more, can't you see I'll be ill?");
+
+		// Sort them by word, since they're all the same weight.
+		Arrays.sort(words, new Comparator<Word>() {
+			public int compare(Word word1, Word word2) {
+				return word1.word.compareTo(word2.word);
+			}
+		});
+
+		String[] expectedWords = "any be can't i ill more see want you"
+				.split(" ");
+
+		Assert.assertEquals(expectedWords.length, words.length);
+		for (int i = 0; i < words.length; i++) {
+			Assert.assertEquals(expectedWords[i], words[i].word);
+			Assert.assertEquals(1.0, words[i].weight, 0.0f);
+		}
 	}
 
 	@Test
@@ -60,30 +83,62 @@ public class TestTextSplitter {
 	}
 
 	@Test
-	public void testSplit() {
-		testSplit("yo baby boo", "yo baby boo", "basic test");
-		testSplit("hey now mamma jamma", "hey  now  mamma    jamma",
-				"multiple spaces");
+	public void testSplitLeftoverCases() {
+		testSplit("a b c", "a b c", "basic test");
+		testSplit("a b c", "A B C", "downcases");
+		testSplit("a b c a", "A b C a",
+				"preserves duplicate words (dumb test, I know)");
+	}
+
+	@Test
+	public void removesWhiteSpace() {
+		testSplit("a b c d", "a  b  c    d", "multiple spaces");
 		testSplit("a b c", "   a b c    ", "leading and trailing spaces");
 		testSplit("a b c", "a\tb \t c", "tabs");
 		testSplit("a b c", "a\nb \n c", "new lines");
 		testSplit("a b c", "\n\ta\n\tb\t\nc\n\t",
 				"mixed, and leading, newlines & tabs");
-		testSplit("a b c", "A B C", "downcases");
+	}
 
+	@Test
+	public void removesPunctuationOnTheEndsOfWords() {
+		testSplit("a b c", "@a' #b? -c/", "removes punctuation");
+		testSplit("i know i said", "\"I know,\" I said.",
+				"removes punctuation from beginnigs & ends of words");
+	}
+
+	@Test
+	public void removesMultiplePunctuationOnTheEndsOfWords() {
+		testSplit("a b c", "@?a~' #@!&&$^b?@@ -@#$#@%c$#@//",
+				"removes punctuation");
+		testSplit("hey you there", "Hey--you there!!",
+				"removes punctuation from beginnigs & ends of words");
+	}
+
+	@Test
+	public void leavesPunctuationInsideWords() {
+		testSplit("i'll say you're silly", "I'll say you're silly!",
+				"leaves punctuation inside words");
+	}
+
+	@Test
+	public void removesDashesBetweenWords() {
 		testSplit("a b c", "a--b--c", "turns -- into a space");
-		testSplit("a b c", "a !@#$#@! b $#@!$#@!# c",
-				"removes words that are all punctuation");
-		testSplit("a b c", "@a' #b? -c//", "removes punctuation");
-		testSplit("a b c", "a 0 b c 1 1948", "removes numbers");
+	}
 
-		testSplit("a b c a", "A b C a",
-				"preserves duplicate words (dumb test, I know)");
+	@Test
+	@Ignore("This could be an option later")
+	public void removesNumbers() {
+		testSplit("a b c", "a 0 b c 1 1948", "removes numbers");
 	}
 
 	private void testSplit(String expected, String src, String msg) {
 		String[] expectedArray = expected.split(" ");
 		String[] actual = ts.splitIntoWords(src);
-		Assert.assertArrayEquals(msg, expectedArray, actual);
+		
+		for (int i = 0; i < expectedArray.length; i++) {
+			Assert.assertEquals(msg, expectedArray[i], actual[i]);
+		}
+		Assert.assertEquals(msg, expectedArray.length, actual.length);
 	}
 }
