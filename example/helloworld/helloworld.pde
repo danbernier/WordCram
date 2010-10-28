@@ -15,8 +15,8 @@ limitations under the License.
 */
 
 /*
-This is as basic as it gets.  If you can't get this running, something is not 
-quite right.
+This is as basic as it gets.  If you can't get this running, 
+something is not quite right.
 */
 
 import wordcram.*;
@@ -24,34 +24,18 @@ import wordcram.*;
 size(700, 400);
 background(0);
 
-WordCram wordcram = new WordCram(
-  this,  // You have to pass the sketch to WordCram, so it can draw to it.
-  
-  // These are your words. You can use pretty much whatever numbers you like 
-  // for their weights, and they can be in any order.
-  new Word[] {
+// Each Word object has its word, and its weight.  You can use whatever
+// numbers you like for their weights, and they can be in any order.
+Word[] wordArray = new Word[] {
     new Word("Hello", 100),
     new Word("WordCram", 60)
-  },
-  
-  // Fonters tell WordCram which PFont to draw your words in.
-  // The Processing docs say: "Using createFont() (instead of loadFont) 
-  // enables vector data to be used with the JAVA2D (default) renderer 
-  // setting. This can be helpful when many font sizes are needed..."
-  Fonters.alwaysUse(createFont("sans", 1)),
-  
-  // Sizers tell WordCram how big to draw your words.
-  Sizers.byWeight(4, 60),
-  
-  // Colorers tell WordCram how to color your words.
-  Colorers.pickFrom(color(255)),
-  
-  // Anglers tell WordCram how to angle, or rotate, your words.
-  Anglers.horiz(),
-  
-  // Placers tell WordCram where (approximately) to draw your words.
-  Placers.centerClump()
-);
+  };
+
+// Pass in the sketch (the variable "this"), so WordCram can draw to it.
+WordCram wordcram = new WordCram(this)
+
+// Pass in the words to draw.
+  .forWords(wordArray);
 
 // Now we've created our WordCram, we can draw it:
 wordcram.drawAll();
