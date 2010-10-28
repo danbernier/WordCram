@@ -34,71 +34,61 @@ public class TestWordCounter {
 	@Test
 	public void testPunctuationInStopWords() {
 		WordCounter wc = new WordCounter("don't i'll");
-		String[] words = "i don't want any more, can't you see i'll be ill?".split(" ");
+		String[] words = split("i don't want any more, can't you see i'll be ill?");
 		Word[] weightedWords = wc.count(words);		
 
 		// Sort them by word, since they're all the same weight.
 		Arrays.sort(weightedWords, alphabetically);
 
-		String[] expectedWords = "any be can't i ill? more, see want you"
-				.split(" ");
-
-		Assert.assertEquals(expectedWords.length, weightedWords.length);
-		for (int i = 0; i < weightedWords.length; i++) {
-			Assert.assertEquals(expectedWords[i], weightedWords[i].word);
-			Assert.assertEquals(1.0, weightedWords[i].weight, 0.0f);
-		}
+		assertWeightedWordsAre(weightedWords, "any 1", "be 1", "can't 1",
+				"i 1", "ill? 1", "more, 1", "see 1", "want 1", "you 1");
 	}
 
 	@Test
 	public void testCountsWithStopWords() {
 		WordCounter wc = new WordCounter("these are stop words");
 
-		String[] words = "biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words"
-				.split(" ");
+		String[] words = split("biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words");
 		Word[] weightedWords = wc.count(words);
 		Arrays.sort(weightedWords);
-
-		Assert.assertEquals(3, weightedWords.length);
-
-		Assert.assertEquals("cherry", weightedWords[0].word);
-		Assert.assertEquals("biscuit", weightedWords[1].word);
-		Assert.assertEquals("cocoa", weightedWords[2].word);
-
-		Assert.assertEquals(3, (int) weightedWords[0].weight);
-		Assert.assertEquals(2, (int) weightedWords[1].weight);
-		Assert.assertEquals(1, (int) weightedWords[2].weight);
+		
+		assertWeightedWordsAre(weightedWords, "cherry 3", "biscuit 2", "cocoa 1");
 	}
 	
 	@Test
 	public void testThatStopWordsAreCaseInsensitive() {
 		WordCounter wc = new WordCounter("STOP WORDS");
 		
-		String[] words = "these are stop words Stop Words STOP WORDS".split(" ");
+		String[] words = split("these are stop words Stop Words STOP WORDS");
 		Word[] weightedWords = wc.count(words);
 		Arrays.sort(weightedWords, alphabetically);
 		
-		Assert.assertEquals(2, weightedWords.length);
-		Assert.assertEquals("are", weightedWords[0].word);
-		Assert.assertEquals("these", weightedWords[1].word);
+		assertWeightedWordsAre(weightedWords, "are 1", "these 1");
 	}
 
 	@Test
 	public void testCountsWithNoStopWords() {
 		WordCounter wc = new WordCounter("");
 
-		String[] words = "a b c a b a".split(" ");
+		String[] words = split("a b c a b a");
 		Word[] weightedWords = wc.count(words);
 		Arrays.sort(weightedWords);
-
-		Assert.assertEquals(3, weightedWords.length);
-
-		Assert.assertEquals("a", weightedWords[0].word);
-		Assert.assertEquals("b", weightedWords[1].word);
-		Assert.assertEquals("c", weightedWords[2].word);
-
-		Assert.assertEquals(3, (int) weightedWords[0].weight);
-		Assert.assertEquals(2, (int) weightedWords[1].weight);
-		Assert.assertEquals(1, (int) weightedWords[2].weight);
+		
+		assertWeightedWordsAre(weightedWords, "a 3", "b 2", "c 1");
+	}
+	
+	private void assertWeightedWordsAre(Word[] actualWords, String... expectedCases) {
+		
+		Assert.assertEquals("Got the wrong number of words", expectedCases.length, actualWords.length);
+		
+		for (int i = 0; i < expectedCases.length; i++) {
+			String[] wordAndWeight = split(expectedCases[i].trim());
+			Assert.assertEquals(wordAndWeight[0], actualWords[i].word);
+			Assert.assertEquals(Double.parseDouble(wordAndWeight[1]), actualWords[i].weight, 0.0001);
+		}
+	}
+	
+	private String[] split(String words) {
+		return words.split(" ");
 	}
 }
