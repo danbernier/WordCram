@@ -77,6 +77,8 @@ public class WordCram {
 	private Word[] words;
 	private TextSource textSource;
 	private String stopWords = StopWords.ENGLISH;
+	private enum TextCase { Lower, Upper, Keep };
+	private TextCase textCase = TextCase.Keep;
 	
 	private WordCramEngine wordCramEngine;
 	
@@ -158,6 +160,42 @@ public class WordCram {
 	 */
 	public WordCram withStopWords(String stopWords) {
 		this.stopWords = stopWords;
+		return this;
+	}
+	
+	/**
+	 * Make the WordCram change all words to lower-case.  
+	 * Stop-words are unaffected; they're always case-insensitive.
+	 * The default is to keep words as they appear in the text.
+	 * 
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram lowerCase() {
+		this.textCase = TextCase.Lower;
+		return this;
+	}
+	
+	/**
+	 * Make the WordCram change all words to upper-case.  
+	 * Stop-words are unaffected; they're always case-insensitive.
+	 * The default is to keep words as they appear in the text.
+	 * 
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram upperCase() {
+		this.textCase = TextCase.Upper;
+		return this;
+	}
+	
+	/**
+	 * Make the WordCram leave all words cased as they appear in the text.  
+	 * Stop-words are unaffected; they're always case-insensitive.
+	 * This is the default.
+	 * 
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram keepCase() {
+		this.textCase = TextCase.Keep;
 		return this;
 	}
 	
@@ -379,6 +417,11 @@ public class WordCram {
 
 			if (words == null && textSource != null) {
 				String text = textSource.getText();
+				
+				text = textCase == TextCase.Lower ? text.toLowerCase()
+				     : textCase == TextCase.Upper ? text.toUpperCase()
+				     : text;
+				
 				String[] wordStrings = new WordScanner().scanIntoWords(text);
 				words = new WordCounter(stopWords).count(wordStrings);
 			}			
