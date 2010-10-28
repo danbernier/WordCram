@@ -1,4 +1,4 @@
-package util;
+package wordcram;
 
 /*
  Copyright 2010 Daniel Bernier

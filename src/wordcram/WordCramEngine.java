@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import processing.core.*;
-import util.Timer;
 
 class WordCramEngine {
 

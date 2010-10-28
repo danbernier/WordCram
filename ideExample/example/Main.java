@@ -100,16 +100,16 @@ public class Main extends PApplet {
 							return new PVector(x, y);
 						}
 					})
-					//.withPlacer(Placers.horizBandAnchoredLeft())
+					.withPlacer(Placers.horizBandAnchoredLeft())
 					.withSizer(Sizers.byWeight(10, 100))
-					.withNudger(new SpiralWordNudger());
+					.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()));
 	}
 	
 	public void draw() {
 		//fill(55);
 		//rect(0, 0, width, height);
 		
-		boolean allAtOnce = true;
+		boolean allAtOnce = false;
 		if (allAtOnce) {
 			wordcram.drawAll();
 			println("Done");
