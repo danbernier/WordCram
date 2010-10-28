@@ -40,7 +40,7 @@ public class TextSplitter {
 	}
 
 	public Word[] split(String text) {
-		String[] words = new WordScanner().scanIntoWords(text);
-		return new WordCounter(stopWordsString).count(words);
+		String[] words = new WordScanner().scanIntoWords(text.toLowerCase());
+		return new WordCounter(stopWordsString.toLowerCase()).count(words);
 	}
 }

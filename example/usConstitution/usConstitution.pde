@@ -24,21 +24,19 @@ import wordcram.*;
 import wordcram.text.*;
 
 WordCram wordCram;
-Word[] words;
 
 void setup() {
   size(800, 600);
   background(255);
   colorMode(HSB);
   
-  String[] usConst = loadStrings("usconst.txt");
-  words = new TextSplitter(StopWords.ENGLISH + " shall").split(usConst);
   initWordCram();
 }
 
 void initWordCram() {
   wordCram = new WordCram(this)
-      .fromWords(words)
+      .fromTextFile("usconst.txt")
+      .withStopWords(StopWords.ENGLISH + " shall")
       .withFont(createFont("LiberationSerif-Regular.ttf", 1))
       .sizedByWeight(10, 90)
       .withColors(color(0, 250, 200), color(30), color(170, 230, 200));

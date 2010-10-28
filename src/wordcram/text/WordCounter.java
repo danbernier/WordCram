@@ -25,12 +25,8 @@ public class WordCounter {
 
 	private Set<String> stopWords;
 
-	public WordCounter() {
-		this(StopWords.ENGLISH);
-	}
-
 	public WordCounter(String stopWordsString) {
-		String[] stopWordsArray = stopWordsString.split(" ");
+		String[] stopWordsArray = stopWordsString.toLowerCase().split(" ");
 		stopWords = new HashSet<String>(Arrays.asList(stopWordsArray));
 	}
 
@@ -42,7 +38,7 @@ public class WordCounter {
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 
 		for (String word : words) {
-			if (!stopWords.contains(word)) {
+			if (!stopWords.contains(word.toLowerCase())) {
 				if (!counts.containsKey(word)) {
 					counts.put(word, 1);
 				} else {

@@ -24,6 +24,12 @@ import wordcram.Word;
  */
 
 public class TestWordCounter {
+	
+	private Comparator<Word> alphabetically = new Comparator<Word>() {
+		public int compare(Word word1, Word word2) {
+			return word1.word.compareTo(word2.word);
+		}
+	};
 
 	@Test
 	public void testPunctuationInStopWords() {
@@ -32,11 +38,7 @@ public class TestWordCounter {
 		Word[] weightedWords = wc.count(words);		
 
 		// Sort them by word, since they're all the same weight.
-		Arrays.sort(weightedWords, new Comparator<Word>() {
-			public int compare(Word word1, Word word2) {
-				return word1.word.compareTo(word2.word);
-			}
-		});
+		Arrays.sort(weightedWords, alphabetically);
 
 		String[] expectedWords = "any be can't i ill? more, see want you"
 				.split(" ");
@@ -66,6 +68,19 @@ public class TestWordCounter {
 		Assert.assertEquals(3, (int) weightedWords[0].weight);
 		Assert.assertEquals(2, (int) weightedWords[1].weight);
 		Assert.assertEquals(1, (int) weightedWords[2].weight);
+	}
+	
+	@Test
+	public void testThatStopWordsAreCaseInsensitive() {
+		WordCounter wc = new WordCounter("STOP WORDS");
+		
+		String[] words = "these are stop words Stop Words STOP WORDS".split(" ");
+		Word[] weightedWords = wc.count(words);
+		Arrays.sort(weightedWords, alphabetically);
+		
+		Assert.assertEquals(2, weightedWords.length);
+		Assert.assertEquals("are", weightedWords[0].word);
+		Assert.assertEquals("these", weightedWords[1].word);
 	}
 
 	@Test

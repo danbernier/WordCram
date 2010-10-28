@@ -20,8 +20,6 @@ package wordcram.text;
 public class WordScanner {
 
 	public String[] scanIntoWords(String text) {
-		text = text.toLowerCase();
-
 		String[] tokens = splitIntoTokens(text);
 
 		for (int i = 0; i < tokens.length; i++) {
@@ -34,7 +32,6 @@ public class WordScanner {
 		}
 
 		return tokens;
-
 	}
 
 	private String removePunctuationFromEndOfWords(String token) {
