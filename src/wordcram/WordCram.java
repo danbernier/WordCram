@@ -36,7 +36,7 @@ import wordcram.text.*;
  * <p>Creating a WordCram comes down to two parts:
  * <ul>
  * 	 <li>Give it your text or word list.  All these methods start with "for...": 
- * 		 {@link #forWebPage(String)}, {@link #forTextFile(String)}, {@link #forWords(Word[])}, etc.
+ * 		 {@link #fromWebPage(String)}, {@link #fromTextFile(String)}, {@link #fromWords(Word[])}, etc.
  *   </li>
  *   <li>Tell it how to display your words.  All these methods start with "with...": 
  *       {@link #withFonts(PFont...)}, {@link #withColors(int...)}, etc.
@@ -105,7 +105,7 @@ public class WordCram {
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer, WordNudger _wordNudger) {
 		this(_parent);
 		withFonter(_fonter).withSizer(_sizer).withColorer(_colorer).withAngler(_angler).withPlacer(_wordPlacer).withNudger(_wordNudger);
-		forWords(_words);
+		fromWords(_words);
 	}
 
 	/**
@@ -138,59 +138,72 @@ public class WordCram {
 	}
 	
 	/**
-	 * This WordCram will be based on word frequencies in the text of the given web page.
+	 * Make a WordCram from the text on a web page.
+	 * Loads the web page's HTML, scrapes out the text, and counts and sorts the words.
+	 * @param webPageAddress the URL of the web page to load 
 	 * @return The WordCram, for further setup or drawing.
 	 */
-	public WordCram forWebPage(String url) {
-		return forWords(new WebPage(url, parent));
+	public WordCram fromWebPage(String webPageAddress) {
+		return fromText(new WebPage(webPageAddress, parent));
 	}
 	
 	/**
-	 * This WordCram will be based on word frequencies in the text of the given html file.
+	 * Makes a WordCram from the text in a saved .html file.
+	 * Loads the file's HTML, scrapes out the text, and counts and sorts the words.
+	 * @param path the path of the HTML file
 	 * @return The WordCram, for further setup or drawing.
 	 */
-	public WordCram forHtmlFile(String path) {
-		return forWords(new HtmlFile(path, parent));
+	public WordCram fromHtmlFile(String path) {
+		return fromText(new HtmlFile(path, parent));
 	}
 	
 	/**
-	 * This WordCram will be based on word frequencies in the text of the given html String.
+	 * Makes a WordCram from a String of HTML.
+	 * Scrapes out the text from the HTML, and counts and sorts the words.
+	 * @param html the String of HTML
 	 * @return The WordCram, for further setup or drawing. 
 	 */
-	public WordCram forHtml(String html) {
-		return forWords(new Html(html));
+	public WordCram fromHtml(String html) {
+		return fromText(new Html(html));
 	}
 	
 	/**
-	 * This WordCram will be based on word frequencies in the text of the given text file.
+	 * Makes a WordCram from a text file.  Loads the file, and counts and sorts its words. 
+	 * @param path the path of the text file
 	 * @return The WordCram, for further setup or drawing. 
 	 */
-	public WordCram forTextFile(String path) {
-		return forWords(new TextFile(path, parent));
+	public WordCram fromTextFile(String path) {
+		return fromText(new TextFile(path, parent));
 	}
 	
 	/**
-	 * This WordCram will be based on word frequencies in the text of the given text String.
+	 * Makes a WordCram from a String of text.
+	 * @param text the String of text to get the words from
 	 * @return The WordCram, for further setup or drawing. 
 	 */
-	public WordCram forText(String text) {
-		return forWords(new Text(text));
+	public WordCram fromText(String text) {
+		return fromText(new Text(text));
 	}
 	
 	/**
-	 * This WordCram will be based on word frequencies in the text of the given {@link TextSource}.
+	 * Makes a WordCram from any {@link TextSource}.  Call's the textSource's getText()
+	 * method, so if that means network or filesystem access, it'll happen when you call this. 
+	 * @param textSource the TextSource to get the text from.
 	 * @return The WordCram, for further setup or drawing.
 	 */
-	public WordCram forWords(TextSource textSource) {
+	public WordCram fromText(TextSource textSource) {
 		Word[] words = new TextSplitter().split(textSource.getText());
-		return forWords(words);
+		return fromWords(words);
 	}
 	
 	/**
-	 * This WordCram will be based on the given {@link Word} array.
+	 * Makes a WordCram from your own custom {@link Word} array.
+	 * The Words can be ordered and weighted arbitrarily -- WordCram will
+	 * sort them by weight, and then divide their weights by the weight of the
+	 * heaviest Word, so the heaviest Word will end up with a weight of 1.0.
 	 * @return The WordCram, for further setup or drawing. 
 	 */
-	public WordCram forWords(Word[] _words) {
+	public WordCram fromWords(Word[] _words) {
 		// TODO move this to drawNext(), so accidentally using >1 textsource doesn't load extra stuff?
 		words = new WordSorterAndScaler().sortAndScale(_words);
 		return this;

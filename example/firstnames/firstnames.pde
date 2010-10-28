@@ -67,7 +67,7 @@ void loadNames() {
 
 void makeWordCram() {
   wc = new WordCram(this)
-    .forWords(names)
+    .fromWords(names)
     .withFont(createFont("MINYN___.TTF", 1))
     .sizedByWeight(12, 60)
     .withColorer(colorer())
@@ -103,7 +103,7 @@ void draw() {
 
 void mouseClicked() {
   background(255);
-  initWordCram();
+  makeWordCram();
   loop();
 }
 

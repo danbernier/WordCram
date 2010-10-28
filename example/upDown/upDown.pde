@@ -36,7 +36,7 @@ void initWordCram() {
     words[i] = new Word(i % 2 == 0 ? "word" : "cram", 1);
   }
 
-  wordCram = new WordCram(this).forWords(words)
+  wordCram = new WordCram(this).fromWords(words)
     .withSizer(Sizers.byWeight(20, 20))
     .withColors(color(0))
     .withAngler(
@@ -48,7 +48,6 @@ void initWordCram() {
     .withPlacer(new WordPlacer() {
       public PVector place(Word w, int wordIndex, int wordsCount, int wordWidth, int wordHeight, int fieldWidth, int fieldHeight) {
         int columns = 17;
-        int offset
         return new PVector(map(wordIndex % columns, 0, columns, 0, fieldWidth),
                            map(floor(wordIndex / (float)columns), 0, 15, 0, height));
         //return new PVector(random(fieldWidth - wordWidth), random(fieldHeight - wordHeight));

@@ -35,7 +35,7 @@ Word[] wordArray = new Word[] {
 WordCram wordcram = new WordCram(this)
 
 // Pass in the words to draw.
-  .forWords(wordArray);
+  .fromWords(wordArray);
 
 // Now we've created our WordCram, we can draw it:
 wordcram.drawAll();
