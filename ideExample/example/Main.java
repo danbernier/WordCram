@@ -61,13 +61,7 @@ public class Main extends PApplet {
 		background(30);
 
 		wordcram = new WordCram(this)
-					//.forWebPage("http://cnn.com")
-					//.forWords(alphabet())
-					//.forWords(loadWords())
-					.forTextFile(textFilePath())
-					//.forHtmlFile("webPage.html")
-					//.forHtml("<html><b>Hippolyta Hall</b> and <i>The Kindly Ones</i> for Congress!</html>")
-					//.forText("Cthulhu for President! Why choose the lesser of two evils?")
+					.fromTextFile(textFilePath())
 					.withFonts(randomFont())
 					.withColorer(Colorers.twoHuesRandomSats(this))
 					.withAngler(Anglers.horiz())
@@ -102,7 +96,8 @@ public class Main extends PApplet {
 					})
 					.withPlacer(Placers.horizBandAnchoredLeft())
 					.withSizer(Sizers.byWeight(10, 100))
-					.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()));
+					//.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
+					;
 	}
 	
 	public void draw() {
