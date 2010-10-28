@@ -192,8 +192,10 @@ public class WordCram {
 	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram fromText(TextSource textSource) {
-		Word[] words = new TextSplitter().split(textSource.getText());
-		return fromWords(words);
+		String text = textSource.getText();
+		String[] words = new WordScanner().scanIntoWords(text);
+		Word[] weightedWords = new WordCounter().count(words);
+		return fromWords(weightedWords);
 	}
 	
 	/**
