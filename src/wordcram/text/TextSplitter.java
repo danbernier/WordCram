@@ -16,8 +16,6 @@ package wordcram.text;
  limitations under the License.
  */
 
-import java.util.ArrayList;
-
 import wordcram.Word;
 
 public class TextSplitter {
@@ -42,43 +40,7 @@ public class TextSplitter {
 	}
 
 	public Word[] split(String text) {
-		return new WordCounter(stopWordsString).count(splitIntoWords(text));
-	}
-
-	protected String[] splitIntoWords(String text) {
-		text = text.toLowerCase();
-
-		String[] tokens = splitIntoTokens(text);
-
-		for (int i = 0; i < tokens.length; i++) {
-			String token = tokens[i];
-			token = removePunctuationFromStringBeginning(token);
-			token = removePunctuationFromStringEnd(token);
-			token = removePunctuationFromBeginningOfWords(token);
-			token = removePunctuationFromEndOfWords(token);
-			tokens[i] = token;
-		}
-
-		return tokens; 
-	}
-
-	private String removePunctuationFromEndOfWords(String token) {
-		return token.replaceAll("\\W+\\s+", " ");
-	}
-
-	private String removePunctuationFromBeginningOfWords(String token) {
-		return token.replaceAll("\\s+\\W+", " ");
-	}
-
-	private String removePunctuationFromStringEnd(String token) {
-		return token.replaceAll("\\W+$", "");
-	}
-
-	private String removePunctuationFromStringBeginning(String token) {
-		return token.replaceAll("^\\W+", "");
-	}
-
-	private String[] splitIntoTokens(String text) {
-		return text.trim().split("(\\s+|--)");
+		String[] words = new WordScanner().scanIntoWords(text);
+		return new WordCounter(stopWordsString).count(words);
 	}
 }

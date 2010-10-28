@@ -1,7 +1,6 @@
 package wordcram.text;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,6 +24,29 @@ import wordcram.Word;
  */
 
 public class TestWordCounter {
+
+	@Test
+	public void testPunctuationInStopWords() {
+		WordCounter wc = new WordCounter("don't i'll");
+		String[] words = "i don't want any more, can't you see i'll be ill?".split(" ");
+		Word[] weightedWords = wc.count(words);		
+
+		// Sort them by word, since they're all the same weight.
+		Arrays.sort(weightedWords, new Comparator<Word>() {
+			public int compare(Word word1, Word word2) {
+				return word1.word.compareTo(word2.word);
+			}
+		});
+
+		String[] expectedWords = "any be can't i ill? more, see want you"
+				.split(" ");
+
+		Assert.assertEquals(expectedWords.length, weightedWords.length);
+		for (int i = 0; i < weightedWords.length; i++) {
+			Assert.assertEquals(expectedWords[i], weightedWords[i].word);
+			Assert.assertEquals(1.0, weightedWords[i].weight, 0.0f);
+		}
+	}
 
 	@Test
 	public void testCountsWithStopWords() {
