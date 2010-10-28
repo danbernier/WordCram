@@ -32,16 +32,54 @@ public class TestWordCounter {
 	};
 
 	@Test
+	public void canRemoveWordsThatAreJustNumbers() {
+		WordCounter wc = new WordCounter("");
+		wc.shouldRemoveNumbers(true);
+		String[] words = split("I saw U2 in 1999 I saw them 10 times");
+		Word[] weightedWords = wc.count(words);
+
+		Arrays.sort(weightedWords, alphabetically);
+
+		assertWeightedWordsAre(weightedWords, "I 2", "U2 1", "in 1", "saw 2",
+				"them 1", "times 1");
+	}
+	
+	@Test
+	public void canRemoveWordsThatHaveDecimalPoints() {
+		WordCounter wc = new WordCounter("");
+		wc.shouldRemoveNumbers(true);
+		String[] words = split("Pi is about 3.1415 I think");
+		Word[] weightedWords = wc.count(words);
+		
+		Arrays.sort(weightedWords, alphabetically);
+		
+		assertWeightedWordsAre(weightedWords, "I 1", "Pi 1", "about 1", "is 1", "think 1");
+	}
+
+	@Test
+	public void canLeaveWordsThatAreJustNumbers() {
+		WordCounter wc = new WordCounter("");
+		wc.shouldRemoveNumbers(false);
+		String[] words = split("I saw U2 in 1999 I saw them 10 times");
+		Word[] weightedWords = wc.count(words);
+
+		Arrays.sort(weightedWords, alphabetically);
+
+		assertWeightedWordsAre(weightedWords, "10 1", "1999 1", "I 2", "U2 1",
+				"in 1", "saw 2", "them 1", "times 1");
+	}
+
+	@Test
 	public void testPunctuationInStopWords() {
 		WordCounter wc = new WordCounter("don't i'll");
-		String[] words = split("i don't want any more, can't you see i'll be ill?");
+		String[] words = split("i don't want any more can't you see i'll be ill");
 		Word[] weightedWords = wc.count(words);		
 
 		// Sort them by word, since they're all the same weight.
 		Arrays.sort(weightedWords, alphabetically);
 
 		assertWeightedWordsAre(weightedWords, "any 1", "be 1", "can't 1",
-				"i 1", "ill? 1", "more, 1", "see 1", "want 1", "you 1");
+				"i 1", "ill 1", "more 1", "see 1", "want 1", "you 1");
 	}
 
 	@Test

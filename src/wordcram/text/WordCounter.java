@@ -24,10 +24,16 @@ import wordcram.Word;
 public class WordCounter {
 
 	private Set<String> stopWords;
-
+	private boolean removeNumbers;
+	
 	public WordCounter(String stopWordsString) {
 		String[] stopWordsArray = stopWordsString.toLowerCase().split(" ");
 		stopWords = new HashSet<String>(Arrays.asList(stopWordsArray));
+	}
+	
+	public WordCounter shouldRemoveNumbers(boolean shouldRemoveNumbers) {
+		removeNumbers = shouldRemoveNumbers;
+		return this;
 	}
 
 	public Word[] count(String[] words) {
@@ -38,7 +44,7 @@ public class WordCounter {
 		HashMap<String, Integer> counts = new HashMap<String, Integer>();
 
 		for (String word : words) {
-			if (!stopWords.contains(word.toLowerCase())) {
+			if (shouldCountWord(word)) {
 				if (!counts.containsKey(word)) {
 					counts.put(word, 1);
 				} else {
@@ -48,6 +54,24 @@ public class WordCounter {
 		}
 
 		return counts;
+	}
+
+	private boolean shouldCountWord(String word) {
+		return !isStopWord(word) && !(removeNumbers && isNumeric(word));
+	}
+
+	private boolean isNumeric(String word) {
+		try {
+			Double.parseDouble(word);
+			return true;
+		}
+		catch (NumberFormatException x) {
+			return false;
+		}
+	}
+
+	private boolean isStopWord(String word) {
+		return stopWords.contains(word.toLowerCase());
 	}
 
 	private Word[] toWords(Map<String, Integer> counts) {

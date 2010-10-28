@@ -62,6 +62,7 @@ public class Main extends PApplet {
 
 		wordcram = new WordCram(this)
 					.fromTextFile(textFilePath())
+					.removeNumbers()
 					.withFonts(randomFont())
 					.withColorer(Colorers.twoHuesRandomSats(this))
 					.withAngler(Anglers.horiz())

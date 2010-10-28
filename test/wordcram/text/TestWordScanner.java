@@ -77,12 +77,6 @@ public class TestWordScanner {
 		testSplit("a b c", "a--b--c");
 	}
 
-	@Test
-	@Ignore("This could be an option later")
-	public void removesNumbers() {
-		testSplit("a b c", "a 0 b c 1 1948");
-	}
-
 	private void testSplit(String expected, String src) {
 		String[] expectedArray = expected.split(" ");
 		String[] actual = scanner.scanIntoWords(src);

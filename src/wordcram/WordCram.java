@@ -77,6 +77,7 @@ public class WordCram {
 	private Word[] words;
 	private TextSource textSource;
 	private String stopWords = StopWords.ENGLISH;
+	private boolean removeNumbers = true;
 	private enum TextCase { Lower, Upper, Keep };
 	private TextCase textCase = TextCase.Keep;
 	
@@ -160,6 +161,31 @@ public class WordCram {
 	 */
 	public WordCram withStopWords(String stopWords) {
 		this.stopWords = stopWords;
+		return this;
+	}
+	
+	/**
+	 * Exclude numbers from the text in the WordCram.  They're excluded by default.
+	 * <p>
+	 * Words that are all numbers, like 1, 3.14159, 42, or 1492, will be excluded.
+	 * Words that have some letters and some numbers like 1A, U2, or funnyguy194 will be included.
+	 *
+	 * @see #includeNumbers()
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram removeNumbers() {
+		this.removeNumbers = true;
+		return this;
+	}
+	
+	/**
+	 * Include numbers from the text in the WordCram.  They're excluded by default.
+	 *
+	 * @see #excludeNumbers()
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram includeNumbers() {
+		this.removeNumbers = false;
 		return this;
 	}
 	
@@ -423,7 +449,7 @@ public class WordCram {
 				     : text;
 				
 				String[] wordStrings = new WordScanner().scanIntoWords(text);
-				words = new WordCounter(stopWords).count(wordStrings);
+				words = new WordCounter(stopWords).shouldRemoveNumbers(removeNumbers).count(wordStrings);
 			}			
 			words = new WordSorterAndScaler().sortAndScale(words);
 			
