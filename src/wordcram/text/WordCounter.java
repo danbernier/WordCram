@@ -24,15 +24,15 @@ import wordcram.Word;
 public class WordCounter {
 
 	private Set<String> stopWords;
-	private boolean removeNumbers;
+	private boolean excludeNumbers;
 	
 	public WordCounter(String stopWordsString) {
 		String[] stopWordsArray = stopWordsString.toLowerCase().split(" ");
 		stopWords = new HashSet<String>(Arrays.asList(stopWordsArray));
 	}
 	
-	public WordCounter shouldRemoveNumbers(boolean shouldRemoveNumbers) {
-		removeNumbers = shouldRemoveNumbers;
+	public WordCounter shouldExcludeNumbers(boolean shouldExcludeNumbers) {
+		excludeNumbers = shouldExcludeNumbers;
 		return this;
 	}
 
@@ -57,7 +57,7 @@ public class WordCounter {
 	}
 
 	private boolean shouldCountWord(String word) {
-		return !isStopWord(word) && !(removeNumbers && isNumeric(word));
+		return !isStopWord(word) && !(excludeNumbers && isNumeric(word));
 	}
 
 	private boolean isNumeric(String word) {

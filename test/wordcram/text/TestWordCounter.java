@@ -32,9 +32,9 @@ public class TestWordCounter {
 	};
 
 	@Test
-	public void canRemoveWordsThatAreJustNumbers() {
+	public void canExcludeWordsThatAreJustNumbers() {
 		WordCounter wc = new WordCounter("");
-		wc.shouldRemoveNumbers(true);
+		wc.shouldExcludeNumbers(true);
 		String[] words = split("I saw U2 in 1999 I saw them 10 times");
 		Word[] weightedWords = wc.count(words);
 
@@ -45,9 +45,9 @@ public class TestWordCounter {
 	}
 	
 	@Test
-	public void canRemoveWordsThatHaveDecimalPoints() {
+	public void canExcludeWordsThatHaveDecimalPoints() {
 		WordCounter wc = new WordCounter("");
-		wc.shouldRemoveNumbers(true);
+		wc.shouldExcludeNumbers(true);
 		String[] words = split("Pi is about 3.1415 I think");
 		Word[] weightedWords = wc.count(words);
 		
@@ -59,7 +59,7 @@ public class TestWordCounter {
 	@Test
 	public void canLeaveWordsThatAreJustNumbers() {
 		WordCounter wc = new WordCounter("");
-		wc.shouldRemoveNumbers(false);
+		wc.shouldExcludeNumbers(false);
 		String[] words = split("I saw U2 in 1999 I saw them 10 times");
 		Word[] weightedWords = wc.count(words);
 
