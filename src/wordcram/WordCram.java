@@ -381,8 +381,7 @@ public class WordCram {
 	 * Make the WordCram size words by their weight, where the "heaviest"
 	 * word will be sized at <code>maxSize</code>.
 	 * <p>
-	 * To be specific, the font size for each word will be calculated with:
-	 * <pre>PApplet.lerp(minSize, maxSize, (float)word.weight)</pre>
+	 * Specifically, it makes the WordCram use {@link Sizers#byWeight(int, int)}.
 	 * 
 	 * @param minSize the size to draw a Word with weight = 0
 	 * @param maxSize the size to draw a Word with weight = 1
@@ -396,8 +395,7 @@ public class WordCram {
 	 * Make the WordCram size words by their rank.  The first
 	 * word will be sized at <code>maxSize</code>.
 	 * <p>
-	 * To be specific, the font size for each word will be calculated with:
-	 * <pre>PApplet.map(wordRank, 0, wordCount, maxSize, minSize)</pre>
+	 * Specifically, it makes the WordCram use {@link Sizers#byRank(int, int)}.
 	 * 
 	 * @param minSize the size to draw the last Word
 	 * @param maxSize the size to draw the first Word
