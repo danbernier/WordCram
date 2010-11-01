@@ -366,7 +366,7 @@ public class WordCram {
 	}
 	
 	/**
-	 * Use the given WordFonter to pick fonts for each word.
+	 * Use the given {@link WordFonter} to pick fonts for each word.
 	 * You'll probably only use this if you're making a custom WordFonter.
 	 * 
 	 * @param fonter the WordFonter to use.
@@ -404,32 +404,90 @@ public class WordCram {
 	public WordCram sizedByRank(int minSize, int maxSize) {
 		return withSizer(Sizers.byRank(minSize, maxSize));
 	}
-	
+
+	/**
+	 * Use the given {@link WordSizer} to pick fonts for each word.
+	 * You'll probably only use this if you're making a custom WordSizer.
+	 * 
+	 * @param sizer the WordSizer to use.
+	 * @return The WordCram, for further setup or drawing.
+	 */
 	public WordCram withSizer(WordSizer sizer) {
 		this.sizer = sizer;
 		return this;
 	}
 	
+	/**
+	 * Render words by randomly choosing from the given
+	 * colors.  Uses {@link Colorers#pickFrom(int...)}.
+	 * <p>
+	 * Note: if you want all your words to be, say, red, <i>don't</i> do this:
+	 * <pre>
+	 * ...withColors(255, 0, 0)...  // No no!
+	 * </pre>
+	 * You'll just see a blank WordCram.  Since 
+	 * <a href="http://processing.org/reference/color_datatype.html" target="blank">Processing 
+	 * stores colors as integers</a>, WordCram will see each integer as a different
+	 * color, and it'll color about 1/3 of your words with the color represented by 
+	 * the integer 255, and the other 2/3 with the color represented by the integer
+	 * 0.  The punchline is, Processing stores opacity (or alpha) in the highest 
+	 * bits (the ones used for storing really big numbers, from 2<sup>24</sup> to 
+	 * 2<sup>32</sup>), so your colors 0 and 255 have, effectively, 0 opacity -- they're
+	 * completely transparent.  Oops.
+	 * <p>
+	 * Use this instead, and you'll get what you're after:
+	 * <pre>
+	 * ...withColors(color(255, 0, 0))...  // Much better!
+	 * </pre>
+	 * 
+	 * @param colors the colors to randomly choose from.
+	 * @return The WordCram, for further setup or drawing.
+	 */
 	public WordCram withColors(int... colors) {
 		return withColorer(Colorers.pickFrom(colors));
 	}
+
+	/**
+	 * Use the given {@link WordColorer} to pick colors for each word.
+	 * 
+	 * @param colorer the WordColorer to use.
+	 * @return The WordCram, for further setup or drawing.
+	 */
 	public WordCram withColorer(WordColorer colorer) {
 		this.colorer = colorer;
 		return this;
 	}
 
 	// TODO need more overloads!
-	
+
+	/**
+	 * Use the given {@link WordAngler} to pick angles for each word.
+	 * 
+	 * @param angler the WordAngler to use.
+	 * @return The WordCram, for further setup or drawing.
+	 */
 	public WordCram withAngler(WordAngler angler) {
 		this.angler = angler;
 		return this;
 	}
-	
+
+	/**
+	 * Use the given {@link WordPlacer} to pick locations for each word.
+	 * 
+	 * @param placer the WordPlacer to use.
+	 * @return The WordCram, for further setup or drawing.
+	 */
 	public WordCram withPlacer(WordPlacer placer) {
 		this.placer = placer;
 		return this;
 	}
-	
+
+	/**
+	 * Use the given {@link WordNudger} to pick angles for each word.
+	 * 
+	 * @param nudger the WordNudger to use.
+	 * @return The WordCram, for further setup or drawing.
+	 */
 	public WordCram withNudger(WordNudger nudger) {
 		this.nudger = nudger;
 		return this;
