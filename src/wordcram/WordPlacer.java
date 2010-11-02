@@ -19,21 +19,21 @@ package wordcram;
 import processing.core.PVector;
 
 /**
- * A WordPlacer tells WordCram where to place a word on the field.
- * 
+ * A WordPlacer tells WordCram where to place a word (in x,y coordinates) on the field.
+ * <p>
  * A WordPlacer only suggests: the WordCram will try to place the Word where the
  * WordPlacer tells it to, but if the Word overlaps other Words, a WordNudger
  * will suggest different near-by spots for the Word until it fits, or until the
  * WordCram gives up.
- * 
- * It returns the desired location for the Word as a 2D PVector.
+ * <p>
+ * Some useful implementations are available in {@link Placers}.
  * 
  * @author Dan Bernier
  */
 public interface WordPlacer {
 
 	/**
-	 * Return the desired location for a Word on the field, as a 2D PVector.
+	 * Where should this {@link Word} be drawn on the field?
 	 * 
 	 * @param word
 	 *            The Word to place. A typical WordPlacer might use the Word's

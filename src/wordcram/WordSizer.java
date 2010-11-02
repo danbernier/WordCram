@@ -17,11 +17,12 @@ package wordcram;
  */
 
 /**
- * WordSizer is one of the components you customize your WordCram with. It tells
- * {@link WordCram} how big to render each {@link Word}. You'll pass a WordSizer
- * to WordCram via {@link WordCram#withSizer(WordSizer)}.
+ * A WordSizer tells WordCram how big to render each word. 
+ * You'll pass a WordSizer to WordCram via {@link WordCram#withSizer(WordSizer)}.
  * <p>
  * Some useful implementations are available in {@link Sizers}.
+ * 
+ * @author Dan Bernier
  */
 public interface WordSizer {
 

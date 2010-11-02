@@ -18,7 +18,7 @@ package wordcram;
 
 import java.util.*;
 
-public class Timer {
+class Timer {
 	
 	private Stack<Timer.IntervalStart> starts = new Stack<Timer.IntervalStart>();
 	private HashMap<String,ArrayList<Long>> durations = new HashMap<String,ArrayList<Long>>();
