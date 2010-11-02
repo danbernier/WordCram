@@ -36,7 +36,7 @@ public class Main extends PApplet {
 
 		// P2D can't draw to destination.image.getGraphics(). Interesting.
 
-		size(1300, 1000); // (int)random(300, 800)); //1200, 675); //1600, 900);
+		size(1200, 1200); // (int)random(300, 800)); //1200, 675); //1600, 900);
 		smooth();
 		colorMode(HSB);
 		initWordCram();
@@ -46,15 +46,15 @@ public class Main extends PApplet {
 	private PFont randomFont() {
 		String[] fonts = PFont.list();
 		String noGoodFontNames = "Dingbats|Standard Symbols L";
-		String blockFontNames = "OpenSymbol|Mallige Bold|Mallige Normal|Lohit Punjabi|Webdings";
+		String blockFontNames = "OpenSymbol|Mallige Bold|Mallige Normal|Lohit Bengali|Lohit Punjabi|Webdings";
 		Set<String> noGoodFonts = new HashSet<String>(Arrays.asList((noGoodFontNames+"|"+blockFontNames).split("|")));
 		String fontName;
 		do {
 			fontName = fonts[(int)random(fonts.length)];
 		} while (fontName == null || noGoodFonts.contains(fontName));
 		System.out.println(fontName);
-		//return createFont(fontName, 1);
-		return createFont("Molengo", 1);
+		return createFont(fontName, 1);
+		//return createFont("Molengo", 1);
 	}
 	
 	private void initWordCram() {
@@ -62,7 +62,8 @@ public class Main extends PApplet {
 
 		wordcram = new WordCram(this)
 					.fromTextFile(textFilePath())
-					.removeNumbers()
+					//.upperCase()
+					//.excludeNumbers()
 					.withFonts(randomFont())
 					.withColorer(Colorers.twoHuesRandomSats(this))
 					.withAngler(Anglers.horiz())
@@ -95,9 +96,12 @@ public class Main extends PApplet {
 							return new PVector(x, y);
 						}
 					})
-					.withPlacer(Placers.horizBandAnchoredLeft())
+					.withPlacer(Placers.swirl())
 					.withSizer(Sizers.byWeight(10, 100))
+					
 					//.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
+					.withNudger(new RandomWordNudger())
+					
 					;
 	}
 	
@@ -109,6 +113,7 @@ public class Main extends PApplet {
 		if (allAtOnce) {
 			wordcram.drawAll();
 			println("Done");
+			save("wordcram.png");
 			noLoop();
 		}
 		else {
@@ -118,6 +123,7 @@ public class Main extends PApplet {
 			}
 			if (!wordcram.hasMore()) {
 				println("Done");
+				save("wordcram.png");
 				noLoop();
 			}
 		}
