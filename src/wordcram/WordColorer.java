@@ -34,8 +34,8 @@ public interface WordColorer {
 	/**
 	 * What color should this {@link Word} be?
 	 * 
-	 * @param word
-	 * @return
+	 * @param word the word to pick the color for
+	 * @return the color for the word
 	 */
 	public int colorFor(Word word);
 }

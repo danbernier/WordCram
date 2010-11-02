@@ -33,8 +33,8 @@ public interface WordFonter {
 	
 	/**
 	 * What font should this {@link Word} be drawn in?
-	 * @param word
-	 * @return
+	 * @param word the word to pick the PFont for
+	 * @return the PFont for the word
 	 */
 	public PFont fontFor(Word word);
 }
