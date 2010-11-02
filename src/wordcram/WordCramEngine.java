@@ -118,7 +118,7 @@ class WordCramEngine {
 		}
 		
 		Rectangle2D rect = shape.getBounds2D();
-		int minWordRenderedSize = 4; // TODO extract config setting for minWordRenderedSize
+		int minWordRenderedSize = 7; // TODO extract config setting for minWordRenderedSize
 		if (rect.getWidth() < minWordRenderedSize || rect.getHeight() < minWordRenderedSize) {
 			return null;		
 		}
@@ -169,6 +169,7 @@ class WordCramEngine {
 		word.setDesiredLocation(placer.place(word, wordIndex, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height));
 		
 		// TODO just make this 10000
+		// TODO make this a config!!!  that'll help people write their own nudgers, if they know how many times it'll try -- also, it'll help tweak performance
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
 		Word lastCollidedWith = null;
 		for (int attempt = 0; attempt < maxAttempts; attempt++) {
