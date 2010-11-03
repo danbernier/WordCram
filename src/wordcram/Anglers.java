@@ -43,24 +43,28 @@ public class Anglers implements PConstants {
 			}
 		};
 	}
-	
+
 	/**
-	 * @param min the lower-bound of the angle range
-	 * @param max the upper-bound of the angle range 
-	 * @return a WordAngler that gives a random angle between min and max, every time it's called.
+	 * @param min
+	 *            the lower-bound of the angle range
+	 * @param max
+	 *            the upper-bound of the angle range
+	 * @return a WordAngler that gives a random angle between min and max, every
+	 *         time it's called.
 	 */
 	public static WordAngler randomBetween(final float min, final float max) {
 		final Random r = new Random();
-		final float difference = max - min; 
+		final float difference = max - min;
 		return new WordAngler() {
 			public float angleFor(Word w) {
 				return (r.nextFloat() * difference) + min;
 			}
 		};
 	}
-	
+
 	/**
-	 * @return a WordAngler that angles all words between -7 degrees and 7 degrees, for a "heaped" effect.
+	 * @return a WordAngler that angles all words between -7 degrees and 7
+	 *         degrees, for a "heaped" effect.
 	 */
 	public static WordAngler heaped() {
 		final Random r = new Random();
@@ -70,7 +74,8 @@ public class Anglers implements PConstants {
 
 	/**
 	 * If you want all your words to be drawn at the same angle, use this. For
-	 * example, {@link #horiz()} is basically implemented as <code>return alwaysUse(0f);</code>.
+	 * example, {@link #horiz()} is basically implemented as
+	 * <code>return alwaysUse(0f);</code>.
 	 * 
 	 * @see #horiz()
 	 * @param angle
