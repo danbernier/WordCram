@@ -21,6 +21,46 @@ import processing.core.PFont;
 import wordcram.text.*;
 
 /**
+ * There are three phases to making a WordCram.
+ * <p>Start with a <code>new WordCram(this)</code>, then:
+ * 
+ * <h2>Load your Words</h2>
+ * <li>{@link #fromWebPage(String)}
+ * <li>{@link #fromTextFile(String)}
+ * <li>{@link #fromHtmlString(String)}
+ * <li>{@link #fromTextString(String)}
+ * <li>{@link #fromText(TextSource)}
+ * <p>
+ * Control case-sensitivity:
+ * <li>{@link #upperCase()}
+ * <li>{@link #lowerCase()}
+ * <li>{@link #keepCase()} (the default)
+ * <p>...number words:
+ * <li>{@link #includeNumbers()}
+ * <li>{@link #excludeNumbers()} (the default)
+ * <p>...and stop words:
+ * <li>{@link #withStopWords(String)}
+ *
+ * <h2>Style your Words</h2>
+ * <li>{@link #sizedByWeight(int, int)}
+ * <li>{@link #sizedByRank(int, int)}
+ * <li>{@link #withSizer(WordSizer)}
+ * <li>
+ * <li>{@link #withAngler(WordAngler)}
+ * <li>
+ * <li>{@link #withFont(String)}
+ * <li>{@link #withFonts(String...)}
+ * <li>{@link #withFonter(WordFonter)}
+ * <li>
+ * <li>{@link #withColors(int...)}
+ * <li>{@link #withColorer(WordColorer)}
+ * <li>
+ * <li>{@link #withPlacer(WordPlacer)}
+ * <li>
+ * <li>{@link #withNudger(WordNudger)}
+ * 
+ * <hr/>
+ * 
  * The WordCram class is the main API for WordCram.  There are three steps to making a WordCram:
  * <ol>
  * <li>weight your words
@@ -489,6 +529,13 @@ public class WordCram {
 	}
 
 	// TODO need more overloads!
+	
+	public WordCram angledAt(float... anglesInRadians) {
+		return withAngler(Anglers.pickFrom(anglesInRadians));
+	}
+	public WordCram angledBetween(float minAngleInRadians, float maxAngleInRadians) {
+		return withAngler(Anglers.randomBetween(minAngleInRadians, maxAngleInRadians));
+	}
 
 	/**
 	 * Use the given WordAngler to pick angles for each word.
