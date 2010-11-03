@@ -24,6 +24,8 @@ import wordcram.text.*;
  * WordCram is the main API for WordCram.  There are two phases to using a WordCram: 
  * constructing, and drawing.
  * 
+ * <h2>Constructing a WordCram</h2>
+ * 
  * <p>Constructing a WordCram is done with the fluent API -- first, construct a WordCram,
  * then call configuring methods on it.  Like this:
  * <pre>
@@ -33,17 +35,59 @@ import wordcram.text.*;
  *   .withColors(color(255,0,0), color(0,0,255));              // colored red and blue.
  * </pre>
  * 
- * <h2>Constructing a WordCram</h2>
+ * <h2>Choose Your Words</h2>
  * 
- * <p>Creating a WordCram comes down to two parts:
+ * <h3>Loading Your Text</h3>
+ * 
+ * You start by giving WordCram either some text to chew on,
+ * or an array of Words you've weighted yourself.
+ * <p>
+ * WordCram can load text from a few different text sources:
  * <ul>
- * 	 <li>Give it your text or word list.  All these methods start with "from...": 
- * 		 {@link #fromWebPage(String)}, {@link #fromTextFile(String)}, {@link #fromWords(Word[])}, etc.
- *   </li>
- *   <li>Tell it how to display your words.  All these methods start with "with...": 
- *       {@link #withFonts(PFont...)}, {@link #withColors(int...)}, etc.
- *   </li>
+ * <li>{@link #fromWebPage(String)} will load a URL (or an HTML file from the filesystem), and scrape the text from the HTML</li>
+ * <li>{@link #fromTextFile(String)} will load a file (from the filesystem or the network), and treat it as plaintext</li>
+ * <li>{@link #fromHtmlString(String)} takes a String, assumes it's HTML, and scrapes out its text</li>
+ * <li>{@link #fromTextString(String)} takes a String, and assumes it's plaintext</li>
+ * <li>If you want WordCram to count words from some other source, you can pass your own {@link TextSource} 
+ * 		to {@link #fromText(TextSource)}, and WordCram will get its text via {@link TextSource#getText()}</li>
  * </ul>
+ * 
+ * <h3>Counting Your Words</h3>
+ * 
+ * Once the text is loaded, you can control how WordCram counts up the words, too.
+ * 
+ * <h4>Case sensitivity</h4>
+ * By default, WordCram will treat "HELLO", "hello", and "Hello" as three different words, but:
+ * <ul>
+ * <li>{@link #lowerCase()} will count them all as "hello",</li>
+ * <li>{@link #upperCase()} will count them all as "HELLO", and</li>
+ * <li>{@link #keepCase()} will count them separately, as they appear in the source text.</li>
+ * </ul>
+ * 
+ * <h4>Custom stop words</h4>
+ * <a href="../constant-values.html#wordcram.text.StopWords.ENGLISH">Common English words</a>
+ * are removed from the text by default, but you can use your own list of stop words
+ * with {@link #withStopWords(String)}.  Stop words are just a 
+ * space-separated String, so if you just want to add a few, you can use 
+ * <code>withStopWords(StopWords.ENGLISH + " your stop words")</code>. 
+ * 
+ * <h4>Numbers</h4>
+ * By default, it excludes words that look
+ * like numbers, but you can include them with {@link #includeNumbers()}, or go back to weeding them out with
+ * {@link #excludeNumbers()}.
+ * 
+ * 
+ * <h3>Your Own Weights</h3>
+ * If you already have your words weighted, you can pass an array of words to {@link #fromWords(Word[])}.
+ * 
+ * 
+ * 
+ * <h2>Style Your Words</h2>
+ * {TODO finish this}
+ * 
+ * 
+ * <h2>Draw Your Words</h2>
+ * {TODO finish this}
  * 
  * <p>After all that, actually rendering the WordCram is simple.  There are two ways:
  * <ul>
@@ -107,7 +151,7 @@ public class WordCram {
 	 * @param _angler says how to rotate each word.
 	 * @param _wordPlacer says (approximately) where to place each word.
 	 * @param _wordNudger says how to nudge a word, when it doesn't initially fit.
-	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the builder fluent API instead.
+	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the fluent builder methods instead.
 	 */
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer, WordNudger _wordNudger) {
 		this(_parent);
@@ -128,7 +172,7 @@ public class WordCram {
 	 * @param _colorer says which color to draw each word in.
 	 * @param _angler says how to rotate each word.
 	 * @param _wordPlacer says (approximately) where to place each word.
-	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the builder fluent API instead.
+	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the fluent builder methods instead.
 	 */
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
 		this(_parent, _words, _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
@@ -239,17 +283,7 @@ public class WordCram {
 		return fromText(new WebPage(webPageAddress, parent));
 	}
 	
-	/**
-	 * Makes a WordCram from the text in a saved .html file.
-	 * Just before the WordCram is drawn, it'll load the file's HTML, scrape out the text, 
-	 * and count and sort the words.
-	 * 
-	 * @param htmlFilePath the path of the HTML file
-	 * @return The WordCram, for further setup or drawing.
-	 */
-	public WordCram fromHtmlFile(String htmlFilePath) {
-		return fromText(new HtmlFile(htmlFilePath, parent));
-	}
+	// TODO from an inputstream!  or reader, anyway
 	
 	/**
 	 * Makes a WordCram from a String of HTML.
@@ -258,19 +292,19 @@ public class WordCram {
 	 * @param html the String of HTML
 	 * @return The WordCram, for further setup or drawing. 
 	 */
-	public WordCram fromHtml(String html) {
+	public WordCram fromHtmlString(String html) {
 		return fromText(new Html(html));
 	}
 	
 	/**
-	 * Makes a WordCram from a text file.  Just before the WordCram is drawn, it'll load the file,
-	 * and count and sort its words.
+	 * Makes a WordCram from a text file, either on the filesystem or the network.
+	 * Just before the WordCram is drawn, it'll load the file, and count and sort its words.
 	 * 
-	 * @param textFilePath the path of the text file
+	 * @param textFilePathOrUrl the path of the text file
 	 * @return The WordCram, for further setup or drawing. 
 	 */
-	public WordCram fromTextFile(String textFilePath) {
-		return fromText(new TextFile(textFilePath, parent));
+	public WordCram fromTextFile(String textFilePathOrUrl) {
+		return fromText(new TextFile(textFilePathOrUrl, parent));
 	}
 	
 	/**
@@ -279,12 +313,12 @@ public class WordCram {
 	 * @param text the String of text to get the words from
 	 * @return The WordCram, for further setup or drawing. 
 	 */
-	public WordCram fromText(String text) {
+	public WordCram fromTextString(String text) {
 		return fromText(new Text(text));
 	}
 	
 	/**
-	 * Makes a WordCram from any {@link TextSource}.
+	 * Makes a WordCram from any TextSource.
 	 * <p>
 	 * It only caches the TextSource -- it won't load the text from it until {@link #drawAll()}
 	 * or {@link #drawNext()} is called.
@@ -298,7 +332,7 @@ public class WordCram {
 	}
 	
 	/**
-	 * Makes a WordCram from your own custom {@link Word} array.
+	 * Makes a WordCram from your own custom Word array.
 	 * The Words can be ordered and weighted arbitrarily -- WordCram will
 	 * sort them by weight, and then divide their weights by the weight of the
 	 * heaviest Word, so the heaviest Word will end up with a weight of 1.0.
@@ -368,7 +402,7 @@ public class WordCram {
 	}
 	
 	/**
-	 * Use the given {@link WordFonter} to pick fonts for each word.
+	 * Use the given WordFonter to pick fonts for each word.
 	 * You'll probably only use this if you're making a custom WordFonter.
 	 * 
 	 * @param fonter the WordFonter to use.
@@ -408,7 +442,7 @@ public class WordCram {
 	}
 
 	/**
-	 * Use the given {@link WordSizer} to pick fonts for each word.
+	 * Use the given WordSizer to pick fonts for each word.
 	 * You'll probably only use this if you're making a custom WordSizer.
 	 * 
 	 * @param sizer the WordSizer to use.
@@ -450,7 +484,7 @@ public class WordCram {
 	}
 
 	/**
-	 * Use the given {@link WordColorer} to pick colors for each word.
+	 * Use the given WordColorer to pick colors for each word.
 	 * 
 	 * @param colorer the WordColorer to use.
 	 * @return The WordCram, for further setup or drawing.
@@ -463,7 +497,7 @@ public class WordCram {
 	// TODO need more overloads!
 
 	/**
-	 * Use the given {@link WordAngler} to pick angles for each word.
+	 * Use the given WordAngler to pick angles for each word.
 	 * 
 	 * @param angler the WordAngler to use.
 	 * @return The WordCram, for further setup or drawing.
@@ -474,7 +508,7 @@ public class WordCram {
 	}
 
 	/**
-	 * Use the given {@link WordPlacer} to pick locations for each word.
+	 * Use the given WordPlacer to pick locations for each word.
 	 * 
 	 * @param placer the WordPlacer to use.
 	 * @return The WordCram, for further setup or drawing.
@@ -485,7 +519,7 @@ public class WordCram {
 	}
 
 	/**
-	 * Use the given {@link WordNudger} to pick angles for each word.
+	 * Use the given WordNudger to pick angles for each word.
 	 * 
 	 * @param nudger the WordNudger to use.
 	 * @return The WordCram, for further setup or drawing.
