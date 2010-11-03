@@ -71,34 +71,36 @@ import wordcram.text.*;
  * 
  * <h2>Style Your Words</h2>
  * 
- * There are 
+ * There are six questions you have to answer when drawing a word on the WordCram:
+ * how big should it be?
+ * how should it be rotated?
+ * what font should it be in?
+ * how should it be colored?
+ * where on the image should this word go?
+ * if it doesn't fit there, how should I nudge it so it fits?
+ * 
  * {TODO finish this}
  * 
  * 
  * <h2>Draw Your Words</h2>
- * {TODO finish this}
  * 
- * <p>After all that, actually rendering the WordCram is simple.  There are two ways:
- * <ul>
- * 	 <li>repeatedly call {@link #drawNext()} while the WordCram {@link #hasMore()} words
- *       to draw (probably once per Processing frame):
- *       <pre>
- *       void draw() {
- *           if (wordCram.hasMore()) {
- *               wordCram.drawNext();
- *           }
- *       }
- *       </pre>
- *   </li>
- *   <li>call {@link #drawAll()} once, and let it loop for you:
- *       <pre>
- *       void draw() {
- *           wordCram.drawAll();
- *       }
- *       </pre>
- *   </li>
- * </ul>
+ * <p>After all that, actually rendering the WordCram is simple.
  * 
+ * You can repeatedly call {@link #drawNext()} while the WordCram {@link #hasMore()} words
+ * to draw (probably once per Processing frame):
+ * <pre>
+ * void draw() {
+ *     if (wordCram.hasMore()) {
+ *         wordCram.drawNext();
+ *     }
+ * }
+ * </pre>
+ * Or you can call {@link #drawAll()} once, and let it loop for you:
+ * <pre>
+ * void draw() {
+ *     wordCram.drawAll();
+ * }
+ * </pre> 
  * @author Dan Bernier
  */
 public class WordCram {
