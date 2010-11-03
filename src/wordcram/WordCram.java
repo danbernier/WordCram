@@ -21,26 +21,20 @@ import processing.core.PFont;
 import wordcram.text.*;
 
 /**
- * WordCram is the main API for WordCram.  There are two phases to using a WordCram: 
- * constructing, and drawing.
- * 
- * <h2>Constructing a WordCram</h2>
- * 
- * <p>Constructing a WordCram is done with the fluent API -- first, construct a WordCram,
- * then call configuring methods on it.  Like this:
- * <pre>
- * WordCram wc = new WordCram(this)                            // Construct the WordCram...
- *   .fromWords(new WebPage("http://wordcram.wordpress.com"))  // Have it scrape the text from the WordCram blog...
- *   .withFonts("serif")                                       // and draw the words in a serif font... 
- *   .withColors(color(255,0,0), color(0,0,255));              // colored red and blue.
- * </pre>
+ * The WordCram class is the main API for WordCram.  There are three steps to making a WordCram:
+ * <ol>
+ * <li>weight your words
+ * <li>pick your styles
+ * <li>draw your WordCram
+ * </ol>
+ * You start with a <code>new WordCram(this)</code>, and then...
  * 
  * <h2>Choose Your Words</h2>
  * 
- * <h3>Loading Your Text</h3>
- * 
  * You start by giving WordCram either some text to chew on,
  * or an array of Words you've weighted yourself.
+ * 
+ * <h3>Let WordCram Count Your Words</h3>
  * <p>
  * WordCram can load text from a few different text sources:
  * <ul>
@@ -48,41 +42,36 @@ import wordcram.text.*;
  * <li>{@link #fromTextFile(String)} will load a file (from the filesystem or the network), and treat it as plaintext</li>
  * <li>{@link #fromHtmlString(String)} takes a String, assumes it's HTML, and scrapes out its text</li>
  * <li>{@link #fromTextString(String)} takes a String, and assumes it's plaintext</li>
- * <li>If you want WordCram to count words from some other source, you can pass your own {@link TextSource} 
- * 		to {@link #fromText(TextSource)}, and WordCram will get its text via {@link TextSource#getText()}</li>
+ * <li>If you need some other way to load your text, 
+ * 	    pass your own TextSource to {@link #fromText(TextSource)}, 
+ * 	    and WordCram will get its text via {@link TextSource#getText()}.</li>
  * </ul>
  * 
- * <h3>Counting Your Words</h3>
- * 
- * Once the text is loaded, you can control how WordCram counts up the words, too.
- * 
- * <h4>Case sensitivity</h4>
- * By default, WordCram will treat "HELLO", "hello", and "Hello" as three different words, but:
- * <ul>
- * <li>{@link #lowerCase()} will count them all as "hello",</li>
- * <li>{@link #upperCase()} will count them all as "HELLO", and</li>
- * <li>{@link #keepCase()} will count them separately, as they appear in the source text.</li>
- * </ul>
- * 
- * <h4>Custom stop words</h4>
- * <a href="../constant-values.html#wordcram.text.StopWords.ENGLISH">Common English words</a>
+ * Once the text is loaded, you can control how WordCram counts up the words.
+ * <p>
+ * <b>Case sensitivity:</b>  If your text contains "hello", "HELLO", and "Hello",
+ * <ul><li>{@link #lowerCase()} will count them all as "hello"</li>
+ * 	   <li>{@link #upperCase()} will count them all as "HELLO"</li>
+ *     <li>{@link #keepCase()}, the default, will count them separately, as three different words</li></ul>
+ * <p>
+ * <b>Numbers:</b>
+ * If your text contains words like "42" or "3.14159", 
+ * you can remove them with {@link #excludeNumbers()} (the default),
+ * or include them with {@link #includeNumbers()}.
+ * <p>
+ * <b>Stop words:</b> <a href="../constant-values.html#wordcram.text.StopWords.ENGLISH">Common English words</a>
  * are removed from the text by default, but you can use your own list of stop words
- * with {@link #withStopWords(String)}.  Stop words are just a 
- * space-separated String, so if you just want to add a few, you can use 
- * <code>withStopWords(StopWords.ENGLISH + " your stop words")</code>. 
- * 
- * <h4>Numbers</h4>
- * By default, it excludes words that look
- * like numbers, but you can include them with {@link #includeNumbers()}, or go back to weeding them out with
- * {@link #excludeNumbers()}.
+ * with {@link #withStopWords(String)}.
  * 
  * 
- * <h3>Your Own Weights</h3>
- * If you already have your words weighted, you can pass an array of words to {@link #fromWords(Word[])}.
+ * <h3>Weight Your Own Words</h3>
+ * If you have some other way to weight your words, you can pass them to {@link #fromWords(Word[])}.
  * 
  * 
  * 
  * <h2>Style Your Words</h2>
+ * 
+ * There are 
  * {TODO finish this}
  * 
  * 
@@ -191,7 +180,8 @@ public class WordCram {
 	
 	/**
 	 * Tells WordCram which words to ignore when it counts up the words in your text.
-	 * These words won't show up in the image.
+	 * These words won't show up in the image.  {@link StopWords} provides some common sets
+	 * of stop-words.
 	 * <p>
 	 * Stop-words are always case-insensitive: if your source text contains "The plane, 
 	 * the plane!", using "the" for a stop-word is enough to block both "the" and "The".
@@ -200,7 +190,9 @@ public class WordCram {
 	 * <p>
 	 * <b><i>Note:</i></b> Stop-words have no effect if you're passing in your own custom
 	 * {@link Word} array, since WordCram won't do any text analysis on it (other than 
-	 * sorting the words and scaling their weights). 
+	 * sorting the words and scaling their weights).
+	 * 
+	 * @see StopWords
 	 * 
 	 * @param stopWords a space-delimited String of words to ignore when counting the words in your text.
 	 * @return The WordCram, for further setup or drawing.
