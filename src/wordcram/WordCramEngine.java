@@ -146,6 +146,8 @@ class WordCramEngine {
 	}
 	
 	public void drawNext() {
+		if (!hasMore()) return;
+		
 		Word word = words[++wordIndex];
 		Shape wordShape = shapes[wordIndex];
 
