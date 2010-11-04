@@ -24,7 +24,7 @@ import wordcram.text.*;
  * There are three phases to making a WordCram.
  * <p>Start with a <code>new WordCram(this)</code>, then:
  * 
- * <h2>Load your Words</h2>
+ * <h2>Load your words</h2>
  * {@link #fromWebPage(String)}
  * {@link #fromTextFile(String)}
  * {@link #fromHtmlString(String)}
@@ -40,8 +40,11 @@ import wordcram.text.*;
  * {@link #excludeNumbers()} (the default)
  * <p>...and stop words:
  * {@link #withStopWords(String)}
+ * 
+ * <h3>Or, Use your own words</h3>
+ * {@link #fromWords(Word[])}
  *
- * <h2>Style your Words</h2>
+ * <h2>Style your words</h2>
  * {@link #sizedByWeight(int, int)}
  * {@link #sizedByRank(int, int)}
  * {@link #withSizer(WordSizer)}
@@ -60,6 +63,11 @@ import wordcram.text.*;
  * {@link #withPlacer(WordPlacer)}
  * <p>
  * {@link #withNudger(WordNudger)}
+ * 
+ * <h2>Draw your words</h2>
+ * {@link #drawAll()}
+ * {@link #drawNext()}
+ * {@link #hasMore()}
  * 
  * <hr/>
  * 
@@ -455,8 +463,8 @@ public class WordCram {
 	 * <p>
 	 * Specifically, it makes the WordCram use {@link Sizers#byWeight(int, int)}.
 	 * 
-	 * @param minSize the size to draw a Word with weight = 0
-	 * @param maxSize the size to draw a Word with weight = 1
+	 * @param minSize the size to draw a Word of weight 0
+	 * @param maxSize the size to draw a Word of weight 1
 	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram sizedByWeight(int minSize, int maxSize) {
@@ -532,9 +540,21 @@ public class WordCram {
 
 	// TODO need more overloads!
 	
+	/**
+	 * Make the WordCram rotate each word at one of the given angles. 
+	 * @param anglesInRadians The list of possible rotation angles, in radians
+	 * @return The WordCram, for further setup or drawing.
+	 */
 	public WordCram angledAt(float... anglesInRadians) {
 		return withAngler(Anglers.pickFrom(anglesInRadians));
 	}
+	
+	/**
+	 * Make the WordCram rotate words randomly, between the min and max angles. 
+	 * @param minAngleInRadians The minimum rotation angle, in radians
+	 * @param maxAngleInRadians The maximum rotation angle, in radians
+	 * @return The WordCram, for further setup or drawing.
+	 */
 	public WordCram angledBetween(float minAngleInRadians, float maxAngleInRadians) {
 		return withAngler(Anglers.randomBetween(minAngleInRadians, maxAngleInRadians));
 	}
@@ -603,15 +623,30 @@ public class WordCram {
 	}
 	
 
-	// TODO javadoc these 3
+	/**
+	 * If you're drawing the words one-at-a-time using {@link #drawNext()},
+	 * this will tell you whether the WordCram has any words left to draw.
+	 * @return true if the WordCram has any words left to draw; false otherwise.
+	 * @see #drawNext()
+	 */
 	public boolean hasMore() {
 		return getWordCramEngine().hasMore();
 	}
 
+	/**
+	 * If the WordCram has any more words to draw, draw the next one.
+	 * @see #hasMore()
+	 * @see #drawAll()
+	 */
 	public void drawNext() {
 		getWordCramEngine().drawNext();
 	}
 	
+	/**
+	 * Just like it sounds: draw all the words.  Once the WordCram has everything set,
+	 * call this and wait just a bit.
+	 * @see #drawNext()
+	 */
 	public void drawAll() {
 		getWordCramEngine().drawAll();
 	}
