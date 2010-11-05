@@ -122,14 +122,33 @@ import wordcram.text.*;
  * <h2>Style Your Words</h2>
  * 
  * There are six questions you have to answer when drawing a word on the WordCram:
- * how big should it be?
- * how should it be rotated?
- * what font should it be in?
- * how should it be colored?
- * where on the image should this word go?
- * if it doesn't fit there, how should I nudge it so it fits?
  * 
- * {TODO finish this}
+ * <h3>How big should it be?</h3>
+ * A word can be 
+ * {@link #sizedByWeight(int, int)},
+ * {@link #sizedByRank(int, int)}, or
+ * {@link #withSizer(WordSizer)}
+ * 
+ * <h3>How should it be angled?</h3>
+ * It can be 
+ * {@link #angledAt(float...)},
+ * {@link #angledBetween(float, float)}, or
+ * {@link #withAngler(WordAngler)}
+ * 
+ * <h3>What font should it be in?</h3>
+ * {@link #withFont(String)}
+ * {@link #withFonts(String...)}
+ * {@link #withFonter(WordFonter)}
+ * 
+ * <h3>How should it be colored?</h3>
+ * {@link #withColors(int...)}
+ * {@link #withColorer(WordColorer)}
+ * 
+ * <h3>Where on the image should it go?</h3>
+ * {@link #withPlacer(WordPlacer)}
+ * 
+ * <h3>If it doesn't fit at first, how should I nudge it?</h3>
+ * {@link #withNudger(WordNudger)}
  * 
  * 
  * <h2>Draw Your Words</h2>
