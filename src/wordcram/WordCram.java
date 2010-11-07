@@ -21,72 +21,23 @@ import processing.core.PFont;
 import wordcram.text.*;
 
 /**
- * There are three phases to making a WordCram.
- * <p>Start with a <code>new WordCram(this)</code>, then:
- * 
- * <h2>Load your words</h2>
- * {@link #fromWebPage(String)}
- * {@link #fromTextFile(String)}
- * {@link #fromHtmlString(String)}
- * {@link #fromTextString(String)}
- * {@link #fromText(TextSource)}
- * <p>
- * Control case-sensitivity:
- * {@link #upperCase()}
- * {@link #lowerCase()}
- * {@link #keepCase()} (the default)
- * <p>...number words:
- * {@link #includeNumbers()}
- * {@link #excludeNumbers()} (the default)
- * <p>...and stop words:
- * {@link #withStopWords(String)}
- * 
- * <h3>Or, Use your own words</h3>
- * {@link #fromWords(Word[])}
- *
- * <h2>Style your words</h2>
- * {@link #sizedByWeight(int, int)}
- * {@link #sizedByRank(int, int)}
- * {@link #withSizer(WordSizer)}
- * <p>
- * {@link #angledAt(float...)}
- * {@link #angledBetween(float, float)}
- * {@link #withAngler(WordAngler)}
- * <p>
- * {@link #withFont(String)}
- * {@link #withFonts(String...)}
- * {@link #withFonter(WordFonter)}
- * <p>
- * {@link #withColors(int...)}
- * {@link #withColorer(WordColorer)}
- * <p>
- * {@link #withPlacer(WordPlacer)}
- * <p>
- * {@link #withNudger(WordNudger)}
- * 
- * <h2>Draw your words</h2>
- * {@link #drawAll()}
- * {@link #drawNext()}
- * {@link #hasMore()}
- * 
- * <hr/>
- * 
  * The WordCram class is the main API for WordCram.  There are three steps to making a WordCram:
  * <ol>
  * <li>weight your words
- * <li>pick your styles
+ * <li>style your words
  * <li>draw your WordCram
  * </ol>
  * You start with a <code>new WordCram(this)</code>, and then...
  * 
- * <h2>Choose Your Words</h2>
+ * <h2>Step One: Weight Your Words</h2>
  * 
  * You start by giving WordCram either some text to chew on,
  * or an array of Words you've weighted yourself.
  * 
- * <h3>Let WordCram Count Your Words</h3>
+ * <h3>Let WordCram Weight Your Words</h3>
  * <p>
- * WordCram can load text from a few different text sources:
+ * WordCram can weight your words by the number of times they appear in a text document.  
+ * It can load text from a few different sources:
  * <ul>
  * <li>{@link #fromWebPage(String)} will load a URL (or an HTML file from the filesystem), and scrape the text from the HTML</li>
  * <li>{@link #fromTextFile(String)} will load a file (from the filesystem or the network), and treat it as plaintext</li>
@@ -119,7 +70,7 @@ import wordcram.text.*;
  * 
  * 
  * 
- * <h2>Style Your Words</h2>
+ * <h2>Step Two: Style Your Words</h2>
  * 
  * There are six questions you have to answer when drawing a word on the WordCram:
  * 
@@ -151,7 +102,7 @@ import wordcram.text.*;
  * {@link #withNudger(WordNudger)}
  * 
  * 
- * <h2>Draw Your Words</h2>
+ * <h2>Step Three: Draw Your WordCram</h2>
  * 
  * <p>After all that, actually rendering the WordCram is simple.
  * 
