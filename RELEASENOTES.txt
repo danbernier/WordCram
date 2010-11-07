@@ -1,0 +1,23 @@
+Release notes for WordCram 0.3:
+
+* Added TextSource, so WordCram can count words from different kinds
+  of source, including web pages and text files.
+* Added a fluent API for building WordCrams: 
+  new WordCram(this).forWebPage("{url}").sizedByWeight(10, 100).
+* Added case-sensitive word counting, and the ability to exclude
+  numeric words.
+* Added javadoc comments for lots of classes -- more to come.
+* Added Processing examples: in Processing, look under File >
+  Sketchbook > libraries > WordCram > examples.
+* Bug fix: issue 1, Stop-words with punctuation have no effect.
+* Added StopWords.JAVA for making WordCrams from java source code.
+* Added Anglers.heaped(), Anglers.randomBetween(min,max),
+  Colorers.twoHuesRandomSatsOnWhite(), and
+  Placers.horizBandAnchoredLeft().
+* Deprecated old WordCram constructors, WordCram.currentWord(), and
+  WordCram.currentWordIndex().
+* Changed minimum shape size from 4 to 7, to speed up rendering.
+* WaveWordPlacer and SwirlWordPlacer no longer randomly offset
+  placement, so they should look crisper.
+* Improved SpiralWordNudger's spiralling, so more words should show,
+  and faster.
