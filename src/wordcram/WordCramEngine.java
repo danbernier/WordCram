@@ -210,41 +210,16 @@ class WordCramEngine {
 	
 	private void drawWordImage(Word word, Shape wordShape, PVector location) {
 		
-		GeneralPath polyline = new GeneralPath(wordShape);
-		
-		boolean useJavaGeom = true;		
-		if (useJavaGeom) {
-			polyline.transform(AffineTransform.getTranslateInstance(location.x, location.y));
+		Path2D.Float path2d = new Path2D.Float(wordShape, AffineTransform.getTranslateInstance(location.x, location.y));
+		//wordShape = AffineTransform.getTranslateInstance(location.x, location.y).createTransformedShape(wordShape);
 			
-			//wordShape = AffineTransform.getTranslateInstance(location.x, location.y).createTransformedShape(wordShape);
+		boolean drawToParent = false;
 			
-			boolean drawToParent = false;
+		Graphics2D g2 = (Graphics2D)(drawToParent ? parent.getGraphics() : destination.image.getGraphics());
 			
-			//System.out.println(parent.getGraphics().getClass().getName());
-			
-			Graphics2D g2 = (Graphics2D)(drawToParent ? parent.getGraphics() : destination.image.getGraphics());
-			
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setPaint(new Color(colorer.colorFor(word), true));
-			g2.fill(polyline);
-		
-		}
-		else {
-			Rectangle wordRect = wordShape.getBounds();
-			PGraphics wordImage = parent.createGraphics(wordRect.width-wordRect.x, wordRect.height-wordRect.y,
-					PApplet.JAVA2D);
-			wordImage.beginDraw();
-			
-				Graphics2D g2 = (Graphics2D)wordImage.image.getGraphics();
-				
-				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2.setPaint(new Color(colorer.colorFor(word), true));
-				g2.fill(polyline);
-			
-			wordImage.endDraw();
-			
-			destination.image(wordImage, location.x, location.y);
-		}
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setPaint(new Color(colorer.colorFor(word), true));
+		g2.fill(path2d);
 		
 //		destination.pushStyle();
 //		destination.stroke(30, 255, 255, 50);
@@ -252,12 +227,6 @@ class WordCramEngine {
 //		word.getBBTree().draw(destination);
 //		destination.rect(location.x, location.y, wordImage.width, wordImage.height);
 //		destination.popStyle();
-		
-		//destination.pushStyle();
-		//destination.strokeWeight(PApplet.map(attempt, 0, 700, 1, 30));
-		//destination.stroke(0, 255, 255, 50);
-		//destination.line(origSpot.x, origSpot.y, location.x, location.y);
-		//destination.popStyle();
 	}
 	
 
