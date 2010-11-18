@@ -17,10 +17,7 @@ limitations under the License.
 */
 
 import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
 import java.awt.geom.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import processing.core.*;
@@ -40,7 +37,7 @@ class WordCramEngine {
 	private WordNudger nudger;
 
 	private BBTreeBuilder bbTreeBuilder;
-	private FontRenderContext frc;
+	private WordShaper wordShaper;
 	
 	private Word[] words;
 	private Shape[] shapes;
@@ -61,75 +58,24 @@ class WordCramEngine {
 		this.nudger = nudger;
 		
 		this.bbTreeBuilder = new BBTreeBuilder();
-		this.frc = new FontRenderContext(null, true, true);
+		this.wordShaper = new WordShaper(this.sizer, this.fonter, this.angler);
 		
 		renderWordsToShapes();
-	}	
+		makeBBTreesFromShapes();
+	}
 	
 	private void renderWordsToShapes() {
-		this.shapes = wordsToShapes(); // ONLY returns shapes for words that are big enough to see
+		this.shapes = wordShaper.shapeWords(this.words); // ONLY returns shapes for words that are big enough to see
 		this.words = Arrays.copyOf(words, shapes.length);  // Trim down the list of words
 		this.wordIndex = -1;
 	}
 	
-	/*
-	 * TODO question here: you want to eliminate as many words as possible, so FIRST rip through & render all their shapes,
-	 * and stop once the shapes are too small.  Then you can shorten the arrays, and loop through less.
-	 * This is also good because now, your WordPlacers will have better ranks to go on: if 75% of the words are too small
-	 * to render, then the lowest word will have a 25th-percentile rank, and it'll place them in only (eh) 25% of the 
-	 * field.  Basically, it's like you're lying to the Placer.  Cutting down the list first will give you a better
-	 * answer to "how many words am i drawing here?".
-	 * 
-	 * BUT: won't that screw with your weights?  Maybe?  Er, maybe not?  Not sure. 
-	 */
-	private Shape[] wordsToShapes() {
-		
-		ArrayList<Shape> shapes = new ArrayList<Shape>();
-		
-		for (int i = 0; i < words.length; i++) {			
-			Word word = words[i];
-			float size = sizer.sizeFor(word, i, words.length);
-			PFont pFont = fonter.fontFor(word);
-			float rotation = angler.angleFor(word);		
-
-			timer.start("wordToShape");
-			Shape wordShape = wordToShape(word, size, pFont, rotation);
-			timer.end("wordToShape");
-			if (wordShape == null) break;
-			shapes.add(wordShape);
+	private void makeBBTreesFromShapes() {
+		for (int i = 0; i < this.shapes.length; i++) {
+			Word word = this.words[i];
+			Shape shape = this.shapes[i];
+			word.setBBTree(bbTreeBuilder.makeTree(shape, 7));  // TODO extract config setting for minBoundingBox, and add swelling option
 		}
-		
-		return shapes.toArray(new Shape[0]);
-	}
-
-	private Shape wordToShape(Word word, float fontSize, PFont pFont, float rotation) {
-		Font font = pFont.getFont().deriveFont(fontSize);
-		char[] chars = word.word.toCharArray();
-		
-		// TODO hmm: this doesn't render newlines.  Hrm.  If you're word text is "foo\nbar", you get "foobar".
-		GlyphVector gv = font.layoutGlyphVector(frc, chars, 0, chars.length,
-				Font.LAYOUT_LEFT_TO_RIGHT);
-
-		Shape shape = gv.getOutline();
-
-		if (rotation != 0.0) {
-			shape = AffineTransform.getRotateInstance(rotation)
-					.createTransformedShape(shape);
-		}
-		
-		Rectangle2D rect = shape.getBounds2D();
-		int minWordRenderedSize = 7; // TODO extract config setting for minWordRenderedSize
-		if (rect.getWidth() < minWordRenderedSize || rect.getHeight() < minWordRenderedSize) {
-			return null;		
-		}
-		
-		shape = AffineTransform.getTranslateInstance(-rect.getX(), -rect.getY()).createTransformedShape(shape);
-		
-		timer.start("bbTreeBuilder.makeTree()");
-		word.setBBTree(bbTreeBuilder.makeTree(shape, 7));  // TODO extract config setting for minBoundingBox, and add swelling option
-		timer.end("bbTreeBuilder.makeTree()");
-
-		return shape;
 	}
 	
 	public boolean hasMore() {
@@ -151,9 +97,8 @@ class WordCramEngine {
 		Word word = words[++wordIndex];
 		Shape wordShape = shapes[wordIndex];
 
-		Rectangle2D rect = wordShape.getBounds2D();
 		timer.start("placeWord");
-		PVector wordLocation = placeWord(word, (int)rect.getWidth(), (int)rect.getHeight());
+		PVector wordLocation = placeWord(word, wordShape);
 		timer.end("placeWord");
 			
 		if (wordLocation != null) {
@@ -166,8 +111,12 @@ class WordCramEngine {
 		}	
 	}	
 	
-	private PVector placeWord(Word word, int wordImageWidth, int wordImageHeight) {
+	private PVector placeWord(Word word, Shape wordShape) {
 		// TODO does it make sense to COMBINE wordplacer & wordnudger, the way you (sort of) orig. had it?  i think it does...
+		Rectangle2D rect = wordShape.getBounds2D();		
+		int wordImageWidth = (int)rect.getWidth();
+		int wordImageHeight = (int)rect.getHeight();
+		
 		word.setDesiredLocation(placer.place(word, wordIndex, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height));
 		
 		// TODO just make this 10000
