@@ -66,7 +66,7 @@ public class Main extends PApplet {
 					//.excludeNumbers()
 					.withFonts(randomFont())
 					.withColorer(Colorers.twoHuesRandomSats(this))
-					.withAngler(Anglers.horiz())
+					.withAngler(Anglers.random()) //Anglers.horiz())
 					//.withPlacer(Placers.horizLine())
 					.withPlacer(new WordPlacer() {
 						private java.util.Random r = new java.util.Random();
@@ -103,6 +103,8 @@ public class Main extends PApplet {
 					.withNudger(new RandomWordNudger())
 					
 					;
+		
+		//wordcram.printSkippedWords();
 	}
 	
 	public void draw() {

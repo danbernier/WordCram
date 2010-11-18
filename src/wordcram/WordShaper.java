@@ -1,15 +1,5 @@
 package wordcram;
 
-import java.awt.Font;
-import java.awt.Shape;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
-
-import processing.core.PFont;
-
 /*
  Copyright 2010 Daniel Bernier
 
@@ -25,6 +15,16 @@ import processing.core.PFont;
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+
+import java.awt.Font;
+import java.awt.Shape;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+
+import processing.core.PFont;
 
 class WordShaper {
 	
@@ -91,6 +91,8 @@ class WordShaper {
 		Rectangle2D rect = shape.getBounds2D();
 		int minWordRenderedSize = 7; // TODO extract config setting for minWordRenderedSize
 		if (rect.getWidth() < minWordRenderedSize || rect.getHeight() < minWordRenderedSize) {
+			// TODO extend the notion of printSkippedWords into here, to get the first too-small rect's dimensions?
+			//System.out.println("skipping " + word + " cause it's too small: " + rect.getWidth() + "x" + rect.getHeight());
 			return null;		
 		}
 		
