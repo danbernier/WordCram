@@ -99,8 +99,7 @@ import wordcram.text.*;
  * {@link #withPlacer(WordPlacer)}
  * 
  * <h3>If it doesn't fit at first, how should I nudge it?</h3>
- * {@link #withNudger(WordNudger)}
- * 
+ * {@link #withNudger(WordNudger)} 
  * 
  * <h2>Step Three: Draw Your WordCram</h2>
  * 
@@ -120,7 +119,13 @@ import wordcram.text.*;
  * void draw() {
  *     wordCram.drawAll();
  * }
- * </pre> 
+ * </pre>
+ * 
+ * <p>
+ * If you're having trouble getting your words to show up, you might
+ * want to {@link #printSkippedWords()}.  Knowing which words were
+ * skipped, and why, can help you size and place your words better.
+ *  
  * @author Dan Bernier
  */
 public class WordCram {
@@ -148,6 +153,8 @@ public class WordCram {
 	private WordAngler angler;
 	private WordPlacer placer;
 	private WordNudger nudger;
+	
+	private boolean printSkippedWords = false;
 	
 	/**
 	 * This was the old way to build a WordCram: you have to specify <i>everything</i>.
@@ -562,6 +569,21 @@ public class WordCram {
 		return this;
 	}
 	
+	/**
+	 * Print a message to standard-out whenever a word is skipped.
+	 * <p>
+	 * Words are skipped whenever a) they're too small, or b) the WordCram
+	 * can't successfully nudge them into place.  If printSkippedWords
+	 * is turned on, the WordCram will print a message that includes the word, 
+	 * its weight, and why the word was skipped.
+	 * 
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram printSkippedWords() {
+		printSkippedWords = true;
+		return this;
+	}
+	
 	
 	private WordCramEngine getWordCramEngine() {
 		if (wordCramEngine == null) {
@@ -586,7 +608,7 @@ public class WordCram {
 			if (placer == null) placer = Placers.horizLine();
 			if (nudger == null) nudger = new SpiralWordNudger();
 						
-			wordCramEngine = new WordCramEngine(parent, words, fonter, sizer, colorer, angler, placer, nudger);
+			wordCramEngine = new WordCramEngine(parent, words, fonter, sizer, colorer, angler, placer, nudger, printSkippedWords);
 		}
 		
 		return wordCramEngine;
@@ -620,6 +642,7 @@ public class WordCram {
 	public void drawAll() {
 		getWordCramEngine().drawAll();
 	}
+	
 	
 	/* methods JUST for off-screen drawing. */
 	/* Replace these w/ a callback functor to drawNext()? */

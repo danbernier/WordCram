@@ -43,9 +43,11 @@ class WordCramEngine {
 	private Shape[] shapes;
 	private int wordIndex;
 	
+	private boolean printSkippedWords = false;
+	
 	private Timer timer = new Timer();
 
-	public WordCramEngine(PApplet parent, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger) {
+	public WordCramEngine(PApplet parent, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printSkippedWords) {
 		this.parent = parent;
 		this.destination = parent.g;
 		
@@ -60,12 +62,26 @@ class WordCramEngine {
 		this.bbTreeBuilder = new BBTreeBuilder();
 		this.wordShaper = new WordShaper(this.sizer, this.fonter, this.angler);
 		
+		this.printSkippedWords = printSkippedWords;
+		
 		renderWordsToShapes();
 		makeBBTreesFromShapes();
 	}
 	
 	private void renderWordsToShapes() {
 		this.shapes = wordShaper.shapeWords(this.words); // ONLY returns shapes for words that are big enough to see
+		
+		if (printSkippedWords) {
+
+			for (int i = shapes.length; i < words.length; i++) {
+				System.out.println("Too small: " + words[i]);
+			}
+			
+			// TODO are these at all useful?
+			//System.out.println("the last word to be drawn will be: " + words[shapes.length-1]);
+			//System.out.println("the first TOO SMALL word was: " + words[shapes.length] + ", which would be drawn at size " + sizer.sizeFor(words[shapes.length], shapes.length, words.length));
+		}
+		
 		this.words = Arrays.copyOf(words, shapes.length);  // Trim down the list of words
 		this.wordIndex = -1;
 	}
@@ -112,7 +128,6 @@ class WordCramEngine {
 	}	
 	
 	private PVector placeWord(Word word, Shape wordShape) {
-		// TODO does it make sense to COMBINE wordplacer & wordnudger, the way you (sort of) orig. had it?  i think it does...
 		Rectangle2D rect = wordShape.getBounds2D();		
 		int wordImageWidth = (int)rect.getWidth();
 		int wordImageHeight = (int)rect.getHeight();
@@ -153,6 +168,9 @@ class WordCramEngine {
 			}
 		}
 		
+		if (printSkippedWords) {
+			System.out.println("Couldn't fit: " + word);
+		}
 		timer.count("couldn't place a word");
 		return null;
 	}
