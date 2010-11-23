@@ -36,7 +36,7 @@ public class Main extends PApplet {
 
 		// P2D can't draw to destination.image.getGraphics(). Interesting.
 
-		size(1200, 1200); // (int)random(300, 800)); //1200, 675); //1600, 900);
+		size(700, 900); // (int)random(300, 800)); //1200, 675); //1600, 900);
 		smooth();
 		colorMode(HSB);
 		initWordCram();
@@ -96,11 +96,11 @@ public class Main extends PApplet {
 							return new PVector(x, y);
 						}
 					})
-					.withPlacer(Placers.swirl())
-					.withSizer(Sizers.byWeight(10, 100))
+					.withPlacer(Placers.centerClump())
+					.withSizer(Sizers.byWeight(10, 130))
 					
 					//.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
-					.withNudger(new RandomWordNudger())
+					//.withNudger(new RandomWordNudger())
 					
 					;
 		
@@ -130,6 +130,15 @@ public class Main extends PApplet {
 			}
 		}
 	}
+	
+	/*
+	public void mouseMoved() {
+		Word word = wordcram.getWordAt(mouseX, mouseY);
+		if (word != null) {
+			System.out.println(round(mouseX) + "," + round(mouseY) + " -> " + word.word);
+		}
+	}
+	*/
 	
 	public void mouseClicked() {
 		initWordCram();

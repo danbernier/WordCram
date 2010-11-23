@@ -643,6 +643,12 @@ public class WordCram {
 		getWordCramEngine().drawAll();
 	}
 	
+	/*
+	public Word getWordAt(float x, float y) {
+		return getWordCramEngine().getWordAt(x, y);
+	}
+	*/
+	
 	
 	/* methods JUST for off-screen drawing. */
 	/* Replace these w/ a callback functor to drawNext()? */

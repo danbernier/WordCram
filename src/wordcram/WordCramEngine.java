@@ -19,6 +19,7 @@ limitations under the License.
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import processing.core.*;
 
@@ -70,7 +71,7 @@ class WordCramEngine {
 	
 	private void renderWordsToShapes() {
 		this.shapes = wordShaper.shapeWords(this.words); // ONLY returns shapes for words that are big enough to see
-		
+
 		if (printSkippedWords) {
 
 			for (int i = shapes.length; i < words.length; i++) {
@@ -116,10 +117,14 @@ class WordCramEngine {
 		timer.start("placeWord");
 		PVector wordLocation = placeWord(word, wordShape);
 		timer.end("placeWord");
-			
+					
 		if (wordLocation != null) {
+			wordShape = AffineTransform.getTranslateInstance(wordLocation.x, wordLocation.y).createTransformedShape(wordShape);
+			shapes[wordIndex] = wordShape;
+			word.getBBTree().setLocation(wordLocation);
+			
 			timer.start("drawWordImage");
-			drawWordImage(word, wordShape, wordLocation);
+			drawWordImage(word, wordShape);
 			timer.end("drawWordImage");
 		}
 		else {
@@ -171,13 +176,14 @@ class WordCramEngine {
 		if (printSkippedWords) {
 			System.out.println("Couldn't fit: " + word);
 		}
+		
 		timer.count("couldn't place a word");
 		return null;
 	}
 	
-	private void drawWordImage(Word word, Shape wordShape, PVector location) {
+	private void drawWordImage(Word word, Shape wordShape) {
 		
-		Path2D.Float path2d = new Path2D.Float(wordShape, AffineTransform.getTranslateInstance(location.x, location.y));
+		Path2D.Float path2d = new Path2D.Float(wordShape);
 		//wordShape = AffineTransform.getTranslateInstance(location.x, location.y).createTransformedShape(wordShape);
 			
 		boolean drawToParent = false;
@@ -195,6 +201,19 @@ class WordCramEngine {
 //		destination.rect(location.x, location.y, wordImage.width, wordImage.height);
 //		destination.popStyle();
 	}
+	
+	
+	/*
+	public Word getWordAt(float x, float y) {
+		for (int i = 0; i < shapes.length; i++) {
+			Shape shape = shapes[i];
+			if (shape.contains(x, y)) {
+				return words[i];
+			}
+		}
+		return null;
+	}
+	*/
 	
 
 	
