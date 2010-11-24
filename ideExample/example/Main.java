@@ -36,7 +36,7 @@ public class Main extends PApplet {
 
 		// P2D can't draw to destination.image.getGraphics(). Interesting.
 
-		size(700, 900); // (int)random(300, 800)); //1200, 675); //1600, 900);
+		size(900, 700); // (int)random(300, 800)); //1200, 675); //1600, 900);
 		smooth();
 		colorMode(HSB);
 		initWordCram();
