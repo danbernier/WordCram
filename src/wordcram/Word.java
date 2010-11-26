@@ -1,5 +1,7 @@
 package wordcram;
 
+import java.util.HashMap;
+
 import processing.core.PVector;
 
 /*
@@ -25,10 +27,35 @@ public class Word implements Comparable<Word> {
 	private PVector desiredLocation;
 	private PVector currentLocation;
 	private BBTree bbTree;
+	private HashMap<String,Object> properties = new HashMap<String,Object>();
 		
 	public Word(String word, double weight) {
 		this.word = word;
 		this.weight = weight;
+	}
+
+	/**
+	 * Get a property value from this Word, for a WordColorer, a WordPlacer, etc.
+	 * <p>
+	 * This is really for cases when you're weighting your own words, and passing a Word[] to the WordCram.
+	 * If you're using <code>fromWebPage</code> or something like that, this won't help you much.
+	 * @param propertyName
+	 * @return the value of the property, or <code>null</code>, if it's not there.
+	 */
+	public Object getProperty(String propertyName) {
+		return properties.get(propertyName);
+	}
+	
+	/**
+	 * Set a property on this Word, to be used by a WordColorer, a WordPlacer, etc, down the line.
+	 * <p>
+	 * This is really for cases when you're weighting your own words, and passing a Word[] to the WordCram.
+	 * If you're using <code>fromWebPage</code> or something like that, this won't help you much.
+	 * @param propertyName
+	 * @param propertyValue
+	 */
+	public void setProperty(String propertyName, Object propertyValue) {
+		properties.put(propertyName, propertyValue);
 	}
 	
 	@Override
@@ -47,23 +74,23 @@ public class Word implements Comparable<Word> {
 		else return 0;
 	}
 	
-	public void setBBTree(BBTree _bbTree) {
+	void setBBTree(BBTree _bbTree) {
 		bbTree = _bbTree;
 	}
 
-	public boolean overlaps(Word other) {
+	boolean overlaps(Word other) {
 		return bbTree.overlaps(other.bbTree);
 	}
 	
-	public void setDesiredLocation(PVector loc) {
+	void setDesiredLocation(PVector loc) {
 		desiredLocation = new PVector(loc.x, loc.y);
 		currentLocation = new PVector(loc.x, loc.y);
 	}
-	public void nudge(PVector nudge) {
+	void nudge(PVector nudge) {
 		currentLocation = PVector.add(desiredLocation, nudge);
 		bbTree.setLocation(currentLocation.get());
 	}
-	public PVector getLocation() {
+	PVector getLocation() {
 		return currentLocation.get();
 	}
 	

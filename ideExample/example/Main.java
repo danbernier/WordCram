@@ -61,7 +61,7 @@ public class Main extends PApplet {
 		background(30);
 
 		wordcram = new WordCram(this)
-					.fromTextFile(textFilePath())
+					.fromTextFile(textFilePath())					
 					//.upperCase()
 					//.excludeNumbers()
 					.withFonts(randomFont())
