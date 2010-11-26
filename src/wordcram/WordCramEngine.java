@@ -19,7 +19,6 @@ limitations under the License.
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.Arrays;
-import java.util.Iterator;
 
 import processing.core.*;
 
@@ -40,8 +39,8 @@ class WordCramEngine {
 	private BBTreeBuilder bbTreeBuilder;
 	private WordShaper wordShaper;
 	
-	private Word[] words;
-	private Shape[] shapes;
+	private EngineWord[] words;
+	private Shape[] shapes;	
 	private int wordIndex;
 	
 	private boolean printSkippedWords = false;
@@ -52,7 +51,6 @@ class WordCramEngine {
 		this.parent = parent;
 		this.destination = parent.g;
 		
-		this.words = words;
 		this.fonter = fonter;
 		this.sizer = sizer;
 		this.colorer = colorer;
@@ -65,11 +63,20 @@ class WordCramEngine {
 		
 		this.printSkippedWords = printSkippedWords;
 		
-		renderWordsToShapes();
-		makeBBTreesFromShapes();
+		this.words = wordsIntoEngineWords(words);
+		wordsIntoShapes();
+		shapesIntoBBTrees();
 	}
 	
-	private void renderWordsToShapes() {
+	private EngineWord[] wordsIntoEngineWords(Word[] words) {
+		EngineWord[] engineWords = new EngineWord[words.length];
+		for (int i = 0; i < words.length; i++) {
+			engineWords[i] = new EngineWord(words[i]);
+		}
+		return engineWords;
+	}
+	
+	private void wordsIntoShapes() {
 		this.shapes = wordShaper.shapeWords(this.words); // ONLY returns shapes for words that are big enough to see
 
 		if (printSkippedWords) {
@@ -87,9 +94,9 @@ class WordCramEngine {
 		this.wordIndex = -1;
 	}
 	
-	private void makeBBTreesFromShapes() {
+	private void shapesIntoBBTrees() {
 		for (int i = 0; i < this.shapes.length; i++) {
-			Word word = this.words[i];
+			Word word = this.words[i].word;
 			Shape shape = this.shapes[i];
 			word.setBBTree(bbTreeBuilder.makeTree(shape, 7));  // TODO extract config setting for minBoundingBox, and add swelling option
 		}
@@ -111,7 +118,7 @@ class WordCramEngine {
 	public void drawNext() {
 		if (!hasMore()) return;
 		
-		Word word = words[++wordIndex];
+		Word word = words[++wordIndex].word;
 		Shape wordShape = shapes[wordIndex];
 
 		timer.start("placeWord");
@@ -160,7 +167,7 @@ class WordCramEngine {
 			
 			boolean foundOverlap = false;
 			for (int i = 0; !foundOverlap && i < wordIndex; i++) {
-				Word otherWord = words[i];
+				Word otherWord = words[i].word;
 				if (word.overlaps(otherWord)) {
 					foundOverlap = true;
 					lastCollidedWith = otherWord;
@@ -219,7 +226,7 @@ class WordCramEngine {
 	
 	
 	public Word currentWord() {
-		return hasMore() ? words[wordIndex] : null;
+		return hasMore() ? words[wordIndex].word : null;
 	}
 	public int currentWordIndex() {
 		return wordIndex;

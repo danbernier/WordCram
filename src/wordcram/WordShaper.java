@@ -33,29 +33,19 @@ class WordShaper {
 	private WordAngler angler;
 	private FontRenderContext frc;
 	
-	public WordShaper(WordSizer sizer, WordFonter fonter, WordAngler angler) {
+	WordShaper(WordSizer sizer, WordFonter fonter, WordAngler angler) {
 		this.sizer = sizer;
 		this.fonter = fonter;
 		this.angler = angler;
 		this.frc = new FontRenderContext(null, true, true);
 	}
 	
-	/*
-	 * TODO question here: you want to eliminate as many words as possible, so FIRST rip through & render all their shapes,
-	 * and stop once the shapes are too small.  Then you can shorten the arrays, and loop through less.
-	 * This is also good because now, your WordPlacers will have better ranks to go on: if 75% of the words are too small
-	 * to render, then the lowest word will have a 25th-percentile rank, and it'll place them in only (eh) 25% of the 
-	 * field.  Basically, it's like you're lying to the Placer.  Cutting down the list first will give you a better
-	 * answer to "how many words am i drawing here?".
-	 * 
-	 * BUT: won't that screw with your weights?  Maybe?  Er, maybe not?  Not sure. 
-	 */
-	public Shape[] shapeWords(Word[] words) {
+	Shape[] shapeWords(EngineWord[] words) {
 
 		ArrayList<Shape> shapes = new ArrayList<Shape>();
 		
 		for (int i = 0; i < words.length; i++) {			
-			Word word = words[i];
+			Word word = words[i].word;
 			
 			Shape wordShape = shapeWord(word, i, words.length);
 			if (wordShape == null) {
