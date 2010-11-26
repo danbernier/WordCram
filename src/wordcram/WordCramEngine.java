@@ -59,7 +59,7 @@ class WordCramEngine {
 		this.nudger = nudger;
 		
 		this.bbTreeBuilder = new BBTreeBuilder();
-		this.wordShaper = new WordShaper(this.sizer, this.fonter, this.angler);
+		this.wordShaper = new WordShaper();
 		
 		this.printSkippedWords = printSkippedWords;
 		
@@ -71,7 +71,16 @@ class WordCramEngine {
 	private EngineWord[] wordsIntoEngineWords(Word[] words) {
 		EngineWord[] engineWords = new EngineWord[words.length];
 		for (int i = 0; i < words.length; i++) {
-			engineWords[i] = new EngineWord(words[i]);
+			Word word = words[i];
+			EngineWord eWord = new EngineWord(word);
+			
+			eWord.rank = i;
+			eWord.size = sizer.sizeFor(word, i, words.length);
+			eWord.angle = angler.angleFor(word);
+			eWord.font = fonter.fontFor(word);
+			eWord.color = colorer.colorFor(word);
+			
+			engineWords[i] = eWord;
 		}
 		return engineWords;
 	}
@@ -118,11 +127,12 @@ class WordCramEngine {
 	public void drawNext() {
 		if (!hasMore()) return;
 		
-		Word word = words[++wordIndex].word;
+		EngineWord eWord = words[++wordIndex];
+		Word word = eWord.word;
 		Shape wordShape = shapes[wordIndex];
 
 		timer.start("placeWord");
-		PVector wordLocation = placeWord(word, wordShape);
+		PVector wordLocation = placeWord(eWord, wordShape);
 		timer.end("placeWord");
 					
 		if (wordLocation != null) {
@@ -131,7 +141,7 @@ class WordCramEngine {
 			word.getBBTree().setLocation(wordLocation);
 			
 			timer.start("drawWordImage");
-			drawWordImage(word, wordShape);
+			drawWordImage(eWord, wordShape);
 			timer.end("drawWordImage");
 		}
 		else {
@@ -139,12 +149,13 @@ class WordCramEngine {
 		}	
 	}	
 	
-	private PVector placeWord(Word word, Shape wordShape) {
+	private PVector placeWord(EngineWord eWord, Shape wordShape) {
+		Word word = eWord.word;
 		Rectangle2D rect = wordShape.getBounds2D();		
 		int wordImageWidth = (int)rect.getWidth();
 		int wordImageHeight = (int)rect.getHeight();
 		
-		word.setDesiredLocation(placer.place(word, wordIndex, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height));
+		word.setDesiredLocation(placer.place(word, eWord.rank, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height));
 		
 		// TODO just make this 10000
 		// TODO make this a config!!!  that'll help people write their own nudgers, if they know how many times it'll try -- also, it'll help tweak performance
@@ -188,7 +199,7 @@ class WordCramEngine {
 		return null;
 	}
 	
-	private void drawWordImage(Word word, Shape wordShape) {
+	private void drawWordImage(EngineWord word, Shape wordShape) {
 		
 		Path2D.Float path2d = new Path2D.Float(wordShape);
 		//wordShape = AffineTransform.getTranslateInstance(location.x, location.y).createTransformedShape(wordShape);
@@ -198,7 +209,7 @@ class WordCramEngine {
 		Graphics2D g2 = (Graphics2D)(drawToParent ? parent.getGraphics() : destination.image.getGraphics());
 			
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setPaint(new Color(colorer.colorFor(word), true));
+		g2.setPaint(new Color(word.color, true));
 		g2.fill(path2d);
 		
 //		destination.pushStyle();

@@ -27,27 +27,14 @@ import java.util.ArrayList;
 import processing.core.PFont;
 
 class WordShaper {
-	
-	private WordSizer sizer;
-	private WordFonter fonter;
-	private WordAngler angler;
-	private FontRenderContext frc;
-	
-	WordShaper(WordSizer sizer, WordFonter fonter, WordAngler angler) {
-		this.sizer = sizer;
-		this.fonter = fonter;
-		this.angler = angler;
-		this.frc = new FontRenderContext(null, true, true);
-	}
+	private FontRenderContext frc = new FontRenderContext(null, true, true);
 	
 	Shape[] shapeWords(EngineWord[] words) {
 
 		ArrayList<Shape> shapes = new ArrayList<Shape>();
 		
-		for (int i = 0; i < words.length; i++) {			
-			Word word = words[i].word;
-			
-			Shape wordShape = shapeWord(word, i, words.length);
+		for (EngineWord word : words) {
+			Shape wordShape = shapeWord(word);
 			if (wordShape == null) {
 				break;
 			}
@@ -58,14 +45,14 @@ class WordShaper {
 		return shapes.toArray(new Shape[0]);
 	}
 	
-	private Shape shapeWord(Word word, int wordRank, int wordCount) {
+	private Shape shapeWord(EngineWord eWord) {
 
-		float fontSize = sizer.sizeFor(word, wordRank, wordCount); 
-		PFont pFont = fonter.fontFor(word);
-		float rotation = angler.angleFor(word);
+		float fontSize = eWord.size;
+		PFont pFont = eWord.font;
+		float rotation = eWord.angle;
 		
 		Font font = pFont.getFont().deriveFont(fontSize);
-		char[] chars = word.word.toCharArray();
+		char[] chars = eWord.word.word.toCharArray();
 		
 		// TODO hmm: this doesn't render newlines.  Hrm.  If you're word text is "foo\nbar", you get "foobar".
 		GlyphVector gv = font.layoutGlyphVector(frc, chars, 0, chars.length,
@@ -79,7 +66,7 @@ class WordShaper {
 		}
 		
 		Rectangle2D rect = shape.getBounds2D();
-		int minWordRenderedSize = 7; // TODO extract config setting for minWordRenderedSize
+		int minWordRenderedSize = 7; // TODO extract config setting for minWordRenderedSize, and take height into account -- not just width
 		if (rect.getWidth() < minWordRenderedSize || rect.getHeight() < minWordRenderedSize) {
 			// TODO extend the notion of printSkippedWords into here, to get the first too-small rect's dimensions?
 			//System.out.println("skipping " + word + " cause it's too small: " + rect.getWidth() + "x" + rect.getHeight());

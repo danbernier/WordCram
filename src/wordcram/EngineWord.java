@@ -16,8 +16,15 @@ package wordcram;
  limitations under the License.
  */
 
+import processing.core.PFont;
+
 class EngineWord {
 	Word word;
+	int rank;
+	float size;
+	float angle;
+	PFont font;
+	int color;
 	
 	EngineWord(Word word) {
 		this.word = word;
