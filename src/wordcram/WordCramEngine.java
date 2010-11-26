@@ -18,6 +18,7 @@ limitations under the License.
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import processing.core.*;
@@ -41,7 +42,7 @@ class WordCramEngine {
 	
 	private EngineWord[] words;
 	private Shape[] shapes;	
-	private int wordIndex;
+	private int wordIndex = -1;
 	
 	private boolean printSkippedWords = false;
 	
@@ -64,12 +65,11 @@ class WordCramEngine {
 		this.printSkippedWords = printSkippedWords;
 		
 		this.words = wordsIntoEngineWords(words);
-		wordsIntoShapes();
-		shapesIntoBBTrees();
 	}
 	
 	private EngineWord[] wordsIntoEngineWords(Word[] words) {
-		EngineWord[] engineWords = new EngineWord[words.length];
+		ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
+		
 		for (int i = 0; i < words.length; i++) {
 			Word word = words[i];
 			EngineWord eWord = new EngineWord(word);
@@ -80,35 +80,23 @@ class WordCramEngine {
 			eWord.font = fonter.fontFor(word);
 			eWord.color = colorer.colorFor(word);
 			
-			engineWords[i] = eWord;
-		}
-		return engineWords;
-	}
-	
-	private void wordsIntoShapes() {
-		this.shapes = wordShaper.shapeWords(this.words); // ONLY returns shapes for words that are big enough to see
-
-		if (printSkippedWords) {
-
-			for (int i = shapes.length; i < words.length; i++) {
-				System.out.println("Too small: " + words[i]);
-			}
+			Shape shape = wordShaper.shapeWord(eWord);
 			
-			// TODO are these at all useful?
-			//System.out.println("the last word to be drawn will be: " + words[shapes.length-1]);
-			//System.out.println("the first TOO SMALL word was: " + words[shapes.length] + ", which would be drawn at size " + sizer.sizeFor(words[shapes.length], shapes.length, words.length));
+			if (shape == null) {
+				if (printSkippedWords) {
+					System.out.println("Too small: " + word.word);	
+				}
+			}
+			else {
+				eWord.shape = shape;
+				
+				// TODO extract config setting for minBoundingBox, and add swelling option
+				word.setBBTree(bbTreeBuilder.makeTree(shape, 7));
+				engineWords.add(eWord);
+			}
 		}
 		
-		this.words = Arrays.copyOf(words, shapes.length);  // Trim down the list of words
-		this.wordIndex = -1;
-	}
-	
-	private void shapesIntoBBTrees() {
-		for (int i = 0; i < this.shapes.length; i++) {
-			Word word = this.words[i].word;
-			Shape shape = this.shapes[i];
-			word.setBBTree(bbTreeBuilder.makeTree(shape, 7));  // TODO extract config setting for minBoundingBox, and add swelling option
-		}
+		return engineWords.toArray(new EngineWord[0]);
 	}
 	
 	public boolean hasMore() {
@@ -128,20 +116,17 @@ class WordCramEngine {
 		if (!hasMore()) return;
 		
 		EngineWord eWord = words[++wordIndex];
-		Word word = eWord.word;
-		Shape wordShape = shapes[wordIndex];
-
+		
 		timer.start("placeWord");
-		PVector wordLocation = placeWord(eWord, wordShape);
+		PVector wordLocation = placeWord(eWord);
 		timer.end("placeWord");
 					
 		if (wordLocation != null) {
-			wordShape = AffineTransform.getTranslateInstance(wordLocation.x, wordLocation.y).createTransformedShape(wordShape);
-			shapes[wordIndex] = wordShape;
-			word.getBBTree().setLocation(wordLocation);
+			eWord.shape = AffineTransform.getTranslateInstance(wordLocation.x, wordLocation.y).createTransformedShape(eWord.shape);
+			eWord.word.getBBTree().setLocation(wordLocation);
 			
 			timer.start("drawWordImage");
-			drawWordImage(eWord, wordShape);
+			drawWordImage(eWord);
 			timer.end("drawWordImage");
 		}
 		else {
@@ -149,9 +134,9 @@ class WordCramEngine {
 		}	
 	}	
 	
-	private PVector placeWord(EngineWord eWord, Shape wordShape) {
+	private PVector placeWord(EngineWord eWord) {
 		Word word = eWord.word;
-		Rectangle2D rect = wordShape.getBounds2D();		
+		Rectangle2D rect = eWord.shape.getBounds2D();		
 		int wordImageWidth = (int)rect.getWidth();
 		int wordImageHeight = (int)rect.getHeight();
 		
@@ -199,9 +184,9 @@ class WordCramEngine {
 		return null;
 	}
 	
-	private void drawWordImage(EngineWord word, Shape wordShape) {
+	private void drawWordImage(EngineWord word) {
 		
-		Path2D.Float path2d = new Path2D.Float(wordShape);
+		Path2D.Float path2d = new Path2D.Float(word.shape);
 		//wordShape = AffineTransform.getTranslateInstance(location.x, location.y).createTransformedShape(wordShape);
 			
 		boolean drawToParent = false;

@@ -16,6 +16,8 @@ package wordcram;
  limitations under the License.
  */
 
+import java.awt.Shape;
+
 import processing.core.PFont;
 
 class EngineWord {
@@ -25,6 +27,7 @@ class EngineWord {
 	float angle;
 	PFont font;
 	int color;
+	Shape shape;
 	
 	EngineWord(Word word) {
 		this.word = word;

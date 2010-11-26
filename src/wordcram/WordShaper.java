@@ -29,23 +29,7 @@ import processing.core.PFont;
 class WordShaper {
 	private FontRenderContext frc = new FontRenderContext(null, true, true);
 	
-	Shape[] shapeWords(EngineWord[] words) {
-
-		ArrayList<Shape> shapes = new ArrayList<Shape>();
-		
-		for (EngineWord word : words) {
-			Shape wordShape = shapeWord(word);
-			if (wordShape == null) {
-				break;
-			}
-			
-			shapes.add(wordShape);
-		}
-		
-		return shapes.toArray(new Shape[0]);
-	}
-	
-	private Shape shapeWord(EngineWord eWord) {
+	Shape shapeWord(EngineWord eWord) {
 
 		float fontSize = eWord.size;
 		PFont pFont = eWord.font;
