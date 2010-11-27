@@ -19,7 +19,6 @@ limitations under the License.
 import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import processing.core.*;
 
@@ -41,7 +40,6 @@ class WordCramEngine {
 	private WordShaper wordShaper;
 	
 	private EngineWord[] words;
-	private Shape[] shapes;	
 	private int wordIndex = -1;
 	
 	private boolean printSkippedWords = false;
@@ -59,8 +57,8 @@ class WordCramEngine {
 		this.placer = placer;
 		this.nudger = nudger;
 		
-		this.bbTreeBuilder = new BBTreeBuilder();
 		this.wordShaper = new WordShaper();
+		this.bbTreeBuilder = new BBTreeBuilder();
 		
 		this.printSkippedWords = printSkippedWords;
 		
@@ -88,11 +86,12 @@ class WordCramEngine {
 				}
 			}
 			else {
+				engineWords.add(eWord);  // DON'T add eWords with no shape.
 				eWord.shape = shape;
 				
 				// TODO extract config setting for minBoundingBox, and add swelling option
+				// TODO try perf-testing smaller bounding boxes -- if not slower, could make better images 
 				word.setBBTree(bbTreeBuilder.makeTree(shape, 7));
-				engineWords.add(eWord);
 			}
 		}
 		
