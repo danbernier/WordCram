@@ -91,7 +91,7 @@ class WordCramEngine {
 				
 				// TODO extract config setting for minBoundingBox, and add swelling option
 				// TODO try perf-testing smaller bounding boxes -- if not slower, could make better images 
-				word.setBBTree(bbTreeBuilder.makeTree(shape, 7));
+				eWord.setBBTree(bbTreeBuilder.makeTree(shape, 7));
 			}
 		}
 		
@@ -122,7 +122,7 @@ class WordCramEngine {
 					
 		if (wordLocation != null) {
 			eWord.shape = AffineTransform.getTranslateInstance(wordLocation.x, wordLocation.y).createTransformedShape(eWord.shape);
-			eWord.word.getBBTree().setLocation(wordLocation);
+			eWord.getBBTree().setLocation(wordLocation);
 			
 			timer.start("drawWordImage");
 			drawWordImage(eWord);
@@ -139,22 +139,22 @@ class WordCramEngine {
 		int wordImageWidth = (int)rect.getWidth();
 		int wordImageHeight = (int)rect.getHeight();
 		
-		word.setDesiredLocation(placer.place(word, eWord.rank, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height));
+		eWord.setDesiredLocation(placer.place(word, eWord.rank, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height));
 		
 		// TODO just make this 10000
 		// TODO make this a config!!!  that'll help people write their own nudgers, if they know how many times it'll try -- also, it'll help tweak performance
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
-		Word lastCollidedWith = null;
+		EngineWord lastCollidedWith = null;
 		for (int attempt = 0; attempt < maxAttempts; attempt++) {
 
-			word.nudge(nudger.nudgeFor(word, attempt));
+			eWord.nudge(nudger.nudgeFor(word, attempt));
 			
-			if (lastCollidedWith != null && word.overlaps(lastCollidedWith)) {
+			if (lastCollidedWith != null && eWord.overlaps(lastCollidedWith)) {
 				timer.count("CACHE COLLISION");
 				continue;
 			}
 			
-			PVector loc = word.getLocation();
+			PVector loc = eWord.getLocation();
 			if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= destination.width || loc.y + wordImageHeight >= destination.height) {
 				timer.count("OUT OF BOUNDS");
 				continue;
@@ -162,8 +162,8 @@ class WordCramEngine {
 			
 			boolean foundOverlap = false;
 			for (int i = 0; !foundOverlap && i < wordIndex; i++) {
-				Word otherWord = words[i].word;
-				if (word.overlaps(otherWord)) {
+				EngineWord otherWord = words[i];
+				if (eWord.overlaps(otherWord)) {
 					foundOverlap = true;
 					lastCollidedWith = otherWord;
 				}
@@ -171,7 +171,7 @@ class WordCramEngine {
 			
 			if (!foundOverlap) {
 				timer.count("placed a word");
-				return word.getLocation();
+				return eWord.getLocation();
 			}
 		}
 		

@@ -19,6 +19,7 @@ package wordcram;
 import java.awt.Shape;
 
 import processing.core.PFont;
+import processing.core.PVector;
 
 class EngineWord {
 	Word word;
@@ -29,7 +30,35 @@ class EngineWord {
 	int color;
 	Shape shape;
 	
+	private BBTree bbTree;
+	private PVector desiredLocation;
+	private PVector currentLocation;
+	
 	EngineWord(Word word) {
 		this.word = word;
+	}
+	
+	void setBBTree(BBTree bbTree) {
+		this.bbTree = bbTree;
+	}
+	BBTree getBBTree() {
+		return bbTree;
+	}
+
+	boolean overlaps(EngineWord other) {
+		return bbTree.overlaps(other.bbTree);
+	}
+	
+	void setDesiredLocation(PVector loc) {
+		word.setProperty("_desiredLocation", loc); // TODO resolve. This is only there for PlottingWordNudger.
+		desiredLocation = new PVector(loc.x, loc.y);
+		currentLocation = new PVector(loc.x, loc.y);
+	}
+	void nudge(PVector nudge) {
+		currentLocation = PVector.add(desiredLocation, nudge);
+		bbTree.setLocation(currentLocation.get());
+	}
+	PVector getLocation() {
+		return currentLocation.get();
 	}
 }

@@ -39,7 +39,7 @@ public class PlottingWordNudger implements WordNudger {
 		alpha = (float) Math.pow(alpha, 3);
 		parent.fill(40, 255, 255, alpha * 255);
 		
-		PVector wordLoc = PVector.add(v, word.getLocation());
+		PVector wordLoc = PVector.add(v, (PVector)word.getProperty("_desiredLocation"));
 		parent.ellipse(wordLoc.x, wordLoc.y, 3, 3);
 		parent.popStyle();
 		return v;

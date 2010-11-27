@@ -18,15 +18,10 @@ limitations under the License.
 
 import java.util.HashMap;
 
-import processing.core.PVector;
-
 public class Word implements Comparable<Word> {
 	public String word;
 	public double weight;
 	
-	private PVector desiredLocation;
-	private PVector currentLocation;
-	private BBTree bbTree;
 	private HashMap<String,Object> properties = new HashMap<String,Object>();
 		
 	public Word(String word, double weight) {
@@ -72,29 +67,5 @@ public class Word implements Comparable<Word> {
 			return 1;
 		}
 		else return 0;
-	}
-	
-	void setBBTree(BBTree _bbTree) {
-		bbTree = _bbTree;
-	}
-
-	boolean overlaps(Word other) {
-		return bbTree.overlaps(other.bbTree);
-	}
-	
-	void setDesiredLocation(PVector loc) {
-		desiredLocation = new PVector(loc.x, loc.y);
-		currentLocation = new PVector(loc.x, loc.y);
-	}
-	void nudge(PVector nudge) {
-		currentLocation = PVector.add(desiredLocation, nudge);
-		bbTree.setLocation(currentLocation.get());
-	}
-	PVector getLocation() {
-		return currentLocation.get();
-	}
-	
-	BBTree getBBTree() {
-		return bbTree;
 	}
 }
