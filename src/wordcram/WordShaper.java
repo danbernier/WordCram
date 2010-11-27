@@ -30,35 +30,52 @@ class WordShaper {
 	
 	Shape shapeWord(EngineWord eWord) {
 
-		float fontSize = eWord.size;
-		PFont pFont = eWord.font;
-		float rotation = eWord.angle;
+		Shape shape = getShapeFor(eWord.word.word, eWord.font, eWord.size);
 		
+		if (isTooSmall(shape)) {
+			return null;		
+		}
+		
+		return moveToOrigin(
+				rotate(shape, eWord.angle));
+	}
+
+	private Shape getShapeFor(String word, PFont pFont, float fontSize) {
 		Font font = pFont.getFont().deriveFont(fontSize);
-		char[] chars = eWord.word.word.toCharArray();
+		
+		char[] chars = word.toCharArray();
 		
 		// TODO hmm: this doesn't render newlines.  Hrm.  If you're word text is "foo\nbar", you get "foobar".
 		GlyphVector gv = font.layoutGlyphVector(frc, chars, 0, chars.length,
 				Font.LAYOUT_LEFT_TO_RIGHT);
 
-		Shape shape = gv.getOutline();
-
-		if (rotation != 0.0) {
-			shape = AffineTransform.getRotateInstance(rotation)
-					.createTransformedShape(shape);
-		}
-		
-		Rectangle2D rect = shape.getBounds2D();
-		int minWordRenderedSize = 7; // TODO extract config setting for minWordRenderedSize, and take height into account -- not just width
-		if (rect.getWidth() < minWordRenderedSize || rect.getHeight() < minWordRenderedSize) {
-			// TODO extend the notion of printSkippedWords into here, to get the first too-small rect's dimensions?
-			//System.out.println("skipping " + word + " cause it's too small: " + rect.getWidth() + "x" + rect.getHeight());
-			return null;		
-		}
-		
-		shape = AffineTransform.getTranslateInstance(-rect.getX(), -rect.getY()).createTransformedShape(shape);
-		
-		return shape;
+		return gv.getOutline();
 	}
 	
+	private boolean isTooSmall(Shape shape) {
+		Rectangle2D r = shape.getBounds2D();
+		
+		// TODO extract config setting for minWordRenderedSize, and take height into account -- not just width
+		int minSize = 7;
+		
+		return r.getWidth() < minSize || r.getHeight() < minSize;
+	}
+	
+	private Shape rotate(Shape shape, float rotation) {
+		if (rotation == 0) {
+			return shape;
+		}
+
+		return AffineTransform.getRotateInstance(rotation).createTransformedShape(shape);
+	}
+
+	private Shape moveToOrigin(Shape shape) {
+		Rectangle2D rect = shape.getBounds2D();
+		
+		if (rect.getX() == 0 || rect.getY() == 0) {
+			return shape;
+		}
+		
+		return AffineTransform.getTranslateInstance(-rect.getX(), -rect.getY()).createTransformedShape(shape);
+	}
 }
