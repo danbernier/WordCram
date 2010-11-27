@@ -17,6 +17,7 @@ package wordcram;
  */
 
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 
 import processing.core.PFont;
 import processing.core.PVector;
@@ -38,13 +39,15 @@ class EngineWord {
 		this.word = word;
 	}
 	
-	void setBBTree(BBTree bbTree) {
-		this.bbTree = bbTree;
-	}
-	BBTree getBBTree() {
-		return bbTree;
-	}
+	void setShape(Shape shape) {
+		this.shape = shape;
 
+		
+		// TODO extract config setting for minBoundingBox, and add swelling option
+		// TODO try perf-testing smaller bounding boxes -- if not slower, could make better images 
+		this.bbTree = new BBTreeBuilder().makeTree(shape, 7);
+	}
+	
 	boolean overlaps(EngineWord other) {
 		return bbTree.overlaps(other.bbTree);
 	}
@@ -58,6 +61,12 @@ class EngineWord {
 		currentLocation = PVector.add(desiredLocation, nudge);
 		bbTree.setLocation(currentLocation.get());
 	}
+	
+	void setFinalLocation(PVector loc) {
+		shape = AffineTransform.getTranslateInstance(loc.x, loc.y).createTransformedShape(shape);
+		bbTree.setLocation(loc);
+	}
+	
 	PVector getLocation() {
 		return currentLocation.get();
 	}

@@ -36,8 +36,7 @@ class WordCramEngine {
 	private WordPlacer placer;
 	private WordNudger nudger;
 
-	private BBTreeBuilder bbTreeBuilder;
-	private WordShaper wordShaper;
+	private WordShaper wordShaper = new WordShaper();
 	
 	private EngineWord[] words;
 	private int wordIndex = -1;
@@ -56,9 +55,6 @@ class WordCramEngine {
 		this.angler = angler;
 		this.placer = placer;
 		this.nudger = nudger;
-		
-		this.wordShaper = new WordShaper();
-		this.bbTreeBuilder = new BBTreeBuilder();
 		
 		this.printSkippedWords = printSkippedWords;
 		
@@ -87,11 +83,7 @@ class WordCramEngine {
 			}
 			else {
 				engineWords.add(eWord);  // DON'T add eWords with no shape.
-				eWord.shape = shape;
-				
-				// TODO extract config setting for minBoundingBox, and add swelling option
-				// TODO try perf-testing smaller bounding boxes -- if not slower, could make better images 
-				eWord.setBBTree(bbTreeBuilder.makeTree(shape, 7));
+				eWord.setShape(shape);
 			}
 		}
 		
@@ -121,16 +113,12 @@ class WordCramEngine {
 		timer.end("placeWord");
 					
 		if (wordLocation != null) {
-			eWord.shape = AffineTransform.getTranslateInstance(wordLocation.x, wordLocation.y).createTransformedShape(eWord.shape);
-			eWord.getBBTree().setLocation(wordLocation);
+			eWord.setFinalLocation(wordLocation);
 			
 			timer.start("drawWordImage");
 			drawWordImage(eWord);
 			timer.end("drawWordImage");
 		}
-		else {
-			//System.out.println("couldn't place: " + word.word + ", " + word.weight);
-		}	
 	}	
 	
 	private PVector placeWord(EngineWord eWord) {
