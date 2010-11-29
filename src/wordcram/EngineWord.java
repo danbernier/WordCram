@@ -29,45 +29,56 @@ class EngineWord {
 	float angle;
 	PFont font;
 	int color;
-	Shape shape;
-	
+
+	private Shape shape;
 	private BBTree bbTree;
+
 	private PVector desiredLocation;
 	private PVector currentLocation;
-	
+
 	EngineWord(Word word) {
 		this.word = word;
 	}
-	
+
 	void setShape(Shape shape) {
 		this.shape = shape;
 
-		
-		// TODO extract config setting for minBoundingBox, and add swelling option
-		// TODO try perf-testing smaller bounding boxes -- if not slower, could make better images 
+		// TODO extract config setting for minBoundingBox, and add swelling
+		// option
+		// TODO try perf-testing smaller bounding boxes -- if it's not slower,
+		// it could make better images
 		this.bbTree = new BBTreeBuilder().makeTree(shape, 7);
 	}
-	
+
+	Shape getShape() {
+		return shape;
+	}
+
 	boolean overlaps(EngineWord other) {
 		return bbTree.overlaps(other.bbTree);
 	}
-	
+
 	void setDesiredLocation(PVector loc) {
-		word.setProperty("_desiredLocation", loc); // TODO resolve. This is only there for PlottingWordNudger.
+		// TODO resolve. This is only there for PlottingWordNudger.
+		word.setProperty("_desiredLocation", loc);
+
 		desiredLocation = new PVector(loc.x, loc.y);
 		currentLocation = new PVector(loc.x, loc.y);
 	}
+
 	void nudge(PVector nudge) {
 		currentLocation = PVector.add(desiredLocation, nudge);
 		bbTree.setLocation(currentLocation.get());
 	}
-	
-	void setFinalLocation(PVector loc) {
-		shape = AffineTransform.getTranslateInstance(loc.x, loc.y).createTransformedShape(shape);
-		bbTree.setLocation(loc);
+
+	void finalizeLocation() {
+		AffineTransform transform = AffineTransform.getTranslateInstance(
+				currentLocation.x, currentLocation.y);
+		shape = transform.createTransformedShape(shape);
+		bbTree.setLocation(currentLocation);
 	}
-	
-	PVector getLocation() {
+
+	PVector getCurrentLocation() {
 		return currentLocation.get();
 	}
 }

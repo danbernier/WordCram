@@ -97,7 +97,7 @@ public class Main extends PApplet {
 						}
 					})
 					.withPlacer(Placers.centerClump())
-					.withSizer(Sizers.byWeight(10, 130))
+					.withSizer(Sizers.byWeight(5, 130))
 					
 					//.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
 					//.withNudger(new RandomWordNudger())
@@ -111,7 +111,7 @@ public class Main extends PApplet {
 		//fill(55);
 		//rect(0, 0, width, height);
 		
-		boolean allAtOnce = false;
+		boolean allAtOnce = true;
 		if (allAtOnce) {
 			wordcram.drawAll();
 			println("Done");

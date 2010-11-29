@@ -28,9 +28,9 @@ import processing.core.PFont;
 class WordShaper {
 	private FontRenderContext frc = new FontRenderContext(null, true, true);
 	
-	Shape shapeWord(EngineWord eWord) {
+	Shape getShapeFor(EngineWord eWord) {
 
-		Shape shape = getShapeFor(eWord.word.word, eWord.font, eWord.size);
+		Shape shape = makeShape(eWord.word.word, eWord.font, eWord.size);
 		
 		if (isTooSmall(shape)) {
 			return null;		
@@ -40,7 +40,7 @@ class WordShaper {
 				rotate(shape, eWord.angle));
 	}
 
-	private Shape getShapeFor(String word, PFont pFont, float fontSize) {
+	private Shape makeShape(String word, PFont pFont, float fontSize) {
 		Font font = pFont.getFont().deriveFont(fontSize);
 		
 		char[] chars = word.toCharArray();

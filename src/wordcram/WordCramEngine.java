@@ -17,7 +17,8 @@ limitations under the License.
 */
 
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import processing.core.*;
@@ -58,13 +59,16 @@ class WordCramEngine {
 		
 		this.printSkippedWords = printSkippedWords;
 		
+		timer.start("making shapes");
 		this.words = wordsIntoEngineWords(words);
+		timer.end("making shapes");
 	}
 	
 	private EngineWord[] wordsIntoEngineWords(Word[] words) {
 		ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
 		
 		for (int i = 0; i < words.length; i++) {
+			timer.start("making a shape");
 			Word word = words[i];
 			EngineWord eWord = new EngineWord(word);
 			
@@ -74,7 +78,7 @@ class WordCramEngine {
 			eWord.font = fonter.fontFor(word);
 			eWord.color = colorer.colorFor(word);
 			
-			Shape shape = wordShaper.shapeWord(eWord);
+			Shape shape = wordShaper.getShapeFor(eWord);
 			
 			if (shape == null) {
 				if (printSkippedWords) {
@@ -82,9 +86,11 @@ class WordCramEngine {
 				}
 			}
 			else {
-				engineWords.add(eWord);  // DON'T add eWords with no shape.
 				eWord.setShape(shape);
+				engineWords.add(eWord);  // DON'T add eWords with no shape.
 			}
+			
+			timer.end("making a shape");
 		}
 		
 		return engineWords.toArray(new EngineWord[0]);
@@ -109,21 +115,19 @@ class WordCramEngine {
 		EngineWord eWord = words[++wordIndex];
 		
 		timer.start("placeWord");
-		PVector wordLocation = placeWord(eWord);
+		boolean wasPlaced = placeWord(eWord);
 		timer.end("placeWord");
 					
-		if (wordLocation != null) {
-			eWord.setFinalLocation(wordLocation);
-			
+		if (wasPlaced) {
 			timer.start("drawWordImage");
 			drawWordImage(eWord);
 			timer.end("drawWordImage");
 		}
 	}	
 	
-	private PVector placeWord(EngineWord eWord) {
+	private boolean placeWord(EngineWord eWord) {
 		Word word = eWord.word;
-		Rectangle2D rect = eWord.shape.getBounds2D();		
+		Rectangle2D rect = eWord.getShape().getBounds2D();		
 		int wordImageWidth = (int)rect.getWidth();
 		int wordImageHeight = (int)rect.getHeight();
 		
@@ -137,14 +141,14 @@ class WordCramEngine {
 
 			eWord.nudge(nudger.nudgeFor(word, attempt));
 			
-			if (lastCollidedWith != null && eWord.overlaps(lastCollidedWith)) {
-				timer.count("CACHE COLLISION");
+			PVector loc = eWord.getCurrentLocation();
+			if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= destination.width || loc.y + wordImageHeight >= destination.height) {
+				timer.count("OUT OF BOUNDS");
 				continue;
 			}
 			
-			PVector loc = eWord.getLocation();
-			if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= destination.width || loc.y + wordImageHeight >= destination.height) {
-				timer.count("OUT OF BOUNDS");
+			if (lastCollidedWith != null && eWord.overlaps(lastCollidedWith)) {
+				timer.count("CACHE COLLISION");
 				continue;
 			}
 			
@@ -159,25 +163,23 @@ class WordCramEngine {
 			
 			if (!foundOverlap) {
 				timer.count("placed a word");
-				return eWord.getLocation();
+				eWord.finalizeLocation();
+				return true;
 			}
 		}
 		
 		if (printSkippedWords) {
 			System.out.println("Couldn't fit: " + word);
 		}
-		
 		timer.count("couldn't place a word");
-		return null;
+		return false;
 	}
 	
 	private void drawWordImage(EngineWord word) {
 		
-		Path2D.Float path2d = new Path2D.Float(word.shape);
-		//wordShape = AffineTransform.getTranslateInstance(location.x, location.y).createTransformedShape(wordShape);
+		Path2D.Float path2d = new Path2D.Float(word.getShape());
 			
 		boolean drawToParent = false;
-			
 		Graphics2D g2 = (Graphics2D)(drawToParent ? parent.getGraphics() : destination.image.getGraphics());
 			
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
