@@ -25,6 +25,12 @@ class Timer {
 	private List<String> orderedMessages = new ArrayList<String>();
 		
 	private HashMap<String,Integer> counts = new HashMap<String,Integer>(); 
+
+	private static Timer instance = new Timer();
+	public static Timer getInstance() {
+		return instance;
+	}
+	private Timer() {}
 	
 	public void count(String message) {
 		if (!counts.containsKey(message)) {

@@ -44,7 +44,7 @@ class WordCramEngine {
 	
 	private boolean printSkippedWords = false;
 	
-	private Timer timer = new Timer();
+	private Timer timer = Timer.getInstance();
 
 	public WordCramEngine(PApplet parent, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printSkippedWords) {
 		this.parent = parent;
