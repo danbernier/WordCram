@@ -51,11 +51,6 @@ class Timer {
 		IntervalStart start = starts.pop();
 		long duration = now() - start.time;
 		
-		if (!message.equals(start.message)) {
-			String holyCrap = message + " != " + start.message;
-			int x = 42;
-		}
-
 		ArrayList<Long> timesForMessage = durations.get(start.message);
 		timesForMessage.add(duration);
 	}

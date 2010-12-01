@@ -67,7 +67,6 @@ public class Anglers implements PConstants {
 	 *         degrees, for a "heaped" effect.
 	 */
 	public static WordAngler heaped() {
-		final Random r = new Random();
 		final float angle = PApplet.radians(7);
 		return randomBetween(-angle, angle);
 	}

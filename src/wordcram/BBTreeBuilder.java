@@ -19,8 +19,6 @@ package wordcram;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
-import processing.core.PImage;
-
 class BBTreeBuilder {
 	public BBTree makeTree(Shape shape, int minBoxSize) {
 		Rectangle2D bounds = shape.getBounds2D();
