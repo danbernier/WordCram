@@ -15,39 +15,29 @@ limitations under the License.
 */
 
 /*
-firstnamesUsingSubclasses is a WordCram of the most popular first names from 
+firstnamesUsingWordProperties is a WordCram of the most popular first names from 
 the 1990 US Census.  Predictably, males are blue, and females
 are pink.  It also shows one way you can use a custom WordColorer.
-See firstnamesUsingWordProperties for another.
+See firstnamesUsingSubclasses for another.
 
 When you're parsing the names data, you know whether each word
-is a male or female name.  To take advantage of this, the sketch 
-creates a Name object, which extends WordCram's Word object with 
-a boolean isFemale flag.  (Which makes sense: you could say that 
-a Name is a Word, with gender.)
+is a male or female name.  To take advantage of this, the sketch
+creates a Word object, and gives it a property named "isFemale",
+set to either true or false.
 
 Then, the sketch gives WordCram a custom WordColorer that checks
-each Name's isFemale flag, and returns the corresponding pink or 
+each Word's isFemale property, and returns the corresponding pink or 
 blue.
 
-Built with WordCram 0.3, http://code.google.com/p/wordcram/
+Built with WordCram 0.4, http://code.google.com/p/wordcram/
 Names collected from http://www.census.gov/genealogy/names
 Minya Nouvelle font from http://www.1001fonts.com/font_details.html?font_id=59
 */
 
 import wordcram.*;
 
-// A Name is a Word, with gender.
-class Name extends Word {
-  boolean isFemale;
-  public Name(String name, float weight, boolean _isFemale) {
-    super(name, weight);
-    isFemale = _isFemale;
-  }
-}
-
 WordCram wc;
-Name[] names;
+Word[] names;
 
 void setup() {
   colorMode(HSB);
@@ -60,7 +50,7 @@ void setup() {
 
 void loadNames() { 
   String[] nameData = loadStrings("names.txt");
-  names = new Name[nameData.length];
+  names = new Word[nameData.length];
   for (int i = 0; i < names.length; i++) {
     names[i] = parseName(nameData[i]);
   }
@@ -78,11 +68,10 @@ void makeWordCram() {
 
 WordColorer colorer() {
   return new WordColorer() {
-    public int colorFor(Word word) {
-      // We can assume this Word is a Name.
-      Name name = (Name)word;
+    public int colorFor(Word name) {
+      boolean isFemale = (Boolean)name.getProperty("isFemale");
       
-      if (name.isFemale) {
+      if (isFemale) {
         return color(#f36d91); // pink
       }
       else {
@@ -109,10 +98,12 @@ void mouseClicked() {
 }
 
 
-Name parseName(String data) {
+Word parseName(String data) {
   String[] parts = split(data, '\t');
-  String name = parts[0];
+  String nameString = parts[0];
   float freq = float(parts[1]);
   boolean isFemale = "f".equals(parts[2]);
-  return new Name(name, freq, isFemale);
+  Word name = new Word(nameString, freq);
+  name.setProperty("isFemale", isFemale);
+  return name;
 }
