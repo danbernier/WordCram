@@ -123,7 +123,7 @@ import wordcram.text.*;
  * 
  * <p>
  * If you're having trouble getting your words to show up, you might
- * want to {@link #printSkippedWords()}.  Knowing which words were
+ * want to {@link #printWhenSkippingWords()}.  Knowing which words were
  * skipped, and why, can help you size and place your words better.
  *  
  * @author Dan Bernier
@@ -154,7 +154,7 @@ public class WordCram {
 	private WordPlacer placer;
 	private WordNudger nudger;
 	
-	private boolean printSkippedWords = false;
+	private boolean printWhenSkippingWords = false;
 	
 	/**
 	 * This was the old way to build a WordCram: you have to specify <i>everything</i>.
@@ -570,17 +570,17 @@ public class WordCram {
 	}
 	
 	/**
-	 * Print a message to standard-out whenever a word is skipped.
+	 * Make the WordCram print a message to standard-out whenever a word is skipped.
 	 * <p>
 	 * Words are skipped whenever a) they're too small, or b) the WordCram
-	 * can't successfully nudge them into place.  If printSkippedWords
+	 * can't successfully nudge them into place.  If printWhenSkippingWords
 	 * is turned on, the WordCram will print a message that includes the word, 
 	 * its weight, and why the word was skipped.
 	 * 
 	 * @return The WordCram, for further setup or drawing.
 	 */
-	public WordCram printSkippedWords() {
-		printSkippedWords = true;
+	public WordCram printWhenSkippingWords() {
+		printWhenSkippingWords = true;		
 		return this;
 	}
 	
@@ -608,7 +608,7 @@ public class WordCram {
 			if (placer == null) placer = Placers.horizLine();
 			if (nudger == null) nudger = new SpiralWordNudger();
 						
-			wordCramEngine = new WordCramEngine(parent, words, fonter, sizer, colorer, angler, placer, nudger, printSkippedWords);
+			wordCramEngine = new WordCramEngine(parent, words, fonter, sizer, colorer, angler, placer, nudger, printWhenSkippingWords);
 		}
 		
 		return wordCramEngine;

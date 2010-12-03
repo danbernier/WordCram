@@ -104,7 +104,7 @@ public class Main extends PApplet {
 					
 					;
 		
-		//wordcram.printSkippedWords();
+		//wordcram.printWhenSkippingWords();
 	}
 	
 	public void draw() {

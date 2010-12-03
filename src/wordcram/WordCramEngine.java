@@ -42,11 +42,11 @@ class WordCramEngine {
 	private EngineWord[] words;
 	private int wordIndex = -1;
 	
-	private boolean printSkippedWords = false;
+	private boolean printWhenSkippingWords = false;
 	
 	private Timer timer = Timer.getInstance();
 
-	public WordCramEngine(PApplet parent, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printSkippedWords) {
+	public WordCramEngine(PApplet parent, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
 		this.parent = parent;
 		this.destination = parent.g;
 		
@@ -57,7 +57,7 @@ class WordCramEngine {
 		this.placer = placer;
 		this.nudger = nudger;
 		
-		this.printSkippedWords = printSkippedWords;
+		this.printWhenSkippingWords = printWhenSkippingWords;
 		
 		timer.start("making shapes");
 		this.words = wordsIntoEngineWords(words);
@@ -81,8 +81,8 @@ class WordCramEngine {
 			Shape shape = wordShaper.getShapeFor(eWord);
 			
 			if (shape == null) {
-				if (printSkippedWords) {
-					System.out.println("Too small: " + word.word);	
+				if (printWhenSkippingWords) {
+					System.out.println(("Too small: " + word));	
 				}
 			}
 			else {
@@ -168,7 +168,7 @@ class WordCramEngine {
 			}
 		}
 		
-		if (printSkippedWords) {
+		if (printWhenSkippingWords) {
 			System.out.println("Couldn't fit: " + word);
 		}
 		timer.count("couldn't place a word");
