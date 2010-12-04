@@ -72,7 +72,7 @@ class WordShaper {
 	private Shape moveToOrigin(Shape shape) {
 		Rectangle2D rect = shape.getBounds2D();
 		
-		if (rect.getX() == 0 || rect.getY() == 0) {
+		if (rect.getX() == 0 && rect.getY() == 0) {
 			return shape;
 		}
 		
