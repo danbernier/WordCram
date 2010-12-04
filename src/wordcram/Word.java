@@ -18,6 +18,29 @@ limitations under the License.
 
 import java.util.HashMap;
 
+/**
+ * A weighted word, for rendering in the word cloud image.
+ * <p>
+ * Each Word object has a {@link #word} String, and its associated {@link #weight}, and it's constructed
+ * with these two things.
+ * <p>
+ * A word can also have properties.  If you're creating your own <code>Word[]</code> to pass
+ * to the WordCram (rather than using something like {@link WordCram#fromWebPage(String)}),
+ * and custom components ({@link WordColorer}, {@link WordAngler}, etc),
+ * you might want to send other information along with the word, for the components to use.
+ * 
+ * 
+ * 
+ * <p>
+ * Besides that, WordCram will set a few properties of its own on your words:
+ * 
+ * <ul>
+ * <li>place: the PVector returned by the {@link WordPlacer}</li>
+ * <li>finalPlace: the PVector location where the word is finally rendered, or null if it isn't rendered.x</li>
+ * </ul>
+ * 
+ * @author Dan Bernier
+ */
 public class Word implements Comparable<Word> {
 	public String word;
 	public double weight;
@@ -53,11 +76,17 @@ public class Word implements Comparable<Word> {
 		properties.put(propertyName, propertyValue);
 	}
 	
+	/**
+	 * Displays the word, and its weight (in parentheses).
+	 */
 	@Override
 	public String toString() {
 		return word + " (" + weight + ")";
 	}
-
+	
+	/**
+	 * Compares Words based on weight only. Words with equal weight are arbitrarily sorted.
+	 */
 	@Override
 	public int compareTo(Word w) {
 		if (w.weight < weight) {

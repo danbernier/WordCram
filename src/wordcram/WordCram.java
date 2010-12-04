@@ -643,9 +643,18 @@ public class WordCram {
 		getWordCramEngine().drawAll();
 	}
 	
-	/*
+	/**
+	 * Get the Word at the given (x,y) coordinates.
+	 * <p>
+	 * This can be called while the WordCram is rendering, or after it's done.
+	 * If a Word is too small to render, or hasn't been placed yet, it will 
+	 * never be returned by this method.
+	 * 
+	 * @param x the X coordinate
+	 * @param y the Y coordinate
+	 * @return the Word that covers those coordinates, or null if there isn't one 
+	 */
 	public Word getWordAt(float x, float y) {
 		return getWordCramEngine().getWordAt(x, y);
 	}
-	*/
 }

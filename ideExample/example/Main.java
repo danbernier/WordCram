@@ -131,15 +131,13 @@ public class Main extends PApplet {
 		}
 	}
 	
-	/*
 	public void mouseMoved() {
 		Word word = wordcram.getWordAt(mouseX, mouseY);
 		if (word != null) {
 			System.out.println(round(mouseX) + "," + round(mouseY) + " -> " + word.word);
 		}
 	}
-	*/
-	
+		
 	public void mouseClicked() {
 		initWordCram();
 		loop();

@@ -195,15 +195,15 @@ class WordCramEngine {
 	}
 	
 	
-	/*
 	public Word getWordAt(float x, float y) {
-		for (int i = 0; i < shapes.length; i++) {
-			Shape shape = shapes[i];
-			if (shape.contains(x, y)) {
-				return words[i];
+		for (int i = 0; i < words.length; i++) {
+			if (words[i].wasPlaced()) {
+				Shape shape = words[i].getShape();
+				if (shape.contains(x, y)) {
+					return words[i].word;
+				}
 			}
 		}
 		return null;
 	}
-	*/
 }

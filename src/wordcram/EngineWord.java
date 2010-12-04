@@ -25,6 +25,16 @@ import processing.core.PVector;
 class EngineWord {
 	Word word;
 	int rank;
+	
+	/* TODO Encapsulate these. Have the methods a) set a property on the Word, so people using 
+	 * getWordAt(x,y) can SEE the Word's final outcome, and b) have them first LOOK for those 
+	 * properties, before calling the component, so people can just say 
+	 * Word.setProperty("size", 24).setProperty("angle", radians(20)), and it'll come out that way.
+	 * See setDesiredLocation(), below.
+	 * 
+	 * (At that point, might want to move more of this stuff back INTO Word. So they can even
+	 * iterate over their original Word[], and see interesting stuff.)
+	 */
 	float size;
 	float angle;
 	PFont font;
@@ -35,6 +45,7 @@ class EngineWord {
 
 	private PVector desiredLocation;
 	private PVector currentLocation;
+	private boolean wasPlaced = false;
 
 	EngineWord(Word word) {
 		this.word = word;
@@ -59,8 +70,7 @@ class EngineWord {
 	}
 
 	void setDesiredLocation(PVector loc) {
-		// TODO resolve. This is only there for PlottingWordNudger.
-		word.setProperty("_desiredLocation", loc);
+		word.setProperty("place", loc);
 
 		desiredLocation = new PVector(loc.x, loc.y);
 		currentLocation = new PVector(loc.x, loc.y);
@@ -76,9 +86,15 @@ class EngineWord {
 				currentLocation.x, currentLocation.y);
 		shape = transform.createTransformedShape(shape);
 		bbTree.setLocation(currentLocation);
+		wasPlaced = true;
+		word.setProperty("finalPlace", currentLocation);
 	}
 
 	PVector getCurrentLocation() {
 		return currentLocation.get();
+	}
+	
+	boolean wasPlaced() {
+		return this.wasPlaced;
 	}
 }
