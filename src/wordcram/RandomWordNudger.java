@@ -23,14 +23,26 @@ import processing.core.PVector;
 public class RandomWordNudger implements WordNudger {
 
 	private Random r = new Random();
+	private float stdDev;
 	
+	/**
+	 * Create a RandomWordNudger, where each attempt
+	 */
+	public RandomWordNudger() {
+		this(0.6f);
+	}
+
+	public RandomWordNudger(float stdDev) {
+		this.stdDev = stdDev;
+	}
+
 	@Override
 	public PVector nudgeFor(Word w, int attempt) {
 		return new PVector(next(attempt), next(attempt));
 	}
 	
 	private float next(int attempt) {
-		return (float)r.nextGaussian() * attempt * 0.075f;  // TODO make that a ctor parameter
+		return (float)r.nextGaussian() * attempt * stdDev;
 	}
 
 }
