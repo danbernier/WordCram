@@ -648,33 +648,4 @@ public class WordCram {
 		return getWordCramEngine().getWordAt(x, y);
 	}
 	*/
-	
-	
-	/* methods JUST for off-screen drawing. */
-	/* Replace these w/ a callback functor to drawNext()? */
-	
-	/**
-	 * This method, and {@link #currentWordIndex()}, are probably just a bad
-	 * idea waiting to be removed.  They're only here in case you want to display
-	 * info about how the WordCram is progressing.  I wouldn't count on them
-	 * being around for long -- if you really need them, please let me know.
-	 * 
-	 * @deprecated Will be removed in the 0.4 release, at the latest. 
-	 */
-	public Word currentWord() {
-		return getWordCramEngine().currentWord();
-	}
-	
-	/**
-	 * This method, and {@link #currentWord()}, are probably just a bad
-	 * idea waiting to be removed.  They're only here in case you want to display
-	 * info about how the WordCram is progressing.  I wouldn't count on them
-	 * being around for long -- if you really need them, please let me know.
-	 * 
-	 * @deprecated Will be removed in the 0.4 release, at the latest. 
-	 */
-	public int currentWordIndex() {
-		return getWordCramEngine().currentWordIndex();
-	}
-	/* END OF methods JUST for off-screen drawing. */
 }

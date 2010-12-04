@@ -7,6 +7,7 @@ Release notes for WordCram 0.4, date TBD:
 * Added printWhenSkippingWords() so you can see when WordCram
   either thinks a Word will be too small to see, or can't find a
   place for it.
+* Deleted currentWord() and currentWordIndex(), which were deprecated.
 
 
 Release notes for WordCram 0.3.1, 2010-11-10:

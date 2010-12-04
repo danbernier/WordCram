@@ -206,14 +206,4 @@ class WordCramEngine {
 		return null;
 	}
 	*/
-	
-
-	
-	
-	public Word currentWord() {
-		return hasMore() ? words[wordIndex].word : null;
-	}
-	public int currentWordIndex() {
-		return wordIndex;
-	}
 }
