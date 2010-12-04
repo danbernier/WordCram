@@ -38,7 +38,4 @@ public class Fonters {
 			}
 		};
 	}
-
-    // TODO add an overload that takes a String[] of font names?  How would you
-    // indicate size?  Oh, wait, that's the sizer, duh.
 }
