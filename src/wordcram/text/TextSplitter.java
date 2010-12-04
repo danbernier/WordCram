@@ -17,7 +17,17 @@ package wordcram.text;
  */
 
 import wordcram.Word;
+import wordcram.WordCounter; // TODO delete this class, and make WordCounter package-local.
+import wordcram.WordScanner; // TODO delete this class, and make WordScanner package-local.
 
+/**
+ * <h1>TextSplitter is deprecated.</h1>
+ * <p>
+ * It'll be removed in WordCram 0.5, if not sooner.
+ * <p>
+ * Use {@link TextFile} or {@link Text} instead. 
+ */
+@Deprecated
 public class TextSplitter {
 
 	private String stopWordsString;

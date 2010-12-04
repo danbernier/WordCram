@@ -1,4 +1,4 @@
-package wordcram.text;
+package wordcram;
 
 /*
  Copyright 2010 Daniel Bernier
@@ -16,7 +16,7 @@ package wordcram.text;
  limitations under the License.
  */
 
-//TODO if we move all .text.* classes into WordCram, we can make this pkg-local...
+//TODO make this pkg-local, once TextSplitter is deleted.
 public class WordScanner {
 
 	public String[] scanIntoWords(String text) {

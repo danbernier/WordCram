@@ -20,7 +20,6 @@ import java.util.*;
 
 import processing.core.*;
 import wordcram.*;
-import wordcram.text.*;
 
 public class Main extends PApplet {
 	
@@ -61,7 +60,7 @@ public class Main extends PApplet {
 		background(30);
 
 		wordcram = new WordCram(this)
-					.fromTextFile(textFilePath())					
+					.fromTextFile(textFilePath())
 					//.upperCase()
 					//.excludeNumbers()
 					.withFonts(randomFont())
@@ -147,11 +146,6 @@ public class Main extends PApplet {
 		if (keyCode == ' ') {
 			saveFrame("wordcram-##.png");
 		}
-	}
-	
-	private Word[] loadWords() {
-		String[] text = loadStrings(textFilePath());
-		return new TextSplitter().split(text);
 	}
 	
 	private String textFilePath() {

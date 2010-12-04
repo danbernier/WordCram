@@ -1,4 +1,4 @@
-package wordcram.text;
+package wordcram;
 
 /*
  Copyright 2010 Daniel Bernier
@@ -20,7 +20,7 @@ import java.util.*;
 
 import wordcram.Word;
 
-// TODO if we move all .text.* classes into WordCram, we can make this pkg-local...
+//TODO make this pkg-local, once TextSplitter is deleted.
 public class WordCounter {
 
 	private Set<String> stopWords;

@@ -18,8 +18,7 @@ limitations under the License.
 
 import org.jsoup.Jsoup;
 
-// TODO make this class non-public, once HtmlPage and HtmlFile are in place
-public class Html2Text {
+class Html2Text {
 	public String text(String html) {
 		return Jsoup.parse(html).text();
 	}
