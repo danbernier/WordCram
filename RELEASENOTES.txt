@@ -4,6 +4,7 @@ Release notes for WordCram 0.4, date TBD:
   setProperty(String name, Object value).  These will probably be
   used only when you're using a custom WordPlacer, WordColorer, etc.
   The firstnamesUsingWordProperties example sketch shows how it works.
+* Added getWordAt(x,y).
 * Added printWhenSkippingWords() so you can see when WordCram
   either thinks a Word will be too small to see, or can't find a
   place for it.
