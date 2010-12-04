@@ -1,4 +1,23 @@
-Release notes for WordCram 0.3:
+Release notes for WordCram 0.4, date TBD:
+
+* Word now has methods getProperty(String name) and 
+  setProperty(String name, Object value).  These will probably be
+  used only when you're using a custom WordPlacer, WordColorer, etc.
+  The firstnamesUsingWordProperties example sketch shows how it works.
+* Added printWhenSkippingWords() so you can see when WordCram
+  either thinks a Word will be too small to see, or can't find a
+  place for it.
+
+
+Release notes for WordCram 0.3.1, 2010-11-10:
+
+* Bug fix: in 0.3, the WordCram library folder under Processing was 
+  renamed from wordcram to WordCram, but the .jar was still 
+  wordcram.jar, so Processing didn't load it.  Renamed it to 
+  WordCram.jar.
+
+
+Release notes for WordCram 0.3, 2010-11-07:
 
 * Added TextSource, so WordCram can count words from different kinds
   of source, including web pages and text files.
