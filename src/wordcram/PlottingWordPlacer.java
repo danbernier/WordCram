@@ -1,7 +1,5 @@
 package wordcram;
 
-import processing.core.*;
-
 /*
  Copyright 2010 Daniel Bernier
 
@@ -17,6 +15,8 @@ import processing.core.*;
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+
+import processing.core.*;
 
 public class PlottingWordPlacer implements WordPlacer {
 	
