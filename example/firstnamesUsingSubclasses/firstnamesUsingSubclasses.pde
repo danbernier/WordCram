@@ -59,7 +59,7 @@ void setup() {
 }
 
 void loadNames() { 
-  String[] nameData = loadStrings("names.txt");
+  String[] nameData = loadStrings("../names.txt");
   names = new Name[nameData.length];
   for (int i = 0; i < names.length; i++) {
     names[i] = parseName(nameData[i]);
@@ -69,7 +69,7 @@ void loadNames() {
 void makeWordCram() {
   wc = new WordCram(this)
     .fromWords(names)
-    .withFont(createFont("MINYN___.TTF", 1))
+    .withFont(createFont("../MINYN___.TTF", 1))
     .sizedByWeight(12, 60)
     .withColorer(colorer())
     .withAngler(Anglers.mostlyHoriz())
