@@ -89,6 +89,8 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 	</target>
 
 	<target name="publish.local" depends="bundleForProcessing">
+		<delete dir="${processing.sketchFolder}/libraries/WordCram" />
+		<mkdir dir="${processing.sketchFolder}/libraries/WordCram" />
 		<copy todir="${processing.sketchFolder}/libraries/WordCram">
 			<fileset dir="build/p5lib/WordCram" />
 		</copy>
