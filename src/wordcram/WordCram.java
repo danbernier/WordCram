@@ -657,12 +657,4 @@ public class WordCram {
 	public Word getWordAt(float x, float y) {
 		return getWordCramEngine().getWordAt(x, y);
 	}
-	
-	public String getStats() {
-		return getRuntimeStats();
-	}
-
-	public String getRuntimeStats() {
-		return getWordCramEngine().getRuntimeStats();
-	}
-}
+} 
