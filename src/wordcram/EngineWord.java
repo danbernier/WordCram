@@ -35,10 +35,10 @@ class EngineWord {
 	 * (At that point, might want to move more of this stuff back INTO Word. So they can even
 	 * iterate over their original Word[], and see interesting stuff.)
 	 */
-	float size;
-	float angle;
-	PFont font;
-	int color;
+	private float size;
+	private float angle;
+	private PFont font;
+	private int color;
 
 	private Shape shape;
 	private BBTree bbTree;
@@ -47,8 +47,21 @@ class EngineWord {
 	private PVector currentLocation;
 	private boolean wasPlaced = false;
 
-	EngineWord(Word word) {
+	EngineWord(Word word, int rank, int wordCount, WordSizer sizer, WordAngler angler, WordFonter fonter, WordColorer colorer) {
 		this.word = word;
+		this.rank = rank;
+		
+		Object size = word.getProperty("size");
+		this.size = size != null ? Float.valueOf(size.toString()) : sizer.sizeFor(word, rank, wordCount);
+		
+		Object angle = this.word.getProperty("angle");
+		this.angle = angle != null ? Float.valueOf(angle.toString()) : angler.angleFor(this.word);
+		
+		Object font = this.word.getProperty("font");
+		this.font = font != null ? (PFont)font : fonter.fontFor(this.word);
+		
+		Object color = this.word.getProperty("color");
+		this.color = color != null ? (Integer)color : colorer.colorFor(this.word);
 	}
 
 	void setShape(Shape shape) {
@@ -96,5 +109,22 @@ class EngineWord {
 	
 	boolean wasPlaced() {
 		return this.wasPlaced;
+	}
+
+	
+	float getSize() {
+		return size;
+	}
+
+	float getAngle() {
+		return angle;
+	}
+
+	PFont getFont() {
+		return font;
+	}
+
+	int getColor() {
+		return color;
 	}
 }

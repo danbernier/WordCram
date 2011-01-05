@@ -68,17 +68,13 @@ class WordCramEngine {
 		ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
 		
 		for (int i = 0; i < words.length; i++) {
-			timer.start("making a shape");
+			
 			Word word = words[i];
-			EngineWord eWord = new EngineWord(word);
-			
-			eWord.rank = i;
-			eWord.size = sizer.sizeFor(word, i, words.length);
-			eWord.angle = angler.angleFor(word);
-			eWord.font = fonter.fontFor(word);
-			eWord.color = colorer.colorFor(word);
-			
+			EngineWord eWord = new EngineWord(word, i, words.length, sizer, angler, fonter, colorer);
+						
+			timer.start("making a shape");
 			Shape shape = wordShaper.getShapeFor(eWord);
+			timer.end("making a shape");
 			
 			if (shape == null) {
 				if (printWhenSkippingWords) {
@@ -89,8 +85,6 @@ class WordCramEngine {
 				eWord.setShape(shape);
 				engineWords.add(eWord);  // DON'T add eWords with no shape.
 			}
-			
-			timer.end("making a shape");
 		}
 		
 		return engineWords.toArray(new EngineWord[0]);
@@ -183,7 +177,7 @@ class WordCramEngine {
 		Graphics2D g2 = (Graphics2D)(drawToParent ? parent.getGraphics() : destination.image.getGraphics());
 			
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setPaint(new Color(word.color, true));
+		g2.setPaint(new Color(word.getColor(), true));
 		g2.fill(path2d);
 		
 //		destination.pushStyle();

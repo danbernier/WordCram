@@ -30,14 +30,14 @@ class WordShaper {
 	
 	Shape getShapeFor(EngineWord eWord) {
 
-		Shape shape = makeShape(eWord.word.word, eWord.font, eWord.size);
+		Shape shape = makeShape(eWord.word.word, eWord.getFont(), eWord.getSize());
 		
 		if (isTooSmall(shape)) {
 			return null;		
 		}
 		
 		return moveToOrigin(
-				rotate(shape, eWord.angle));
+				rotate(shape, eWord.getAngle()));
 	}
 
 	private Shape makeShape(String word, PFont pFont, float fontSize) {
