@@ -45,7 +45,6 @@ class EngineWord {
 
 	private PVector desiredLocation;
 	private PVector currentLocation;
-	private boolean wasPlaced = false;
 
 	EngineWord(Word word, int rank, int wordCount, WordSizer sizer, WordAngler angler, WordFonter fonter, WordColorer colorer) {
 		this.word = word;
@@ -107,7 +106,6 @@ class EngineWord {
 				currentLocation.x, currentLocation.y);
 		shape = transform.createTransformedShape(shape);
 		bbTree.setLocation(currentLocation);
-		wasPlaced = true;
 		word.setProperty("finalPlace", currentLocation);
 	}
 
@@ -116,7 +114,7 @@ class EngineWord {
 	}
 	
 	boolean wasPlaced() {
-		return this.wasPlaced;
+		return word.getProperty("finalPlace") != null;
 	}
 
 	
