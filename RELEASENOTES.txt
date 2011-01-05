@@ -1,13 +1,19 @@
 Release notes for WordCram 0.4, date TBD:
 
-* Word now has methods getProperty(String name) and 
-  setProperty(String name, Object value).  These will probably be
-  used only when you're using a custom WordPlacer, WordColorer, etc.
-  The firstnamesUsingWordProperties example sketch shows how it works.
+* Word now has methods getProperty(String name) and setProperty(String
+  name, Object value).  The firstnamesUsingWordProperties example
+  sketch shows how it works. If a Word has properties named "size",
+  "angle", "color", "font", or "place", the WordCram will use those
+  values rather than the values from the WordSizer, WordAngler, etc.
+  Properties can also be useful with a custom WordPlacer, WordColorer,
+  etc.
+
 * Added getWordAt(x,y).
-* Added printWhenSkippingWords() so you can see when WordCram
-  either thinks a Word will be too small to see, or can't find a
-  place for it.
+
+* Added printWhenSkippingWords() so you can see when WordCram either
+  thinks a Word will be too small to see, or can't find a place for
+  it.
+
 * Deleted currentWord() and currentWordIndex(), which were deprecated.
 
 
