@@ -116,6 +116,7 @@ public class Main extends PApplet {
 			println("Done");
 			save("wordcram.png");
 			noLoop();
+			System.out.println(wordcram.getRuntimeStats());
 		}
 		else {
 			int wordsPerFrame = 1;

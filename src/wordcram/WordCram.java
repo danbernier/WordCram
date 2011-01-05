@@ -597,7 +597,7 @@ public class WordCram {
 				
 				String[] wordStrings = new WordScanner().scanIntoWords(text);
 				words = new WordCounter(stopWords).shouldExcludeNumbers(excludeNumbers).count(wordStrings);
-			}			
+			}
 			words = new WordSorterAndScaler().sortAndScale(words);
 			
 
@@ -656,5 +656,13 @@ public class WordCram {
 	 */
 	public Word getWordAt(float x, float y) {
 		return getWordCramEngine().getWordAt(x, y);
+	}
+	
+	public String getStats() {
+		return getRuntimeStats();
+	}
+
+	public String getRuntimeStats() {
+		return getWordCramEngine().getRuntimeStats();
 	}
 }
