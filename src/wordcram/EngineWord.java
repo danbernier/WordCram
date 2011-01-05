@@ -53,15 +53,19 @@ class EngineWord {
 		
 		Object size = word.getProperty("size");
 		this.size = size != null ? Float.valueOf(size.toString()) : sizer.sizeFor(word, rank, wordCount);
+		word.setProperty("size", this.size);
 		
 		Object angle = this.word.getProperty("angle");
 		this.angle = angle != null ? Float.valueOf(angle.toString()) : angler.angleFor(this.word);
+		word.setProperty("angle", this.angle);
 		
 		Object font = this.word.getProperty("font");
 		this.font = font != null ? (PFont)font : fonter.fontFor(this.word);
+		word.setProperty("font", this.font);
 		
 		Object color = this.word.getProperty("color");
 		this.color = color != null ? (Integer)color : colorer.colorFor(this.word);
+		word.setProperty("color", this.color);
 	}
 
 	void setShape(Shape shape) {
@@ -83,10 +87,14 @@ class EngineWord {
 	}
 
 	void setDesiredLocation(PVector loc) {
-		word.setProperty("place", loc);
-
-		desiredLocation = new PVector(loc.x, loc.y);
-		currentLocation = new PVector(loc.x, loc.y);
+		Object placeProperty = word.getProperty("place");
+		if (placeProperty != null) {
+			loc = (PVector)placeProperty;
+		}
+		word.setProperty("place", loc.get());
+		
+		desiredLocation = loc.get();
+		currentLocation = loc.get();
 	}
 
 	void nudge(PVector nudge) {
