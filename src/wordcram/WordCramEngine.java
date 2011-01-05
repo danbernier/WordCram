@@ -78,7 +78,7 @@ class WordCramEngine {
 			
 			if (shape == null) {
 				if (printWhenSkippingWords) {
-					System.out.println(("Too small: " + word));	
+					System.out.println("Too small: " + word);	
 				}
 			}
 			else {
@@ -132,7 +132,7 @@ class WordCramEngine {
 		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
 		EngineWord lastCollidedWith = null;
 		for (int attempt = 0; attempt < maxAttempts; attempt++) {
-
+			
 			eWord.nudge(nudger.nudgeFor(word, attempt));
 			
 			PVector loc = eWord.getCurrentLocation();
