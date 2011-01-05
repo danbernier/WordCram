@@ -45,7 +45,6 @@ class WordCramEngine {
 	private boolean printWhenSkippingWords = false;
 	
 	private Timer timer = Timer.getInstance();
-	private RuntimeStats stats = new RuntimeStats();
 
 	public WordCramEngine(PApplet parent, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
 		this.parent = parent;
@@ -66,7 +65,6 @@ class WordCramEngine {
 	}
 	
 	private EngineWord[] wordsIntoEngineWords(Word[] words) {
-		stats.numWords = words.length;
 		ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
 		
 		for (int i = 0; i < words.length; i++) {
@@ -83,7 +81,6 @@ class WordCramEngine {
 			Shape shape = wordShaper.getShapeFor(eWord);
 			
 			if (shape == null) {
-				stats.numTooSmall++;
 				if (printWhenSkippingWords) {
 					System.out.println(("Too small: " + word));	
 				}
@@ -105,11 +102,9 @@ class WordCramEngine {
 	
 	public void drawAll() {
 		timer.start("drawAll");
-		stats.start();
 		while(hasMore()) {
 			drawNext();
 		}
-		stats.end();
 		timer.end("drawAll");
 		//System.out.println(timer.report());
 	}
@@ -169,9 +164,6 @@ class WordCramEngine {
 			if (!foundOverlap) {
 				timer.count("placed a word");
 				eWord.finalizeLocation();
-				stats.numPlaced++;
-				stats.totalAttempts += (attempt+1);
-				stats.totalPlaceDist += PVector.dist((PVector)eWord.word.getProperty("place"), (PVector)eWord.word.getProperty("finalPlace"));
 				return true;
 			}
 		}
@@ -180,8 +172,6 @@ class WordCramEngine {
 			System.out.println("Couldn't fit: " + word);
 		}
 		timer.count("couldn't place a word");
-		stats.numNotPlaced++;
-		stats.totalAttempts += maxAttempts;
 		return false;
 	}
 	
@@ -216,60 +206,5 @@ class WordCramEngine {
 		}
 		return null;
 	}
-	
-	
-	public String getRuntimeStats() {
-		return stats.toString();
-	}
-	
-	private class RuntimeStats {
-		int numWords;
-		int numTooSmall;
-		int numNotPlaced;
-		int numPlaced;
-		int totalAttempts;
-		double totalPlaceDist;
-		long startTime;
-		long duration;
-		
-		void start() {
-			startTime = System.currentTimeMillis();
-		}
-		void end() {
-			duration = System.currentTimeMillis() - startTime;
-		}
-		
-		public String toTabDelimString() {
-			StringBuilder sb = new StringBuilder();
-						
-			sb.append(numWords + "\t");
-			sb.append(numTooSmall + "\t");
-			sb.append(numNotPlaced + "\t");
-			sb.append(numPlaced + "\t");
-			
-			sb.append(totalAttempts + "\t");
-			sb.append(totalPlaceDist + "\t");
-			
-			sb.append(duration);
-			
-			return sb.toString();
-		}
-		
-		public String toString() {
-			StringBuilder sb = new StringBuilder();
-			
-			int numShaped = numWords - numTooSmall;
-			
-			sb.append("total words : " + numWords + "\n");
-			sb.append("- too small : " + numTooSmall + "\n");
-			sb.append("- not placed: " + numNotPlaced + " (" + Math.round(numNotPlaced * 100f / numShaped) + " %)\n");
-			sb.append("- placed    : " + numPlaced + " (" + Math.round(numPlaced * 100f / numShaped) + " %)\n");
-			sb.append("average number of attempts: " + Math.round((float)totalAttempts / numShaped) + " times\n");
-			sb.append("average distance from orig. place: " + Math.round((float)totalPlaceDist / numPlaced) + " pixels\n");
-			
-			sb.append("total runtime: " + duration + " ms");
-			
-			return sb.toString();
-		}
-	}
 }
+ 
