@@ -19,7 +19,9 @@ Release notes for WordCram 0.4, date TBD:
   of them after the sketch has run.
 
 * Added withCustomCanvas(PGraphics), so a WordCram can be drawn to a
-  PGraphics besides the sketch it's running in.
+  PGraphics besides the sketch it's running in. Also added
+  getProgress(), which can help provide feedback on long-running
+  WordCrams to a custom canvas.
 
 * Added withMaxAttemptsForPlacement(int), which tells WordCram to only
   try so many times to place a word.

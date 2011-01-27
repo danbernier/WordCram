@@ -46,7 +46,6 @@ class WordCramEngine {
 	
 	private boolean printWhenSkippingWords = false;
 	private boolean registerSkippedWords = false;
-	private boolean usesCustomDestination = false;
 	
 	private Timer timer = Timer.getInstance();
 
@@ -184,8 +183,6 @@ class WordCramEngine {
 	}
 	
 	private void drawWordImage(EngineWord word) {
-		if(this.usesCustomDestination) destination.beginDraw();
-		
 		Path2D.Float path2d = new Path2D.Float(word.getShape());
 		
 		boolean drawToParent = false;
@@ -201,8 +198,6 @@ class WordCramEngine {
 //		word.getBBTree().draw(destination);
 //		destination.rect(location.x, location.y, wordImage.width, wordImage.height);
 //		destination.popStyle();
-		
-		if(this.usesCustomDestination) destination.endDraw();
 	}
 	
 	
@@ -235,7 +230,7 @@ class WordCramEngine {
 	 * @author FEZ (Felix Kratzer)
 	 * @param doRegister
 	 */
-	protected void registerSkippedWords(boolean doRegister){
+	protected void registerSkippedWords(boolean doRegister) {
 		this.registerSkippedWords = doRegister;
 	}
 	
@@ -247,6 +242,13 @@ class WordCramEngine {
 	 */
 	protected void setMaxAttemptsForPlacement(int maxAttempts) {
 		this.maxAttemptsForPlacement = maxAttempts;
+	}
+	
+	/**
+	 * How far through the words are we? Useful for when drawing to a custom PGraphics.
+	 */
+	public float getProgress() {
+		return (float)this.wordIndex / this.words.length;
 	}
 }
  

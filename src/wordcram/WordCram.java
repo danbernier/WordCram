@@ -719,7 +719,11 @@ public class WordCram {
 		return this;
 	}
 	
-	public int getWordCount() {
-		return this.words.length;
+	/**
+	 * How far through the words are we? Useful for when drawing to a custom PGraphics.
+	 * @return The current point of progress through the list, as a float between 0 and 1. 
+	 */
+	public float getProgress() {
+		return getWordCramEngine().getProgress();
 	}
 }
