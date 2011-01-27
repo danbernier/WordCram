@@ -42,10 +42,19 @@ class WordCramEngine {
 	private EngineWord[] words;
 	private int wordIndex = -1;
 	
+	private int maxAttemptsForPlacement = -1;
+	
 	private boolean printWhenSkippingWords = false;
+	private boolean registerSkippedWords = false;
+	private boolean usesCustomDestination = false;
 	
 	private Timer timer = Timer.getInstance();
 
+	/**
+	 * Contains all words that could not be placed
+	 */
+	private ArrayList<Word> unplacedWords = null;
+	
 	public WordCramEngine(PApplet parent, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
 		this.parent = parent;
 		this.destination = parent.g;
@@ -58,6 +67,8 @@ class WordCramEngine {
 		this.nudger = nudger;
 		
 		this.printWhenSkippingWords = printWhenSkippingWords;
+		
+		this.unplacedWords = new ArrayList<Word>();
 		
 		timer.start("making shapes");
 		this.words = wordsIntoEngineWords(words);
@@ -80,6 +91,7 @@ class WordCramEngine {
 				if (printWhenSkippingWords) {
 					System.out.println("Too small: " + word);	
 				}
+				if(this.registerSkippedWords) this.unplacedWords.add(eWord.word);
 			}
 			else {
 				eWord.setShape(shape);
@@ -127,11 +139,12 @@ class WordCramEngine {
 		
 		eWord.setDesiredLocation(placer.place(word, eWord.rank, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height));
 		
-		// TODO just make this 10000
-		// TODO make this a config!!!  that'll help people write their own nudgers, if they know how many times it'll try -- also, it'll help tweak performance
-		int maxAttempts = (int)((1.0-word.weight) * 600) + 100;
+		// Set maximum number of placement trials
+		int max = (int)((1.0-word.weight) * 600) + 100;
+		if(this.maxAttemptsForPlacement > -1) max = this.maxAttemptsForPlacement;
+		
 		EngineWord lastCollidedWith = null;
-		for (int attempt = 0; attempt < maxAttempts; attempt++) {
+		for (int attempt = 0; attempt < max; attempt++) {
 			
 			eWord.nudge(nudger.nudgeFor(word, attempt));
 			
@@ -165,14 +178,16 @@ class WordCramEngine {
 		if (printWhenSkippingWords) {
 			System.out.println("Couldn't fit: " + word);
 		}
+		if(this.registerSkippedWords) this.unplacedWords.add(eWord.word);
 		timer.count("couldn't place a word");
 		return false;
 	}
 	
 	private void drawWordImage(EngineWord word) {
+		if(this.usesCustomDestination) destination.beginDraw();
 		
 		Path2D.Float path2d = new Path2D.Float(word.getShape());
-			
+		
 		boolean drawToParent = false;
 		Graphics2D g2 = (Graphics2D)(drawToParent ? parent.getGraphics() : destination.image.getGraphics());
 			
@@ -186,6 +201,8 @@ class WordCramEngine {
 //		word.getBBTree().draw(destination);
 //		destination.rect(location.x, location.y, wordImage.width, wordImage.height);
 //		destination.popStyle();
+		
+		if(this.usesCustomDestination) destination.endDraw();
 	}
 	
 	
@@ -199,6 +216,47 @@ class WordCramEngine {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Gets a list of all words that were not placed on the canvas.
+	 * This requires that {@link registerSkippedWords(boolean)} has been set.
+	 * @author FEZ (Felix Kratzer)
+	 * @return
+	 */
+	protected ArrayList<Word> getSkippedWords() {
+		if(this.registerSkippedWords) return unplacedWords;
+		else return null;
+	}
+
+	/**
+	 * Should skipped words be registered in a certain place so they can be 
+	 * used after drawing?
+	 * @author FEZ (Felix Kratzer)
+	 * @param doRegister
+	 */
+	protected void registerSkippedWords(boolean doRegister){
+		this.registerSkippedWords = doRegister;
+	}
+	
+	/**
+	 * Sets the maximum number of attempts that are used for placing a word.
+	 * If nothing is set, a default value is calculated in {@link #placeWord(EngineWord)}
+	 * @author FEZ (Felix Kratzer)
+	 * @param maxAttempts
+	 */
+	protected void setMaxAttemptsForPlacement(int maxAttempts) {
+		this.maxAttemptsForPlacement = maxAttempts;
+	}
+	
+	/**
+	 * Sets the destionation to a custom PGraphics object.
+	 * @author FEZ (Felix Kratzer)
+	 * @param canvas
+	 */
+	protected void setCanvas(PGraphics canvas){
+		this.usesCustomDestination = true;
+		this.destination = canvas;
 	}
 }
  
