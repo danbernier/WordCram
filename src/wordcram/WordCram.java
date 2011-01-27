@@ -614,11 +614,11 @@ public class WordCram {
 			if (angler == null) angler = Anglers.mostlyHoriz();
 			if (placer == null) placer = Placers.horizLine();
 			if (nudger == null) nudger = new SpiralWordNudger();
-						
-			wordCramEngine = new WordCramEngine(parent, words, fonter, sizer, colorer, angler, placer, nudger, printWhenSkippingWords);
+			
+			PGraphics canvas = useCustomCanvas ? this.destination : parent.g; 
+			wordCramEngine = new WordCramEngine(parent, canvas, words, fonter, sizer, colorer, angler, placer, nudger, printWhenSkippingWords);
 			wordCramEngine.setMaxAttemptsForPlacement(this.maxAttemptsForPlacement);
 			wordCramEngine.registerSkippedWords(this.registerSkippedWords);
-			if(this.useCustomCanvas) wordCramEngine.setCanvas(this.destination);
 		}
 		
 		return wordCramEngine;
@@ -717,5 +717,9 @@ public class WordCram {
 		this.useCustomCanvas = true;
 		this.destination = canvas;
 		return this;
+	}
+	
+	public int getWordCount() {
+		return this.words.length;
 	}
 }

@@ -14,6 +14,16 @@ Release notes for WordCram 0.4, date TBD:
   thinks a Word will be too small to see, or can't find a place for
   it.
 
+* Added registerSkippedWords() and getSkippedWords(), which make
+  WordCram remember each skipped word, so it can provide an ArrayList
+  of them after the sketch has run.
+
+* Added withCustomCanvas(PGraphics), so a WordCram can be drawn to a
+  PGraphics besides the sketch it's running in.
+
+* Added withMaxAttemptsForPlacement(int), which tells WordCram to only
+  try so many times to place a word.
+
 * Deleted currentWord() and currentWordIndex(), which were deprecated.
 
 

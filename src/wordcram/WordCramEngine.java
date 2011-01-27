@@ -55,9 +55,9 @@ class WordCramEngine {
 	 */
 	private ArrayList<Word> unplacedWords = null;
 	
-	public WordCramEngine(PApplet parent, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
+	public WordCramEngine(PApplet parent, PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
 		this.parent = parent;
-		this.destination = parent.g;
+		this.destination = destination;
 		
 		this.fonter = fonter;
 		this.sizer = sizer;
@@ -247,16 +247,6 @@ class WordCramEngine {
 	 */
 	protected void setMaxAttemptsForPlacement(int maxAttempts) {
 		this.maxAttemptsForPlacement = maxAttempts;
-	}
-	
-	/**
-	 * Sets the destionation to a custom PGraphics object.
-	 * @author FEZ (Felix Kratzer)
-	 * @param canvas
-	 */
-	protected void setCanvas(PGraphics canvas){
-		this.usesCustomDestination = true;
-		this.destination = canvas;
 	}
 }
  
