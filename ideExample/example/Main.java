@@ -109,11 +109,15 @@ public class Main extends PApplet {
 					;
 		
 		//wordcram.printWhenSkippingWords();
+		//wordcram.registerSkippedWords();
 	}
 	
 	private void finishUp() {
 		//pg.endDraw();
 		//image(pg, 0, 0);
+		
+		//println(wordcram.getSkippedWords());
+		
 		println("Done");
 		save("wordcram.png");
 		noLoop();

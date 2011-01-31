@@ -214,8 +214,8 @@ class WordCramEngine {
 	 * @author FEZ (Felix Kratzer)
 	 * @return
 	 */
-	ArrayList<Word> getSkippedWords() {
-		return registerSkippedWords ? skippedWords : null;
+	Word[] getSkippedWords() {
+		return registerSkippedWords ? skippedWords.toArray(new Word[0]) : null;
 	}
 
 	/**

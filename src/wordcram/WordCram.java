@@ -674,12 +674,7 @@ public class WordCram {
 	 * @return An array of words
 	 */
 	public Word[] getSkippedWords() {
-		if (this.registerSkippedWords) {
-			return getWordCramEngine().getSkippedWords().toArray(new Word[0]);
-		}
-		else {
-			return null;
-		}
+		return getWordCramEngine().getSkippedWords();
 	}
 	
 	/**
