@@ -586,6 +586,42 @@ public class WordCram {
 		return this;
 	}
 	
+	/**
+	 * Tells WordCram to register all words that were not placed on the canvas.
+	 * Use {@link getSkippedWords()} to access those words.
+	 * @author FEZ (Felix Kratzer)
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram registerSkippedWords() {
+		renderOptions.registerSkippedWords = true;
+		return this;
+	}
+	
+	/**
+	 * How many attempts should be used to place a word.
+	 * Higher values ensure that more words get placed, but will make algorithm slower.
+	 * @author FEZ (Felix Kratzer)
+	 * @param maxAttempts
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram withMaxAttemptsForPlacement(int maxAttempts) {
+		renderOptions.maxAttemptsForPlacement = maxAttempts;
+		return this;
+	}
+	
+	/**
+	 * Use a custom canvas instead of the applet's default one.
+	 * This may be needed if rendering in background or in other dimensions than the
+	 * applet size is needed.
+	 * @author FEZ (Felix Kratzer)
+	 * @param canvas
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram withCustomCanvas(PGraphics canvas) {
+		this.destination = canvas;
+		return this;
+	}
+	
 	
 	private WordCramEngine getWordCramEngine() {
 		if (wordCramEngine == null) {
@@ -668,42 +704,6 @@ public class WordCram {
 	 */
 	public Word[] getSkippedWords() {
 		return getWordCramEngine().getSkippedWords();
-	}
-	
-	/**
-	 * Tells WordCram to register all words that were not placed on the canvas.
-	 * Use {@link getSkippedWords()} to access those words.
-	 * @author FEZ (Felix Kratzer)
-	 * @return The WordCram, for further setup or drawing.
-	 */
-	public WordCram registerSkippedWords() {
-		renderOptions.registerSkippedWords = true;
-		return this;
-	}
-	
-	/**
-	 * How many attempts should be used to place a word.
-	 * Higher values ensure that more words get placed, but will make algorithm slower.
-	 * @author FEZ (Felix Kratzer)
-	 * @param maxAttempts
-	 * @return The WordCram, for further setup or drawing.
-	 */
-	public WordCram withMaxAttemptsForPlacement(int maxAttempts) {
-		renderOptions.maxAttemptsForPlacement = maxAttempts;
-		return this;
-	}
-	
-	/**
-	 * Use a custom canvas instead of the applet's default one.
-	 * This may be needed if rendering in background or in other dimensions than the
-	 * applet size is needed.
-	 * @author FEZ (Felix Kratzer)
-	 * @param canvas
-	 * @return The WordCram, for further setup or drawing.
-	 */
-	public WordCram withCustomCanvas(PGraphics canvas) {
-		this.destination = canvas;
-		return this;
 	}
 	
 	/**
