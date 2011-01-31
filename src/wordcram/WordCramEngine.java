@@ -143,6 +143,7 @@ class WordCramEngine {
 		int max = (int)((1.0-word.weight) * 600) + 100;
 		if(this.maxAttemptsForPlacement > -1) max = this.maxAttemptsForPlacement;
 		
+		
 		EngineWord lastCollidedWith = null;
 		for (int attempt = 0; attempt < max; attempt++) {
 			
@@ -193,15 +194,7 @@ class WordCramEngine {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setPaint(new Color(word.getColor(), true));
 		g2.fill(path2d);
-		
-//		destination.pushStyle();
-//		destination.stroke(30, 255, 255, 50);
-//		destination.noFill();
-//		word.getBBTree().draw(destination);
-//		destination.rect(location.x, location.y, wordImage.width, wordImage.height);
-//		destination.popStyle();
 	}
-	
 	
 	public Word getWordAt(float x, float y) {
 		for (int i = 0; i < words.length; i++) {
