@@ -213,11 +213,10 @@ class WordCramEngine {
 	 * Gets a list of all words that were not placed on the canvas.
 	 * This requires that {@link registerSkippedWords(boolean)} has been set.
 	 * @author FEZ (Felix Kratzer)
-	 * @return
+	 * @return the array of Words that were skipped, or an empty array if registerSkippedWords() is set to false.
 	 */
 	Word[] getSkippedWords() {
-		// TODO skip returning null -- if we don't register skipped words, skippedWords will be empty, which is a nice thing to return.
-		return renderOptions.registerSkippedWords ? skippedWords.toArray(new Word[0]) : null;
+		return skippedWords.toArray(new Word[0]);
 	}
 	
 	float getProgress() {
