@@ -55,7 +55,12 @@ class WordShaper {
 	private boolean isTooSmall(Shape shape) {
 		Rectangle2D r = shape.getBounds2D();
 		
-		// TODO extract config setting for minWordRenderedSize, and take height into account -- not just width
+		// TODO extract config setting for minWordRenderedSize, and take height into account -- not just width.
+		// Note, however, that this is called BEFORE rotate(), so the only words like "I" run the risk of 
+		// being unfairly rejected if we don't consider height.
+		// Though, since we say "too narrow OR too short", rather than "...AND...", words like "I"
+		// would be unfairly rejected anyway.
+		
 		int minSize = 7;
 		
 		return r.getWidth() < minSize || r.getHeight() < minSize;
