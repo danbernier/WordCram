@@ -34,6 +34,9 @@ class EngineWord {
 	 * 
 	 * (At that point, might want to move more of this stuff back INTO Word. So they can even
 	 * iterate over their original Word[], and see interesting stuff.)
+	 * 
+	 * TODO that above "to-do" is actually done, but you should doc it up, so people have a prayer
+	 * of finding it. Make some examples or something. Blog about it.
 	 */
 	private float size;
 	private float angle;
