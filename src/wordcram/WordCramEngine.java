@@ -52,7 +52,7 @@ class WordCramEngine {
 	/**
 	 * Contains all words that could not be placed
 	 */
-	private ArrayList<Word> unplacedWords = null;
+	private ArrayList<Word> skippedWords = new ArrayList<Word>();
 	
 	public WordCramEngine(PApplet parent, PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
 		
@@ -71,8 +71,6 @@ class WordCramEngine {
 		this.nudger = nudger;
 		
 		this.printWhenSkippingWords = printWhenSkippingWords;
-		
-		this.unplacedWords = new ArrayList<Word>();
 		
 		timer.start("making shapes");
 		this.words = wordsIntoEngineWords(words);
@@ -95,7 +93,9 @@ class WordCramEngine {
 				if (printWhenSkippingWords) {
 					System.out.println("Too small: " + word);	
 				}
-				if(this.registerSkippedWords) this.unplacedWords.add(eWord.word);
+				if(this.registerSkippedWords) {
+					this.skippedWords.add(eWord.word);
+				}
 			}
 			else {
 				eWord.setShape(shape);
@@ -182,7 +182,9 @@ class WordCramEngine {
 		if (printWhenSkippingWords) {
 			System.out.println("Couldn't fit: " + word);
 		}
-		if(this.registerSkippedWords) this.unplacedWords.add(eWord.word);
+		if (registerSkippedWords) {
+			skippedWords.add(eWord.word);
+		}
 		timer.count("couldn't place a word");
 		return false;
 	}
@@ -190,8 +192,7 @@ class WordCramEngine {
 	private void drawWordImage(EngineWord word) {
 		Path2D.Float path2d = new Path2D.Float(word.getShape());
 		
-		boolean drawToParent = false;
-		Graphics2D g2 = (Graphics2D)(drawToParent ? parent.getGraphics() : destination.image.getGraphics());
+		Graphics2D g2 = (Graphics2D)destination.image.getGraphics();
 			
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setPaint(new Color(word.getColor(), true));
@@ -225,18 +226,17 @@ class WordCramEngine {
 	 * @return
 	 */
 	protected ArrayList<Word> getSkippedWords() {
-		if(this.registerSkippedWords) return unplacedWords;
-		else return null;
+		return registerSkippedWords ? skippedWords : null;
 	}
 
 	/**
 	 * Should skipped words be registered in a certain place so they can be 
 	 * used after drawing?
 	 * @author FEZ (Felix Kratzer)
-	 * @param doRegister
+	 * @param registerSkippedWords
 	 */
-	protected void registerSkippedWords(boolean doRegister) {
-		this.registerSkippedWords = doRegister;
+	protected void registerSkippedWords(boolean registerSkippedWords) {
+		this.registerSkippedWords = registerSkippedWords;
 	}
 	
 	/**
@@ -249,11 +249,7 @@ class WordCramEngine {
 		this.maxAttemptsForPlacement = maxAttempts;
 	}
 	
-	/**
-	 * How far through the words are we? Useful for when drawing to a custom PGraphics.
-	 */
 	public float getProgress() {
 		return (float)this.wordIndex / this.words.length;
 	}
 }
- 
