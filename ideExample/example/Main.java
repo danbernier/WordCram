@@ -60,7 +60,7 @@ public class Main extends PApplet {
 	private void initWordCram() {
 		background(30);
 		
-		//pg = createGraphics(800, 600, P2D);
+		//pg = createGraphics(800, 600, JAVA2D);
 		//pg.beginDraw();
 
 		wordcram = new WordCram(this)
@@ -102,6 +102,7 @@ public class Main extends PApplet {
 					})
 					.withPlacer(Placers.centerClump())
 					.withSizer(Sizers.byWeight(5, 130))
+					//.withMaxAttemptsForPlacement(10)
 					
 					//.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
 					//.withNudger(new RandomWordNudger())

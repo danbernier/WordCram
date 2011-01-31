@@ -155,13 +155,8 @@ public class WordCram {
 	private WordPlacer placer;
 	private WordNudger nudger;
 	
-	private boolean printWhenSkippingWords = false;
-	private boolean registerSkippedWords = false;
-	
-	private boolean useCustomCanvas = false;
 	private PGraphics destination = null;
-	
-	private int maxAttemptsForPlacement = -1;
+	private RenderOptions renderOptions = new RenderOptions();
 	
 	/**
 	 * This was the old way to build a WordCram: you have to specify <i>everything</i>.
@@ -587,7 +582,7 @@ public class WordCram {
 	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram printWhenSkippingWords() {
-		printWhenSkippingWords = true;		
+		renderOptions.printWhenSkippingWords = true;		
 		return this;
 	}
 	
@@ -615,12 +610,8 @@ public class WordCram {
 			if (placer == null) placer = Placers.horizLine();
 			if (nudger == null) nudger = new SpiralWordNudger();
 			
-			// TODO: create RenderOptions for tracking useCustomCanvas, maxAttempts, registerSkippedWords, printWhenSkipping.
-			// TODO: add to it: minShapeSize, maxNumberOfWordsToDraw, boundingBoxSwell.
-			PGraphics canvas = useCustomCanvas ? this.destination : parent.g; 
-			wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, printWhenSkippingWords);
-			wordCramEngine.setMaxAttemptsForPlacement(this.maxAttemptsForPlacement);
-			wordCramEngine.registerSkippedWords(this.registerSkippedWords);
+			PGraphics canvas = destination == null? parent.g : destination; 
+			wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, renderOptions);
 		}
 		
 		return wordCramEngine;
@@ -686,7 +677,7 @@ public class WordCram {
 	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram registerSkippedWords() {
-		this.registerSkippedWords = true;
+		renderOptions.registerSkippedWords = true;
 		return this;
 	}
 	
@@ -698,7 +689,7 @@ public class WordCram {
 	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram withMaxAttemptsForPlacement(int maxAttempts) {
-		this.maxAttemptsForPlacement = maxAttempts;
+		renderOptions.maxAttemptsForPlacement = maxAttempts;
 		return this;
 	}
 	
@@ -711,7 +702,6 @@ public class WordCram {
 	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram withCustomCanvas(PGraphics canvas) {
-		this.useCustomCanvas = true;
 		this.destination = canvas;
 		return this;
 	}

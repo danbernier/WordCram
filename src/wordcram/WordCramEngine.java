@@ -39,10 +39,7 @@ class WordCramEngine {
 	private EngineWord[] words;
 	private int wordIndex = -1;
 	
-	private int maxAttemptsForPlacement = -1;
-	
-	private boolean printWhenSkippingWords = false;
-	private boolean registerSkippedWords = false;
+	private RenderOptions renderOptions;
 	
 	private Timer timer = Timer.getInstance();
 
@@ -51,7 +48,7 @@ class WordCramEngine {
 	 */
 	private ArrayList<Word> skippedWords = new ArrayList<Word>();
 	
-	WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
+	WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, RenderOptions renderOptions) {
 		
 		if (destination.getClass().equals(PGraphics2D.class)) {
 			throw new Error("WordCram can't work with P2D buffers, sorry - try using JAVA2D.");
@@ -66,7 +63,7 @@ class WordCramEngine {
 		this.placer = placer;
 		this.nudger = nudger;
 		
-		this.printWhenSkippingWords = printWhenSkippingWords;
+		this.renderOptions = renderOptions;
 		
 		timer.start("making shapes");
 		this.words = wordsIntoEngineWords(words);
@@ -86,10 +83,10 @@ class WordCramEngine {
 			timer.end("making a shape");
 			
 			if (shape == null) {
-				if (printWhenSkippingWords) {
+				if (renderOptions.printWhenSkippingWords) {
 					System.out.println("Too small: " + word);	
 				}
-				if(this.registerSkippedWords) {
+				if(renderOptions.registerSkippedWords) {
 					this.skippedWords.add(eWord.word);
 				}
 			}
@@ -140,12 +137,12 @@ class WordCramEngine {
 		eWord.setDesiredLocation(placer.place(word, eWord.rank, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height));
 		
 		// Set maximum number of placement trials
-		int max = (int)((1.0-word.weight) * 600) + 100;
-		if(this.maxAttemptsForPlacement > -1) max = this.maxAttemptsForPlacement;
-		
+		int maxAttemptsToPlace = renderOptions.maxAttemptsForPlacement > 0 ?
+									renderOptions.maxAttemptsForPlacement :
+									calculateMaxAttemptsFromWordWeight(word);
 		
 		EngineWord lastCollidedWith = null;
-		for (int attempt = 0; attempt < max; attempt++) {
+		for (int attempt = 0; attempt < maxAttemptsToPlace; attempt++) {
 			
 			eWord.nudge(nudger.nudgeFor(word, attempt));
 			
@@ -176,14 +173,18 @@ class WordCramEngine {
 			}
 		}
 		
-		if (printWhenSkippingWords) {
+		if (renderOptions.printWhenSkippingWords) {
 			System.out.println("Couldn't fit: " + word);
 		}
-		if (registerSkippedWords) {
+		if (renderOptions.registerSkippedWords) {
 			skippedWords.add(eWord.word);
 		}
 		timer.count("couldn't place a word");
 		return false;
+	}
+
+	private int calculateMaxAttemptsFromWordWeight(Word word) {
+		return (int)((1.0 - word.weight) * 600) + 100;
 	}
 	
 	private void drawWordImage(EngineWord word) {
@@ -215,27 +216,7 @@ class WordCramEngine {
 	 * @return
 	 */
 	Word[] getSkippedWords() {
-		return registerSkippedWords ? skippedWords.toArray(new Word[0]) : null;
-	}
-
-	/**
-	 * Should skipped words be registered in a certain place so they can be 
-	 * used after drawing?
-	 * @author FEZ (Felix Kratzer)
-	 * @param registerSkippedWords
-	 */
-	void registerSkippedWords(boolean registerSkippedWords) {
-		this.registerSkippedWords = registerSkippedWords;
-	}
-	
-	/**
-	 * Sets the maximum number of attempts that are used for placing a word.
-	 * If nothing is set, a default value is calculated in {@link #placeWord(EngineWord)}
-	 * @author FEZ (Felix Kratzer)
-	 * @param maxAttempts
-	 */
-	void setMaxAttemptsForPlacement(int maxAttempts) {
-		this.maxAttemptsForPlacement = maxAttempts;
+		return renderOptions.registerSkippedWords ? skippedWords.toArray(new Word[0]) : null;
 	}
 	
 	float getProgress() {
