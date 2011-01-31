@@ -615,6 +615,8 @@ public class WordCram {
 			if (placer == null) placer = Placers.horizLine();
 			if (nudger == null) nudger = new SpiralWordNudger();
 			
+			// TODO: create RenderOptions for tracking useCustomCanvas, maxAttempts, registerSkippedWords, printWhenSkipping.
+			// TODO: add to it: minShapeSize, maxNumberOfWordsToDraw, boundingBoxSwell.
 			PGraphics canvas = useCustomCanvas ? this.destination : parent.g; 
 			wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, printWhenSkippingWords);
 			wordCramEngine.setMaxAttemptsForPlacement(this.maxAttemptsForPlacement);
