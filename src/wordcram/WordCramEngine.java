@@ -51,7 +51,7 @@ class WordCramEngine {
 	 */
 	private ArrayList<Word> skippedWords = new ArrayList<Word>();
 	
-	public WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
+	WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
 		
 		if (destination.getClass().equals(PGraphics2D.class)) {
 			throw new Error("WordCram can't work with P2D buffers, sorry - try using JAVA2D.");
@@ -102,11 +102,11 @@ class WordCramEngine {
 		return engineWords.toArray(new EngineWord[0]);
 	}
 	
-	public boolean hasMore() {
+	boolean hasMore() {
 		return wordIndex < words.length-1;
 	}
 	
-	public void drawAll() {
+	void drawAll() {
 		timer.start("drawAll");
 		while(hasMore()) {
 			drawNext();
@@ -115,7 +115,7 @@ class WordCramEngine {
 		//System.out.println(timer.report());
 	}
 	
-	public void drawNext() {
+	void drawNext() {
 		if (!hasMore()) return;
 		
 		EngineWord eWord = words[++wordIndex];
@@ -196,7 +196,7 @@ class WordCramEngine {
 		g2.fill(path2d);
 	}
 	
-	public Word getWordAt(float x, float y) {
+	Word getWordAt(float x, float y) {
 		for (int i = 0; i < words.length; i++) {
 			if (words[i].wasPlaced()) {
 				Shape shape = words[i].getShape();
@@ -214,7 +214,7 @@ class WordCramEngine {
 	 * @author FEZ (Felix Kratzer)
 	 * @return
 	 */
-	protected ArrayList<Word> getSkippedWords() {
+	ArrayList<Word> getSkippedWords() {
 		return registerSkippedWords ? skippedWords : null;
 	}
 
@@ -224,7 +224,7 @@ class WordCramEngine {
 	 * @author FEZ (Felix Kratzer)
 	 * @param registerSkippedWords
 	 */
-	protected void registerSkippedWords(boolean registerSkippedWords) {
+	void registerSkippedWords(boolean registerSkippedWords) {
 		this.registerSkippedWords = registerSkippedWords;
 	}
 	
@@ -234,11 +234,11 @@ class WordCramEngine {
 	 * @author FEZ (Felix Kratzer)
 	 * @param maxAttempts
 	 */
-	protected void setMaxAttemptsForPlacement(int maxAttempts) {
+	void setMaxAttemptsForPlacement(int maxAttempts) {
 		this.maxAttemptsForPlacement = maxAttempts;
 	}
 	
-	public float getProgress() {
+	float getProgress() {
 		return (float)this.wordIndex / this.words.length;
 	}
 }
