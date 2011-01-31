@@ -25,9 +25,6 @@ import processing.core.*;
 
 class WordCramEngine {
 
-	// PApplet parent is only for 2 things: to get its PGraphics g (aka destination), and 
-	// for createGraphics, for drawing the words.  host should be used for nothing else.
-	private PApplet parent;
 	private PGraphics destination;
 	
 	private WordFonter fonter;
@@ -54,13 +51,12 @@ class WordCramEngine {
 	 */
 	private ArrayList<Word> skippedWords = new ArrayList<Word>();
 	
-	public WordCramEngine(PApplet parent, PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
+	public WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
 		
 		if (destination.getClass().equals(PGraphics2D.class)) {
 			throw new Error("WordCram can't work with P2D buffers, sorry - try using JAVA2D.");
 		}
 		
-		this.parent = parent;
 		this.destination = destination;
 		
 		this.fonter = fonter;

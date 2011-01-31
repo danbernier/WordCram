@@ -616,7 +616,7 @@ public class WordCram {
 			if (nudger == null) nudger = new SpiralWordNudger();
 			
 			PGraphics canvas = useCustomCanvas ? this.destination : parent.g; 
-			wordCramEngine = new WordCramEngine(parent, canvas, words, fonter, sizer, colorer, angler, placer, nudger, printWhenSkippingWords);
+			wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, printWhenSkippingWords);
 			wordCramEngine.setMaxAttemptsForPlacement(this.maxAttemptsForPlacement);
 			wordCramEngine.registerSkippedWords(this.registerSkippedWords);
 		}
