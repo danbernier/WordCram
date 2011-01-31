@@ -56,10 +56,15 @@ public class Main extends PApplet {
 		//return createFont("Molengo", 1);
 	}
 	
+	//PGraphics pg;
 	private void initWordCram() {
 		background(30);
+		
+		//pg = createGraphics(800, 600, P2D);
+		//pg.beginDraw();
 
 		wordcram = new WordCram(this)
+					//.withCustomCanvas(pg)
 					.fromTextFile(textFilePath())
 					//.upperCase()
 					//.excludeNumbers()
@@ -106,6 +111,14 @@ public class Main extends PApplet {
 		//wordcram.printWhenSkippingWords();
 	}
 	
+	private void finishUp() {
+		//pg.endDraw();
+		//image(pg, 0, 0);
+		println("Done");
+		save("wordcram.png");
+		noLoop();
+	}
+	
 	public void draw() {
 		//fill(55);
 		//rect(0, 0, width, height);
@@ -113,9 +126,7 @@ public class Main extends PApplet {
 		boolean allAtOnce = true;
 		if (allAtOnce) {
 			wordcram.drawAll();
-			println("Done");
-			save("wordcram.png");
-			noLoop();
+			finishUp();
 		}
 		else {
 			int wordsPerFrame = 1;
@@ -123,9 +134,7 @@ public class Main extends PApplet {
 				wordcram.drawNext();
 			}
 			if (!wordcram.hasMore()) {
-				println("Done");
-				save("wordcram.png");
-				noLoop();
+				finishUp();
 			}
 		}
 	}

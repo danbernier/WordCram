@@ -55,6 +55,11 @@ class WordCramEngine {
 	private ArrayList<Word> unplacedWords = null;
 	
 	public WordCramEngine(PApplet parent, PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, boolean printWhenSkippingWords) {
+		
+		if (destination.getClass().equals(PGraphics2D.class)) {
+			throw new Error("WordCram can't work with P2D buffers, sorry - try using JAVA2D.");
+		}
+		
 		this.parent = parent;
 		this.destination = destination;
 		
