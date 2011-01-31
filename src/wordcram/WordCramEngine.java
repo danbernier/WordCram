@@ -216,6 +216,7 @@ class WordCramEngine {
 	 * @return
 	 */
 	Word[] getSkippedWords() {
+		// TODO skip returning null -- if we don't register skipped words, skippedWords will be empty, which is a nice thing to return.
 		return renderOptions.registerSkippedWords ? skippedWords.toArray(new Word[0]) : null;
 	}
 	
