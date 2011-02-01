@@ -26,6 +26,9 @@ Release notes for WordCram 0.4, date TBD:
 * Added withMaxAttemptsForPlacement(int), which tells WordCram to only
   try so many times to place a word.
 
+* Added maxNumberOfWordsToDraw(int), which limits how many words
+  WordCram will try to draw.
+
 * Deleted currentWord() and currentWordIndex(), which were deprecated.
 
 
