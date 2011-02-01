@@ -80,7 +80,7 @@ class WordCramEngine {
 			
 			Word word = words[i];
 			EngineWord eWord = new EngineWord(word, i, words.length, sizer, angler, fonter, colorer);
-						
+			
 			timer.start("making a shape");
 			Shape shape = wordShaper.getShapeFor(eWord);
 			timer.end("making a shape");
@@ -89,9 +89,7 @@ class WordCramEngine {
 				if (renderOptions.printWhenSkippingWords) {
 					System.out.println("Too small: " + word);	
 				}
-				if(renderOptions.registerSkippedWords) {
-					this.skippedWords.add(eWord.word);
-				}
+				this.skippedWords.add(eWord.word);
 			}
 			else {
 				eWord.setShape(shape);
@@ -103,9 +101,7 @@ class WordCramEngine {
 			if (renderOptions.printWhenSkippingWords) {
 				System.out.println("Over the limit: " + words[i]);
 			}
-			if (renderOptions.registerSkippedWords) {
-				skippedWords.add(words[i]);
-			}
+			skippedWords.add(words[i]);
 		}
 		
 		return engineWords.toArray(new EngineWord[0]);
@@ -188,9 +184,8 @@ class WordCramEngine {
 		if (renderOptions.printWhenSkippingWords) {
 			System.out.println("Couldn't fit: " + word);
 		}
-		if (renderOptions.registerSkippedWords) {
-			skippedWords.add(eWord.word);
-		}
+		skippedWords.add(eWord.word);
+		
 		timer.count("couldn't place a word");
 		return false;
 	}
@@ -221,12 +216,6 @@ class WordCramEngine {
 		return null;
 	}
 
-	/**
-	 * Gets a list of all words that were not placed on the canvas.
-	 * This requires that {@link registerSkippedWords(boolean)} has been set.
-	 * @author FEZ (Felix Kratzer)
-	 * @return the array of Words that were skipped, or an empty array if registerSkippedWords() is set to false.
-	 */
 	Word[] getSkippedWords() {
 		return skippedWords.toArray(new Word[0]);
 	}

@@ -111,7 +111,6 @@ public class Main extends PApplet {
 					;
 		
 		//wordcram.printWhenSkippingWords();
-		//wordcram.registerSkippedWords();
 		//wordcram.maxNumberOfWordsToDraw(12);
 	}
 	
@@ -165,7 +164,7 @@ public class Main extends PApplet {
 	}
 	
 	private String textFilePath() {
-		boolean linux = true;
+		boolean linux = false;
 		String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
 		String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
 		return path;		

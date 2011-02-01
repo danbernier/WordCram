@@ -587,17 +587,6 @@ public class WordCram {
 	}
 	
 	/**
-	 * Tells WordCram to register all words that were not placed on the canvas.
-	 * Use {@link getSkippedWords()} to access those words.
-	 * @author FEZ (Felix Kratzer)
-	 * @return The WordCram, for further setup or drawing.
-	 */
-	public WordCram registerSkippedWords() {
-		renderOptions.registerSkippedWords = true;
-		return this;
-	}
-	
-	/**
 	 * How many attempts should be used to place a word.
 	 * Higher values ensure that more words get placed, but will make algorithm slower.
 	 * @author FEZ (Felix Kratzer)
