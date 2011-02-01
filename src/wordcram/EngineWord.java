@@ -53,6 +53,15 @@ class EngineWord {
 		this.word = word;
 		this.rank = rank;
 		
+		/*
+		 * TODO Consider: make these fields on Word. Make them Integers and Floats, not ints and floats,
+		 * so they're nullable (null = unspecified). Makes it really easy to set up your words - at least
+		 * you don't have to remember what the property names are.
+		 * Also, you can say setPlace(PVector v), which will set desiredLocation (it'll probably still be nudged).
+		 * This should make these fields more consistent w/ place, as we move towards setting properties to
+		 * indicate whether a word was placed: Word can have setDesiredPlace(), getDesiredPlace(), and getActualPlace()
+		 * (which will return null if it wasn't placed yet, or was skipped).
+		 */
 		Object size = word.getProperty("size");
 		this.size = size != null ? Float.valueOf(size.toString()) : sizer.sizeFor(word, rank, wordCount);
 		word.setProperty("size", this.size);

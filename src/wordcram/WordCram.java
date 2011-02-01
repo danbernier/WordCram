@@ -684,6 +684,18 @@ public class WordCram {
 		getWordCramEngine().drawAll();
 	}
 	
+	/* TODO: uncomment this. It REALLY should return a copy.
+	 * Think through how it could be abused, and whether that matters.
+	 * 
+	 ** Get the Words that WordCram is drawing. This can be useful if
+	 * you want to inspect exactly how the words were weighted, or see
+	 * how they were colored, fonted, sized, angled, or placed.
+	 
+	public Word[] getWords() {
+		return words;
+	}
+	*/
+	
 	/**
 	 * Get the Word at the given (x,y) coordinates.
 	 * <p>

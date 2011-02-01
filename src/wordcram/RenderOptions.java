@@ -11,6 +11,8 @@ class RenderOptions {
 	 * then getSkippedWords() could just look for words with a skippedBecause property,
 	 * and you could throw away printWhenSkippingWords.
 	 * 
+	 * OR: should those be fields on Word, rather than properties?
+	 * 
 	 * Note: the maxNumberOfWordsToDraw gives us another reason to skip words: they came
 	 * too late in the game.
 	 */
