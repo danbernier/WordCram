@@ -65,7 +65,8 @@ public class Main extends PApplet {
 
 		wordcram = new WordCram(this)
 					//.withCustomCanvas(pg)
-					.fromTextFile(textFilePath())
+					//.fromTextFile(textFilePath())
+					.fromWords(alphabet())
 					//.upperCase()
 					//.excludeNumbers()
 					.withFonts(randomFont())
@@ -101,7 +102,7 @@ public class Main extends PApplet {
 						}
 					})
 					.withPlacer(Placers.centerClump())
-					.withSizer(Sizers.byWeight(5, 130))
+					.withSizer(Sizers.byWeight(5, 50))
 					//.withMaxAttemptsForPlacement(10)
 					
 					//.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
@@ -111,13 +112,14 @@ public class Main extends PApplet {
 		
 		//wordcram.printWhenSkippingWords();
 		//wordcram.registerSkippedWords();
+		//wordcram.maxNumberOfWordsToDraw(12);
 	}
 	
 	private void finishUp() {
 		//pg.endDraw();
 		//image(pg, 0, 0);
 		
-		//println(wordcram.getSkippedWords());
+		println(wordcram.getSkippedWords());
 		
 		println("Done");
 		save("wordcram.png");

@@ -73,7 +73,10 @@ class WordCramEngine {
 	private EngineWord[] wordsIntoEngineWords(Word[] words) {
 		ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
 		
-		for (int i = 0; i < words.length; i++) {
+		int maxNumberOfWords = renderOptions.maxNumberOfWordsToDraw >= 0 ?
+								renderOptions.maxNumberOfWordsToDraw :
+								words.length;
+		for (int i = 0; i < maxNumberOfWords; i++) {
 			
 			Word word = words[i];
 			EngineWord eWord = new EngineWord(word, i, words.length, sizer, angler, fonter, colorer);
@@ -93,6 +96,15 @@ class WordCramEngine {
 			else {
 				eWord.setShape(shape);
 				engineWords.add(eWord);  // DON'T add eWords with no shape.
+			}
+		}
+		
+		for (int i = maxNumberOfWords; i < words.length; i++) {
+			if (renderOptions.printWhenSkippingWords) {
+				System.out.println("Over the limit: " + words[i]);
+			}
+			if (renderOptions.registerSkippedWords) {
+				skippedWords.add(words[i]);
 			}
 		}
 		

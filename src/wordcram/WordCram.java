@@ -610,6 +610,19 @@ public class WordCram {
 	}
 	
 	/**
+	 * The maximum number of Words WordCram should try to draw.
+	 * This might be useful if you have a whole bunch of words, and need
+	 * an artificial way to cut down the list (for speed).
+	 * By default, it's unlimited.
+	 * @param maxWords can be any value from 0 to Integer.MAX_VALUE. Values < 0 are treated as unlimited.
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram maxNumberOfWordsToDraw(int maxWords) {
+		renderOptions.maxNumberOfWordsToDraw = maxWords;
+		return this;
+	}
+	
+	/**
 	 * Use a custom canvas instead of the applet's default one.
 	 * This may be needed if rendering in background or in other dimensions than the
 	 * applet size is needed.
