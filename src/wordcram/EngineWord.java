@@ -26,18 +26,6 @@ class EngineWord {
 	Word word;
 	int rank;
 	
-	/* TODO Encapsulate these. Have the methods a) set a property on the Word, so people using 
-	 * getWordAt(x,y) can SEE the Word's final outcome, and b) have them first LOOK for those 
-	 * properties, before calling the component, so people can just say 
-	 * Word.setProperty("size", 24).setProperty("angle", radians(20)), and it'll come out that way.
-	 * See setDesiredLocation(), below.
-	 * 
-	 * (At that point, might want to move more of this stuff back INTO Word. So they can even
-	 * iterate over their original Word[], and see interesting stuff.)
-	 * 
-	 * TODO that above "to-do" is actually done, but you should doc it up, so people have a prayer
-	 * of finding it. Make some examples or something. Blog about it.
-	 */
 	private float size;
 	private float angle;
 	private PFont font;
@@ -53,12 +41,6 @@ class EngineWord {
 		this.word = word;
 		this.rank = rank;
 		
-		/*
-		 * TODO Add setPlace(PVector v), which will set desiredLocation (it'll probably still be nudged).
-		 * This should make these fields more consistent w/ place, as we move towards setting properties to
-		 * indicate whether a word was placed: Word can have setDesiredPlace(), getDesiredPlace(), and getActualPlace()
-		 * (which will return null if it wasn't placed yet, or was skipped).
-		 */
 		this.size = word.getSize(sizer, rank, wordCount);
 		this.angle = word.getAngle(angler);
 		this.font = word.getFont(fonter);
@@ -83,15 +65,9 @@ class EngineWord {
 		return bbTree.overlaps(other.bbTree);
 	}
 
-	void setDesiredLocation(PVector loc) {
-		Object placeProperty = word.getProperty("place");
-		if (placeProperty != null) {
-			loc = (PVector)placeProperty;
-		}
-		word.setProperty("place", loc.get());
-		
-		desiredLocation = loc.get();
-		currentLocation = loc.get();
+	void setDesiredLocation(WordPlacer placer, int count, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
+		desiredLocation = word.getTargetPlace(placer, rank, count, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
+		currentLocation = desiredLocation.get();
 	}
 
 	void nudge(PVector nudge) {
@@ -104,7 +80,7 @@ class EngineWord {
 				currentLocation.x, currentLocation.y);
 		shape = transform.createTransformedShape(shape);
 		bbTree.setLocation(currentLocation);
-		word.setProperty("finalPlace", currentLocation);
+		word.setRenderedPlace(currentLocation);
 	}
 
 	PVector getCurrentLocation() {
@@ -112,7 +88,7 @@ class EngineWord {
 	}
 	
 	boolean wasPlaced() {
-		return word.getProperty("finalPlace") != null;
+		return word.wasPlaced();
 	}
 
 	

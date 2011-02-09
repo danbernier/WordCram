@@ -65,8 +65,8 @@ public class Main extends PApplet {
 
 		wordcram = new WordCram(this)
 					//.withCustomCanvas(pg)
-					//.fromTextFile(textFilePath())
-					.fromWords(alphabet())
+					.fromTextFile(textFilePath())
+					//.fromWords(alphabet())
 					//.upperCase()
 					//.excludeNumbers()
 					.withFonts(randomFont())
@@ -102,7 +102,7 @@ public class Main extends PApplet {
 						}
 					})
 					.withPlacer(Placers.centerClump())
-					.withSizer(Sizers.byWeight(5, 50))
+					.withSizer(Sizers.byWeight(5, 70))
 					//.withMaxAttemptsForPlacement(10)
 					
 					//.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
@@ -164,7 +164,7 @@ public class Main extends PApplet {
 	}
 	
 	private String textFilePath() {
-		boolean linux = false;
+		boolean linux = true;
 		String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
 		String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
 		return path;		

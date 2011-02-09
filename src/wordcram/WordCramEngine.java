@@ -138,11 +138,11 @@ class WordCramEngine {
 	
 	private boolean placeWord(EngineWord eWord) {
 		Word word = eWord.word;
-		Rectangle2D rect = eWord.getShape().getBounds2D();		
+		Rectangle2D rect = eWord.getShape().getBounds2D(); // TODO can we move these into EngineWord.setDesiredLocation? Does that make sense?		
 		int wordImageWidth = (int)rect.getWidth();
 		int wordImageHeight = (int)rect.getHeight();
 		
-		eWord.setDesiredLocation(placer.place(word, eWord.rank, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height));
+		eWord.setDesiredLocation(placer, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height);
 		
 		// Set maximum number of placement trials
 		int maxAttemptsToPlace = renderOptions.maxAttemptsForPlacement > 0 ?

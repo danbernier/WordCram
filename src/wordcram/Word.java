@@ -19,6 +19,7 @@ limitations under the License.
 import java.util.HashMap;
 
 import processing.core.PFont;
+import processing.core.PVector;
 
 /**
  * A weighted word, for rendering in the word cloud image.
@@ -70,6 +71,7 @@ import processing.core.PFont;
  * @author Dan Bernier
  */
 public class Word implements Comparable<Word> {
+	
 	public String word;
 	public double weight;
 
@@ -77,12 +79,17 @@ public class Word implements Comparable<Word> {
 	private Float angle;
 	private PFont font;
 	private Integer color;
-	private Float renderedSize;
-	private Float renderedAngle;
+	private PVector place;
+	
+	private float renderedSize;
+	private float renderedAngle;
 	private PFont renderedFont;
-	private Integer renderedColor;
+	private int renderedColor;
+	private PVector targetPlace;
+	private PVector renderedPlace;
+	
 	private HashMap<String,Object> properties = new HashMap<String,Object>();
-		
+	
 	public Word(String word, double weight) {
 		this.word = word;
 		this.weight = weight;
@@ -115,6 +122,20 @@ public class Word implements Comparable<Word> {
 	public void setColor(int color) {  // TODO provide a 3-float overload? 4-float? 2-float? Will need the PApplet...
 		this.color = color;
 	}
+	
+	/**
+	 * Set the place this Word should be rendered at - WordCram won't call the WordPlacer.
+	 */
+	public void setPlace(PVector place) {
+		this.place = place.get();
+	}
+	
+	/**
+	 * Set the place this Word should be rendered at - WordCram won't call the WordPlacer.
+	 */
+	public void setPlace(float x, float y) {
+		this.place = new PVector(x, y);
+	}
 
 	/*
 	 * These methods are called by EngineWord: they return (for instance)
@@ -140,6 +161,15 @@ public class Word implements Comparable<Word> {
 	Integer getColor(WordColorer colorer) {
 		renderedColor = color != null ? color : colorer.colorFor(this);
 		return renderedColor;
+	}
+	
+	PVector getTargetPlace(WordPlacer placer, int rank, int count, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
+		targetPlace = place != null ? place : placer.place(this, rank, count, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
+		return targetPlace;
+	}
+	
+	void setRenderedPlace(PVector place) {
+		renderedPlace = place.get();
 	}
 
 	/**
@@ -172,6 +202,32 @@ public class Word implements Comparable<Word> {
 	 */
 	public int getRenderedColor() {
 		return renderedColor;
+	}
+
+	/**
+	 * Get the place the Word was supposed to be rendered at: either the value passed to setPlace(), 
+	 * or the value returned from the WordPlacer.
+	 */
+	public PVector getTargetPlace() {
+		return targetPlace;
+	}
+
+	/**
+	 * Get the final place the Word was rendered at, or null if it couldn't be placed.
+	 * It returns the original target location (which is either the value passed to setPlace(), 
+	 * or the value returned from the WordPlacer), plus the nudge vector returned by the WordNudger.
+	 * @return If word was placed, it's the (x,y) coordinates of the word's final location; else it's null.
+	 */
+	public PVector getRenderedPlace() {
+		return renderedPlace;
+	}
+	
+	/**
+	 * Indicates whether the Word was placed successfully. It's the same as calling word.getRenderedPlace() != null.
+	 * @return true only if the word was placed.
+	 */
+	public boolean wasPlaced() {
+		return renderedPlace != null;
 	}
 
 	/**
