@@ -54,29 +54,15 @@ class EngineWord {
 		this.rank = rank;
 		
 		/*
-		 * TODO Consider: make these fields on Word. Make them Integers and Floats, not ints and floats,
-		 * so they're nullable (null = unspecified). Makes it really easy to set up your words - at least
-		 * you don't have to remember what the property names are.
-		 * Also, you can say setPlace(PVector v), which will set desiredLocation (it'll probably still be nudged).
+		 * TODO Add setPlace(PVector v), which will set desiredLocation (it'll probably still be nudged).
 		 * This should make these fields more consistent w/ place, as we move towards setting properties to
 		 * indicate whether a word was placed: Word can have setDesiredPlace(), getDesiredPlace(), and getActualPlace()
 		 * (which will return null if it wasn't placed yet, or was skipped).
 		 */
-		Object size = word.getProperty("size");
-		this.size = size != null ? Float.valueOf(size.toString()) : sizer.sizeFor(word, rank, wordCount);
-		word.setProperty("size", this.size);
-		
-		Object angle = this.word.getProperty("angle");
-		this.angle = angle != null ? Float.valueOf(angle.toString()) : angler.angleFor(this.word);
-		word.setProperty("angle", this.angle);
-		
-		Object font = this.word.getProperty("font");
-		this.font = font != null ? (PFont)font : fonter.fontFor(this.word);
-		word.setProperty("font", this.font);
-		
-		Object color = this.word.getProperty("color");
-		this.color = color != null ? (Integer)color : colorer.colorFor(this.word);
-		word.setProperty("color", this.color);
+		this.size = word.getSize(sizer, rank, wordCount);
+		this.angle = word.getAngle(angler);
+		this.font = word.getFont(fonter);
+		this.color = word.getColor(colorer);
 	}
 
 	void setShape(Shape shape) {

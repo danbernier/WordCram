@@ -18,45 +18,164 @@ limitations under the License.
 
 import java.util.HashMap;
 
+import processing.core.PFont;
+
 /**
  * A weighted word, for rendering in the word cloud image.
  * <p>
  * Each Word object has a {@link #word} String, and its associated {@link #weight}, and it's constructed
  * with these two things.
- * <p>
- * A word can also have properties.  If you're creating your own <code>Word[]</code> to pass
+ * 
+ * 
+ * <h3>Hand-crafting Your Words</h3>
+ * 
+ * If you're creating your own <code>Word[]</code> to pass
  * to the WordCram (rather than using something like {@link WordCram#fromWebPage(String)}),
- * and custom components ({@link WordColorer}, {@link WordAngler}, etc),
- * you might want to send other information along with the word, for the components to use.
+ * you can specify how a Word should be rendered: set a Word's font, size, etc:
  * 
+ * <pre>
+ * Word w = new Word("texty", 20);
+ * w.setFont(createFont("myFontName", 1));
+ * w.setAngle(radians(45));
+ * </pre>
  * 
+ * Any values set on a Word will override the corresponding component ({@link WordColorer}, 
+ * {@link WordAngler}, etc) - it won't even be called for that word.
  * 
- * <p>
- * Besides that, WordCram will set a few properties of its own on your words:
+ * <h3>Word Properties</h3>
+ * A word can also have properties. If you're creating custom components,
+ * you might want to send other information along with the word, for the components to use:
  * 
- * <ul>
- * <li>place: the PVector returned by the {@link WordPlacer}</li>
- * <li>finalPlace: the PVector location where the word is finally rendered, or null if it isn't rendered.x</li>
- * </ul>
+ * <pre>
+ * Word strawberry = new Word("strawberry", 10);
+ * strawberry.setProperty("isFruit", true);
+ * 
+ * Word pea = new Word("pea", 10);
+ * pea.setProperty("isFruit", false);
+ * 
+ * new WordCram(this)
+ *   .fromWords(new Word[] { strawberry, pea })
+ *   .withColorer(new WordColorer() {
+ *      public int colorFor(Word w) {
+ *        if (w.getProperty("isFruit") == true) {
+ *          return color(255, 0, 0);
+ *        }
+ *        else {
+ *          return color(0, 200, 0);
+ *        }
+ *      }
+ *    });
+ * </pre>
  * 
  * @author Dan Bernier
  */
 public class Word implements Comparable<Word> {
 	public String word;
 	public double weight;
-	
+
+	private Float size;
+	private Float angle;
+	private PFont font;
+	private Integer color;
+	private Float renderedSize;
+	private Float renderedAngle;
+	private PFont renderedFont;
+	private Integer renderedColor;
 	private HashMap<String,Object> properties = new HashMap<String,Object>();
 		
 	public Word(String word, double weight) {
 		this.word = word;
 		this.weight = weight;
 	}
+	
+	/**
+	 * Set the size this Word should be rendered at - WordCram won't even call the WordSizer.
+	 */
+	public void setSize(float size) {
+		this.size = size;
+	}
+	
+	/**
+	 * Set the angle this Word should be rendered at - WordCram won't even call the WordAngler.
+	 */
+	public void setAngle(float angle) {
+		this.angle = angle;
+	}
+	
+	/**
+	 * Set the font this Word should be rendered in - WordCram won't call the WordFonter.
+	 */
+	public void setFont(PFont font) {  // TODO provide a string overload? Will need the PApplet...
+		this.font = font;
+	}
+	
+	/**
+	 * Set the color this Word should be rendered in - WordCram won't call the WordColorer.
+	 */
+	public void setColor(int color) {  // TODO provide a 3-float overload? 4-float? 2-float? Will need the PApplet...
+		this.color = color;
+	}
+
+	/*
+	 * These methods are called by EngineWord: they return (for instance)
+	 * either the color the user set via setColor(), or the value returned
+	 * by the WordColorer. They're package-local, so they can't be called by the sketch.
+	 */
+	
+	Float getSize(WordSizer sizer, int rank, int wordCount) {
+		renderedSize = size != null ? size : sizer.sizeFor(this, rank, wordCount);
+		return renderedSize;
+	}
+	
+	Float getAngle(WordAngler angler) {
+		renderedAngle = angle != null ? angle : angler.angleFor(this);
+		return renderedAngle;
+	}
+	
+	PFont getFont(WordFonter fonter) {
+		renderedFont = font != null ? font : fonter.fontFor(this);
+		return renderedFont;
+	}
+	
+	Integer getColor(WordColorer colorer) {
+		renderedColor = color != null ? color : colorer.colorFor(this);
+		return renderedColor;
+	}
+
+	/**
+	 * Get the size the Word was rendered at: either the value passed to setSize(), or the value returned from the WordSizer. 
+	 * @return the rendered size
+	 */
+	public float getRenderedSize() {
+		return renderedSize;
+	}
+
+	/**
+	 * Get the angle the Word was rendered at: either the value passed to setAngle(), or the value returned from the WordAngler. 
+	 * @return the rendered angle
+	 */
+	public float getRenderedAngle() {
+		return renderedAngle;
+	}
+
+	/**
+	 * Get the font the Word was rendered in: either the value passed to setFont(), or the value returned from the WordFonter. 
+	 * @return the rendered font
+	 */
+	public PFont getRenderedFont() {
+		return renderedFont;
+	}
+
+	/**
+	 * Get the color the Word was rendered in: either the value passed to setColor(), or the value returned from the WordColorer. 
+	 * @return the rendered color
+	 */
+	public int getRenderedColor() {
+		return renderedColor;
+	}
 
 	/**
 	 * Get a property value from this Word, for a WordColorer, a WordPlacer, etc.
-	 * <p>
-	 * This is really for cases when you're weighting your own words, and passing a Word[] to the WordCram.
-	 * If you're using <code>fromWebPage</code> or something like that, this won't help you much.
 	 * @param propertyName
 	 * @return the value of the property, or <code>null</code>, if it's not there.
 	 */
@@ -66,9 +185,6 @@ public class Word implements Comparable<Word> {
 	
 	/**
 	 * Set a property on this Word, to be used by a WordColorer, a WordPlacer, etc, down the line.
-	 * <p>
-	 * This is really for cases when you're weighting your own words, and passing a Word[] to the WordCram.
-	 * If you're using <code>fromWebPage</code> or something like that, this won't help you much.
 	 * @param propertyName
 	 * @param propertyValue
 	 */
@@ -78,6 +194,7 @@ public class Word implements Comparable<Word> {
 	
 	/**
 	 * Displays the word, and its weight (in parentheses).
+	 * <code>new Word("hello", 1.3).toString()</code> will return "hello (0.3)".
 	 */
 	@Override
 	public String toString() {
