@@ -33,8 +33,7 @@ class WordCramEngine {
 	private WordAngler angler;
 	private WordPlacer placer;
 	private WordNudger nudger;
-
-	private WordShaper wordShaper = new WordShaper();
+	private WordShaper wordShaper;
 	
 	private EngineWord[] words;
 	private int wordIndex = -1;
@@ -48,7 +47,7 @@ class WordCramEngine {
 	 */
 	private ArrayList<Word> skippedWords = new ArrayList<Word>();
 	
-	WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, RenderOptions renderOptions) {
+	WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
 		
 		if (destination.getClass().equals(PGraphics2D.class)) {
 			throw new Error("WordCram can't work with P2D buffers, sorry - try using JAVA2D.");
@@ -65,12 +64,14 @@ class WordCramEngine {
 		
 		this.renderOptions = renderOptions;
 		
+		this.wordShaper = shaper;
+		
 		timer.start("making shapes");
-		this.words = wordsIntoEngineWords(words);
+		this.words = wordsIntoEngineWords(words, bbTreeBuilder);
 		timer.end("making shapes");
 	}
 	
-	private EngineWord[] wordsIntoEngineWords(Word[] words) {
+	private EngineWord[] wordsIntoEngineWords(Word[] words, BBTreeBuilder bbTreeBuilder) {
 		ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
 		
 		int maxNumberOfWords = renderOptions.maxNumberOfWordsToDraw >= 0 ?
@@ -79,10 +80,10 @@ class WordCramEngine {
 		for (int i = 0; i < maxNumberOfWords; i++) {
 			
 			Word word = words[i];
-			EngineWord eWord = new EngineWord(word, i, words.length, sizer, angler, fonter, colorer);
+			EngineWord eWord = new EngineWord(word, i, words.length, sizer, angler, fonter, colorer, bbTreeBuilder);
 			
 			timer.start("making a shape");
-			Shape shape = wordShaper.getShapeFor(eWord);
+			Shape shape = wordShaper.getShapeFor(eWord.word.word, eWord.getFont(), eWord.getSize(), eWord.getAngle());
 			timer.end("making a shape");
 			
 			if (shape == null) {
@@ -129,7 +130,7 @@ class WordCramEngine {
 		boolean wasPlaced = placeWord(eWord);
 		timer.end("placeWord");
 					
-		if (wasPlaced) {
+		if (wasPlaced) { // TODO unit test (somehow)
 			timer.start("drawWordImage");
 			drawWordImage(eWord);
 			timer.end("drawWordImage");

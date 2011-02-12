@@ -28,16 +28,16 @@ import processing.core.PFont;
 class WordShaper {
 	private FontRenderContext frc = new FontRenderContext(null, true, true);
 	
-	Shape getShapeFor(EngineWord eWord) {
+	Shape getShapeFor(String word, PFont font, float fontSize, float angle) {
 
-		Shape shape = makeShape(eWord.word.word, eWord.getFont(), eWord.getSize());
+		Shape shape = makeShape(word, font, fontSize);
 		
 		if (isTooSmall(shape)) {
 			return null;		
 		}
 		
 		return moveToOrigin(
-				rotate(shape, eWord.getAngle()));
+				rotate(shape, angle));
 	}
 
 	private Shape makeShape(String word, PFont pFont, float fontSize) {

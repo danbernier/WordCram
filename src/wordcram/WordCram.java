@@ -649,7 +649,7 @@ public class WordCram {
 			if (nudger == null) nudger = new SpiralWordNudger();
 			
 			PGraphics canvas = destination == null? parent.g : destination; 
-			wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, renderOptions);
+			wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
 		}
 		
 		return wordCramEngine;

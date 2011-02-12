@@ -32,19 +32,22 @@ class EngineWord {
 	private int color;
 
 	private Shape shape;
+	private BBTreeBuilder bbTreeBuilder;
 	private BBTree bbTree;
 
 	private PVector desiredLocation;
 	private PVector currentLocation;
 
-	EngineWord(Word word, int rank, int wordCount, WordSizer sizer, WordAngler angler, WordFonter fonter, WordColorer colorer) {
+	EngineWord(Word word, int rank, int wordCount, WordSizer sizer, WordAngler angler, WordFonter fonter, WordColorer colorer, BBTreeBuilder bbTreeBuilder) {
 		this.word = word;
 		this.rank = rank;
 		
 		this.size = word.getSize(sizer, rank, wordCount);
 		this.angle = word.getAngle(angler);
 		this.font = word.getFont(fonter);
-		this.color = word.getColor(colorer);
+		this.color = word.getColor(colorer); // TODO odd: should we only call the colorer when it's time to color the word?
+		
+		this.bbTreeBuilder = bbTreeBuilder;
 	}
 
 	void setShape(Shape shape) {
@@ -54,7 +57,7 @@ class EngineWord {
 		// option
 		// TODO try perf-testing smaller bounding boxes -- if it's not slower,
 		// it could make better images
-		this.bbTree = new BBTreeBuilder().makeTree(shape, 7);
+		this.bbTree = bbTreeBuilder.makeTree(shape, 7);
 	}
 
 	Shape getShape() {
