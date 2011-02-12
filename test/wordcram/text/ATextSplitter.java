@@ -22,7 +22,7 @@ import org.junit.*;
 
 import wordcram.Word;
 
-public class TestTextSplitter {
+public class ATextSplitter {
 
 	private TextSplitter ts;
 

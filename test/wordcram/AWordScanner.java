@@ -18,7 +18,7 @@ package wordcram;
 
 import org.junit.*;
 
-public class TestWordScanner {
+public class AWordScanner {
 
 	private WordScanner scanner;
 

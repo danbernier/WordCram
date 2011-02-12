@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import wordcram.Word;
 
-public class TestWordSorterAndScaler {
+public class AWordSorterAndScaler {
 	
 	private float epsilon = 0.00001f;
 	

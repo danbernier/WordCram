@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import wordcram.Word;
 
-public class TestWordCounter {
+public class AWordCounter {
 	
 	private Comparator<Word> alphabetically = new Comparator<Word>() {
 		public int compare(Word word1, Word word2) {
