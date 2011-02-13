@@ -36,8 +36,7 @@ class WordShaper {
 			return null;		
 		}
 		
-		return moveToOrigin(
-				rotate(shape, angle));
+		return moveToOrigin(rotate(shape, angle));
 	}
 
 	private Shape makeShape(String word, PFont pFont, float fontSize) {
