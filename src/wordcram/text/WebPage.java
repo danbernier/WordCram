@@ -28,7 +28,6 @@ public class WebPage implements TextSource {
 		this.parent = parent;
 	}
 
-	@Override
 	public String getText() {
 		String html = PApplet.join(parent.loadStrings(url), ' ');
 		return new Html2Text().text(html);

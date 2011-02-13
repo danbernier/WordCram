@@ -24,7 +24,6 @@ public class Html implements TextSource {
 		src = htmlSrc;
 	}
 
-	@Override
 	public String getText() {
 		return new Html2Text().text(src);
 	}

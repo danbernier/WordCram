@@ -24,7 +24,7 @@ class WordSorterAndScaler {
 
 	public Word[] sortAndScale(Word[] rawWords) {
 		
-		Word[] words = Arrays.copyOf(rawWords, rawWords.length);
+		Word[] words = copy(rawWords);
 		Arrays.sort(words);
 		double maxWeight = words[0].weight;
 		
@@ -33,5 +33,16 @@ class WordSorterAndScaler {
 		}
 		
 		return words;
+	}
+	
+	private Word[] copy(Word[] rawWords) {
+		
+		// was Arrays.copyOf(rawWords, rawWords.length);
+		
+		Word[] copy = new Word[rawWords.length];
+		for(int i = 0; i < copy.length; i++) {
+			copy[i] = rawWords[i];
+		}
+		return copy;
 	}
 }

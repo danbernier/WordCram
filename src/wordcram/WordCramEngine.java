@@ -17,8 +17,7 @@ limitations under the License.
 */
 
 import java.awt.*;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 import java.util.ArrayList;
 
 import processing.core.*;
@@ -196,7 +195,7 @@ class WordCramEngine {
 	}
 	
 	private void drawWordImage(EngineWord word) {
-		Path2D.Float path2d = new Path2D.Float(word.getShape());
+		GeneralPath path2d = new GeneralPath(word.getShape());
 		
 		Graphics2D g2 = (Graphics2D)destination.image.getGraphics();
 			

@@ -47,7 +47,6 @@ public class RandomWordNudger implements WordNudger {
 		this.stdDev = stdDev;
 	}
 
-	@Override
 	public PVector nudgeFor(Word w, int attempt) {
 		return new PVector(next(attempt), next(attempt));
 	}

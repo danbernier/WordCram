@@ -29,7 +29,6 @@ public class PlottingWordNudger implements WordNudger {
 		wrappedNudger = _wrappedNudger;
 	}
 
-	@Override
 	public PVector nudgeFor(Word word, int attempt) {
 		PVector v = wrappedNudger.nudgeFor(word, attempt);
 		parent.pushStyle();

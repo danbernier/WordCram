@@ -7,8 +7,6 @@ import java.awt.Shape;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.ws.ServiceMode;
-
 import junit.framework.Assert;
 
 import org.junit.Before;

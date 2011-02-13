@@ -25,7 +25,6 @@ public class SpiralWordNudger implements WordNudger {
 	// bigger fonts need a bigger thetaIncrement.
 	private float thetaIncrement = (float) (Math.PI * 0.03);
 
-	@Override
 	public PVector nudgeFor(Word w, int attempt) {
 		float rad = powerMap(0.6f, attempt, 0, 600, 1, 100);
 

@@ -260,7 +260,6 @@ public class Word implements Comparable<Word> {
 	/**
 	 * Compares Words based on weight only. Words with equal weight are arbitrarily sorted.
 	 */
-	@Override
 	public int compareTo(Word w) {
 		if (w.weight < weight) {
 			return -1;

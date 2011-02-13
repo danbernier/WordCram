@@ -48,7 +48,7 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 
 	<target name="test" depends="compile">
 		<mkdir dir="build/tests" />
-		<javac srcdir="test" destdir="build/tests" classpath="${classpath};lib/junit/junit-4.8.2.jar;lib/mockito-all-1.8.5.jar;build/classes" includeantruntime="false" />
+		<javac srcdir="test" destdir="build/tests" classpath="${classpath};lib/junit/junit-4.8.2.jar;lib/mockito-all-1.8.5.jar;build/classes" source="1.5" target="1.5" includeantruntime="false" />
 		<junit dir="build/tests" haltonfailure="true">
 			<classpath path="${classpath};lib/junit/junit-4.8.2.jar;lib/mockito-all-1.8.5.jar;build/classes;build/tests" />
 			<formatter type="brief" usefile="false" />

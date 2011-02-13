@@ -28,7 +28,6 @@ public class PlottingWordPlacer implements WordPlacer {
 		wrappedPlacer = _wrappedPlacer;
 	}
 	
-	@Override
 	public PVector place(Word word, int wordIndex, int wordsCount, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
 		PVector v = wrappedPlacer.place(word, wordIndex, wordsCount, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
 		parent.pushStyle();

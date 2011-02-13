@@ -31,7 +31,6 @@ public class TextFile implements TextSource {
 		this.parent = parent;
 	}
 
-	@Override
 	public String getText() {
 		return PApplet.join(parent.loadStrings(path), ' ');
 	}
