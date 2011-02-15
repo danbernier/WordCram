@@ -86,10 +86,7 @@ class WordCramEngine {
 			timer.end("making a shape");
 			
 			if (shape == null) {
-				if (renderOptions.printWhenSkippingWords) {
-					System.out.println("Too small: " + word);	
-				}
-				this.skippedWords.add(eWord.word);
+				skipWord(word, WordCram.TOO_SMALL);
 			}
 			else {
 				eWord.setShape(shape);
@@ -98,13 +95,24 @@ class WordCramEngine {
 		}
 		
 		for (int i = maxNumberOfWords; i < words.length; i++) {
-			if (renderOptions.printWhenSkippingWords) {
-				System.out.println("Over the limit: " + words[i]);
-			}
-			skippedWords.add(words[i]);
+			skipWord(words[i], WordCram.TOO_MANY_WORDS);
 		}
 		
 		return engineWords.toArray(new EngineWord[0]);
+	}
+	
+	private void skipWord(Word word, int reason) {
+		if (renderOptions.printWhenSkippingWords) {
+			switch(reason) {
+			case WordCram.TOO_MANY_WORDS: System.out.println("Over the limit: " + word); break;
+			case WordCram.TOO_SMALL: System.out.println("Too small: " + word); break;
+			case WordCram.NO_ROOM: System.out.println("Couldn't fit: " + word); break;
+			}
+		}
+		skippedWords.add(word); // TODO remove this, & calculate it inside getSkippedWords() ?
+		// TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
+		// NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
+		word.setProperty(WordCram.SKIPPED_BECAUSE, reason);
 	}
 	
 	boolean hasMore() {
@@ -181,11 +189,7 @@ class WordCramEngine {
 			}
 		}
 		
-		if (renderOptions.printWhenSkippingWords) {
-			System.out.println("Couldn't fit: " + word);
-		}
-		skippedWords.add(eWord.word);
-		
+		skipWord(eWord.word, WordCram.NO_ROOM);
 		timer.count("couldn't place a word");
 		return false;
 	}

@@ -111,14 +111,14 @@ public class Main extends PApplet {
 					;
 		
 		//wordcram.printWhenSkippingWords();
-		//wordcram.maxNumberOfWordsToDraw(12);
+		//wordcram.maxNumberOfWordsToDraw(500);
 	}
 	
 	private void finishUp() {
 		//pg.endDraw();
 		//image(pg, 0, 0);
 		
-		println(wordcram.getSkippedWords());
+		//println(wordcram.getSkippedWords());
 		
 		println("Done");
 		save("wordcram.png");
@@ -129,7 +129,7 @@ public class Main extends PApplet {
 		//fill(55);
 		//rect(0, 0, width, height);
 		
-		boolean allAtOnce = true;
+		boolean allAtOnce = false;
 		if (allAtOnce) {
 			wordcram.drawAll();
 			finishUp();
@@ -139,10 +139,42 @@ public class Main extends PApplet {
 			while (wordcram.hasMore() && wordsPerFrame-- > 0) {
 				wordcram.drawNext();
 			}
+			
+			int[] wordCounts = getCounts(wordcram.getWords());
+			println(join(nfs(wordCounts, 4), ' '));
+			
 			if (!wordcram.hasMore()) {
 				finishUp();
 			}
 		}
+	}
+	
+	private int[] getCounts(Word[] words) {
+		int tooMany = 0;
+		int tooSmall = 0;
+		int couldntPlace = 0;
+		int placed = 0;
+		int remaining = 0;
+		
+		for (Word word : words) {
+			if (word.wasSkipped()) {
+				Integer skipReason = ((Integer)word.getProperty(WordCram.SKIPPED_BECAUSE)).intValue();
+				switch(skipReason) {
+				case WordCram.TOO_MANY_WORDS: tooMany++; break;
+				case WordCram.TOO_SMALL: tooSmall++; break;
+				case WordCram.NO_ROOM: couldntPlace++; break;
+				default: System.out.println("Got a weird skip reason: " + skipReason + ", " + word);
+				}
+			}
+			else if (word.wasPlaced()){
+				placed++;
+			}
+			else {
+				remaining++;
+			}
+		}
+		
+		return new int[] { tooMany, tooSmall, couldntPlace, placed, remaining };
 	}
 	
 	public void mouseMoved() {

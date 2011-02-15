@@ -75,12 +75,13 @@ public class Word implements Comparable<Word> {
 	public String word;
 	public double weight;
 
-	private Float size;
-	private Float angle;
-	private PFont font;
-	private Integer color;
-	private PVector place;
+	private Float presetSize;
+	private Float presetAngle;
+	private PFont presetFont;
+	private Integer presetColor;
+	private PVector presetTargetPlace;
 	
+	// TODO should these be Float, Integer, etc? They'll be null until they're rendered...
 	private float renderedSize;
 	private float renderedAngle;
 	private PFont renderedFont;
@@ -99,42 +100,42 @@ public class Word implements Comparable<Word> {
 	 * Set the size this Word should be rendered at - WordCram won't even call the WordSizer.
 	 */
 	public void setSize(float size) {
-		this.size = size;
+		this.presetSize = size;
 	}
 	
 	/**
 	 * Set the angle this Word should be rendered at - WordCram won't even call the WordAngler.
 	 */
 	public void setAngle(float angle) {
-		this.angle = angle;
+		this.presetAngle = angle;
 	}
 	
 	/**
 	 * Set the font this Word should be rendered in - WordCram won't call the WordFonter.
 	 */
 	public void setFont(PFont font) {  // TODO provide a string overload? Will need the PApplet...
-		this.font = font;
+		this.presetFont = font;
 	}
 	
 	/**
 	 * Set the color this Word should be rendered in - WordCram won't call the WordColorer.
 	 */
 	public void setColor(int color) {  // TODO provide a 3-float overload? 4-float? 2-float? Will need the PApplet...
-		this.color = color;
+		this.presetColor = color;
 	}
 	
 	/**
 	 * Set the place this Word should be rendered at - WordCram won't call the WordPlacer.
 	 */
 	public void setPlace(PVector place) {
-		this.place = place.get();
+		this.presetTargetPlace = place.get();
 	}
 	
 	/**
 	 * Set the place this Word should be rendered at - WordCram won't call the WordPlacer.
 	 */
 	public void setPlace(float x, float y) {
-		this.place = new PVector(x, y);
+		this.presetTargetPlace = new PVector(x, y);
 	}
 
 	/*
@@ -144,27 +145,27 @@ public class Word implements Comparable<Word> {
 	 */
 	
 	Float getSize(WordSizer sizer, int rank, int wordCount) {
-		renderedSize = size != null ? size : sizer.sizeFor(this, rank, wordCount);
+		renderedSize = presetSize != null ? presetSize : sizer.sizeFor(this, rank, wordCount);
 		return renderedSize;
 	}
 	
 	Float getAngle(WordAngler angler) {
-		renderedAngle = angle != null ? angle : angler.angleFor(this);
+		renderedAngle = presetAngle != null ? presetAngle : angler.angleFor(this);
 		return renderedAngle;
 	}
 	
 	PFont getFont(WordFonter fonter) {
-		renderedFont = font != null ? font : fonter.fontFor(this);
+		renderedFont = presetFont != null ? presetFont : fonter.fontFor(this);
 		return renderedFont;
 	}
 	
 	Integer getColor(WordColorer colorer) {
-		renderedColor = color != null ? color : colorer.colorFor(this);
+		renderedColor = presetColor != null ? presetColor : colorer.colorFor(this);
 		return renderedColor;
 	}
 	
 	PVector getTargetPlace(WordPlacer placer, int rank, int count, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
-		targetPlace = place != null ? place : placer.place(this, rank, count, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
+		targetPlace = presetTargetPlace != null ? presetTargetPlace : placer.place(this, rank, count, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
 		return targetPlace;
 	}
 	
@@ -228,6 +229,10 @@ public class Word implements Comparable<Word> {
 	 */
 	public boolean wasPlaced() {
 		return renderedPlace != null;
+	}
+	
+	public boolean wasSkipped() {
+		return getProperty(WordCram.SKIPPED_BECAUSE) != null;
 	}
 
 	/**

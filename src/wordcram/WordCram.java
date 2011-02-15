@@ -136,6 +136,11 @@ public class WordCram {
 	 * to the WordCramEngine, where all the work happens.  This separation keeps the classes 
 	 * focused on only one thing, but still gives the user a pretty nice API.
 	 */
+	
+	public static final String SKIPPED_BECAUSE = "skippedBecause";
+	public static final int TOO_MANY_WORDS = 301;
+	public static final int TOO_SMALL = 302;
+	public static final int NO_ROOM = 303;
 
 	private Word[] words;
 	private TextSource textSource;
@@ -684,17 +689,17 @@ public class WordCram {
 		getWordCramEngine().drawAll();
 	}
 	
-	/* TODO: uncomment this. It REALLY should return a copy.
-	 * Think through how it could be abused, and whether that matters.
-	 * 
-	 ** Get the Words that WordCram is drawing. This can be useful if
+	/** 
+	 * Get the Words that WordCram is drawing. This can be useful if
 	 * you want to inspect exactly how the words were weighted, or see
-	 * how they were colored, fonted, sized, angled, or placed.
-	 
+	 * how they were colored, fonted, sized, angled, or placed, or why
+	 * they were skipped.
+	 */
 	public Word[] getWords() {
-		return words;
+		Word[] wordsCopy = new Word[words.length];
+		System.arraycopy(words, 0, wordsCopy, 0, words.length);
+		return wordsCopy;
 	}
-	*/
 	
 	/**
 	 * Get the Word at the given (x,y) coordinates.
