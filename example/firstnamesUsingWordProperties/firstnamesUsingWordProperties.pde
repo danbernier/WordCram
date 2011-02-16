@@ -1,20 +1,4 @@
 /*
-Copyright 2010 Daniel Bernier
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
-/*
 firstnamesUsingWordProperties is a WordCram of the most popular first names from 
 the 1990 US Census.  Predictably, males are blue, and females
 are pink.  It also shows one way you can use a custom WordColorer.
@@ -29,7 +13,6 @@ Then, the sketch gives WordCram a custom WordColorer that checks
 each Word's isFemale property, and returns the corresponding pink or 
 blue.
 
-Built with WordCram 0.4, http://code.google.com/p/wordcram/
 Names collected from http://www.census.gov/genealogy/names
 Minya Nouvelle font from http://www.1001fonts.com/font_details.html?font_id=59
 */
