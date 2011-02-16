@@ -55,8 +55,6 @@ class EngineWord {
 
 		// TODO extract config setting for minBoundingBox, and add swelling
 		// option
-		// TODO try perf-testing smaller bounding boxes -- if it's not slower,
-		// it could make better images
 		this.bbTree = bbTreeBuilder.makeTree(shape, 2);
 	}
 
