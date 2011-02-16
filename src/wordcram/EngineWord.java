@@ -26,9 +26,6 @@ class EngineWord {
 	Word word;
 	int rank;
 	
-	private float size;
-	private float angle;
-	private PFont font;
 	private int color;
 
 	private Shape shape;
@@ -38,13 +35,11 @@ class EngineWord {
 	private PVector desiredLocation;
 	private PVector currentLocation;
 
-	EngineWord(Word word, int rank, int wordCount, WordSizer sizer, WordAngler angler, WordFonter fonter, WordColorer colorer, BBTreeBuilder bbTreeBuilder) {
+	EngineWord(Word word, int rank, int wordCount, WordColorer colorer, BBTreeBuilder bbTreeBuilder) {
 		this.word = word;
 		this.rank = rank;
 		
-		this.size = word.getSize(sizer, rank, wordCount);
-		this.angle = word.getAngle(angler);
-		this.font = word.getFont(fonter);
+		// TODO looks like for these, we a) set them here from the Word, b) immediately call their getters, and c) pass them to wordShaper. Just kill the caches here.
 		this.color = word.getColor(colorer); // TODO odd: should we only call the colorer when it's time to color the word?
 		
 		this.bbTreeBuilder = bbTreeBuilder;
@@ -53,8 +48,7 @@ class EngineWord {
 	void setShape(Shape shape) {
 		this.shape = shape;
 
-		// TODO extract config setting for minBoundingBox, and add swelling
-		// option
+		// TODO extract config setting for minBoundingBox, and add swelling option
 		this.bbTree = bbTreeBuilder.makeTree(shape, 2);
 	}
 
@@ -90,19 +84,6 @@ class EngineWord {
 	
 	boolean wasPlaced() {
 		return word.wasPlaced();
-	}
-
-	
-	float getSize() {
-		return size;
-	}
-
-	float getAngle() {
-		return angle;
-	}
-
-	PFont getFont() {
-		return font;
 	}
 
 	int getColor() {

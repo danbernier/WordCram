@@ -79,10 +79,14 @@ class WordCramEngine {
 		for (int i = 0; i < maxNumberOfWords; i++) {
 			
 			Word word = words[i];
-			EngineWord eWord = new EngineWord(word, i, words.length, sizer, angler, fonter, colorer, bbTreeBuilder);
+			EngineWord eWord = new EngineWord(word, i, words.length, colorer, bbTreeBuilder);
+			
+			PFont wordFont = word.getFont(fonter);
+			float wordSize = word.getSize(sizer, i, words.length);
+			float wordAngle = word.getAngle(angler);
 			
 			timer.start("making a shape");
-			Shape shape = wordShaper.getShapeFor(eWord.word.word, eWord.getFont(), eWord.getSize(), eWord.getAngle(), renderOptions.minShapeSize);
+			Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle, renderOptions.minShapeSize);
 			timer.end("making a shape");
 			
 			if (shape == null) {
