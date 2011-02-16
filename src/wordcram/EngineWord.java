@@ -19,14 +19,11 @@ package wordcram;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 
-import processing.core.PFont;
 import processing.core.PVector;
 
 class EngineWord {
 	Word word;
 	int rank;
-	
-	private int color;
 
 	private Shape shape;
 	private BBTreeBuilder bbTreeBuilder;
@@ -35,13 +32,9 @@ class EngineWord {
 	private PVector desiredLocation;
 	private PVector currentLocation;
 
-	EngineWord(Word word, int rank, int wordCount, WordColorer colorer, BBTreeBuilder bbTreeBuilder) {
+	EngineWord(Word word, int rank, int wordCount, BBTreeBuilder bbTreeBuilder) {
 		this.word = word;
 		this.rank = rank;
-		
-		// TODO looks like for these, we a) set them here from the Word, b) immediately call their getters, and c) pass them to wordShaper. Just kill the caches here.
-		this.color = word.getColor(colorer); // TODO odd: should we only call the colorer when it's time to color the word?
-		
 		this.bbTreeBuilder = bbTreeBuilder;
 	}
 
@@ -84,9 +77,5 @@ class EngineWord {
 	
 	boolean wasPlaced() {
 		return word.wasPlaced();
-	}
-
-	int getColor() {
-		return color;
 	}
 }

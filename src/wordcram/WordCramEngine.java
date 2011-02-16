@@ -79,7 +79,7 @@ class WordCramEngine {
 		for (int i = 0; i < maxNumberOfWords; i++) {
 			
 			Word word = words[i];
-			EngineWord eWord = new EngineWord(word, i, words.length, colorer, bbTreeBuilder);
+			EngineWord eWord = new EngineWord(word, i, words.length, bbTreeBuilder);
 			
 			PFont wordFont = word.getFont(fonter);
 			float wordSize = word.getSize(sizer, i, words.length);
@@ -208,7 +208,7 @@ class WordCramEngine {
 		Graphics2D g2 = (Graphics2D)destination.image.getGraphics();
 			
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setPaint(new Color(word.getColor(), true));
+		g2.setPaint(new Color(word.word.getColor(colorer), true));
 		g2.fill(path2d);
 	}
 	
