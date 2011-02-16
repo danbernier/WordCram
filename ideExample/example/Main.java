@@ -35,7 +35,7 @@ public class Main extends PApplet {
 
 		// P2D can't draw to destination.image.getGraphics(). Interesting.
 
-		size(900, 700); // (int)random(300, 800)); //1200, 675); //1600, 900);
+		size(700, 400); // (int)random(300, 800)); //1200, 675); //1600, 900);
 		smooth();
 		colorMode(HSB);
 		initWordCram();
@@ -71,37 +71,9 @@ public class Main extends PApplet {
 					//.excludeNumbers()
 					.withFonts(randomFont())
 					.withColorer(Colorers.twoHuesRandomSats(this))
-					.withAngler(Anglers.random()) //Anglers.horiz())
-					//.withPlacer(Placers.horizLine())
-					.withPlacer(new WordPlacer() {
-						private java.util.Random r = new java.util.Random();
-
-						public PVector place(Word word, int wordIndex,
-								int wordsCount, int wordImageWidth,
-								int wordImageHeight, int fieldWidth, int fieldHeight) {
-
-							float x = (float) (r.nextGaussian() * (1 - word.weight)) / 2;
-							float y = (float) (r.nextGaussian() * (1 - word.weight)) / 2;
-							//x *= Math.abs(x);
-							y *= Math.abs(y);
-							x = PApplet.map(x, -2, 2, 0, fieldWidth - wordImageWidth);
-							y = PApplet.map(y, -2, 2, 0, fieldHeight - wordImageHeight);
-							
-							y = PApplet.map((float)wordIndex, wordsCount, 0, 0, fieldHeight - wordImageHeight);
-							y = PApplet.map((float)word.weight, 0, 1, 0, fieldHeight - wordImageHeight);
-							
-							x = PApplet.map((float)word.weight, 1, 0, 0, fieldWidth - wordImageWidth);
-							//y = (float)(r.nextGaussian() * (1-word.weight)) / 2;
-							//y *= Math.abs(y);
-							//y = PApplet.map(y, -2, 2, 0, fieldHeight - wordImageHeight);
-							
-							int firstLetter = word.word.toCharArray()[0];
-							x = PApplet.map(firstLetter, 97, 122, 0, fieldWidth - wordImageWidth);
-							
-							return new PVector(x, y);
-						}
-					})
-					.withPlacer(Placers.centerClump())
+					.withAngler(Anglers.mostlyHoriz())
+					.withPlacer(Placers.horizLine())
+					//.withPlacer(Placers.centerClump())
 					.withSizer(Sizers.byWeight(5, 70))
 					//.withMaxAttemptsForPlacement(10)
 					
@@ -198,7 +170,7 @@ public class Main extends PApplet {
 	private String textFilePath() {
 		boolean linux = true;
 		String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
-		String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
+		String path = projDir + "eclipse/wordcram/trunk/ideExample/franklin.txt";
 		return path;		
 	}
 	
