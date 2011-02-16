@@ -57,7 +57,7 @@ class EngineWord {
 		// option
 		// TODO try perf-testing smaller bounding boxes -- if it's not slower,
 		// it could make better images
-		this.bbTree = bbTreeBuilder.makeTree(shape, 7);
+		this.bbTree = bbTreeBuilder.makeTree(shape, 2);
 	}
 
 	Shape getShape() {
