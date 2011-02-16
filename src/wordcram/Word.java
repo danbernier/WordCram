@@ -81,12 +81,11 @@ public class Word implements Comparable<Word> {
 	private Integer presetColor;
 	private PVector presetTargetPlace;
 	
-	// TODO should these be Float, Integer, etc? They'll be null until they're rendered...
-	// ...and then we can re-null them on a re-render.
-	private float renderedSize;
-	private float renderedAngle;
+	// These are null until they're rendered, and can be wiped out for a re-render.
+	private Float renderedSize;
+	private Float renderedAngle;
 	private PFont renderedFont;
-	private int renderedColor;
+	private Integer renderedColor;
 	private PVector targetPlace;
 	private PVector renderedPlace;
 	
