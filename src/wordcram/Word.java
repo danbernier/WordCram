@@ -82,6 +82,7 @@ public class Word implements Comparable<Word> {
 	private PVector presetTargetPlace;
 	
 	// TODO should these be Float, Integer, etc? They'll be null until they're rendered...
+	// ...and then we can re-null them on a re-render.
 	private float renderedSize;
 	private float renderedAngle;
 	private PFont renderedFont;
@@ -225,14 +226,38 @@ public class Word implements Comparable<Word> {
 	
 	/**
 	 * Indicates whether the Word was placed successfully. It's the same as calling word.getRenderedPlace() != null.
+	 * If this returns false, it's either because a) WordCram didn't get to this Word yet,
+	 * or b) it was skipped for some reason (see {@link #wasSkipped()} and {@link #getSkippedReason()}).
 	 * @return true only if the word was placed.
 	 */
 	public boolean wasPlaced() {
 		return renderedPlace != null;
 	}
 	
+	/**
+	 * Indicates whether the Word was skipped.
+	 * @see {@link #getSkippedReason()}
+	 * @return true if the word was skipped
+	 */
 	public boolean wasSkipped() {
-		return getProperty(WordCram.SKIPPED_BECAUSE) != null;
+		return getSkippedReason() != null;
+	}
+	
+	/**
+	 * Tells you why this Word was skipped.
+	 * 
+	 * If the word was skipped, 
+	 * then this will return an Integer, which will be one of 
+	 * {@link WordCram#TOO_MANY_WORDS}, {@link WordCram#TOO_SMALL}, 
+	 * or {@link WordCram#NO_ROOM}.
+	 * 
+	 * If the word was successfully placed, or WordCram hasn't
+	 * gotten to this word yet, this will return null.
+	 * 
+	 * @return the code for the reason the word was skipped, or null if it wasn't skipped.  
+	 */
+	public Integer getSkippedReason() {
+		return (Integer)getProperty(WordCram.SKIPPED_BECAUSE);
 	}
 
 	/**
@@ -259,7 +284,27 @@ public class Word implements Comparable<Word> {
 	 */
 	@Override
 	public String toString() {
-		return word + " (" + weight + ")";
+		String status = "";
+		if (wasPlaced()) {
+			status = renderedPlace.x + "," + renderedPlace.y;
+		}
+		else if (wasSkipped()) {
+			switch (getSkippedReason()) {
+			case WordCram.TOO_MANY_WORDS:
+				status = "too many words";
+				break;
+			case WordCram.TOO_SMALL:
+				status = "too small";
+				break;
+			case WordCram.NO_ROOM:
+				status = "couldn't find a spot";
+				break;
+			}
+		}
+		if (status.length() != 0) {
+			status = " [" + status + "]";
+		}
+		return word + " (" + weight + ")" + status;
 	}
 	
 	/**
