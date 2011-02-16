@@ -75,7 +75,7 @@ public class Main extends PApplet {
 					.withPlacer(Placers.horizLine())
 					//.withPlacer(Placers.centerClump())
 					.withSizer(Sizers.byWeight(5, 70))
-					.minShapeSize(0)
+					//.minShapeSize(0)
 					//.withMaxAttemptsForPlacement(10)
 					
 					//.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))

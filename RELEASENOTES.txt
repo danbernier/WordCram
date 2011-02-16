@@ -2,11 +2,11 @@ Release notes for WordCram 0.4, date TBD:
 
 * Word now has methods getProperty(String name) and setProperty(String
   name, Object value).  The firstnamesUsingWordProperties example
-  sketch shows how it works. If a Word has properties named "size",
-  "angle", "color", "font", or "place", the WordCram will use those
-  values rather than the values from the WordSizer, WordAngler, etc.
-  Properties can also be useful with a custom WordPlacer, WordColorer,
-  etc.
+  sketch shows how it works. Properties can be useful with a custom
+  WordPlacer, WordColorer, etc.
+
+* Word also now has methods setSize(), etc..., and getRenderedSize(), 
+  etc...
 
 * Added getWordAt(x,y).
 
@@ -14,9 +14,9 @@ Release notes for WordCram 0.4, date TBD:
   thinks a Word will be too small to see, or can't find a place for
   it.
 
-* Added registerSkippedWords() and getSkippedWords(), which make
-  WordCram remember each skipped word, so it can provide an ArrayList
-  of them after the sketch has run.
+* Added getSkippedWords(), which returns a Word[] of all words that were (so far)
+  skipped, and getWords(), which returns a Word[] of all words the WordCram
+  is looking at.
 
 * Added withCustomCanvas(PGraphics), so a WordCram can be drawn to a
   PGraphics besides the sketch it's running in. Also added
@@ -29,7 +29,10 @@ Release notes for WordCram 0.4, date TBD:
 * Added maxNumberOfWordsToDraw(int), which limits how many words
   WordCram will try to draw.
 
-* Deleted currentWord() and currentWordIndex(), which were deprecated.
+* Added minShapeSize(int), to weed out words that render to Shapes
+  smaller than the given size.
+
+* Deleted deprecated methods currentWord() and currentWordIndex().
 
 
 Release notes for WordCram 0.3.1, 2010-11-10:
