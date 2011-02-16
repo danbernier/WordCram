@@ -75,6 +75,7 @@ public class Main extends PApplet {
 					.withPlacer(Placers.horizLine())
 					//.withPlacer(Placers.centerClump())
 					.withSizer(Sizers.byWeight(5, 70))
+					.minShapeSize(0)
 					//.withMaxAttemptsForPlacement(10)
 					
 					//.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
@@ -82,7 +83,7 @@ public class Main extends PApplet {
 					
 					;
 		
-		//wordcram.printWhenSkippingWords();
+		wordcram.printWhenSkippingWords();
 		//wordcram.maxNumberOfWordsToDraw(500);
 	}
 	
@@ -139,7 +140,7 @@ public class Main extends PApplet {
 	private String textFilePath() {
 		boolean linux = true;
 		String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
-		String path = projDir + "eclipse/wordcram/trunk/ideExample/franklin.txt";
+		String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
 		return path;		
 	}
 	

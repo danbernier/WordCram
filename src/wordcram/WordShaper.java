@@ -28,11 +28,11 @@ import processing.core.PFont;
 class WordShaper {
 	private FontRenderContext frc = new FontRenderContext(null, true, true);
 	
-	Shape getShapeFor(String word, PFont font, float fontSize, float angle) {
+	Shape getShapeFor(String word, PFont font, float fontSize, float angle, int minShapeSize) {
 
 		Shape shape = makeShape(word, font, fontSize);
 		
-		if (isTooSmall(shape)) {
+		if (isTooSmall(shape, minShapeSize)) {
 			return null;		
 		}
 		
@@ -51,18 +51,16 @@ class WordShaper {
 		return gv.getOutline();
 	}
 	
-	private boolean isTooSmall(Shape shape) {
+	private boolean isTooSmall(Shape shape, int minShapeSize) {
 		Rectangle2D r = shape.getBounds2D();
 		
-		// TODO extract config setting for minWordRenderedSize, and take height into account -- not just width.
+		// TODO take height into account -- not just width.
 		// Note, however, that this is called BEFORE rotate(), so the only words like "I" run the risk of 
 		// being unfairly rejected if we don't consider height.
 		// Though, since we say "too narrow OR too short", rather than "...AND...", words like "I"
 		// would be unfairly rejected anyway.
 		
-		int minSize = 7;
-		
-		return r.getWidth() < minSize || r.getHeight() < minSize;
+		return r.getWidth() < minShapeSize || r.getHeight() < minShapeSize;
 	}
 	
 	private Shape rotate(Shape shape, float rotation) {

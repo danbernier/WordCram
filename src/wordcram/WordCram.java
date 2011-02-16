@@ -617,6 +617,17 @@ public class WordCram {
 	}
 	
 	/**
+	 * The smallest sized Shape the WordCram should try to draw.
+	 * By default, it's 7.
+	 * @param maxWords can be any value from 0 to Integer.MAX_VALUE. Values < 0 are treated as unlimited.
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram minShapeSize(int minShapeSize) {
+		renderOptions.minShapeSize = minShapeSize;
+		return this;
+	}
+	
+	/**
 	 * Use a custom canvas instead of the applet's default one.
 	 * This may be needed if rendering in background or in other dimensions than the
 	 * applet size is needed.

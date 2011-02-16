@@ -65,7 +65,7 @@ public class AWordCramEngine {
 		WordCramEngine engine = getEngine(words);
 		
 		for (int i = 0; i < words.length; i++) {
-			verify(shaper).getShapeFor(words[i].word, pFont, sizes[i], angles[i]);
+			verify(shaper).getShapeFor(words[i].word, pFont, sizes[i], angles[i], renderOptions.minShapeSize);
 		}
 	}
 	
@@ -75,8 +75,8 @@ public class AWordCramEngine {
 		Word small = new Word("small", 1);
 		Shape bigShape = mock(Shape.class);
 		
-		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(bigShape);
-		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(null);
+		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(bigShape);
+		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(null);
 		
 		WordCramEngine engine = getEngine(big, small);
 		Word[] skippedWords = engine.getSkippedWords();
@@ -97,7 +97,7 @@ public class AWordCramEngine {
 		
 		renderOptions.maxNumberOfWordsToDraw = 2;
 		
-		when(shaper.getShapeFor(anyString(), any(PFont.class), anyFloat(), anyFloat())).thenReturn(new Rectangle());
+		when(shaper.getShapeFor(anyString(), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(new Rectangle());
 		
 		WordCramEngine engine = getEngine(words);
 		Word[] skippedWords = engine.getSkippedWords();
