@@ -113,7 +113,13 @@ class WordCramEngine {
 			case WordCram.NO_ROOM: System.out.println("Couldn't fit: " + word); break;
 			}
 		}
-		skippedWords.add(word); // TODO remove this, & calculate it inside getSkippedWords() ?
+		
+		/* TODO remove this, & calculate it inside getSkippedWords() ?
+		 * If we do, we'll have to cache the orig. Word[] somewhere, because EngineWord[]
+		 * DOESN'T have words that a) were over the limit, or b) had shapes too small. 
+		 */
+		skippedWords.add(word);
+		
 		// TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
 		// NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
 		word.setProperty(WordCram.SKIPPED_BECAUSE, reason);
