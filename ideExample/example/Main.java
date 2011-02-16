@@ -112,41 +112,10 @@ public class Main extends PApplet {
 				wordcram.drawNext();
 			}
 			
-			int[] wordCounts = getCounts(wordcram.getWords());
-			println(join(nfs(wordCounts, 4), ' '));
-			
 			if (!wordcram.hasMore()) {
 				finishUp();
 			}
 		}
-	}
-	
-	private int[] getCounts(Word[] words) {
-		int tooMany = 0;
-		int tooSmall = 0;
-		int couldntPlace = 0;
-		int placed = 0;
-		int remaining = 0;
-		
-		for (Word word : words) {
-			if (word.wasSkipped()) {
-				Integer skipReason = ((Integer)word.getProperty(WordCram.SKIPPED_BECAUSE)).intValue();
-				switch(skipReason) {
-				case WordCram.TOO_MANY_WORDS: tooMany++; break;
-				case WordCram.TOO_SMALL: tooSmall++; break;
-				case WordCram.NO_ROOM: couldntPlace++; break;
-				default: System.out.println("Got a weird skip reason: " + skipReason + ", " + word);
-				}
-			}
-			else if (word.wasPlaced()){
-				placed++;
-			}
-			else {
-				remaining++;
-			}
-		}
-		
-		return new int[] { tooMany, tooSmall, couldntPlace, placed, remaining };
 	}
 	
 	public void mouseMoved() {
