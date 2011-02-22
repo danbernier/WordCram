@@ -70,7 +70,7 @@ public class Main extends PApplet {
 					//.upperCase()
 					//.excludeNumbers()
 					.withFonts(randomFont())
-					.withColorer(Colorers.twoHuesRandomSats(this))
+					//.withColorer(Colorers.complement(this, random(255), 200, 220))
 					.withAngler(Anglers.mostlyHoriz())
 					.withPlacer(Placers.horizLine())
 					//.withPlacer(Placers.centerClump())
@@ -83,7 +83,7 @@ public class Main extends PApplet {
 					
 					;
 		
-		wordcram.printWhenSkippingWords();
+		//wordcram.printWhenSkippingWords();
 		//wordcram.maxNumberOfWordsToDraw(500);
 	}
 	
@@ -120,10 +120,12 @@ public class Main extends PApplet {
 	}
 	
 	public void mouseMoved() {
+		/*
 		Word word = wordcram.getWordAt(mouseX, mouseY);
 		if (word != null) {
 			System.out.println(round(mouseX) + "," + round(mouseY) + " -> " + word.word);
 		}
+		*/
 	}
 		
 	public void mouseClicked() {
