@@ -83,7 +83,6 @@ public class Main extends PApplet {
 					
 					;
 		
-		//wordcram.printWhenSkippingWords();
 		//wordcram.maxNumberOfWordsToDraw(500);
 	}
 	

@@ -5,18 +5,14 @@ Release notes for WordCram 0.4, date TBD:
   sketch shows how it works. Properties can be useful with a custom
   WordPlacer, WordColorer, etc.
 
-* Word also now has methods setSize(), etc..., and getRenderedSize(), 
+* Word also now has methods setSize(), etc..., and getRenderedSize(),
   etc...
 
 * Added getWordAt(x,y).
 
-* Added printWhenSkippingWords() so you can see when WordCram either
-  thinks a Word will be too small to see, or can't find a place for
-  it.
-
-* Added getSkippedWords(), which returns a Word[] of all words that were (so far)
-  skipped, and getWords(), which returns a Word[] of all words the WordCram
-  is looking at.
+* Added getSkippedWords(), which returns a Word[] of all words that
+  were (so far) skipped, and getWords(), which returns a Word[] of all
+  words the WordCram is looking at.
 
 * Added withCustomCanvas(PGraphics), so a WordCram can be drawn to a
   PGraphics besides the sketch it's running in. Also added

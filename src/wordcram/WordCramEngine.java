@@ -106,14 +106,6 @@ class WordCramEngine {
 	}
 	
 	private void skipWord(Word word, int reason) {
-		if (renderOptions.printWhenSkippingWords) {
-			switch(reason) {
-			case WordCram.TOO_MANY_WORDS: System.out.println("Over the limit: " + word); break;
-			case WordCram.TOO_SMALL: System.out.println("Too small: " + word); break;
-			case WordCram.NO_ROOM: System.out.println("Couldn't fit: " + word); break;
-			}
-		}
-		
 		/* TODO 0.4: remove this, & calculate it inside getSkippedWords() ?
 		 * If we do, we'll have to cache the orig. Word[] somewhere, because EngineWord[]
 		 * DOESN'T have words that a) were over the limit, or b) had shapes too small. 

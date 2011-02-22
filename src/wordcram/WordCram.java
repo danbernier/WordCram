@@ -124,7 +124,7 @@ import wordcram.text.*;
  * 
  * <p>
  * If you're having trouble getting your words to show up, you might
- * want to {@link #printWhenSkippingWords()}.  Knowing which words were
+ * want to {@link #getSkippedWords()}.  Knowing which words were
  * skipped, and why, can help you size and place your words better.
  *  
  * @author Dan Bernier
@@ -573,21 +573,6 @@ public class WordCram {
 	 */
 	public WordCram withNudger(WordNudger nudger) {
 		this.nudger = nudger;
-		return this;
-	}
-	
-	/**
-	 * Make the WordCram print a message to standard-out whenever a word is skipped.
-	 * <p>
-	 * Words are skipped whenever a) they're too small, or b) the WordCram
-	 * can't successfully nudge them into place.  If printWhenSkippingWords
-	 * is turned on, the WordCram will print a message that includes the word, 
-	 * its weight, and why the word was skipped.
-	 * 
-	 * @return The WordCram, for further setup or drawing.
-	 */
-	public WordCram printWhenSkippingWords() {
-		renderOptions.printWhenSkippingWords = true;		
 		return this;
 	}
 	
