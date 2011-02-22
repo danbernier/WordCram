@@ -138,7 +138,7 @@ public class WordCram {
 	 */
 	
 	public static final String SKIPPED_BECAUSE = "skippedBecause";
-	public static final int TOO_MANY_WORDS = 301;  // TODO find a better "name" for that
+	public static final int TOO_MANY_WORDS = 301;  // TODO 0.4: find a better "name" for that
 	public static final int TOO_SMALL = 302;
 	public static final int NO_ROOM = 303;
 

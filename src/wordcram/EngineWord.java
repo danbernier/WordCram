@@ -41,7 +41,7 @@ class EngineWord {
 	void setShape(Shape shape) {
 		this.shape = shape;
 
-		// TODO extract config setting for minBoundingBox, and add swelling option
+		// TODO 0.4: extract config setting for minBoundingBox, and add swelling option
 		this.bbTree = bbTreeBuilder.makeTree(shape, 2);
 	}
 
