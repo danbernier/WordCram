@@ -1,17 +1,13 @@
 /*
-firstnamesUsingWordProperties is a WordCram of the most popular first names from 
+firstnamesUsingWordPresets is a WordCram of the most popular first names from 
 the 1990 US Census.  Predictably, males are blue, and females
 are pink.  It also shows one way you can use a custom WordColorer.
-See firstnamesUsingWordPresets for another.
+See firstnamesUsingSubclasses for another.
 
 When you're parsing the names data, you know whether each word
 is a male or female name.  To take advantage of this, the sketch
-creates a Word object, and gives it a property named "isFemale",
-set to either true or false.
-
-Then, the sketch gives WordCram a custom WordColorer that checks
-each Word's isFemale property, and returns the corresponding pink or 
-blue.
+creates a Word object, and pre-sets its color to blue or pink,
+via the setColor() method.
 
 Names collected from http://www.census.gov/genealogy/names
 Minya Nouvelle font from http://www.1001fonts.com/font_details.html?font_id=59
@@ -43,23 +39,7 @@ void makeWordCram() {
   wc = new WordCram(this)
     .fromWords(names)
     .withFont(createFont("../MINYN___.TTF", 1))
-    .sizedByWeight(12, 60)
-    .withColorer(colorer());
-}
-
-WordColorer colorer() {
-  return new WordColorer() {
-    public int colorFor(Word name) {
-      boolean isFemale = (Boolean)name.getProperty("isFemale");
-      
-      if (isFemale) {
-        return color(#f36d91); // pink
-      }
-      else {
-        return color(#476dd5); // blue
-      }
-    }
-  };
+    .sizedByWeight(12, 60);
 }
 
 void draw() {
@@ -92,7 +72,13 @@ Word parseName(String data) {
   
   Word word = new Word(name, frequency);
   
-  word.setProperty("isFemale", isFemale);
+  if (isFemale) {
+    word.setColor(#f36d91); // pink
+  }
+  else {
+    word.setColor(#476dd5); // blue
+  }
   
   return word;
 }
+
