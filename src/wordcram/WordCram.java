@@ -176,7 +176,7 @@ public class WordCram {
 	 * @param _angler says how to rotate each word.
 	 * @param _wordPlacer says (approximately) where to place each word.
 	 * @param _wordNudger says how to nudge a word, when it doesn't initially fit.
-	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the fluent builder methods instead.
+	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the fluent builder methods instead. Will be deleted in 0.5.
 	 */
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer, WordNudger _wordNudger) {
 		this(_parent);
@@ -197,7 +197,7 @@ public class WordCram {
 	 * @param _colorer says which color to draw each word in.
 	 * @param _angler says how to rotate each word.
 	 * @param _wordPlacer says (approximately) where to place each word.
-	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the fluent builder methods instead.
+	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the fluent builder methods instead. Will be deleted in 0.5.
 	 */
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
 		this(_parent, _words, _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
