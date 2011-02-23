@@ -1,4 +1,9 @@
-Release notes for WordCram 0.4, date TBD:
+Release notes for WordCram 0.4, Spring 2011:
+
+WordCram 0.4 changes center around three themes: setting rendering
+options on words directly (rather than through components);
+information on whether a Word was placed or skipped, and why; and
+finer control over the rendering process.
 
 * Word now has methods getProperty(String name) and setProperty(String
   name, Object value).  The firstnamesUsingWordProperties example
@@ -27,6 +32,8 @@ Release notes for WordCram 0.4, date TBD:
 
 * Added minShapeSize(int), to weed out words that render to Shapes
   smaller than the given size.
+
+* Back-ported to run on Java 1.5, to match Processing.
 
 * Deleted deprecated methods currentWord() and currentWordIndex().
 

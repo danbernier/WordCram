@@ -112,7 +112,7 @@ class WordCramEngine {
 		 */
 		skippedWords.add(word);
 		
-		// TODO 0.4: delete these properties when starting a sketch, in case it's a re-run w/ the same words.
+		// TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
 		// NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
 		word.wasSkippedBecause(reason);
 	}
