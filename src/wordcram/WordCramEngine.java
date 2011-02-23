@@ -90,7 +90,7 @@ class WordCramEngine {
 			timer.end("making a shape");
 			
 			if (shape == null) {
-				skipWord(word, WordCram.TOO_SMALL);
+				skipWord(word, WordCram.SHAPE_WAS_TOO_SMALL);
 			}
 			else {
 				eWord.setShape(shape);
@@ -99,7 +99,7 @@ class WordCramEngine {
 		}
 		
 		for (int i = maxNumberOfWords; i < words.length; i++) {
-			skipWord(words[i], WordCram.TOO_MANY_WORDS);
+			skipWord(words[i], WordCram.WAS_OVER_MAX_NUMBER_OF_WORDS);
 		}
 		
 		return engineWords.toArray(new EngineWord[0]);
@@ -114,7 +114,7 @@ class WordCramEngine {
 		
 		// TODO 0.4: delete these properties when starting a sketch, in case it's a re-run w/ the same words.
 		// NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
-		word.setProperty(WordCram.SKIPPED_BECAUSE, reason);
+		word.wasSkippedBecause(reason);
 	}
 	
 	boolean hasMore() {

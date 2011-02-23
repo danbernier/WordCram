@@ -33,20 +33,18 @@ void report() {
     Word word = words[i];
     if (word.wasSkipped()) {
 
-      int skipReason = ((Integer)word.getProperty(WordCram.SKIPPED_BECAUSE)).intValue();
+      int skipReason = word.wasSkippedBecause().intValue();
 
       switch(skipReason) {
-      case WordCram.TOO_MANY_WORDS: 
-        tooMany++; 
+      case WordCram.WAS_OVER_MAX_NUMBER_OF_WORDS: 
+        tooMany++;
         break;
-      case WordCram.TOO_SMALL: 
+      case WordCram.SHAPE_WAS_TOO_SMALL: 
         tooSmall++; 
         break;
       case WordCram.NO_ROOM: 
         couldNotPlace++; 
         break;
-      default: 
-        System.out.println("Got a weird skip reason: " + skipReason + ", " + word);
       }
     }
     else if (word.wasPlaced()) {

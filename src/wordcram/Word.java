@@ -88,6 +88,7 @@ public class Word implements Comparable<Word> {
 	private Integer renderedColor;
 	private PVector targetPlace;
 	private PVector renderedPlace;
+	private Integer skippedBecause;
 	
 	private HashMap<String,Object> properties = new HashMap<String,Object>();
 	
@@ -226,7 +227,7 @@ public class Word implements Comparable<Word> {
 	/**
 	 * Indicates whether the Word was placed successfully. It's the same as calling word.getRenderedPlace() != null.
 	 * If this returns false, it's either because a) WordCram didn't get to this Word yet,
-	 * or b) it was skipped for some reason (see {@link #wasSkipped()} and {@link #getSkippedReason()}).
+	 * or b) it was skipped for some reason (see {@link #wasSkipped()} and {@link #wasSkippedBecause()}).
 	 * @return true only if the word was placed.
 	 */
 	public boolean wasPlaced() {
@@ -235,11 +236,11 @@ public class Word implements Comparable<Word> {
 	
 	/**
 	 * Indicates whether the Word was skipped.
-	 * @see {@link #getSkippedReason()}
+	 * @see {@link #wasSkippedBecause()}
 	 * @return true if the word was skipped
 	 */
 	public boolean wasSkipped() {
-		return getSkippedReason() != null;
+		return wasSkippedBecause() != null;
 	}
 	
 	/**
@@ -247,7 +248,7 @@ public class Word implements Comparable<Word> {
 	 * 
 	 * If the word was skipped, 
 	 * then this will return an Integer, which will be one of 
-	 * {@link WordCram#TOO_MANY_WORDS}, {@link WordCram#TOO_SMALL}, 
+	 * {@link WordCram#WAS_OVER_MAX_NUMBER_OF_WORDS}, {@link WordCram#SHAPE_WAS_TOO_SMALL}, 
 	 * or {@link WordCram#NO_ROOM}.
 	 * 
 	 * If the word was successfully placed, or WordCram hasn't
@@ -255,8 +256,12 @@ public class Word implements Comparable<Word> {
 	 * 
 	 * @return the code for the reason the word was skipped, or null if it wasn't skipped.  
 	 */
-	public Integer getSkippedReason() {
-		return (Integer)getProperty(WordCram.SKIPPED_BECAUSE);
+	public Integer wasSkippedBecause() {
+		return skippedBecause;
+	}
+	
+	void wasSkippedBecause(int reason) {
+		skippedBecause = reason;
 	}
 
 	/**
@@ -288,12 +293,12 @@ public class Word implements Comparable<Word> {
 			status = renderedPlace.x + "," + renderedPlace.y;
 		}
 		else if (wasSkipped()) {
-			switch (getSkippedReason()) {
-			case WordCram.TOO_MANY_WORDS:
-				status = "too many words";
+			switch (wasSkippedBecause()) {
+			case WordCram.WAS_OVER_MAX_NUMBER_OF_WORDS:
+				status = "was over the maximum number of words";
 				break;
-			case WordCram.TOO_SMALL:
-				status = "too small";
+			case WordCram.SHAPE_WAS_TOO_SMALL:
+				status = "shape was too small";
 				break;
 			case WordCram.NO_ROOM:
 				status = "couldn't find a spot";
