@@ -20,8 +20,9 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
 class BBTreeBuilder {
-	public BBTree makeTree(Shape shape, int minBoxSize) {
+	public BBTree makeTree(Shape shape) {
 		Rectangle2D bounds = shape.getBounds2D();
+		int minBoxSize = 1;
 		int left = (int) bounds.getX();
 		int top = (int) bounds.getY();
 		int right = left + (int) bounds.getWidth();
