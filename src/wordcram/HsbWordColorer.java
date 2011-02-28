@@ -19,7 +19,7 @@ limitations under the License.
 import processing.core.PApplet;
 import processing.core.PConstants;
 
-public abstract class HsbWordColorer implements WordColorer {
+abstract class HsbWordColorer implements WordColorer {
 	private PApplet host;
 	private int range;
 	
