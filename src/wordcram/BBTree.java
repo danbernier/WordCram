@@ -36,7 +36,7 @@ class BBTree {
 		bottom = _bottom;
 	}
 
-	public void addKids(BBTree... _kids) {
+	void addKids(BBTree... _kids) {
 		ArrayList<BBTree> kidList = new ArrayList<BBTree>();
 		for (BBTree kid : _kids) {
 			if (kid != null) {
@@ -47,7 +47,7 @@ class BBTree {
 		kids = kidList.toArray(new BBTree[0]);
 	}
 
-	public void setLocation(PVector _location) {
+	void setLocation(PVector _location) {
 		location = _location;
 		if (!isLeaf()) {
 			for (BBTree kid : kids) {
@@ -56,11 +56,7 @@ class BBTree {
 		}
 	}
 
-	private BBTree[] getKids() {
-		return kids;
-	}
-
-	public boolean overlaps(BBTree otherTree) {
+	boolean overlaps(BBTree otherTree) {
 
 		if (rectCollide(this, otherTree)) {
 			if (this.isLeaf() && otherTree.isLeaf()) {
@@ -68,7 +64,7 @@ class BBTree {
 			}
 
 			if (this.isLeaf()) {  // Then otherTree isn't a leaf.
-				for (BBTree otherKid : otherTree.getKids()) {
+				for (BBTree otherKid : otherTree.kids) {
 					if (this.overlaps(otherKid)) {
 						return true;
 					}
@@ -77,7 +73,7 @@ class BBTree {
 			}
 			
 			// Now we know that neither this nor otherTree are leaves.
-			for (BBTree myKid : this.getKids()) {
+			for (BBTree myKid : this.kids) {
 				if (otherTree.overlaps(myKid)) {
 					return true;
 				}
@@ -103,7 +99,7 @@ class BBTree {
 				&& aBottomRight.x > bTopLeft.x && aTopLeft.x < bBottomRight.x;
 	}
 
-	public boolean isLeaf() {
+	boolean isLeaf() {
 		return kids == null;
 	}
 
