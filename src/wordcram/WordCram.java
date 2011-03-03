@@ -456,6 +456,8 @@ public class WordCram {
 	 * @param fonter the WordFonter to use.
 	 * @return The WordCram, for further setup or drawing.
 	 */
+	//example withFonter({your WordFonter})
+	//@Example("StyleWords withFonter({your WordFonter})") 
 	public WordCram withFonter(WordFonter fonter) {
 		this.fonter = fonter;
 		return this;
@@ -471,6 +473,7 @@ public class WordCram {
 	 * @param maxSize the size to draw a Word of weight 1
 	 * @return The WordCram, for further setup or drawing.
 	 */
+	//example sizedByWeight(int minSize, int maxSize)
 	public WordCram sizedByWeight(int minSize, int maxSize) {
 		return withSizer(Sizers.byWeight(minSize, maxSize));
 	}
@@ -485,6 +488,7 @@ public class WordCram {
 	 * @param maxSize the size to draw the first Word
 	 * @return The WordCram, for further setup or drawing.
 	 */
+	//example sizedByRank(int minSize, int maxSize)
 	public WordCram sizedByRank(int minSize, int maxSize) {
 		return withSizer(Sizers.byRank(minSize, maxSize));
 	}
