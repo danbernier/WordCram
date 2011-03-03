@@ -1,0 +1,111 @@
+fromWebPage(String urlOrPath)
+fromTextFile(String pathOrUrl)
+fromHtmlString(String html)
+fromTextString(String text)
+fromText(TextSource)
+fromWords(Word[])
+
+excludeNumbers()
+includeNumbers()
+keepCase()
+lowerCase()
+upperCase()
+withStopWords(String stopWords)
+
+angledAt(float... anglesInRadians)
+angledBetween(float minAngleInRadians, float maxAngleInRadians) 
+sizedByRank(int min, int max)
+sizedByWeight(int min, int max)
+withFont(PFont)
+withFont(String fontname)
+withFonts(PFont...)
+withFonts(String... fontnames)
+withColors(color...)
+
+withAngler()
+withColorer()
+withFonter()
+withPlacer()
+withSizer()
+withNudger()
+
+withCustomCanvas(PGraphics)
+maxAttemptsToPlaceWord(int)
+maxNumberOfWordsToDraw(int)
+minShapeSize(int)
+
+drawAll()
+hasMore()
+drawNext()
+getProgress() : float
+
+getWords() : Word[]
+getSkippedWords() : Word[]
+getWordAt(x, y) : Word
+
+---------------------------
+Word:
+
+getProperty(String name) : Object
+setProperty(String name, Object value)
+
+setAngle(float)
+setColor(color)
+setFont(PFont)
+setPlace(float x, float y)
+setPlace(PVector)
+setSize(float)
+
+wasSkipped()
+wasSkippedBecause()
+
+wasPlaced()
+getRenderedAngle() : angle
+getRenderedColor() : color
+getRenderedFont() : PFont
+getRenderedSize() : float
+getTargetPlace() : PVector
+getRenderedPlaced() : PVector
+---------------------------
+
+Anglers:
+alwaysUse(float angle)
+heaped()
+hexes()
+horiz()
+mostlyHoriz()
+pickFrom(float... angles)
+random()
+randomBetween(float min, float max)
+upAndDown()
+
+Colorers:
+alwaysUse(color)
+pickFrom(colors...)
+twoHuesRandomSats(PApplet)
+twoHuesRandomSatsOnWhite(PApplet)
+
+Fonters:
+alwaysUse(PFont)
+pickFrom(PFont...)
+
+Sizers:
+byRank(int min, int max)
+byWeight(int min, int max)
+
+Placers:
+centerClump()
+horizBandAnchoredLeft()
+horizLine()
+swirl()
+upperLeft()
+wave()
+
+---------------------------
+
+WordAngler.angleFor(Word) : float
+WordColorer.colorFor(Word) : color
+WordFonter.fontFor(Word) : PFont
+WordSizer.sizeFor(Word, int rank, int wordCount) : float
+WordNudger.nudgeFor(Word, int attemptNumber) : PVector
+WordPlacer.placeFor(Word, int rank, int wordCount, int ww, int wh, int fw, int fh) : PVector
