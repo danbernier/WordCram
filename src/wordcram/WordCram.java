@@ -158,9 +158,9 @@ public class WordCram {
 	/**
 	 * Skip Reason: WordCram tried placing the Word, but it couldn't find a clear
 	 * spot. The {@link WordNudger} nudged it around a bunch (according to 
-	 * {@link #withMaxAttemptsForPlacement(int)}, if it was set), but there was just no room. 
+	 * {@link #maxAttemptsToPlaceWord(int)}, if it was set), but there was just no room. 
 	 */
-	public static final int NO_ROOM = 303;
+	public static final int NO_SPACE = 303;
 
 	private Word[] words;
 	private TextSource textSource;
@@ -603,8 +603,8 @@ public class WordCram {
 	 * @param maxAttempts
 	 * @return The WordCram, for further setup or drawing.
 	 */
-	public WordCram withMaxAttemptsForPlacement(int maxAttempts) {
-		renderOptions.maxAttemptsForPlacement = maxAttempts;
+	public WordCram maxAttemptsToPlaceWord(int maxAttempts) {
+		renderOptions.maxAttemptsToPlaceWord = maxAttempts;
 		return this;
 	}
 	

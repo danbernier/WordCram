@@ -249,7 +249,7 @@ public class Word implements Comparable<Word> {
 	 * If the word was skipped, 
 	 * then this will return an Integer, which will be one of 
 	 * {@link WordCram#WAS_OVER_MAX_NUMBER_OF_WORDS}, {@link WordCram#SHAPE_WAS_TOO_SMALL}, 
-	 * or {@link WordCram#NO_ROOM}.
+	 * or {@link WordCram#NO_SPACE}.
 	 * 
 	 * If the word was successfully placed, or WordCram hasn't
 	 * gotten to this word yet, this will return null.
@@ -300,7 +300,7 @@ public class Word implements Comparable<Word> {
 			case WordCram.SHAPE_WAS_TOO_SMALL:
 				status = "shape was too small";
 				break;
-			case WordCram.NO_ROOM:
+			case WordCram.NO_SPACE:
 				status = "couldn't find a spot";
 				break;
 			}

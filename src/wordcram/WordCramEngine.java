@@ -155,8 +155,8 @@ class WordCramEngine {
 		eWord.setDesiredLocation(placer, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height);
 		
 		// Set maximum number of placement trials
-		int maxAttemptsToPlace = renderOptions.maxAttemptsForPlacement > 0 ?
-									renderOptions.maxAttemptsForPlacement :
+		int maxAttemptsToPlace = renderOptions.maxAttemptsToPlaceWord > 0 ?
+									renderOptions.maxAttemptsToPlaceWord :
 									calculateMaxAttemptsFromWordWeight(word);
 		
 		EngineWord lastCollidedWith = null;
@@ -191,7 +191,7 @@ class WordCramEngine {
 			}
 		}
 		
-		skipWord(eWord.word, WordCram.NO_ROOM);
+		skipWord(eWord.word, WordCram.NO_SPACE);
 		timer.count("couldn't place a word");
 		return false;
 	}
