@@ -42,8 +42,8 @@ import wordcram.text.*;
  * <ul>
  * <li>{@link #fromWebPage(String)} will load a URL (or an HTML file from the filesystem), and scrape the text from the HTML</li>
  * <li>{@link #fromTextFile(String)} will load a file (from the filesystem or the network), and treat it as plaintext</li>
- * <li>{@link #fromHtmlString(String)} takes a String, assumes it's HTML, and scrapes out its text</li>
- * <li>{@link #fromTextString(String)} takes a String, and assumes it's plaintext</li>
+ * <li>{@link #fromHtmlString(String...)} takes a String (or String[]), assumes it's HTML, and scrapes out its text</li>
+ * <li>{@link #fromTextString(String...)} takes a String (or String[]), and assumes it's plaintext</li>
  * <li>If you need some other way to load your text, 
  * 	    pass your own TextSource to {@link #fromText(TextSource)}, 
  * 	    and WordCram will get its text via {@link TextSource#getText()}.</li>
@@ -331,17 +331,32 @@ public class WordCram {
 		return fromText(new WebPage(webPageAddress, parent));
 	}
 	
+	/**
+	 * Make a WordCram from the text in a HTML file.
+	 * Just before the WordCram is drawn, it'll load the file's HTML, scrape out the text, 
+	 * and count and sort the words.
+	 * 
+	 * @param htmlFilePath the path of the html file to load 
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram fromHtmlFile(String htmlFilePath) {
+		return fromText(new WebPage(htmlFilePath, parent));
+	}
+	
 	// TODO from an inputstream!  or reader, anyway
 	
 	/**
 	 * Makes a WordCram from a String of HTML.
-	 * Just before the WordCram is drawn, it'll scrape out the text from the HTML, and count and sort the words.
+	 * Just before the WordCram is drawn, it'll scrape out the text 
+	 * from the HTML, and count and sort the words.
 	 * 
-	 * @param html the String of HTML
+	 * @param html the String(s) of HTML
 	 * @return The WordCram, for further setup or drawing. 
 	 */
-	public WordCram fromHtmlString(String html) {
-		return fromText(new Html(html));
+	//example fromHtmlString(loadStrings("my.html"))
+	//example fromHtmlString("<html><p>Hello there!</p></html>")
+	public WordCram fromHtmlString(String... html) {
+		return fromText(new Html(PApplet.join(html, "")));
 	}
 	
 	/**
@@ -361,8 +376,10 @@ public class WordCram {
 	 * @param text the String of text to get the words from
 	 * @return The WordCram, for further setup or drawing. 
 	 */
-	public WordCram fromTextString(String text) {
-		return fromText(new Text(text));
+	//example fromTextString(loadStrings("my.txt"))
+	//example fromTextString("Hello there!")
+	public WordCram fromTextString(String... text) {
+		return fromText(new Text(PApplet.join(text, "")));
 	}
 	
 	/**
@@ -516,7 +533,7 @@ public class WordCram {
 	 * <p>
 	 * Note: if you want all your words to be, say, red, <i>don't</i> do this:
 	 * <pre>
-	 * ...withColors(255, 0, 0)...  // No no!
+	 * ...withColors(255, 0, 0)...  // Not what you want!
 	 * </pre>
 	 * You'll just see a blank WordCram.  Since 
 	 * <a href="http://processing.org/reference/color_datatype.html" target="blank">Processing 
@@ -538,6 +555,16 @@ public class WordCram {
 	 */
 	public WordCram withColors(int... colors) {
 		return withColorer(Colorers.pickFrom(colors));
+	}
+	
+	/**
+	 * Renders all words in the given color.
+	 * @see #withColors(int...)
+	 * @param color the color for each word.
+	 * @return The WordCram, for further setup or drawing.
+	 */
+	public WordCram withColor(int color) {
+		return withColors(color);
 	}
 
 	/**
