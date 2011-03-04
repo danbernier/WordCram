@@ -12,10 +12,8 @@ files.each do |file|
 	examples[class_name] = class_examples unless class_examples.empty?
 end
 
-puts examples
-
-
-puts '='*80
+#puts examples
+#puts '='*80
 
 
 publics = files.map do |file|
@@ -25,3 +23,12 @@ end
 
 publics = publics.flatten.compact
 #puts publics
+#puts '='*80
+
+
+files.each do |file|
+  src = File.read(file)
+  docs = src.scan(/\/\*\=(.*)\=\*\//m).flatten.compact
+  docs.map! { |doc| doc.gsub(/^\s*\*\s*/, '') }
+  puts docs.join("\n"*3) unless docs.empty?
+end
