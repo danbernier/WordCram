@@ -70,6 +70,10 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 		<copy todir="build/p5lib/WordCram/examples">
 			<fileset dir="example" />
 		</copy>
+		<mkdir dir="build/p5lib/WordCram/tutorial" />
+		<copy todir="build/p5lib/WordCram/tutorial">
+			<fileset dir="tutorial" />
+		</copy>
 
 		<mkdir dir="build/p5lib/WordCram/src" />
 		<copy todir="build/p5lib/WordCram/src">
