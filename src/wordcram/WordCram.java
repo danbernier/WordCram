@@ -456,8 +456,10 @@ public class WordCram {
 	 * @param fonter the WordFonter to use.
 	 * @return The WordCram, for further setup or drawing.
 	 */
-	//example withFonter({your WordFonter})
-	//@Example("StyleWords withFonter({your WordFonter})") 
+	/*=
+	 * example withFonter({your WordFonter})
+	 * @Example("StyleWords withFonter({your WordFonter})")
+	 */
 	public WordCram withFonter(WordFonter fonter) {
 		this.fonter = fonter;
 		return this;
@@ -603,7 +605,6 @@ public class WordCram {
 	/**
 	 * How many attempts should be used to place a word.
 	 * Higher values ensure that more words get placed, but will make algorithm slower.
-	 * @author FEZ (Felix Kratzer)
 	 * @param maxAttempts
 	 * @return The WordCram, for further setup or drawing.
 	 */
@@ -626,9 +627,9 @@ public class WordCram {
 	}
 	
 	/**
-	 * The smallest sized Shape the WordCram should try to draw.
+	 * The smallest-sized Shape the WordCram should try to draw.
 	 * By default, it's 7.
-	 * @param maxWords can be any value from 0 to Integer.MAX_VALUE. Values < 0 are treated as unlimited.
+	 * @param minShapeSize the size of the smallest Shape.
 	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram minShapeSize(int minShapeSize) {
@@ -640,8 +641,7 @@ public class WordCram {
 	 * Use a custom canvas instead of the applet's default one.
 	 * This may be needed if rendering in background or in other dimensions than the
 	 * applet size is needed.
-	 * @author FEZ (Felix Kratzer)
-	 * @param canvas
+	 * @param canvas the canvas to draw to
 	 * @return The WordCram, for further setup or drawing.
 	 */
 	public WordCram withCustomCanvas(PGraphics canvas) {
@@ -738,7 +738,6 @@ public class WordCram {
 	
 	/**
 	 * Returns an array of words that could not be placed.
-	 * @author FEZ (Felix Kratzer)
 	 * @return An array of words
 	 */
 	public Word[] getSkippedWords() {

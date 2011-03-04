@@ -77,7 +77,7 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 		</copy>
 
 		<mkdir dir="build/p5lib/WordCram/reference" />		
-		<javadoc sourcepath="src" destdir="build/p5lib/WordCram/reference" windowtitle="WordCram API" use="true" overview="src/overview.html" 
+		<javadoc classpath="${classpath}" sourcepath="src" destdir="build/p5lib/WordCram/reference" windowtitle="WordCram API" use="true" overview="src/overview.html" 
 			header="WordCram 0.3"> <!-- TODO version # in build file - property? --> 
 			<!--  TODO put these in if it ever seems useful.
 		  <link href="http://processing.googlecode.com/svn/trunk/processing/build/javadoc/" />

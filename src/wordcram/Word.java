@@ -236,7 +236,7 @@ public class Word implements Comparable<Word> {
 	
 	/**
 	 * Indicates whether the Word was skipped.
-	 * @see {@link #wasSkippedBecause()}
+	 * @see Word#wasSkippedBecause()
 	 * @return true if the word was skipped
 	 */
 	public boolean wasSkipped() {
