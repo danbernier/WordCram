@@ -8,6 +8,10 @@ background(255);
  * WordCram will parse out the words, count them 
  * up, and render more-frequent words bigger than
  * less-frequent ones.
+ * 
+ * Try un-commenting some of the methods below.
+ * (If more than one is uncommented, only the last
+ * one will have an effect.)
  */
 
 new WordCram(this)
@@ -18,5 +22,5 @@ new WordCram(this)
   //.fromTextString(loadStrings("../kari-the-elephant.txt"))
   //.fromHtmlString(loadStrings("../kari-the-elephant.html"))
   
-  .withColor(#000000)
+  .withColor(#000000) // Color all the words black.
   .drawAll();
