@@ -135,7 +135,6 @@ public class WordCram {
 	 * focused on only one thing, but still gives the user a pretty nice API.
 	 */
 
-	// TODO move these all to a SkippedBecause static ints class?
 	/**
 	 * Skip Reason: the Word was skipped because {@link #maxNumberOfWordsToDraw(int)}
 	 * was set to some value, and the Word came in over that limit.
@@ -143,7 +142,6 @@ public class WordCram {
 	 * sorted by weight: if its rank is greater than the value passed to maxNumberOfWordsToDraw(),
 	 * then it'll be skipped, and this will be the reason code.
 	 */
-	// TODO 0.4 consider renaming this whole thing to maxWordRank.
 	public static final int WAS_OVER_MAX_NUMBER_OF_WORDS = 301;
 	
 	/**
