@@ -34,17 +34,13 @@ class WordCramEngine {
 	private WordNudger nudger;
 	private WordShaper wordShaper;
 	
-	private EngineWord[] words;
-	private int wordIndex = -1;
+	private Word[] words; // just a safe copy
+	private EngineWord[] eWords;
+	private int eWordIndex = -1;
 	
 	private RenderOptions renderOptions;
 	
 	private Timer timer = Timer.getInstance();
-
-	/**
-	 * Contains all words that could not be placed
-	 */
-	private ArrayList<Word> skippedWords = new ArrayList<Word>();
 	
 	WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
 		
@@ -65,8 +61,9 @@ class WordCramEngine {
 		
 		this.wordShaper = shaper;
 		
+		this.words = words;
 		timer.start("making shapes");
-		this.words = wordsIntoEngineWords(words, bbTreeBuilder);
+		this.eWords = wordsIntoEngineWords(words, bbTreeBuilder);
 		timer.end("making shapes");
 	}
 	
@@ -106,19 +103,13 @@ class WordCramEngine {
 	}
 	
 	private void skipWord(Word word, int reason) {
-		/* TODO 0.4: remove this, & calculate it inside getSkippedWords() ?
-		 * If we do, we'll have to cache the orig. Word[] somewhere, because EngineWord[]
-		 * DOESN'T have words that a) were over the limit, or b) had shapes too small. 
-		 */
-		skippedWords.add(word);
-		
 		// TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
 		// NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
 		word.wasSkippedBecause(reason);
 	}
 	
 	boolean hasMore() {
-		return wordIndex < words.length-1;
+		return eWordIndex < eWords.length-1;
 	}
 	
 	void drawAll() {
@@ -133,7 +124,7 @@ class WordCramEngine {
 	void drawNext() {
 		if (!hasMore()) return;
 		
-		EngineWord eWord = words[++wordIndex];
+		EngineWord eWord = eWords[++eWordIndex];
 		
 		timer.start("placeWord");
 		boolean wasPlaced = placeWord(eWord);
@@ -152,7 +143,7 @@ class WordCramEngine {
 		int wordImageWidth = (int)rect.getWidth();
 		int wordImageHeight = (int)rect.getHeight();
 		
-		eWord.setDesiredLocation(placer, words.length, wordImageWidth, wordImageHeight, destination.width, destination.height);
+		eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, destination.width, destination.height);
 		
 		// Set maximum number of placement trials
 		int maxAttemptsToPlace = renderOptions.maxAttemptsToPlaceWord > 0 ?
@@ -176,8 +167,8 @@ class WordCramEngine {
 			}
 			
 			boolean foundOverlap = false;
-			for (int i = 0; !foundOverlap && i < wordIndex; i++) {
-				EngineWord otherWord = words[i];
+			for (int i = 0; !foundOverlap && i < eWordIndex; i++) {
+				EngineWord otherWord = eWords[i];
 				if (eWord.overlaps(otherWord)) {
 					foundOverlap = true;
 					lastCollidedWith = otherWord;
@@ -211,11 +202,11 @@ class WordCramEngine {
 	}
 	
 	Word getWordAt(float x, float y) {
-		for (int i = 0; i < words.length; i++) {
-			if (words[i].wasPlaced()) {
-				Shape shape = words[i].getShape();
+		for (int i = 0; i < eWords.length; i++) {
+			if (eWords[i].wasPlaced()) {
+				Shape shape = eWords[i].getShape();
 				if (shape.contains(x, y)) {
-					return words[i].word;
+					return eWords[i].word;
 				}
 			}
 		}
@@ -223,10 +214,16 @@ class WordCramEngine {
 	}
 
 	Word[] getSkippedWords() {
+		ArrayList<Word> skippedWords = new ArrayList<Word>();
+		for (int i = 0; i < words.length; i++) {
+			if (words[i].wasSkipped()) {
+				skippedWords.add(words[i]);
+			}
+		}
 		return skippedWords.toArray(new Word[0]);
 	}
 	
 	float getProgress() {
-		return (float)this.wordIndex / this.words.length;
+		return (float)this.eWordIndex / this.eWords.length;
 	}
 }
