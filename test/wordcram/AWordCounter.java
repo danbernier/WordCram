@@ -16,12 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import wordcram.Word;
 
 public class AWordCounter {
 	

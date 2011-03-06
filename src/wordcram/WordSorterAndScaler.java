@@ -16,9 +16,7 @@ package wordcram;
  limitations under the License.
  */
 
-import java.util.*;
-
-import wordcram.Word;
+import java.util.Arrays;
 
 class WordSorterAndScaler {
 

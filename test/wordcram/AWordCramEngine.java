@@ -1,19 +1,18 @@
 package wordcram;
 
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.util.LinkedList;
-import java.util.List;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
 
-import processing.core.*;
+import processing.core.PFont;
+import processing.core.PGraphics;
 
 public class AWordCramEngine {
 	

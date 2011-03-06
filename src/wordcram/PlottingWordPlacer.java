@@ -16,7 +16,8 @@ package wordcram;
  limitations under the License.
  */
 
-import processing.core.*;
+import processing.core.PApplet;
+import processing.core.PVector;
 
 public class PlottingWordPlacer implements WordPlacer {
 	

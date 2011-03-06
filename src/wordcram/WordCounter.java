@@ -18,8 +18,6 @@ package wordcram;
 
 import java.util.*;
 
-import wordcram.Word;
-
 //TODO make this pkg-local, once TextSplitter is deleted.
 public class WordCounter {
 

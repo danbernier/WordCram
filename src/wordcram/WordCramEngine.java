@@ -17,7 +17,8 @@ limitations under the License.
 */
 
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import processing.core.*;

@@ -18,7 +18,8 @@ package example;
 
 import java.util.*;
 
-import processing.core.*;
+import processing.core.PApplet;
+import processing.core.PFont;
 import wordcram.*;
 
 public class Main extends PApplet {

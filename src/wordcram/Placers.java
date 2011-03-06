@@ -18,7 +18,8 @@ package wordcram;
 
 import java.util.Random;
 
-import processing.core.*;
+import processing.core.PApplet;
+import processing.core.PVector;
 
 public class Placers {
 

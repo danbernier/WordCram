@@ -20,8 +20,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import wordcram.Word;
-
 public class AWordSorterAndScaler {
 	
 	private float epsilon = 0.00001f;

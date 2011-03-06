@@ -16,9 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import processing.core.PApplet;
-import processing.core.PFont;
-import processing.core.PGraphics;
+import processing.core.*;
 import wordcram.text.*;
 
 /**

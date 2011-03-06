@@ -19,7 +19,6 @@ limitations under the License.
 import java.util.Random;
 
 import processing.core.PApplet;
-import processing.core.PConstants;
 
 public class Colorers {
 
