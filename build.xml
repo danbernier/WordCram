@@ -42,26 +42,28 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 	</target>
 
 	<target name="compile" depends="clean">
-		<mkdir dir="build/classes" />
-		<javac srcdir="src" destdir="build/classes" classpath="${classpath}" source="1.5" target="1.5" includeantruntime="false">
-		  <compilerarg value="-Xlint" />
-		</javac>
+	  <mkdir dir="build/classes" />
+	  <javac srcdir="src" destdir="build/classes" classpath="${classpath}" source="1.5" target="1.5" includeantruntime="false">
+	    <compilerarg value="-Xlint" />
+	  </javac>
 	</target>
 
 	<target name="test" depends="compile">
-		<mkdir dir="build/tests" />
-		<javac srcdir="test" destdir="build/tests" source="1.5" target="1.5" includeantruntime="false"
-		       classpath="${classpath};lib/junit/junit-4.8.2.jar;lib/mockito-all-1.8.5.jar;build/classes" />
-		<junit dir="build/tests" haltonfailure="true">
-			<classpath path="${classpath};lib/junit/junit-4.8.2.jar;lib/mockito-all-1.8.5.jar;build/classes;build/tests" />
-			<formatter type="brief" usefile="false" />
+	  <mkdir dir="build/tests" />
+	  <javac srcdir="test" destdir="build/tests" source="1.5" target="1.5" includeantruntime="false"
+		 classpath="${classpath};lib/junit/junit-4.8.2.jar;lib/mockito-all-1.8.5.jar;build/classes">
+	    <compilerarg value="-Xlint" />
+	  </javac>
+	  <junit dir="build/tests" haltonfailure="true">
+	    <classpath path="${classpath};lib/junit/junit-4.8.2.jar;lib/mockito-all-1.8.5.jar;build/classes;build/tests" />
+	    <formatter type="brief" usefile="false" />
 
-			<batchtest fork="yes">
-				<fileset dir="test">
-					<include name="**/*.java" />
-				</fileset>
-			</batchtest>
-		</junit>
+	    <batchtest fork="yes">
+	      <fileset dir="test">
+		<include name="**/*.java" />
+	      </fileset>
+	    </batchtest>
+	  </junit>
 	</target>
 
 	<target name="bundleForProcessing" depends="test">
