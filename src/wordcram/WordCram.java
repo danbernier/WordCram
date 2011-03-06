@@ -194,6 +194,7 @@ public class WordCram {
 	 * @param _wordNudger says how to nudge a word, when it doesn't initially fit.
 	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the fluent builder methods instead. Will be deleted in 0.5.
 	 */
+	@Deprecated    
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer, WordNudger _wordNudger) {
 		this(_parent);
 		withFonter(_fonter).withSizer(_sizer).withColorer(_colorer).withAngler(_angler).withPlacer(_wordPlacer).withNudger(_wordNudger);
@@ -215,6 +216,7 @@ public class WordCram {
 	 * @param _wordPlacer says (approximately) where to place each word.
 	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the fluent builder methods instead. Will be deleted in 0.5.
 	 */
+	@Deprecated
 	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
 		this(_parent, _words, _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
 	}
