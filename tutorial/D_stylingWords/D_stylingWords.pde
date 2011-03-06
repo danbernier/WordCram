@@ -9,6 +9,9 @@ background(255);
  * - Use any Processing colors
  * - Angles are in radians
  * - Use any Processing PFonts, or use a font name
+ *
+ * WordCram has some convenient methods for some common
+ * uses.
  */
 
 new WordCram(this)
