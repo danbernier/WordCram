@@ -45,5 +45,4 @@ new WordCram(this)
    */
   //.withStopWords(StopWords.ENGLISH + "Kari jungle elephant")
   
-  .withColor(#000000)
   .drawAll();

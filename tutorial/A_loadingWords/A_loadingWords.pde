@@ -22,5 +22,4 @@ new WordCram(this)
   //.fromTextString(loadStrings("../kari-the-elephant.txt"))
   //.fromHtmlString(loadStrings("../kari-the-elephant.html"))
   
-  .withColor(#000000) // Color all the words black.
   .drawAll();

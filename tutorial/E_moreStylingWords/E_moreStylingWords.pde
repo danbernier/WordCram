@@ -22,7 +22,7 @@ new WordCram(this)
   
   //-----------
   // Colorers
-  .withColorer(Colorers.alwaysUse(#000000))
+  .withColorer(Colorers.alwaysUse(#0000AA))
   //.withColorer(Colorers.twoHuesRandomSatsOnWhite(this))
   //.withColorer(Colorers.pickFrom(#FF0000, #00CC00, #0000FF))
   //.withColorer(Colorers.alwaysUse(color(0, 20, 150, 150)))

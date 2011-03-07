@@ -23,7 +23,7 @@ new WordCram(this)
   
   //-----------
   // Coloring words
-  .withColor(#000000)
+  .withColor(#0000AA)
   //.withColors(#FF0000, #00CC00, #0000FF)
   //.withColor(color(0, 20, 150, 150)) // alpha works, too
   

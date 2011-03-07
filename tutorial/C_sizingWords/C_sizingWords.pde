@@ -59,5 +59,4 @@ new WordCram(this)
   // Hint: if your sketches take too long, try this:
   //.maxNumberOfWordsToDraw(30)
   
-  .withColor(#000000)
   .drawAll();
