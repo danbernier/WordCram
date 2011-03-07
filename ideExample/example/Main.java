@@ -71,6 +71,7 @@ public class Main extends PApplet {
 					//.upperCase()
 					//.excludeNumbers()
 					.withFonts(randomFont())
+					.withColorer(Colorers.twoHuesRandomSats(this))
 					//.withColorer(Colorers.complement(this, random(255), 200, 220))
 					.withAngler(Anglers.mostlyHoriz())
 					.withPlacer(Placers.horizLine())

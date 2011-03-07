@@ -73,7 +73,7 @@ import processing.core.PVector;
 public class Word implements Comparable<Word> {
 	
 	public String word;
-	public double weight;
+	public float weight;
 
 	private Float presetSize;
 	private Float presetAngle;
@@ -92,7 +92,7 @@ public class Word implements Comparable<Word> {
 	
 	private HashMap<String,Object> properties = new HashMap<String,Object>();
 	
-	public Word(String word, double weight) {
+	public Word(String word, float weight) {
 		this.word = word;
 		this.weight = weight;
 	}

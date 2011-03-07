@@ -48,9 +48,9 @@ public class AWordSorterAndScaler {
 	@Test
 	public void testSortingAndScalingWithTinyWeights() {
 		Word[] tinyWords = new Word[] {
-				new Word("critter", 0.000001),
-				new Word("crayter", 0.000002),
-				new Word("croyter", 0.000003)
+				new Word("critter", 0.000001f),
+				new Word("crayter", 0.000002f),
+				new Word("croyter", 0.000003f)
 		};
 		
 		Word[] weighted = new WordSorterAndScaler().sortAndScale(tinyWords);
