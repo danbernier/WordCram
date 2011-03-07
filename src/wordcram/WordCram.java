@@ -703,7 +703,7 @@ public class WordCram {
 
 			if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
 			if (sizer == null) sizer = Sizers.byWeight(5, 70);
-			if (colorer == null) colorer = Colorers.twoHuesRandomSats(parent);
+			if (colorer == null) colorer = Colorers.alwaysUse(parent.color(0));
 			if (angler == null) angler = Anglers.mostlyHoriz();
 			if (placer == null) placer = Placers.horizLine();
 			if (nudger == null) nudger = new SpiralWordNudger();
