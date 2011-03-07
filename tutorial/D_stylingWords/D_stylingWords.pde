@@ -1,5 +1,9 @@
 import wordcram.*;
 
+PFont georgia = createFont("Georgia", 1);
+PFont georgiaItalic = createFont("Georgia Italic", 1);
+PFont minyaNouvelle = createFont("../MINYN___.TTF", 1);
+
 size(600, 350);
 background(255);
 
@@ -19,7 +23,7 @@ new WordCram(this)
   
   //-----------
   // Coloring words
-  //.withColor(#000000)
+  .withColor(#000000)
   //.withColors(#FF0000, #00CC00, #0000FF)
   //.withColor(color(0, 20, 150, 150)) // alpha works, too
   
@@ -30,7 +34,7 @@ new WordCram(this)
   
   //-----------
   // Words at Angles
-  //.angledAt(radians(30))
+  .angledAt(radians(30))
   //.angledAt(radians(30), radians(-60))
   
   // Two-thirds of the words will be at 30 degrees, the rest at -60.
@@ -41,12 +45,11 @@ new WordCram(this)
   
   //---------
   // Fonts
-  //.withFont("Georgia")
-  //.withFont(createFont("Georgia", 1))
-  //.withFont(createFont("../MINYN___.TTF", 1))
-  //.withFonts("Georgia Italic", "Minya Nouvelle")
-  /*.withFonts(createFont("Georgia Italic", 1), 
-               createFont("../MINYN___.TTF", 1))
-               */
+  .withFont("Georgia")
+  //.withFont(georgia)
+  //.withFont(georgiaItalic)
+  //.withFont(minyaNouvelle)
+  //.withFonts("Georgia", "Minya Nouvelle")
+  //.withFonts(georgia, minyaNouvelle)
   
   .drawAll();
