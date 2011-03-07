@@ -468,6 +468,7 @@ public class WordCram {
 	 * Use the given WordFonter to pick fonts for each word.
 	 * You'll probably only use this if you're making a custom WordFonter.
 	 * 
+	 * @see Fonters
 	 * @param fonter the WordFonter to use.
 	 * @return The WordCram, for further setup or drawing.
 	 */
@@ -517,6 +518,7 @@ public class WordCram {
 	 * Use the given WordSizer to pick fonts for each word.
 	 * You'll probably only use this if you're making a custom WordSizer.
 	 * 
+	 * @see Sizers
 	 * @param sizer the WordSizer to use.
 	 * @return The WordCram, for further setup or drawing.
 	 */
@@ -568,6 +570,7 @@ public class WordCram {
 	/**
 	 * Use the given WordColorer to pick colors for each word.
 	 * 
+	 * @see Colorers
 	 * @param colorer the WordColorer to use.
 	 * @return The WordCram, for further setup or drawing.
 	 */
@@ -600,6 +603,7 @@ public class WordCram {
 	/**
 	 * Use the given WordAngler to pick angles for each word.
 	 * 
+	 * @see Anglers
 	 * @param angler the WordAngler to use.
 	 * @return The WordCram, for further setup or drawing.
 	 */
@@ -611,6 +615,7 @@ public class WordCram {
 	/**
 	 * Use the given WordPlacer to pick locations for each word.
 	 * 
+	 * @see Placers
 	 * @param placer the WordPlacer to use.
 	 * @return The WordCram, for further setup or drawing.
 	 */
@@ -622,6 +627,8 @@ public class WordCram {
 	/**
 	 * Use the given WordNudger to pick angles for each word.
 	 * 
+	 * @see SpiralWordNudger
+	 * @see RandomWordNudger
 	 * @param nudger the WordNudger to use.
 	 * @return The WordCram, for further setup or drawing.
 	 */
