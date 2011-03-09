@@ -1,17 +1,24 @@
 Release notes for WordCram 0.4, Spring 2011:
 
+GOING BACK, START AT r315!
+
 WordCram 0.4 changes center around three themes: setting rendering
 options on words directly (rather than through components);
 information on whether a Word was placed or skipped, and why; and
 finer control over the rendering process.
 
-* Word now has methods getProperty(String name) and setProperty(String
-  name, Object value).  The firstnamesUsingWordProperties example
-  sketch shows how it works. Properties can be useful with a custom
-  WordPlacer, WordColorer, etc.
+* Back-ported to run on Java 1.5, to match Processing, and updated the
+  source build to use Processing 1.2.1.
 
-* Word also now has methods setSize(), etc..., and getRenderedSize(),
-  etc...
+* Added tutorial sketches, which walk you through WordCram in a more
+  orderly way than the examples. Also added a few examples, and moved
+  the sample text files & font files up, to shrink the download size.
+
+* If you're creating and weighting your own Words, you can pre-set
+  their styles by calling setAngle(), setColor(), setFont(),
+  setSize(), and/or setPlace(). These values will pre-empt the rules
+  set by the WordAngler, etc. Added getRenderedAngle(),
+  getRenderedColor(), etc, so you can tell how it all turned out.
 
 * Added getWordAt(x,y).
 
@@ -19,12 +26,21 @@ finer control over the rendering process.
   were (so far) skipped, and getWords(), which returns a Word[] of all
   words the WordCram is looking at.
 
-* Added withCustomCanvas(PGraphics), so a WordCram can be drawn to a
-  PGraphics besides the sketch it's running in. Also added
-  getProgress(), which can help provide feedback on long-running
-  WordCrams to a custom canvas.
+* Added wasPlaced(), wasSkipped(), and wasSkippedBecause() to Word,
+  along with static ints on WordCram for the reasons (NO_SPACE,
+  etc). Also added this info to Word's toString() method, so you can
+  just println(yourWord) and see some good info.
 
-* Added withMaxAttemptsForPlacement(int), which tells WordCram to only
+* Dropped BBTree minimum size from 7 to 1 - there's no noticable
+  slow-down, and it should make more accurate collision detection.
+
+* Added withCustomCanvas(PGraphics), so a WordCram can be drawn to a
+  PGraphics besides the sketch it's running in, and getProgress(), to
+  provide feedback while it's rendering to the customCanvas. WordCram
+  throws an exception if you try to pass it a P2D buffer, though -
+  only JAVA2D works.
+
+* Added maxAttemptsForPlacement(int), which tells WordCram to only
   try so many times to place a word.
 
 * Added maxNumberOfWordsToDraw(int), which limits how many words
@@ -33,9 +49,20 @@ finer control over the rendering process.
 * Added minShapeSize(int), to weed out words that render to Shapes
   smaller than the given size.
 
-* Back-ported to run on Java 1.5, to match Processing.
+* Added StopWords.GERMAN. Thank you, Felix, Marco, and Steffen!
 
 * Deleted deprecated methods currentWord() and currentWordIndex().
+
+* Reorganized text-parsing classes to make some classes (Html2Text)
+  unavailable in the Processing sketch, to declutter the API.
+
+* RandomWordNudger: you can now pass the standard deviation to use as
+  a constructor parameter.
+
+* Word now has methods getProperty(String name) and setProperty(String
+  name, Object value).  The firstnamesUsingWordProperties example
+  sketch shows how it works. Properties can be useful with a custom
+  WordPlacer, WordColorer, etc.
 
 
 Release notes for WordCram 0.3.1, 2010-11-10:
