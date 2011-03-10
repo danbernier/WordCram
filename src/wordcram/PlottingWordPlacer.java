@@ -19,6 +19,13 @@ package wordcram;
 import processing.core.PApplet;
 import processing.core.PVector;
 
+/**
+ * If you're using a custom WordPlacer, and having difficulty seeing
+ * how well it works, try wrapping it in a PlottingWordPlacer. As your
+ * WordCram is drawn, it'll render tiny dots at each word's target
+ * location, so you can sort-of see how far off they are when they're
+ * finally rendered.
+ */
 public class PlottingWordPlacer implements WordPlacer {
 	
 	private PApplet parent;

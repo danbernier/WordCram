@@ -18,7 +18,7 @@ package wordcram;
 
 import processing.core.*;
 
-public class WaveWordPlacer implements WordPlacer, PConstants {
+public class WaveWordPlacer implements WordPlacer {
 
 	public PVector place(Word word, int wordIndex, int wordsCount,
 			int wordImageWidth, int wordImageHeight, int fieldWidth,
@@ -33,7 +33,7 @@ public class WaveWordPlacer implements WordPlacer, PConstants {
 	}
 
 	private float getYOffset(int wordIndex, int wordsCount, int fieldHeight) {
-		float theta = PApplet.map(wordIndex, 0, wordsCount, PI, -PI);
+		float theta = PApplet.map(wordIndex, 0, wordsCount, PConstants.PI, -PConstants.PI);
 
 		return (float) Math.sin(theta) * (fieldHeight / 3f);
 	}

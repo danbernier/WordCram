@@ -30,7 +30,7 @@ import processing.core.PConstants;
  * 
  * @author Dan Bernier
  */
-public class Anglers implements PConstants {
+public class Anglers {
 
 	/**
 	 * @return a WordAngler that gives a random angle every time it's called.
@@ -39,7 +39,7 @@ public class Anglers implements PConstants {
 		final Random r = new Random();
 		return new WordAngler() {
 			public float angleFor(Word w) {
-				return r.nextFloat() * TWO_PI;
+				return r.nextFloat() * PConstants.TWO_PI;
 			}
 		};
 	}
@@ -128,7 +128,7 @@ public class Anglers implements PConstants {
 	 * @return a WordAngler that draws all words at hexagonal angles.
 	 */
 	public static WordAngler hexes() {
-		float oneSixth = TWO_PI / 6f;
+		float oneSixth = PConstants.TWO_PI / 6f;
 		return pickFrom(0f, oneSixth, 2 * oneSixth, 3 * oneSixth, 4 * oneSixth,
 				5 * oneSixth);
 	}
@@ -151,7 +151,7 @@ public class Anglers implements PConstants {
 	 *         and down.
 	 */
 	public static WordAngler upAndDown() {
-		return pickFrom(HALF_PI, -HALF_PI);
+		return pickFrom(PConstants.HALF_PI, -PConstants.HALF_PI);
 	}
 
 	/**
@@ -164,6 +164,6 @@ public class Anglers implements PConstants {
 	 *         rest vertically.
 	 */
 	public static WordAngler mostlyHoriz() {
-		return pickFrom(0f, 0f, 0f, 0f, 0f, HALF_PI, -HALF_PI);
+		return pickFrom(0f, 0f, 0f, 0f, 0f, PConstants.HALF_PI, -PConstants.HALF_PI);
 	}
 }

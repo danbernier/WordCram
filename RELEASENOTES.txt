@@ -1,11 +1,14 @@
 Release notes for WordCram 0.4, Spring 2011:
 
-GOING BACK, START AT r315!
-
-WordCram 0.4 changes center around three themes: setting rendering
-options on words directly (rather than through components);
-information on whether a Word was placed or skipped, and why; and
+WordCram 0.4 changes center around three themes: styling words
+directly; knowing whether a Word was placed or skipped, and why; and
 finer control over the rendering process.
+
+* If you're creating and weighting your own Words, you can pre-set
+  their styles by calling setAngle(), setColor(), setFont(),
+  setSize(), and/or setPlace(). These values will pre-empt the rules
+  set by the WordAngler, etc. Added getRenderedAngle(),
+  getRenderedColor(), etc, so you can tell how it all turned out.
 
 * Back-ported to run on Java 1.5, to match Processing, and updated the
   source build to use Processing 1.2.1.
@@ -13,12 +16,6 @@ finer control over the rendering process.
 * Added tutorial sketches, which walk you through WordCram in a more
   orderly way than the examples. Also added a few examples, and moved
   the sample text files & font files up, to shrink the download size.
-
-* If you're creating and weighting your own Words, you can pre-set
-  their styles by calling setAngle(), setColor(), setFont(),
-  setSize(), and/or setPlace(). These values will pre-empt the rules
-  set by the WordAngler, etc. Added getRenderedAngle(),
-  getRenderedColor(), etc, so you can tell how it all turned out.
 
 * Added getWordAt(x,y).
 
@@ -48,6 +45,13 @@ finer control over the rendering process.
 
 * Added minShapeSize(int), to weed out words that render to Shapes
   smaller than the given size.
+
+* Added WordCram methods fromHtmlFile() and withColor(); made
+  fromTextString() and fromHtmlString() n-arity (so they can be used
+  w/ loadStrings() more easily).
+
+* Changed Word.weight from a double to a float, so we can all stop
+  casting.
 
 * Added StopWords.GERMAN. Thank you, Felix, Marco, and Steffen!
 
