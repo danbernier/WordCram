@@ -1,4 +1,4 @@
-Release notes for WordCram 0.4, Spring 2011:
+Release notes for WordCram 0.4, 2011-03-17:
 
 WordCram 0.4 changes center around three themes: styling words
 directly; knowing whether a Word was placed or skipped, and why; and
