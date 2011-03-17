@@ -76,7 +76,7 @@ public class Placers {
 			public PVector place(Word word, int wordIndex, int wordsCount,
 					int wordImageWidth, int wordImageHeight, int fieldWidth,
 					int fieldHeight) {
-				float x = (float) (1 - word.weight) * fieldWidth * r.nextFloat(); // big=left, small=right
+				float x = (1 - word.weight) * fieldWidth * r.nextFloat(); // big=left, small=right
 				float y = ((float) fieldHeight) * 0.5f;
 				return new PVector(x, y);
 			}

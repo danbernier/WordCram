@@ -45,7 +45,7 @@ public class Sizers {
 	public static WordSizer byWeight(final int minSize, final int maxSize) {
 		return new WordSizer() {
 			public float sizeFor(Word word, int wordRank, int wordCount) {
-				return PApplet.lerp(minSize, maxSize, (float) word.weight);
+				return PApplet.lerp(minSize, maxSize, word.weight);
 			}
 		};
 	}

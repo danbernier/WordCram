@@ -99,44 +99,56 @@ public class Word implements Comparable<Word> {
 	
 	/**
 	 * Set the size this Word should be rendered at - WordCram won't even call the WordSizer.
+	 * @return the Word, for more configuration
 	 */
-	public void setSize(float size) {
+	public Word setSize(float size) {
 		this.presetSize = size;
+		return this;
 	}
 	
 	/**
 	 * Set the angle this Word should be rendered at - WordCram won't even call the WordAngler.
+	 * @return the Word, for more configuration
 	 */
-	public void setAngle(float angle) {
+	public Word setAngle(float angle) {
 		this.presetAngle = angle;
+		return this;
 	}
 	
 	/**
 	 * Set the font this Word should be rendered in - WordCram won't call the WordFonter.
+	 * @return the Word, for more configuration
 	 */
-	public void setFont(PFont font) {  // TODO provide a string overload? Will need the PApplet...
+	public Word setFont(PFont font) {  // TODO provide a string overload? Will need the PApplet...
 		this.presetFont = font;
+		return this;
 	}
 	
 	/**
 	 * Set the color this Word should be rendered in - WordCram won't call the WordColorer.
+	 * @return the Word, for more configuration
 	 */
-	public void setColor(int color) {  // TODO provide a 3-float overload? 4-float? 2-float? Will need the PApplet...
+	public Word setColor(int color) {
 		this.presetColor = color;
+		return this;
 	}
 	
 	/**
 	 * Set the place this Word should be rendered at - WordCram won't call the WordPlacer.
+	 * @return the Word, for more configuration
 	 */
-	public void setPlace(PVector place) {
+	public Word setPlace(PVector place) {
 		this.presetTargetPlace = place.get();
+		return this;
 	}
 	
 	/**
 	 * Set the place this Word should be rendered at - WordCram won't call the WordPlacer.
+	 * @return the Word, for more configuration
 	 */
-	public void setPlace(float x, float y) {
+	public Word setPlace(float x, float y) {
 		this.presetTargetPlace = new PVector(x, y);
+		return this;
 	}
 
 	/*
@@ -277,9 +289,11 @@ public class Word implements Comparable<Word> {
 	 * Set a property on this Word, to be used by a WordColorer, a WordPlacer, etc, down the line.
 	 * @param propertyName
 	 * @param propertyValue
+	 * @return the Word, for more configuration
 	 */
-	public void setProperty(String propertyName, Object propertyValue) {
+	public Word setProperty(String propertyName, Object propertyValue) {
 		properties.put(propertyName, propertyValue);
+		return this;
 	}
 	
 	/**

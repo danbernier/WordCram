@@ -33,11 +33,13 @@ a.setFont(createFont("../MINYN___.TTF", 1));
 a.setPlace(340, 200);
 a.setSize(160);
 
+// You can chain your calls, like you do with WordCram.
 Word z = alphabet[25];
-z.setColor(#0000FF);
-z.setAngle(radians(-20));
-z.setFont(createFont("Georgia", 1));
-z.setPlace(180, 40);
+z.setColor(#0000FF)
+   .setAngle(radians(-20))
+   .setFont(createFont("Georgia", 1))
+   .setPlace(180, 40);
+
 z.setSize(130);
 
 new WordCram(this)
