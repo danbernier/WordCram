@@ -33,15 +33,12 @@ class WordCramEngine {
 	private WordAngler angler;
 	private WordPlacer placer;
 	private WordNudger nudger;
-	private WordShaper wordShaper;
 	
 	private Word[] words; // just a safe copy
 	private EngineWord[] eWords;
 	private int eWordIndex = -1;
 	
 	private RenderOptions renderOptions;
-	
-	private Timer timer = Timer.getInstance();
 	
 	WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
 		
@@ -59,16 +56,11 @@ class WordCramEngine {
 		this.nudger = nudger;
 		
 		this.renderOptions = renderOptions;
-		
-		this.wordShaper = shaper;
-		
 		this.words = words;
-		timer.start("making shapes");
-		this.eWords = wordsIntoEngineWords(words, bbTreeBuilder);
-		timer.end("making shapes");
+		this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
 	}
 	
-	private EngineWord[] wordsIntoEngineWords(Word[] words, BBTreeBuilder bbTreeBuilder) {
+	private EngineWord[] wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
 		ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
 		
 		int maxNumberOfWords = renderOptions.maxNumberOfWordsToDraw >= 0 ?
@@ -83,10 +75,7 @@ class WordCramEngine {
 			float wordSize = word.getSize(sizer, i, words.length);
 			float wordAngle = word.getAngle(angler);
 			
-			timer.start("making a shape");
 			Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle, renderOptions.minShapeSize);
-			timer.end("making a shape");
-			
 			if (shape == null) {
 				skipWord(word, WordCram.SHAPE_WAS_TOO_SMALL);
 			}
@@ -114,27 +103,19 @@ class WordCramEngine {
 	}
 	
 	void drawAll() {
-		timer.start("drawAll");
 		while(hasMore()) {
 			drawNext();
 		}
-		timer.end("drawAll");
-		//System.out.println(timer.report());
 	}
 	
 	void drawNext() {
 		if (!hasMore()) return;
 		
 		EngineWord eWord = eWords[++eWordIndex];
-		
-		timer.start("placeWord");
+
 		boolean wasPlaced = placeWord(eWord);
-		timer.end("placeWord");
-					
 		if (wasPlaced) { // TODO unit test (somehow)
-			timer.start("drawWordImage");
 			drawWordImage(eWord);
-			timer.end("drawWordImage");
 		}
 	}	
 	
@@ -158,12 +139,10 @@ class WordCramEngine {
 			
 			PVector loc = eWord.getCurrentLocation();
 			if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= destination.width || loc.y + wordImageHeight >= destination.height) {
-				timer.count("OUT OF BOUNDS");
 				continue;
 			}
 			
 			if (lastCollidedWith != null && eWord.overlaps(lastCollidedWith)) {
-				timer.count("CACHE COLLISION");
 				continue;
 			}
 			
@@ -177,14 +156,12 @@ class WordCramEngine {
 			}
 			
 			if (!foundOverlap) {
-				timer.count("placed a word");
 				eWord.finalizeLocation();
 				return true;
 			}
 		}
 		
 		skipWord(eWord.word, WordCram.NO_SPACE);
-		timer.count("couldn't place a word");
 		return false;
 	}
 
