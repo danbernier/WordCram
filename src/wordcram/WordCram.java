@@ -200,36 +200,11 @@ public class WordCram {
 	private RenderOptions renderOptions = new RenderOptions();
 	
 	/**
-	 * This was the old way to build a WordCram: you have to specify <i>everything</i>.
-	 * The new way, {@link #WordCram(PApplet)}, is much easier, but this will be left
-	 * around for a while.
-	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the fluent builder methods instead. Will be deleted in 0.5.
-	 */
-	@Deprecated    
-	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer, WordNudger _wordNudger) {
-		this(_parent);
-		withFonter(_fonter).withSizer(_sizer).withColorer(_colorer).withAngler(_angler).withPlacer(_wordPlacer).withNudger(_wordNudger);
-		fromWords(_words);
-	}
-
-	/**
-	 * This was the old way to build a WordCram: you have to specify <i>everything</i> 
-	 * (except the WordNudger, which defaults to a {@link SpiralWordNudger}). 
-	 * The new way, {@link #WordCram(PApplet)}, is much easier, but this will be left
-	 * around for a while.
-	 * @deprecated Since WordCram 0.3. Use {@link #WordCram(PApplet)} and the fluent builder methods instead. Will be deleted in 0.5.
-	 */
-	@Deprecated
-	public WordCram(PApplet _parent, Word[] _words, WordFonter _fonter, WordSizer _sizer, WordColorer _colorer, WordAngler _angler, WordPlacer _wordPlacer) {
-		this(_parent, _words, _fonter, _sizer, _colorer, _angler, _wordPlacer, new SpiralWordNudger());
-	}
-	
-	/**
 	 * Make a new WordCram.
 	 * <p>
-	 * When constructed this way, it's the starting point of the fluent API for building WordCrams.
+	 * It's the starting point of the fluent API for building WordCrams.
 	 * 
-	 * @param parent Your Processing sketch. You'll probably pass it as <code>this</code>.
+	 * @param parent Your Processing sketch. Pass it as <code>this</code>.
 	 */
 	public WordCram(PApplet parent) {
 		this.parent = parent;
