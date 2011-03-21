@@ -16,8 +16,7 @@ package wordcram;
  limitations under the License.
  */
 
-//TODO make this pkg-local, once TextSplitter is deleted.
-public class WordScanner {
+class WordScanner {
 
 	public String[] scanIntoWords(String text) {
 		String[] tokens = splitIntoTokens(text);
