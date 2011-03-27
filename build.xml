@@ -162,7 +162,8 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 		<copy todir="../../javadoc">
 			<fileset dir="build/p5lib/WordCram/reference" />
 		</copy>
-		<svn><propset path="../../javadoc" name="svn:mime-type" value="text/html" recurse="true"/></svn>
+		<svn><propset path="../../javadoc/" name="svn:mime-type" value="text/html" recurse="true"/></svn>
+		<svn><propset path="../../javadoc/stylesheet.css"  name="svn:mime-type" value="text/css"  recurse="true"/></svn>
 		<svn><commit dir="../../javadoc" recurse="true" 
 			     message="updating javadoc for release ${publish.releaseNumber}" /></svn>
 	</target>
