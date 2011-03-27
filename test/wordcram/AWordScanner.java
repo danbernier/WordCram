@@ -92,6 +92,22 @@ public class AWordScanner {
 	public void removesDashesBetweenWords() {
 		testSplit("a b c", "a--b--c");
 	}
+	
+	@Test
+	public void handlesABunchOfUnicodeCharacters() {
+		testSplit("Ā ā Ă ă Ć ć Ĉ ĉ Ċ ċ Č č Ď ď Đ đ Ē ē Ĕ ĕ Ė ė Ę ę Ě ě", 
+				  "Ā ā Ă ă Ć ć Ĉ ĉ Ċ ċ Č č Ď ď Đ đ Ē ē Ĕ ĕ Ė ė Ę ę Ě ě");
+	}
+
+	@Test
+	public void handlesUnicodesInWords() {
+		testSplit("l'évolution des espèces vivantes ont révolutionné la biologie", 
+				  "l'évolution des espèces vivantes ont révolutionné la biologie");
+		testSplit("Großcousin Käfern Frühjahr standesgemäßen Vögeln",
+				  "Großcousin  *Käfern  Frühjahr,  'standesgemäßen'!  Vögeln.");
+		testSplit("a partir d'avantpassats comuns mitjançant la selecció natural",
+				  "a partir d'avantpassats comuns mitjançant la selecció natural.");
+	}
 
 	private void testSplit(String expected, String src) {
 		String[] expectedArray = expected.split(" ");

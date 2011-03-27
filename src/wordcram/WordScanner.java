@@ -1,5 +1,7 @@
 package wordcram;
 
+import java.util.regex.Pattern;
+
 /*
  Copyright 2010 Daniel Bernier
 
@@ -17,7 +19,7 @@ package wordcram;
  */
 
 class WordScanner {
-
+	
 	public String[] scanIntoWords(String text) {
 		String[] tokens = splitIntoTokens(text);
 
@@ -33,20 +35,25 @@ class WordScanner {
 		return tokens;
 	}
 
+	private Pattern punctuationAtEndOfWords = Pattern.compile("[^\\p{javaLetter}]+\\s+");
+	private Pattern punctuationAtBeginningOfWords = Pattern.compile("\\s+[^\\p{javaLetter}]+");
+	private Pattern punctuationAtStringEnd = Pattern.compile("[^\\p{javaLetter}]+$");
+	private Pattern punctuationAtStringBeginning = Pattern.compile("^[^\\p{javaLetter}]+");
+	
 	private String removePunctuationFromEndOfWords(String token) {
-		return token.replaceAll("\\W+\\s+", " ");
+		return punctuationAtEndOfWords.matcher(token).replaceAll(" ");
 	}
 
 	private String removePunctuationFromBeginningOfWords(String token) {
-		return token.replaceAll("\\s+\\W+", " ");
+		return punctuationAtBeginningOfWords.matcher(token).replaceAll(" ");
 	}
 
 	private String removePunctuationFromStringEnd(String token) {
-		return token.replaceAll("\\W+$", "");
+		return punctuationAtStringEnd.matcher(token).replaceAll("");
 	}
 
 	private String removePunctuationFromStringBeginning(String token) {
-		return token.replaceAll("^\\W+", "");
+		return punctuationAtStringBeginning.matcher(token).replaceAll("");
 	}
 
 	private String[] splitIntoTokens(String text) {

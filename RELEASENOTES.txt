@@ -1,3 +1,9 @@
+Release notes for WordCram 0.4.1, 2011-03-27:
+
+* Bug fix for issue 10: unicode characters in text don't show up in
+  the image.
+
+
 Release notes for WordCram 0.4, 2011-03-17:
 
 WordCram 0.4 changes center around three themes: styling words
