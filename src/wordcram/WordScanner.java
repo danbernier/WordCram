@@ -35,10 +35,10 @@ class WordScanner {
 		return tokens;
 	}
 
-	private Pattern punctuationAtEndOfWords = Pattern.compile("[^\\p{javaLetter}]+\\s+");
-	private Pattern punctuationAtBeginningOfWords = Pattern.compile("\\s+[^\\p{javaLetter}]+");
-	private Pattern punctuationAtStringEnd = Pattern.compile("[^\\p{javaLetter}]+$");
-	private Pattern punctuationAtStringBeginning = Pattern.compile("^[^\\p{javaLetter}]+");
+	private Pattern punctuationAtEndOfWords = Pattern.compile("[^\\p{javaLetter}\\d]+\\s+");
+	private Pattern punctuationAtBeginningOfWords = Pattern.compile("\\s+[^\\p{javaLetter}\\d]+");
+	private Pattern punctuationAtStringEnd = Pattern.compile("[^\\p{javaLetter}\\d]+$");
+	private Pattern punctuationAtStringBeginning = Pattern.compile("^[^\\p{javaLetter}\\d]+");
 	
 	private String removePunctuationFromEndOfWords(String token) {
 		return punctuationAtEndOfWords.matcher(token).replaceAll(" ");

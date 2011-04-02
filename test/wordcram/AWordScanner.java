@@ -108,6 +108,11 @@ public class AWordScanner {
 		testSplit("a partir d'avantpassats comuns mitjançant la selecció natural",
 				  "a partir d'avantpassats comuns mitjançant la selecció natural.");
 	}
+	
+	@Test
+	public void keepsNumbersAtTheEndsOfStrings() {
+		testSplit("bcb6 starts in 30mins", "#bcb6 starts in 30mins");
+	}
 
 	private void testSplit(String expected, String src) {
 		String[] expectedArray = expected.split(" ");
