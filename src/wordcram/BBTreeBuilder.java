@@ -38,37 +38,34 @@ class BBTreeBuilder {
 
 		int width = right - left;
 		int height = bottom - top;
-		boolean intersects = shape.intersects(left, top, width, height);
-		boolean contains = shape.contains(left, top, width, height);
-
-		if (!intersects && !contains) {
-			return null;
-		} else {
+		
+		if (shape.contains(left, top, width, height)) {
+			return new BBTree(left, top, right, bottom);
+		}
+		else if (shape.intersects(left, top, width, height)) {
 			BBTree tree = new BBTree(left, top, right, bottom);
-			if (!contains) {
-				boolean smallEnoughToStop = width <= minBoxSize;
-				if (!smallEnoughToStop) {
-					int centerX = avg(left, right);
-					int centerY = avg(top, bottom);
 
-					// upper left
-					BBTree t0 = makeTree(shape, minBoxSize, left, top, centerX,
-							centerY);
-					// upper right
-					BBTree t1 = makeTree(shape, minBoxSize, centerX, top,
-							right, centerY);
-					// lower left
-					BBTree t2 = makeTree(shape, minBoxSize, left, centerY,
-							centerX, bottom);
-					// lower right
-					BBTree t3 = makeTree(shape, minBoxSize, centerX, centerY,
-							right, bottom);
+			boolean tooSmallToContinue = width <= minBoxSize;
+			if (!tooSmallToContinue) {
+				int centerX = avg(left, right);
+				int centerY = avg(top, bottom);
 
-					tree.addKids(t0, t1, t2, t3);
-				}
+				// upper left
+				BBTree t0 = makeTree(shape, minBoxSize, left, top, centerX, centerY);
+				// upper right
+				BBTree t1 = makeTree(shape, minBoxSize, centerX, top, right, centerY);
+				// lower left
+				BBTree t2 = makeTree(shape, minBoxSize, left, centerY, centerX, bottom);
+				// lower right
+				BBTree t3 = makeTree(shape, minBoxSize, centerX, centerY, right, bottom);
+
+				tree.addKids(t0, t1, t2, t3);
 			}
-
+			
 			return tree;
+		}
+		else {  // neither contains nor intersects
+			return null;
 		}
 	}
 
