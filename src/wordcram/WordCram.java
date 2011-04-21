@@ -697,6 +697,17 @@ public class WordCram {
 	}
 	
 	
+	/**
+	 * TODO REL5: javadoc this, and find a better name. withMinSpaceBetweenWords?
+	 * @param swelling
+	 * @return
+	 */
+	public WordCram withSwelling(int swelling) {
+		renderOptions.swelling = swelling;
+		return this;
+	}
+	
+	
 	private WordCramEngine getWordCramEngine() {
 		if (wordCramEngine == null) {
 

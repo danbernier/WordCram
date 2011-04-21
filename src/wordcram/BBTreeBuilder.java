@@ -20,14 +20,17 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
 class BBTreeBuilder {
-	public BBTree makeTree(Shape shape) {
+	public BBTree makeTree(Shape shape, int swelling) {
 		Rectangle2D bounds = shape.getBounds2D();
 		int minBoxSize = 1;
 		int left = (int) bounds.getX();
 		int top = (int) bounds.getY();
 		int right = left + (int) bounds.getWidth();
 		int bottom = top + (int) bounds.getHeight();
-		return makeTree(shape, minBoxSize, left, top, right, bottom);
+		
+		BBTree tree = makeTree(shape, minBoxSize, left, top, right, bottom);
+		tree.swell(swelling);
+		return tree;
 	}
 
 	private BBTree makeTree(Shape shape, int minBoxSize, int left, int top,

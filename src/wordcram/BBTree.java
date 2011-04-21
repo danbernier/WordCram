@@ -83,8 +83,9 @@ class BBTree {
 	}
 
 	private PVector[] getPoints() {
-		return new PVector[] { PVector.add(new PVector(left, top), location),
-				PVector.add(new PVector(right, bottom), location) };
+		return new PVector[] { 
+				PVector.add(new PVector(left - swelling, top - swelling), location),
+				PVector.add(new PVector(right + swelling, bottom + swelling), location) };
 	}
 
 	private boolean rectCollide(BBTree a, BBTree b) {
@@ -103,15 +104,12 @@ class BBTree {
 		return kids == null;
 	}
 
-	void swellLeaves(int extra) {
-		if (isLeaf()) {
-			left -= extra;
-			right += extra;
-			top -= extra;
-			bottom += extra;
-		} else {
+	int swelling = 0;
+	void swell(int extra) {
+		swelling += extra;
+		if (!isLeaf()) {
 			for (int i = 0; i < kids.length; i++) {
-				kids[i].swellLeaves(extra);
+				kids[i].swell(extra);
 			}
 		}
 	}

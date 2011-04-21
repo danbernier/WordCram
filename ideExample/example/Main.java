@@ -65,27 +65,29 @@ public class Main extends PApplet {
 		//pg.beginDraw();
 
 		wordcram = new WordCram(this)
-					//.withCustomCanvas(pg)
-					.fromTextFile(textFilePath())
-					//.fromWords(alphabet())
-					//.upperCase()
-					//.excludeNumbers()
+//					.withCustomCanvas(pg)
+//					.fromTextFile(textFilePath())
+					.fromWords(alphabet())
+//					.upperCase()
+//					.excludeNumbers()
 					.withFonts(randomFont())
-					.withColorer(Colorers.twoHuesRandomSats(this))
-					//.withColorer(Colorers.complement(this, random(255), 200, 220))
+//					.withColorer(Colorers.twoHuesRandomSats(this))
+//					.withColorer(Colorers.complement(this, random(255), 200, 220))
 					.withAngler(Anglers.mostlyHoriz())
 					.withPlacer(Placers.horizLine())
-					//.withPlacer(Placers.centerClump())
-					.withSizer(Sizers.byWeight(5, 70))
-					//.minShapeSize(0)
-					//.withMaxAttemptsForPlacement(10)
+//					.withPlacer(Placers.centerClump())
+					.withSizer(Sizers.byWeight(20, 200))
 					
-					//.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
-					//.withNudger(new RandomWordNudger())
+//					.withSwelling(6)
+					
+//					.minShapeSize(0)
+//					.withMaxAttemptsForPlacement(10)
+//					.maxNumberOfWordsToDraw(500)
+					
+//					.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
+//					.withNudger(new RandomWordNudger())
 					
 					;
-		
-		//wordcram.maxNumberOfWordsToDraw(500);
 	}
 	
 	private void finishUp() {

@@ -38,9 +38,9 @@ class EngineWord {
 		this.bbTreeBuilder = bbTreeBuilder;
 	}
 
-	void setShape(Shape shape) {
+	void setShape(Shape shape, int swelling) {
 		this.shape = shape;
-		this.bbTree = bbTreeBuilder.makeTree(shape);
+		this.bbTree = bbTreeBuilder.makeTree(shape, swelling);
 	}
 
 	Shape getShape() {
