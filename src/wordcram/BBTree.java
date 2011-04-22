@@ -27,8 +27,8 @@ class BBTree {
 	private int bottom;
 	private BBTree[] kids;
 
-	private int locx;
-	private int locy;
+	private int rootX;
+	private int rootY;
 
 	BBTree(int x, int y, int right, int bottom) {
 		this.x = x;
@@ -49,8 +49,8 @@ class BBTree {
 	}
 
 	void setLocation(int x, int y) {
-		locx = x;
-		locy = y;
+		rootX = x;
+		rootY = y;
 		
 		if (!isLeaf()) {
 			for (BBTree kid : kids) {
@@ -84,10 +84,10 @@ class BBTree {
 
 	private int[] getPoints() {
 		return new int[] {
-				locx - swelling + x,
-				locy - swelling + y,
-				locx + swelling + right,
-				locy + swelling + bottom
+				rootX - swelling + x,
+				rootY - swelling + y,
+				rootX + swelling + right,
+				rootY + swelling + bottom
 		};
 	}
 
