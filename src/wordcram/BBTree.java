@@ -21,19 +21,20 @@ import processing.core.*;
  */
 
 class BBTree {
-	private int left;
-	private int top;
+	private int x;
+	private int y;
 	private int right;
 	private int bottom;
 	private BBTree[] kids;
 
-	private PVector location = new PVector(0, 0);
+	private int locx;
+	private int locy;
 
-	BBTree(int _left, int _top, int _right, int _bottom) {
-		left = _left;
-		top = _top;
-		right = _right;
-		bottom = _bottom;
+	BBTree(int x, int y, int right, int bottom) {
+		this.x = x;
+		this.y = y;
+		this.right = right;
+		this.bottom = bottom;
 	}
 
 	void addKids(BBTree... _kids) {
@@ -47,11 +48,13 @@ class BBTree {
 		kids = kidList.toArray(new BBTree[0]);
 	}
 
-	void setLocation(PVector _location) {
-		location = _location;
+	void setLocation(int x, int y) {
+		locx = x;
+		locy = y;
+		
 		if (!isLeaf()) {
 			for (BBTree kid : kids) {
-				kid.setLocation(_location);
+				kid.setLocation(x, y);
 			}
 		}
 	}
@@ -79,22 +82,20 @@ class BBTree {
 		return false;
 	}
 
-	private PVector[] getPoints() {
-		return new PVector[] { 
-				PVector.add(new PVector(left - swelling, top - swelling), location),
-				PVector.add(new PVector(right + swelling, bottom + swelling), location) };
+	private int[] getPoints() {
+		return new int[] {
+				locx - swelling + x,
+				locy - swelling + y,
+				locx + swelling + right,
+				locy + swelling + bottom
+		};
 	}
 
-	private boolean rectCollide(BBTree a, BBTree b) {
-		PVector[] aPoints = a.getPoints();
-		PVector[] bPoints = b.getPoints();
-		PVector aTopLeft = aPoints[0];
-		PVector aBottomRight = aPoints[1];
-		PVector bTopLeft = bPoints[0];
-		PVector bBottomRight = bPoints[1];
-
-		return aBottomRight.y > bTopLeft.y && aTopLeft.y < bBottomRight.y
-				&& aBottomRight.x > bTopLeft.x && aTopLeft.x < bBottomRight.x;
+	private boolean rectCollide(BBTree aTree, BBTree bTree) {
+		int[] a = aTree.getPoints();
+		int[] b = bTree.getPoints();
+		
+		return a[3] > b[1] && a[1] < b[3] && a[2] > b[0] && a[0] < b[2];
 	}
 
 	boolean isLeaf() {
@@ -113,7 +114,6 @@ class BBTree {
 
 	void draw(PGraphics g) {
 		g.pushStyle();
-		g.rectMode(PConstants.CORNERS);
 		g.noFill();
 	
 		g.stroke(30, 255, 255, 50);
@@ -132,7 +132,7 @@ class BBTree {
 		}
 	}
 
-	private void drawBounds(PGraphics g, PVector[] rect) {
-		g.rect(rect[0].x, rect[0].y, rect[1].x, rect[1].y);
+	private void drawBounds(PGraphics g, int[] rect) {
+		g.rect(rect[0], rect[1], rect[2], rect[3]);
 	}
 }

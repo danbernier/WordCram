@@ -58,14 +58,14 @@ class EngineWord {
 
 	void nudge(PVector nudge) {
 		currentLocation = PVector.add(desiredLocation, nudge);
-		bbTree.setLocation(currentLocation.get());
+		bbTree.setLocation((int)currentLocation.x, (int)currentLocation.y);
 	}
 
 	void finalizeLocation() {
 		AffineTransform transform = AffineTransform.getTranslateInstance(
 				currentLocation.x, currentLocation.y);
 		shape = transform.createTransformedShape(shape);
-		bbTree.setLocation(currentLocation);
+		bbTree.setLocation((int)currentLocation.x, (int)currentLocation.y);
 		word.setRenderedPlace(currentLocation);
 	}
 
