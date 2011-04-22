@@ -1,5 +1,6 @@
 package wordcram;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import processing.core.*;
@@ -21,19 +22,11 @@ import processing.core.*;
  */
 
 class BBTree {
-	private int left;
-	private int top;
-	private int right;
-	private int bottom;
+	private Rectangle rect;
 	private BBTree[] kids;
 
-	private PVector location = new PVector(0, 0);
-
-	BBTree(int _left, int _top, int _right, int _bottom) {
-		left = _left;
-		top = _top;
-		right = _right;
-		bottom = _bottom;
+	BBTree(int x, int y, int width, int height) {
+		rect = new Rectangle(x, y, width, height);
 	}
 
 	void addKids(BBTree... _kids) {
@@ -47,76 +40,59 @@ class BBTree {
 		kids = kidList.toArray(new BBTree[0]);
 	}
 
-	void setLocation(PVector _location) {
-		location = _location;
+	void setLocation(PVector location) {
+		int dx = (int)location.x - rect.x;
+		int dy = (int)location.y - rect.y;
+		translate(dx, dy);
+	}
+	
+	private void translate(int dx, int dy) {
+		rect.translate(dx, dy);
 		if (!isLeaf()) {
 			for (BBTree kid : kids) {
-				kid.setLocation(_location);
+				kid.translate(dx, dy);
 			}
 		}
 	}
 
-	boolean overlaps(BBTree otherTree) {
-
-		if (rectCollide(this, otherTree)) {
-			if (this.isLeaf() && otherTree.isLeaf()) {
+	boolean overlaps(BBTree other) {
+		if (this.rect.intersects(other.rect)) {
+			if (this.isLeaf() && other.isLeaf()) {
 				return true;
 			}
-
-			if (this.isLeaf()) {  // Then otherTree isn't a leaf.
-				for (BBTree otherKid : otherTree.kids) {
+			else if (this.isLeaf()) {
+				for (BBTree otherKid : other.kids) {
 					if (this.overlaps(otherKid)) {
 						return true;
 					}
 				}
-				return false; // This isLeaf, but doesn't overlap w/ any otherTree's kids.
 			}
-			
-			// Now we know that neither this nor otherTree are leaves.
-			for (BBTree myKid : this.kids) {
-				if (otherTree.overlaps(myKid)) {
-					return true;
+			else {
+				for (BBTree myKid : this.kids) {
+					if (other.overlaps(myKid)) {
+						return true;
+					}
 				}
 			}
 		}
 		return false;
 	}
 
-	private PVector[] getPoints() {
-		return new PVector[] { 
-				PVector.add(new PVector(left - swelling, top - swelling), location),
-				PVector.add(new PVector(right + swelling, bottom + swelling), location) };
-	}
-
-	private boolean rectCollide(BBTree a, BBTree b) {
-		PVector[] aPoints = a.getPoints();
-		PVector[] bPoints = b.getPoints();
-		PVector aTopLeft = aPoints[0];
-		PVector aBottomRight = aPoints[1];
-		PVector bTopLeft = bPoints[0];
-		PVector bBottomRight = bPoints[1];
-
-		return aBottomRight.y > bTopLeft.y && aTopLeft.y < bBottomRight.y
-				&& aBottomRight.x > bTopLeft.x && aTopLeft.x < bBottomRight.x;
-	}
-
 	boolean isLeaf() {
 		return kids == null;
 	}
 
-	int swelling = 0;
 	void swell(int extra) {
-		swelling += extra;
+		rect.grow(extra, extra);
 		if (!isLeaf()) {
-			for (int i = 0; i < kids.length; i++) {
-				kids[i].swell(extra);
+			for (BBTree kid : kids) {
+				kid.swell(extra);
 			}
 		}
 	}
 
 	void draw(PGraphics g) {
 		g.pushStyle();
-		g.rectMode(PConstants.CORNERS);
 		g.noFill();
 	
 		g.stroke(30, 255, 255, 50);
@@ -127,15 +103,11 @@ class BBTree {
 
 	private void drawLeaves(PGraphics g) {
 		if (this.isLeaf()) {
-			drawBounds(g, getPoints());
+			g.rect(rect.x, rect.y, rect.width, rect.height);
 		} else {
-			for (int i = 0; i < kids.length; i++) {
-				kids[i].drawLeaves(g);
+			for (BBTree kid : kids) {
+				kid.drawLeaves(g);
 			}
 		}
-	}
-
-	private void drawBounds(PGraphics g, PVector[] rect) {
-		g.rect(rect[0].x, rect[0].y, rect[1].x, rect[1].y);
 	}
 }
