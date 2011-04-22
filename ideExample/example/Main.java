@@ -59,15 +59,15 @@ public class Main extends PApplet {
 	
 	//PGraphics pg;
 	private void initWordCram() {
-		background(30);
+		background(100);
 		
 		//pg = createGraphics(800, 600, JAVA2D);
 		//pg.beginDraw();
 
 		wordcram = new WordCram(this)
 //					.withCustomCanvas(pg)
-//					.fromTextFile(textFilePath())
-					.fromWords(alphabet())
+					.fromTextFile(textFilePath())
+//					.fromWords(alphabet())
 //					.upperCase()
 //					.excludeNumbers()
 					.withFonts(randomFont())
@@ -76,9 +76,9 @@ public class Main extends PApplet {
 					.withAngler(Anglers.mostlyHoriz())
 					.withPlacer(Placers.horizLine())
 //					.withPlacer(Placers.centerClump())
-					.withSizer(Sizers.byWeight(20, 200))
+					.withSizer(Sizers.byWeight(5, 70))
 					
-//					.withSwelling(6)
+					.withWordPadding(6)
 					
 //					.minShapeSize(0)
 //					.withMaxAttemptsForPlacement(10)

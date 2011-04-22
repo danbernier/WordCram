@@ -80,7 +80,7 @@ class WordCramEngine {
 				skipWord(word, WordCram.SHAPE_WAS_TOO_SMALL);
 			}
 			else {
-				eWord.setShape(shape, renderOptions.swelling);
+				eWord.setShape(shape, renderOptions.wordPadding);
 				engineWords.add(eWord);  // DON'T add eWords with no shape.
 			}
 		}

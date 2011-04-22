@@ -52,4 +52,8 @@ new WordCram(this)
   //.withFonts("Georgia", "Minya Nouvelle")
   //.withFonts(georgia, minyaNouvelle)
   
+  //---------
+  // Padding
+  .withWordPadding(2)
+  
   .drawAll();

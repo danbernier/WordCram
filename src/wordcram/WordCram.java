@@ -698,12 +698,18 @@ public class WordCram {
 	
 	
 	/**
-	 * TODO REL5: javadoc this, and find a better name. withMinSpaceBetweenWords?
-	 * @param swelling
-	 * @return
+	 * Add padding around each word, so they stand out from each other more.
+	 * If you call this multiple times, the last value will be used.
+	 * 
+	 * WordCram uses a tree of java.awt.Rectangle objects to detect whether two words overlap.
+	 * What this method actually does is call <code>Rectangle.grow(padding)</code> on the 
+	 * leaves of that tree.
+	 * 
+	 * @param padding The number of pixels to grow each rectangle by. Defaults to zero.
+	 * @return The WordCram, for further setup or drawing.
 	 */
-	public WordCram withSwelling(int swelling) {
-		renderOptions.swelling = swelling;
+	public WordCram withWordPadding(int padding) {
+		renderOptions.wordPadding = padding;
 		return this;
 	}
 	
