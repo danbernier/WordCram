@@ -57,25 +57,22 @@ class BBTree {
 	}
 
 	boolean overlaps(BBTree otherTree) {
-
 		if (rectCollide(this, otherTree)) {
 			if (this.isLeaf() && otherTree.isLeaf()) {
 				return true;
 			}
-
-			if (this.isLeaf()) {  // Then otherTree isn't a leaf.
+			else if (this.isLeaf()) {  // Then otherTree isn't a leaf.
 				for (BBTree otherKid : otherTree.kids) {
 					if (this.overlaps(otherKid)) {
 						return true;
 					}
 				}
-				return false; // This isLeaf, but doesn't overlap w/ any otherTree's kids.
 			}
-			
-			// Now we know that neither this nor otherTree are leaves.
-			for (BBTree myKid : this.kids) {
-				if (otherTree.overlaps(myKid)) {
-					return true;
+			else {
+				for (BBTree myKid : this.kids) {
+					if (otherTree.overlaps(myKid)) {
+						return true;
+					}
 				}
 			}
 		}
