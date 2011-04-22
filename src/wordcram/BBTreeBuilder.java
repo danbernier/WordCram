@@ -23,41 +23,41 @@ class BBTreeBuilder {
 	public BBTree makeTree(Shape shape, int swelling) {
 		Rectangle2D bounds = shape.getBounds2D();
 		int minBoxSize = 1;
-		int x = (int) bounds.getX();
-		int y = (int) bounds.getY();
-		int width = (int) bounds.getWidth();
-		int height = (int) bounds.getHeight();
+		int left = (int) bounds.getX();
+		int top = (int) bounds.getY();
+		int right = left + (int) bounds.getWidth();
+		int bottom = top + (int) bounds.getHeight();
 		
-		BBTree tree = makeTree(shape, minBoxSize, x, y, width, height);
+		BBTree tree = makeTree(shape, minBoxSize, left, top, right, bottom);
 		tree.swell(swelling);
 		return tree;
 	}
 
-	private BBTree makeTree(Shape shape, int minBoxSize, int x, int y,
-			int width, int height) {
+	private BBTree makeTree(Shape shape, int minBoxSize, int left, int top,
+			int right, int bottom) {
+
+		int width = right - left;
+		int height = bottom - top;
 		
-		if (shape.contains(x, y, width, height)) {
-			return new BBTree(x, y, width, height);
+		if (shape.contains(left, top, width, height)) {
+			return new BBTree(left, top, right, bottom);
 		}
-		else if (shape.intersects(x, y, width, height)) {
-			BBTree tree = new BBTree(x, y, width, height);
+		else if (shape.intersects(left, top, width, height)) {
+			BBTree tree = new BBTree(left, top, right, bottom);
 
 			boolean tooSmallToContinue = width <= minBoxSize;
 			if (!tooSmallToContinue) {
-				int halfWidth = width >> 1;   // reminder: x >> 1 == x / 2
-				int halfHeight = height >> 1;
-				
-				int newX = x + halfWidth;
-				int newY = y + halfHeight;
+				int centerX = avg(left, right);
+				int centerY = avg(top, bottom);
 
 				// upper left
-				BBTree t0 = makeTree(shape, minBoxSize, x, y, halfWidth, halfHeight);
+				BBTree t0 = makeTree(shape, minBoxSize, left, top, centerX, centerY);
 				// upper right
-				BBTree t1 = makeTree(shape, minBoxSize, newX, y, halfWidth, halfHeight);
+				BBTree t1 = makeTree(shape, minBoxSize, centerX, top, right, centerY);
 				// lower left
-				BBTree t2 = makeTree(shape, minBoxSize, x, newY, halfWidth, halfHeight);
+				BBTree t2 = makeTree(shape, minBoxSize, left, centerY, centerX, bottom);
 				// lower right
-				BBTree t3 = makeTree(shape, minBoxSize, newX, newY, halfWidth, halfHeight);
+				BBTree t3 = makeTree(shape, minBoxSize, centerX, centerY, right, bottom);
 
 				tree.addKids(t0, t1, t2, t3);
 			}
@@ -67,5 +67,11 @@ class BBTreeBuilder {
 		else {  // neither contains nor intersects
 			return null;
 		}
+	}
+
+	private int avg(int a, int b) {
+		// reminder: x >> 1 == x / 2
+		// avg = (a+b)/2 = (a/2)+(b/2) = (a>>1)+(b>>1)
+		return (a + b) >> 1;
 	}
 }
