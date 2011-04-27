@@ -172,7 +172,8 @@ class WordCramEngine {
 	private void drawWordImage(EngineWord word) {
 		GeneralPath path2d = new GeneralPath(word.getShape());
 		
-		Graphics2D g2 = (Graphics2D)destination.image.getGraphics();
+//		Graphics2D g2 = (Graphics2D)destination.image.getGraphics();
+		Graphics2D g2 = ((PGraphicsJava2D)destination).g2;
 			
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setPaint(new Color(word.word.getColor(colorer), true));
