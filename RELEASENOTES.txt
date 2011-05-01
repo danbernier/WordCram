@@ -3,6 +3,7 @@ Release notes for WordCram 0.5.latest:
 * Added word-padding, so words don't get so close. The method is
   WordCram.withWordPadding(int padding).
 
+* PDF support.
 
 Release notes for WordCram 0.4.1, 2011-03-27:
 
