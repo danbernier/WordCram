@@ -4,11 +4,12 @@ WordCram wordCram;
 
 void setup() {
   size(600, 400);
-  background(0);
+  background(20, 20, 30);
 
   wordCram = new WordCram(this)
     .fromTextFile("../usconst.txt")
-      .sizedByWeight(8, 70);
+    .withColor(#ededed)
+    .sizedByWeight(8, 70);
 }
 
 void draw() {
@@ -42,7 +43,7 @@ void report() {
       case WordCram.SHAPE_WAS_TOO_SMALL: 
         tooSmall++; 
         break;
-      case WordCram.NO_ROOM: 
+      case WordCram.NO_SPACE: 
         couldNotPlace++; 
         break;
       }

@@ -1,6 +1,12 @@
 import processing.pdf.*;
 import wordcram.*;
 
+/*
+ * After you run this sketch,
+ * look in the sketch folder
+ * to find the PDF.
+ */
+
 void setup() {
   size(700, 700, PDF, "usconst.pdf");
   background(255);

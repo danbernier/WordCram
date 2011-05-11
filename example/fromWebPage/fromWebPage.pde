@@ -12,10 +12,9 @@ size(800, 400);
 colorMode(HSB);
 background(255);
 
-WordCram wc = new WordCram(this)
-  .fromWebPage("http://wordcram.wordpress.com")
-  .withFont("Minya Nouvelle")
+new WordCram(this)
+  .fromWebPage("http://wordcram.org")
+  .withFont(createFont("../MINYN___.TTF", 1))
   .withColorer(Colorers.twoHuesRandomSatsOnWhite(this))
-  .sizedByWeight(7, 100);
-
-wc.drawAll();
+  .sizedByWeight(7, 100)
+  .drawAll();

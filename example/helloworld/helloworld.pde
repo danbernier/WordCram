@@ -6,7 +6,7 @@ something is not quite right.
 import wordcram.*;
 
 size(700, 400);
-background(0);
+background(255);
 
 // Each Word object has its word, and its weight.  You can use whatever
 // numbers you like for their weights, and they can be in any order.
