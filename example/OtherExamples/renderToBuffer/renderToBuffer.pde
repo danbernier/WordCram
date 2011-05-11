@@ -16,7 +16,7 @@ void setup() {
   buffer.background(255);
   
   wc = new WordCram(this)
-    .fromTextFile("../usconst.txt")
+    .fromTextFile("../../usconst.txt")
     .withCustomCanvas(buffer)
     .withColors(color(255,0,0), color(0), color(0,0,255)) // red, black, and blue
     .sizedByWeight(9, 70);

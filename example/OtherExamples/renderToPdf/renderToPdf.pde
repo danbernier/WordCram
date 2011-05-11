@@ -12,7 +12,7 @@ void setup() {
   background(255);
   
   new WordCram(this)
-    .fromTextFile("../usconst.txt")
+    .fromTextFile("../../usconst.txt")
     .withColors(#000000, #0000dd, #ff0000)
     .withFonts("LiberationSans")
     .sizedByWeight(4, 140)

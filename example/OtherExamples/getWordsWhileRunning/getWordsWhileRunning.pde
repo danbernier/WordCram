@@ -7,7 +7,7 @@ void setup() {
   background(20, 20, 30);
 
   wordCram = new WordCram(this)
-    .fromTextFile("../usconst.txt")
+    .fromTextFile("../../usconst.txt")
     .withColor(#ededed)
     .sizedByWeight(8, 70);
 }

@@ -14,7 +14,7 @@ background(255);
 
 new WordCram(this)
   .fromWebPage("http://wordcram.org")
-  .withFont(createFont("../MINYN___.TTF", 1))
+  .withFont(createFont("../../MINYN___.TTF", 1))
   .withColorer(Colorers.twoHuesRandomSatsOnWhite(this))
   .sizedByWeight(7, 100)
   .drawAll();
