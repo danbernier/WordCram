@@ -2,9 +2,9 @@ import processing.pdf.*;
 import wordcram.*;
 
 /*
- * After you run this sketch,
- * look in the sketch folder
- * to find the PDF.
+ * After you run this,
+ * open the sketch's folder.
+ * See the PDF.
  */
 
 void setup() {
