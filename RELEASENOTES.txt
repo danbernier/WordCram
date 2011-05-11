@@ -1,9 +1,26 @@
 Release notes for WordCram 0.5, 2011-05-11:
 
-* PDF support! 
+* PDF support! It's simple to use: just output your sketch to a
+  PDF. None of your WordCram code has to change. If you'd like to see
+  an example, go to Processing's Examples menu, and check out WordCram
+  > OtherExamples > renderToPdf.
+
+  My ignorance of Processing's internals made this feature take much
+  longer than it needed to. The fix turned out to be a one-line change
+  (an improvement, really) to the way word-shapes are rendered. But
+  it's here now, ready for you to make something amazing and hi-res.
+
+* Works with Processing 1.5. This was largely a side-effect of the PDF
+  support, but it also meant moving the tutorials & examples around to
+  fit in Processing's new floating "Examples" menu.
 
 * Added word-padding, so words don't get so close. The method is
   WordCram.withWordPadding(int padding).
+
+* Updated all the examples, to make sure they work properly. Some of
+  them were using black backgrounds, and since the default word color
+  was changed to black (back in March), these were pretty unhelpful.
+
 
 Release notes for WordCram 0.4.1, 2011-03-27:
 
