@@ -87,9 +87,9 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 
 		<mkdir dir="build/p5lib/WordCram/reference" />		
 		<javadoc classpath="${classpath}" sourcepath="src" destdir="build/p5lib/WordCram/reference" 
-			 windowtitle="WordCram API" use="true" overview="src/overview.html" header="WordCram 0.4.1">
-		  <!-- TODO version # in build file - property? --> 
-		  <!--  TODO put these in if it ever seems useful.
+			 windowtitle="WordCram API" use="true" overview="src/overview.html" header="WordCram 0.5">
+		  <!-- TODO version # in build file - property? Or rather, pass it as an arg, and have it default to 'latest' or something. --> 
+		  <!-- TODO put these in if it ever seems useful.
 		  <link href="http://processing.googlecode.com/svn/trunk/processing/build/javadoc/" />
 		  <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
 		  -->
