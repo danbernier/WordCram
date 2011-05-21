@@ -22,6 +22,8 @@ import java.util.Comparator;
 import org.junit.Assert;
 import org.junit.Test;
 
+import cue.lang.stop.StopWords;
+
 public class AWordCounter {
 	
 	private Comparator<Word> alphabetically = new Comparator<Word>() {
@@ -32,54 +34,50 @@ public class AWordCounter {
 
 	@Test
 	public void canExcludeWordsThatAreJustNumbers() {
-		WordCounter wc = new WordCounter("");
+		WordCounter wc = new WordCounter();
 		wc.shouldExcludeNumbers(true);
 		Word[] weightedWords = wc.count("I saw U2 in 1999 I saw them 10 times");
 
 		Arrays.sort(weightedWords, alphabetically);
 
-		assertWeightedWordsAre(weightedWords, "I 2", "U2 1", "in 1", "saw 2",
-				"them 1", "times 1");
+		assertWeightedWordsAre(weightedWords, "U2 1", "saw 2", "times 1");
 	}
 	
 	@Test
 	public void canExcludeWordsThatHaveDecimalPoints() {
-		WordCounter wc = new WordCounter("");
+		WordCounter wc = new WordCounter();
 		wc.shouldExcludeNumbers(true);
 		Word[] weightedWords = wc.count("Pi is about 3.1415 I think");
 		
 		Arrays.sort(weightedWords, alphabetically);
 		
-		assertWeightedWordsAre(weightedWords, "I 1", "Pi 1", "about 1", "is 1", "think 1");
+		assertWeightedWordsAre(weightedWords, "Pi 1", "think 1");
 	}
 
 	@Test
 	public void canLeaveWordsThatAreJustNumbers() {
-		WordCounter wc = new WordCounter("");
+		WordCounter wc = new WordCounter();
 		wc.shouldExcludeNumbers(false);
 		Word[] weightedWords = wc.count("I saw U2 in 1999 I saw them 10 times");
 
 		Arrays.sort(weightedWords, alphabetically);
-
-		assertWeightedWordsAre(weightedWords, "10 1", "1999 1", "I 2", "U2 1",
-				"in 1", "saw 2", "them 1", "times 1");
+		
+		assertWeightedWordsAre(weightedWords, "10 1", "1999 1", "U2 1", "saw 2", "times 1");
 	}
 
 	@Test
-	public void testPunctuationInStopWords() {
-		WordCounter wc = new WordCounter("don't i'll");
+	public void testPunctuationInExtraStopWords() {
+		WordCounter wc = new WordCounter().withExtraStopWords("don't i'll");
 		Word[] weightedWords = wc.count("i don't want any more can't you see i'll be ill");		
 
-		// Sort them by word, since they're all the same weight.
 		Arrays.sort(weightedWords, alphabetically);
 
-		assertWeightedWordsAre(weightedWords, "any 1", "be 1", "can't 1",
-				"i 1", "ill 1", "more 1", "see 1", "want 1", "you 1");
+		assertWeightedWordsAre(weightedWords, "ill 1", "see 1", "want 1");
 	}
 
 	@Test
-	public void testCountsWithStopWords() {
-		WordCounter wc = new WordCounter("these are stop words");
+	public void testCountsWithExtraStopWords() {
+		WordCounter wc = new WordCounter().withExtraStopWords("these are stop words");
 
 		Word[] weightedWords = wc.count("biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words");
 		Arrays.sort(weightedWords);
@@ -88,23 +86,23 @@ public class AWordCounter {
 	}
 	
 	@Test
-	public void testThatStopWordsAreCaseInsensitive() {
-		WordCounter wc = new WordCounter("STOP WORDS");
+	public void testThatExtraStopWordsAreCaseInsensitive() {
+		WordCounter wc = new WordCounter().withExtraStopWords("STOP WORDS");
 		
-		Word[] weightedWords = wc.count("these are stop words Stop Words STOP WORDS");
+		Word[] weightedWords = wc.count("jelly fish are not stop words Stop Words STOP WORDS");
+		Arrays.sort(weightedWords, alphabetically);
+	
+		assertWeightedWordsAre(weightedWords, "fish 1", "jelly 1");
+	}
+	
+	@Test
+	public void canUseCustomStopWords() {
+		WordCounter wc = new WordCounter(StopWords.Custom);
+		
+		Word[] weightedWords = wc.count("are am all in she him");
 		Arrays.sort(weightedWords, alphabetically);
 		
-		assertWeightedWordsAre(weightedWords, "are 1", "these 1");
-	}
-
-	@Test
-	public void testCountsWithNoStopWords() {
-		WordCounter wc = new WordCounter("");
-
-		Word[] weightedWords = wc.count("a b c a b a");
-		Arrays.sort(weightedWords);
-		
-		assertWeightedWordsAre(weightedWords, "a 3", "b 2", "c 1");
+		assertWeightedWordsAre(weightedWords, "all 1", "am 1", "are 1", "him 1", "in 1", "she 1");
 	}
 	
 	private void assertWeightedWordsAre(Word[] actualWords, String... expectedCases) {

@@ -9,6 +9,7 @@
 	<classpathentry kind="lib" path="lib/mockito-all-1.8.5.jar"/>
 	<classpathentry kind="lib" path="lib/processing/itext.jar"/>
 	<classpathentry kind="lib" path="lib/processing/pdf.jar"/>
+	<classpathentry kind="lib" path="lib/cue.language.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

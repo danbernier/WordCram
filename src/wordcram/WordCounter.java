@@ -17,15 +17,29 @@ package wordcram;
  */
 
 import java.util.*;
+import java.util.Map.Entry;
+
+import cue.lang.Counter;
+import cue.lang.WordIterator;
+import cue.lang.stop.StopWords;
 
 class WordCounter {
 
-	private Set<String> stopWords;
+	private StopWords cueStopWords;
+	private Set<String> extraStopWords = new HashSet<String>();
 	private boolean excludeNumbers;
 	
-	public WordCounter(String stopWordsString) {
-		String[] stopWordsArray = stopWordsString.toLowerCase().split(" ");
-		stopWords = new HashSet<String>(Arrays.asList(stopWordsArray));
+	public WordCounter() {
+		this(null);
+	}
+	public WordCounter(StopWords cueStopWords) {
+		this.cueStopWords = cueStopWords;
+	}
+	
+	public WordCounter withExtraStopWords(String extraStopWordsString) {
+		String[] stopWordsArray = extraStopWordsString.toLowerCase().split(" ");
+		extraStopWords = new HashSet<String>(Arrays.asList(stopWordsArray));
+		return this;
 	}
 	
 	public WordCounter shouldExcludeNumbers(boolean shouldExcludeNumbers) {
@@ -34,24 +48,28 @@ class WordCounter {
 	}
 
 	public Word[] count(String text) {
-		String[] words = new WordScanner().scanIntoWords(text);
-		return toWords(countWords(words));
+		if (cueStopWords == null) {
+			cueStopWords = StopWords.guess(text);
+		}
+		return countWords(text);
 	}
 
-	private Map<String, Integer> countWords(String[] words) {
-		HashMap<String, Integer> counts = new HashMap<String, Integer>();
-
-		for (String word : words) {
+	private Word[] countWords(String text) {
+		Counter<String> counter = new Counter<String>();
+		
+		for (String word : new WordIterator(text)) {
 			if (shouldCountWord(word)) {
-				if (!counts.containsKey(word)) {
-					counts.put(word, 1);
-				} else {
-					counts.put(word, counts.get(word) + 1);
-				}
+				counter.note(word);
 			}
 		}
-
-		return counts;
+		
+		List<Word> words = new ArrayList<Word>();
+		
+		for (Entry<String, Integer> entry : counter.entrySet()) {
+			words.add(new Word(entry.getKey(), (int)entry.getValue()));
+		}
+		
+		return words.toArray(new Word[0]);
 	}
 
 	private boolean shouldCountWord(String word) {
@@ -69,18 +87,8 @@ class WordCounter {
 	}
 
 	private boolean isStopWord(String word) {
-		return stopWords.contains(word.toLowerCase());
-	}
-
-	private Word[] toWords(Map<String, Integer> counts) {
-		List<Word> words = new ArrayList<Word>();
-
-		for (String word : counts.keySet()) {
-			int count = counts.get(word);
-			words.add(new Word(word, count));
-		}
-
-		return words.toArray(new Word[0]);
+		return cueStopWords.isStopWord(word) || 
+				extraStopWords.contains(word.toLowerCase());
 	}
 
 }

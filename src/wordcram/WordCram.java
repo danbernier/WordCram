@@ -16,6 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import cue.lang.stop.StopWords;
 import processing.core.*;
 import wordcram.text.*;
 
@@ -180,7 +181,7 @@ public class WordCram {
 
 	private Word[] words;
 	private TextSource textSource;
-	private String stopWords = StopWords.ENGLISH;
+	private String extraStopWords = "";
 	private boolean excludeNumbers = true;
 	private enum TextCase { Lower, Upper, Keep };
 	private TextCase textCase = TextCase.Keep;
@@ -212,8 +213,7 @@ public class WordCram {
 	
 	/**
 	 * Tells WordCram which words to ignore when it counts up the words in your text.
-	 * These words won't show up in the image.  {@link StopWords} provides some common sets
-	 * of stop-words.
+	 * These words won't show up in the image.
 	 * <p>
 	 * Stop-words are always case-insensitive: if your source text contains "The plane, 
 	 * the plane!", using "the" for a stop-word is enough to block both "the" and "The".
@@ -224,13 +224,11 @@ public class WordCram {
 	 * {@link Word} array, since WordCram won't do any text analysis on it (other than 
 	 * sorting the words and scaling their weights).
 	 * 
-	 * @see StopWords
-	 * 
-	 * @param stopWords a space-delimited String of words to ignore when counting the words in your text.
+	 * @param extraStopWords a space-delimited String of words to ignore when counting the words in your text.
 	 * @return The WordCram, for further setup or drawing.
 	 */
-	public WordCram withStopWords(String stopWords) {
-		this.stopWords = stopWords;
+	public WordCram withStopWords(String extraStopWords) {
+		this.extraStopWords = extraStopWords;
 		return this;
 	}
 	
@@ -724,7 +722,7 @@ public class WordCram {
 				     : textCase == TextCase.Upper ? text.toUpperCase()
 				     : text;
 				
-				words = new WordCounter(stopWords).shouldExcludeNumbers(excludeNumbers).count(text);
+				words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text);
 			}
 			words = new WordSorterAndScaler().sortAndScale(words);
 			
