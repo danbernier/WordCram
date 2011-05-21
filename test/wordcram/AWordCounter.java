@@ -34,8 +34,7 @@ public class AWordCounter {
 	public void canExcludeWordsThatAreJustNumbers() {
 		WordCounter wc = new WordCounter("");
 		wc.shouldExcludeNumbers(true);
-		String[] words = split("I saw U2 in 1999 I saw them 10 times");
-		Word[] weightedWords = wc.count(words);
+		Word[] weightedWords = wc.count("I saw U2 in 1999 I saw them 10 times");
 
 		Arrays.sort(weightedWords, alphabetically);
 
@@ -47,8 +46,7 @@ public class AWordCounter {
 	public void canExcludeWordsThatHaveDecimalPoints() {
 		WordCounter wc = new WordCounter("");
 		wc.shouldExcludeNumbers(true);
-		String[] words = split("Pi is about 3.1415 I think");
-		Word[] weightedWords = wc.count(words);
+		Word[] weightedWords = wc.count("Pi is about 3.1415 I think");
 		
 		Arrays.sort(weightedWords, alphabetically);
 		
@@ -59,8 +57,7 @@ public class AWordCounter {
 	public void canLeaveWordsThatAreJustNumbers() {
 		WordCounter wc = new WordCounter("");
 		wc.shouldExcludeNumbers(false);
-		String[] words = split("I saw U2 in 1999 I saw them 10 times");
-		Word[] weightedWords = wc.count(words);
+		Word[] weightedWords = wc.count("I saw U2 in 1999 I saw them 10 times");
 
 		Arrays.sort(weightedWords, alphabetically);
 
@@ -71,8 +68,7 @@ public class AWordCounter {
 	@Test
 	public void testPunctuationInStopWords() {
 		WordCounter wc = new WordCounter("don't i'll");
-		String[] words = split("i don't want any more can't you see i'll be ill");
-		Word[] weightedWords = wc.count(words);		
+		Word[] weightedWords = wc.count("i don't want any more can't you see i'll be ill");		
 
 		// Sort them by word, since they're all the same weight.
 		Arrays.sort(weightedWords, alphabetically);
@@ -85,8 +81,7 @@ public class AWordCounter {
 	public void testCountsWithStopWords() {
 		WordCounter wc = new WordCounter("these are stop words");
 
-		String[] words = split("biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words");
-		Word[] weightedWords = wc.count(words);
+		Word[] weightedWords = wc.count("biscuit biscuit cocoa cherry cherry cherry stop words are these these are stop words");
 		Arrays.sort(weightedWords);
 		
 		assertWeightedWordsAre(weightedWords, "cherry 3", "biscuit 2", "cocoa 1");
@@ -96,8 +91,7 @@ public class AWordCounter {
 	public void testThatStopWordsAreCaseInsensitive() {
 		WordCounter wc = new WordCounter("STOP WORDS");
 		
-		String[] words = split("these are stop words Stop Words STOP WORDS");
-		Word[] weightedWords = wc.count(words);
+		Word[] weightedWords = wc.count("these are stop words Stop Words STOP WORDS");
 		Arrays.sort(weightedWords, alphabetically);
 		
 		assertWeightedWordsAre(weightedWords, "are 1", "these 1");
@@ -107,8 +101,7 @@ public class AWordCounter {
 	public void testCountsWithNoStopWords() {
 		WordCounter wc = new WordCounter("");
 
-		String[] words = split("a b c a b a");
-		Word[] weightedWords = wc.count(words);
+		Word[] weightedWords = wc.count("a b c a b a");
 		Arrays.sort(weightedWords);
 		
 		assertWeightedWordsAre(weightedWords, "a 3", "b 2", "c 1");

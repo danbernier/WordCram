@@ -724,8 +724,7 @@ public class WordCram {
 				     : textCase == TextCase.Upper ? text.toUpperCase()
 				     : text;
 				
-				String[] wordStrings = new WordScanner().scanIntoWords(text);
-				words = new WordCounter(stopWords).shouldExcludeNumbers(excludeNumbers).count(wordStrings);
+				words = new WordCounter(stopWords).shouldExcludeNumbers(excludeNumbers).count(text);
 			}
 			words = new WordSorterAndScaler().sortAndScale(words);
 			

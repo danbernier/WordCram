@@ -33,7 +33,8 @@ class WordCounter {
 		return this;
 	}
 
-	public Word[] count(String[] words) {
+	public Word[] count(String text) {
+		String[] words = new WordScanner().scanIntoWords(text);
 		return toWords(countWords(words));
 	}
 
