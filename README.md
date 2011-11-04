@@ -14,7 +14,7 @@ U.S. Constitution](http://openprocessing.org/visuals/?visualID=12413).
 
 ## Make a Word Cloud
 
-```
+```java
 import wordcram.*;
 
 // Set up the Processing sketch
