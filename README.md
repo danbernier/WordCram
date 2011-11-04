@@ -11,18 +11,18 @@ Watch WordCram in action, on !OpenProcessing:
 [popular baby names](http://openprocessing.org/visuals/?visualID=12562), and
 [the U.S. Constitution](http://openprocessing.org/visuals/?visualID=12413).
 
-==Install==
+## Install
 
 [Installing](http://code.google.com/p/wordcram/wiki/Installing) WordCram is
 simple, like any standard Processing library.
 
-==Problems?==
+## Problems?
 
 If you're running into problems with WordCram, see the
 [FAQ](http://code.google.com/p/wordcram/wiki/FAQ), or read the
 [javadocs](http://wordcram.googlecode.com/svn/javadoc/index.html).
 
-==Contribute!==
+## Contribute!
 
 If you'd like to help out with WordCram, pick something from the
 [list of ToDos](http://code.google.com/p/wordcram/wiki/ToDos), and then try
