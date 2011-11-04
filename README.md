@@ -40,16 +40,27 @@ their color, and how they're sized.
 [Installing](http://code.google.com/p/wordcram/wiki/Installing)
 WordCram is simple, like any standard Processing library.
 
+## How do I use this thing? Show me examples!
+
+More of these are coming to the wiki, soon! But if you add WordCram to
+Processing, you can see a bunch of examples under File > Examples >
+Contributed Libraries > WordCram.
+
 ## Problems?
 
-If you're running into problems with WordCram, see the
+If you're running into problems, see the
 [FAQ](http://code.google.com/p/wordcram/wiki/FAQ), or read the
 [javadocs](http://wordcram.googlecode.com/svn/javadoc/index.html).
 
-## Contribute!
+If a question has you stumped, and the
+[FAQ](https://github.com/danbernier/WordCram/wiki/FAQ) is no help,
+send me a note. My email account is 'wordcram', and I use gmail.
 
-If you'd like to help out with WordCram, pick something from the [list
-of ToDos](http://code.google.com/p/wordcram/wiki/ToDos), and then try
-[building WordCram from
-source](http://code.google.com/p/wordcram/wiki/BuildingWordCram) (it's
-really easy).
+## Want a better WordCram?
+
+WordCram is open-source under the Apache 2 license. That means you can
+help make it better! I try to keep the source clean so it's easy to
+find your way around. There's a [laundry list of things to
+do](http://code.google.com/p/wordcram/wiki/ToDos), and it's easy to
+[build WordCram from
+source](http://code.google.com/p/wordcram/wiki/BuildingWordCram).
