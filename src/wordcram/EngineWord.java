@@ -76,4 +76,8 @@ class EngineWord {
 	boolean wasPlaced() {
 		return word.wasPlaced();
 	}
+	
+	boolean wasSkipped() {
+		return word.wasSkipped();
+	}
 }

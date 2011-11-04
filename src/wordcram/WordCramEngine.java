@@ -149,6 +149,8 @@ class WordCramEngine {
 			boolean foundOverlap = false;
 			for (int i = 0; !foundOverlap && i < eWordIndex; i++) {
 				EngineWord otherWord = eWords[i];
+				if (otherWord.wasSkipped()) continue; //can't overlap with skipped word
+				
 				if (eWord.overlaps(otherWord)) {
 					foundOverlap = true;
 					lastCollidedWith = otherWord;

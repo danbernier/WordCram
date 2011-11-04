@@ -76,13 +76,13 @@ public class Main extends PApplet {
 					.withAngler(Anglers.mostlyHoriz())
 					.withPlacer(Placers.horizLine())
 //					.withPlacer(Placers.centerClump())
-					.withSizer(Sizers.byWeight(5, 70))
+					.withSizer(Sizers.byWeight(5, 90))
 					
-					.withWordPadding(6)
+					.withWordPadding(1)
 					
 //					.minShapeSize(0)
 //					.withMaxAttemptsForPlacement(10)
-//					.maxNumberOfWordsToDraw(500)
+					.maxNumberOfWordsToDraw(1000)
 					
 //					.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
 //					.withNudger(new RandomWordNudger())
@@ -105,7 +105,7 @@ public class Main extends PApplet {
 		//fill(55);
 		//rect(0, 0, width, height);
 		
-		boolean allAtOnce = false;
+		boolean allAtOnce = true;
 		if (allAtOnce) {
 			wordcram.drawAll();
 			finishUp();
