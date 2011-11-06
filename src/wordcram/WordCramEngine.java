@@ -63,11 +63,12 @@ class WordCramEngine {
 	private EngineWord[] wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
 		ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
 		
-		int maxNumberOfWords = renderOptions.maxNumberOfWordsToDraw >= 0 ?
-								renderOptions.maxNumberOfWordsToDraw :
-								words.length;
+		int maxNumberOfWords = words.length;
+		if (renderOptions.maxNumberOfWordsToDraw >= 0) {
+			maxNumberOfWords = Math.min(maxNumberOfWords, renderOptions.maxNumberOfWordsToDraw);
+		}
+
 		for (int i = 0; i < maxNumberOfWords; i++) {
-			
 			Word word = words[i];
 			EngineWord eWord = new EngineWord(word, i, words.length, bbTreeBuilder);
 			
