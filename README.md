@@ -4,8 +4,7 @@ It does the heavy lifting -- text analysis, collision detection -- for
 you, so you can focus on making your word clouds as beautiful, as
 revealing, or as silly as you like.
 
-http://wordcram.googlecode.com/svn/javadoc/wordcram.png ![Word Cloud
-by
+![Word Cloud by
 WordCram](https://github.com/danbernier/WordCram/raw/master/wordcram.png)
 
 Watch WordCram in action, on OpenProcessing: [popular baby
@@ -37,7 +36,7 @@ their color, and how they're sized.
 
 ## Install
 
-[Installing](http://code.google.com/p/wordcram/wiki/Installing)
+[Installing](https://github.com/danbernier/WordCram/wiki/Install)
 WordCram is simple, like any standard Processing library.
 
 ## How do I use this thing? Show me examples!
@@ -49,7 +48,7 @@ Contributed Libraries > WordCram.
 ## Problems?
 
 If you're running into problems, see the
-[FAQ](http://code.google.com/p/wordcram/wiki/FAQ), or read the
+[FAQ](https://github.com/danbernier/WordCram/wiki/FAQ), or read the
 [javadocs](http://wordcram.googlecode.com/svn/javadoc/index.html).
 
 If a question has you stumped, and the
@@ -61,6 +60,6 @@ send me a note. My email account is 'wordcram', and I use gmail.
 WordCram is open-source under the Apache 2 license. That means you can
 help make it better! I try to keep the source clean so it's easy to
 find your way around. There's a [laundry list of things to
-do](http://code.google.com/p/wordcram/wiki/ToDos), and it's easy to
+do](https://github.com/danbernier/WordCram/wiki/ToDos), and it's easy to
 [build WordCram from
-source](http://code.google.com/p/wordcram/wiki/BuildingWordCram).
+source](https://github.com/danbernier/WordCram/wiki/Build).
