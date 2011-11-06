@@ -7,10 +7,6 @@ revealing, or as silly as you like.
 ![Word Cloud by
 WordCram](https://github.com/danbernier/WordCram/raw/master/wordcram.png)
 
-Watch WordCram in action, on OpenProcessing: [popular baby
-names](http://openprocessing.org/visuals/?visualID=12562), and [the
-U.S. Constitution](http://openprocessing.org/visuals/?visualID=12413).
-
 ## Make a Word Cloud
 
 ```java
@@ -41,9 +37,18 @@ WordCram is simple, like any standard Processing library.
 
 ## How do I use this thing? Show me examples!
 
-More of these are coming to the wiki, soon! But if you add WordCram to
-Processing, you can see a bunch of examples under File > Examples >
-Contributed Libraries > WordCram.
+More of these are coming to the wiki, soon!
+
+But you can check out the
+[tutorials](http://wordcram.org/category/tutorial/) and
+[examples](http://wordcram.org/category/examples/) at
+http://wordcram.org. You can watch WordCram in action, on
+OpenProcessing: [popular baby
+names](http://openprocessing.org/visuals/?visualID=12562), and [the
+U.S. Constitution](http://openprocessing.org/visuals/?visualID=12413).
+
+And if you add WordCram to Processing, you can see a bunch of examples
+under File > Examples > Contributed Libraries > WordCram.
 
 ## Problems?
 
