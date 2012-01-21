@@ -6,9 +6,12 @@
   <version>0.5.0</version>
   <name>wordcram</name>
   <description>WordCram lets you generate word clouds from text.</description>
+  <packaging>jar</packaging>
+  <url>http://wordcram.org</url>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
+    <!--
     <resources>
       <resource>
         <directory>resources</directory>
@@ -19,6 +22,7 @@
         <directory>test-resources</directory>
       </testResource>
     </testResources>
+    -->
   </build>
   <repositories>
     <repository>
@@ -52,5 +56,19 @@
       <artifactId>cue-language</artifactId>
       <version>1.0</version>
     </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.8.5</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 </project>

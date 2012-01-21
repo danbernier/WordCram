@@ -20,7 +20,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-public class AWordSorterAndScaler {
+public class WordSorterAndScalerTest {
 	
 	private float epsilon = 0.00001f;
 	
