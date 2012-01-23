@@ -1,13 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
+
+  <!-- This is so I can upload to Sonatype -->
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.wordcram</groupId>
   <artifactId>wordcram</artifactId>
   <version>0.5.0</version>
   <name>wordcram</name>
   <description>WordCram lets you generate word clouds from text.</description>
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
   <packaging>jar</packaging>
   <url>http://wordcram.org</url>
+
+  <scm>
+    <connection>scm:git:git@github.com:danbernier/WordCram.git</connection>
+    <developerConnection>scm:git:git@github.com:danbernier/WordCram.git</developerConnection>
+    <url>git@github.com:danbernier/WordCram.git</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <id>danbernier</id>
+      <name>Dan Bernier</name>
+      <email>danbernier@gmail.com</email>
+      <url>http://invisibleblocks.com</url>
+      <organization>WordCram</organization>
+      <organizationUrl>http://wordcram.org</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+  </developers>
+
   <build>
     <sourceDirectory>src</sourceDirectory>
     <testSourceDirectory>test</testSourceDirectory>
@@ -62,12 +100,14 @@
     </plugins>
     
   </build>
+
   <repositories>
     <repository>
       <id>central</id>
       <url>http://repo1.maven.org/maven2</url>
     </repository>
   </repositories>
+
   <dependencies>
     <dependency>
       <groupId>org.processing</groupId>
