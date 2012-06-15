@@ -184,10 +184,9 @@ class WordCramEngine {
 	}
 	
 	Word getWordAt(float x, float y) {
-		for (int i = 0; i < eWords.length; i++) {
+		for (int i = eWords.length-1; i >= 0; i--) {
 			if (eWords[i].wasPlaced()) {
-				Shape shape = eWords[i].getShape();
-				if (shape.contains(x, y)) {
+				if (eWords[i].containsPoint(x, y)) {
 					return eWords[i].word;
 				}
 			}

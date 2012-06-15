@@ -98,6 +98,13 @@ class BBTree {
 		return a[3] > b[1] && a[1] < b[3] && a[2] > b[0] && a[0] < b[2];
 	}
 
+    boolean containsPoint(float x, float y) {
+	return this.rootX + this.x < x &&
+	    this.rootX + this.right > x &&
+	    this.rootY + this.y < y &&
+	    this.rootY + this.bottom > y;
+    }
+
 	boolean isLeaf() {
 		return kids == null;
 	}

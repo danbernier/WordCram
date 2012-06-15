@@ -51,6 +51,11 @@ class EngineWord {
 		return bbTree.overlaps(other.bbTree);
 	}
 
+
+    boolean containsPoint(float x, float y) {
+	return bbTree.containsPoint(x, y);
+    }
+
 	void setDesiredLocation(WordPlacer placer, int count, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
 		desiredLocation = word.getTargetPlace(placer, rank, count, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
 		currentLocation = desiredLocation.get();
