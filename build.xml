@@ -95,14 +95,6 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 		<copy file="wordcram.png" todir="build/p5lib/WordCram/reference" />
 	</target>
 
-	<target name="publish.local" depends="bundleForProcessing">
-		<delete dir="${processing.sketchFolder}/libraries/WordCram" />
-		<mkdir dir="${processing.sketchFolder}/libraries/WordCram" />
-		<copy todir="${processing.sketchFolder}/libraries/WordCram">
-			<fileset dir="build/p5lib/WordCram" />
-		</copy>
-	</target>
-
 	<target name="publish.daily" depends="bundleForProcessing">
 		<input message="Give us a quick summary for Google Code:" addproperty="publish.summary" />
 
