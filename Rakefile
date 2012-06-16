@@ -20,6 +20,7 @@ task 'publish.local' => :bundleForProcessing do
   FileUtils.cp_r('build/p5lib/WordCram', File.join(lib_folder))
 end
 
+desc "Publish & git-tag a fresh WordCram library to github downloads."
 task 'publish.daily' => :bundleForProcessing do
   summary = ask "Give us a quick summary of the release:"
   tstamp = Time.now.strftime '%Y%m%d'
@@ -28,6 +29,7 @@ task 'publish.daily' => :bundleForProcessing do
   zip_and_tar_and_upload tstamp, summary
 end
 
+desc "Release WordCram: git-tag, upload to github, update github pages javadoc. And later, Tweet! (And blog?)"
 task 'publish.release' => :bundleForProcessing do
 
   # git checkout master, first? Warn if you're not on master?
@@ -79,6 +81,7 @@ end
 def git_tag(tag_name, commit_message)
   puts "git tagging..."
   puts `git tag #{tag_name} -m "#{commit_message}"`
+  # TODO Um, git pull && git push?
 end
 
 def build_properties
