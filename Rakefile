@@ -22,7 +22,7 @@ task 'publish.release' => :bundleForProcessing do
 
   # git checkout master, first? Warn if you're not on master?
 
-  puts "Give us a quick summary for Google Code:"
+  puts "Give us a quick summary of the release:"
   summary = STDIN.gets.chomp
 
   puts "...and the release number:"
@@ -39,8 +39,8 @@ task 'publish.release' => :bundleForProcessing do
   puts `tar -cvz build/p5lib/WordCram > #{tarfile}`
 
   puts "uploading to github..."
-  #puts `github-downloads create -u danbernier -r WordCram -f #{zipfile}`   #  -d "description"
-  #puts `github-downloads create -u danbernier -r WordCram -f #{tarfile}`   #  -d "description"
+  #puts `github-downloads create -u danbernier -r WordCram -f #{zipfile} -d "#{summary}"`
+  #puts `github-downloads create -u danbernier -r WordCram -f #{tarfile} -d "#{summary}"`
 
 
   puts "uploading javadoc to github..."
