@@ -10,6 +10,39 @@ TODO: for releases, auto-tweet
 TODO: point blog, etc at http://danbernier.github.com/WordCram and http://danbernier.github.com/WordCram/javadoc
 =end
 
+task :bundleForProcessing => :test do   # TODO rename to bundle?
+
+  # TODO version # in build file - property? Or rather, pass it as an arg, and have it default to 'latest' or something.
+  # TODO put these in if it ever seems useful:
+  #  - http://processing.googlecode.com/svn/trunk/processing/build/javadoc/
+  #  - http://developer.java.sun.com/developer/products/xml/docs/api/
+
+  FileUtils.mkdir_p 'build/p5lib/WordCram/library'
+  `jar -cvf build/p5lib/WordCram/library/WordCram.jar build/classes`
+  FileUtils.cp 'lib/jsoup-1.3.3.jar', 'build/p5lib/WordCram/library'
+  FileUtils.cp 'lib/cue.language.jar', 'build/p5lib/WordCram/library'
+
+  FileUtils.cp_r 'example', 'build/p5lib/WordCram/examples'
+
+  FileUtils.cp_r 'src', 'build/p5lib/WordCram/src'
+
+  javadoc_opts = {
+    :classpath => 'lib/processing/core.jar;lib/jsoup-1.3.3.jar;lib/cue.language.jar',
+    :sourcepath => 'src',
+    :d => 'build/p5lib/WordCram/reference',  # d = destination
+    :windowtitle => "WordCram API",
+    :use => true,
+    :overview => 'src/overview.html',
+    :header => "WordCram 0.5",
+    :subpackages => 'wordcram'
+  }
+
+  # puts "javadoc #{to_flags(javadoc_opts)}"
+  `javadoc #{to_flags(javadoc_opts)}`
+
+  FileUtils.cp 'wordcram.png', 'build/p5lib/WordCram/reference'
+end
+
 namespace :publish do
   desc "Copies a fresh WordCram library into your Processing environment. See build.json!"
   task :local => :bundleForProcessing do
@@ -51,7 +84,7 @@ namespace :publish do
 end
 task :publish => 'publish:local'
 
-%w[bundleForProcessing clean compile test].each do |task_name|
+%w[clean compile test].each do |task_name|
 
   desc "Run ant task #{task_name}"
   task task_name.to_sym do
@@ -84,6 +117,12 @@ def git_tag(tag_name, commit_message)
   puts "git tagging..."
   puts `git tag #{tag_name} -m "#{commit_message}"`
   # TODO Um, git pull && git push?
+end
+
+def to_flags(opts)
+  opts.map { |flag, value|
+    "-#{flag} \"#{value}\""
+  }.join(' ')
 end
 
 def build_properties
