@@ -2,10 +2,12 @@ require 'json'
 require 'fileutils'
 
 =begin
-TODO: host javadoc on github? Maybe with github pages?
+Github Pages:
 https://help.github.com/categories/20/articles
 http://stackoverflow.com/questions/3939595/making-javadocs-available-with-github-sonatype-maven-repo
-There! http://danbernier.github.com/WordCram/javadoc
+
+TODO: for releases, auto-tweet
+TODO: point blog, etc at http://danbernier.github.com/WordCram and http://danbernier.github.com/WordCram/javadoc
 =end
 
 desc "Copies a fresh WordCram library into your Processing environment. See build.json!"
