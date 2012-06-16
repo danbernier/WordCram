@@ -51,7 +51,7 @@ namespace :publish do
 end
 task :publish => 'publish:local'
 
-%w[bundleForProcessing clean compile makeReleaseBranch test].each do |task_name|
+%w[bundleForProcessing clean compile test].each do |task_name|
 
   desc "Run ant task #{task_name}"
   task task_name.to_sym do
