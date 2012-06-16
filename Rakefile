@@ -20,6 +20,14 @@ task 'publish.local' => :bundleForProcessing do
   FileUtils.cp_r('build/p5lib/WordCram', File.join(lib_folder))
 end
 
+task 'publish.daily' => :bundleForProcessing do
+  summary = ask "Give us a quick summary of the release:"
+  tstamp = Time.now.strftime '%Y%m%d'
+
+  git_tag "daily/#{tstamp}", "Tagging the #{tstamp} daily build"
+  zip_and_tar_and_upload tstamp, summary
+end
+
 task 'publish.release' => :bundleForProcessing do
 
   # git checkout master, first? Warn if you're not on master?
@@ -39,7 +47,7 @@ task 'publish.release' => :bundleForProcessing do
 end
 
 
-%w[bundleForProcessing clean compile makeReleaseBranch publish.daily test].each do |task_name|
+%w[bundleForProcessing clean compile makeReleaseBranch test].each do |task_name|
 
   desc "Run ant task #{task_name}"
   task task_name.to_sym do
