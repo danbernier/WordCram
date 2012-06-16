@@ -10,44 +10,46 @@ TODO: for releases, auto-tweet
 TODO: point blog, etc at http://danbernier.github.com/WordCram and http://danbernier.github.com/WordCram/javadoc
 =end
 
-desc "Copies a fresh WordCram library into your Processing environment. See build.json!"
-task 'publish.local' => :bundleForProcessing do
-  sketch_folder = build_properties['processing.sketchFolder']
-  lib_folder = File.join(sketch_folder, 'libraries')
-  wc_folder = File.join(lib_folder, 'WordCram')
+namespace :publish do
+  desc "Copies a fresh WordCram library into your Processing environment. See build.json!"
+  task :local => :bundleForProcessing do
+    sketch_folder = build_properties['processing.sketchFolder']
+    lib_folder = File.join(sketch_folder, 'libraries')
+    wc_folder = File.join(lib_folder, 'WordCram')
 
-  FileUtils.rm_rf(wc_folder)
-  FileUtils.cp_r('build/p5lib/WordCram', File.join(lib_folder))
+    FileUtils.rm_rf(wc_folder)
+    FileUtils.cp_r('build/p5lib/WordCram', File.join(lib_folder))
+  end
+
+  desc "Publish & git-tag a fresh WordCram library to github downloads."
+  task :daily => :bundleForProcessing do
+    summary = ask "Give us a quick summary of the release:"
+    tstamp = Time.now.strftime '%Y%m%d'
+
+    git_tag "daily/#{tstamp}", "Tagging the #{tstamp} daily build"
+    zip_and_tar_and_upload tstamp, summary
+  end
+
+  desc "Release WordCram: git-tag, upload to github, update github pages javadoc. And later, Tweet! (And blog?)"
+  task :release => :bundleForProcessing do
+
+    # git checkout master, first? Warn if you're not on master?
+
+    summary = ask "Give us a quick summary of the release:"
+    release_number = ask "...and the release number:"
+
+    git_tag "release/#{release_number}", "Tagging the #{release_number} release"
+    zip_and_tar_and_upload release_number, summary
+
+    puts "uploading javadoc to github..."
+    puts `git checkout gh-pages`
+    puts `cp -r build/p5lib/WordCram/reference javadoc`
+    puts `git add javadoc`
+    puts `git commit -m "Updating javadoc for #{release_number} release."`
+    puts `git push`
+  end
 end
-
-desc "Publish & git-tag a fresh WordCram library to github downloads."
-task 'publish.daily' => :bundleForProcessing do
-  summary = ask "Give us a quick summary of the release:"
-  tstamp = Time.now.strftime '%Y%m%d'
-
-  git_tag "daily/#{tstamp}", "Tagging the #{tstamp} daily build"
-  zip_and_tar_and_upload tstamp, summary
-end
-
-desc "Release WordCram: git-tag, upload to github, update github pages javadoc. And later, Tweet! (And blog?)"
-task 'publish.release' => :bundleForProcessing do
-
-  # git checkout master, first? Warn if you're not on master?
-
-  summary = ask "Give us a quick summary of the release:"
-  release_number = ask "...and the release number:"
-
-  git_tag "release/#{release_number}", "Tagging the #{release_number} release"
-  zip_and_tar_and_upload release_number, summary
-
-  puts "uploading javadoc to github..."
-  puts `git checkout gh-pages`
-  puts `cp -r build/p5lib/WordCram/reference javadoc`
-  puts `git add javadoc`
-  puts `git commit -m "Updating javadoc for #{release_number} release."`
-  puts `git push`
-end
-
+task :publish => 'publish:local'
 
 %w[bundleForProcessing clean compile makeReleaseBranch test].each do |task_name|
 
