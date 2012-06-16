@@ -10,6 +10,33 @@ TODO: for releases, auto-tweet
 TODO: point blog, etc at http://danbernier.github.com/WordCram and http://danbernier.github.com/WordCram/javadoc
 =end
 
+task :test => :compile do
+  Dir.mkdir 'build/tests'
+
+  javac_opts = {
+    :d => 'build/tests',  # d = destination
+    :source => '1.5',
+    :target => '1.5',
+    :classpath => test_classpath
+  }
+
+  cmd = "javac #{to_flags(javac_opts)} -Xlint test/**/*.java"
+  puts `#{cmd}`
+
+  junit_opts = {
+    :cp => test_classpath + ':build/tests'
+  }
+  cmd = "java #{to_flags(junit_opts)} org.junit.runner.JUnitCore #{unit_test_classes}"
+  puts cmd
+  test_results = `#{cmd}`
+  puts test_results
+
+  if test_results.include? 'FAILURES!!!'
+    puts "Abort the mission, you have test failures!"
+    exit
+  end
+end
+
 task :bundle => :test do
 
   # TODO version # in build file - property? Or rather, pass it as an arg, and have it default to 'latest' or something.
@@ -27,11 +54,10 @@ task :bundle => :test do
   FileUtils.cp_r 'src', 'build/p5lib/WordCram/src'
 
   javadoc_opts = {
-    :classpath => 'lib/processing/core.jar;lib/jsoup-1.3.3.jar;lib/cue.language.jar',
+    :classpath => main_classpath,
     :sourcepath => 'src',
     :d => 'build/p5lib/WordCram/reference',  # d = destination
     :windowtitle => "WordCram API",
-    :use => true,
     :overview => 'src/overview.html',
     :header => "WordCram 0.5",
     :subpackages => 'wordcram'
@@ -84,7 +110,7 @@ namespace :publish do
 end
 task :publish => 'publish:local'
 
-%w[clean compile test].each do |task_name|
+%w[clean compile].each do |task_name|
 
   desc "Run ant task #{task_name}"
   task task_name.to_sym do
@@ -94,6 +120,14 @@ task :publish => 'publish:local'
 end
 
 task :default => :test
+
+def main_classpath
+  ['lib/processing/core.jar', 'lib/jsoup-1.3.3.jar', 'lib/cue.language.jar'] * ':'
+end
+
+def test_classpath
+  [main_classpath, 'lib/junit/junit-4.8.2.jar', 'lib/mockito-all-1.8.5.jar', 'build/classes'] * ':'
+end
 
 def zip_and_tar_and_upload(version, summary)
   zipfile = "build/wordcram.#{version}.zip"
@@ -119,9 +153,16 @@ def git_tag(tag_name, commit_message)
   # TODO Um, git pull && git push?
 end
 
+def unit_test_classes
+  Dir.glob('test/**/A*.java').map { |file|
+    file.gsub(/^test\//, '').gsub(/\.java$/, '').gsub('/', '.')
+  }.join(' ')
+end
+
 def to_flags(opts)
   opts.map { |flag, value|
-    "-#{flag} \"#{value}\""
+    value = "\"#{value}\"" if value.to_s.include? ' '
+    "-#{flag} #{value}"
   }.join(' ')
 end
 
