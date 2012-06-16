@@ -44,10 +44,10 @@ task 'publish.release' => :bundleForProcessing do
 
 
   puts "uploading javadoc to github..."
-  `git checkout gh-pages`
-  `cp -r build/p5lib/WordCram/reference javadoc`
-  `git commit -m "Updating javadoc for #{release_number} release."`
-  `git push`
+  puts `git checkout gh-pages`
+  puts `cp -r build/p5lib/WordCram/reference javadoc`
+  puts `git commit -m "Updating javadoc for #{release_number} release."`
+  puts `git push`
 end
 
 
