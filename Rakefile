@@ -30,8 +30,8 @@ task 'publish.release' => :bundleForProcessing do
   puts "...and the release number:"
   release_number = STDIN.gets.chomp
 
-  #puts "git tagging..."
-  #puts `git tag #{release_number} -m "Tagging the #{release_number} release"`
+  puts "git tagging..."
+  puts `git tag #{release_number} -m "Tagging the #{release_number} release"`
 
   zipfile = "build/wordcram.#{release_number}.zip"
   tarfile = "build/wordcram.#{release_number}.tar.gz"
@@ -41,9 +41,8 @@ task 'publish.release' => :bundleForProcessing do
   puts `tar -cvz build/p5lib/WordCram > #{tarfile}`
 
   puts "uploading to github..."
-  #puts `github-downloads create -u danbernier -r WordCram -f #{zipfile} -d "#{summary}"`
-  #puts `github-downloads create -u danbernier -r WordCram -f #{tarfile} -d "#{summary}"`
-
+  puts `github-downloads create -u danbernier -r WordCram -f #{zipfile} -d "#{summary}"`
+  puts `github-downloads create -u danbernier -r WordCram -f #{tarfile} -d "#{summary}"`
 
   puts "uploading javadoc to github..."
   puts `git checkout gh-pages`
