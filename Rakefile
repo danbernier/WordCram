@@ -24,25 +24,11 @@ task 'publish.release' => :bundleForProcessing do
 
   # git checkout master, first? Warn if you're not on master?
 
-  puts "Give us a quick summary of the release:"
-  summary = STDIN.gets.chomp
+  summary = ask "Give us a quick summary of the release:"
+  release_number = ask "...and the release number:"
 
-  puts "...and the release number:"
-  release_number = STDIN.gets.chomp
-
-  puts "git tagging..."
-  puts `git tag #{release_number} -m "Tagging the #{release_number} release"`
-
-  zipfile = "build/wordcram.#{release_number}.zip"
-  tarfile = "build/wordcram.#{release_number}.tar.gz"
-
-  puts "zipping & tarring..."
-  puts `zip -5Tr #{zipfile} build/p5lib/WordCram`
-  puts `tar -cvz build/p5lib/WordCram > #{tarfile}`
-
-  puts "uploading to github..."
-  puts `github-downloads create -u danbernier -r WordCram -f #{zipfile} -d "#{summary}"`
-  puts `github-downloads create -u danbernier -r WordCram -f #{tarfile} -d "#{summary}"`
+  git_tag "release/#{release_number}", "Tagging the #{release_number} release"
+  zip_and_tar_and_upload release_number, summary
 
   puts "uploading javadoc to github..."
   puts `git checkout gh-pages`
@@ -63,6 +49,29 @@ end
 end
 
 task :default => :test
+
+def zip_and_tar_and_upload(version, summary)
+  zipfile = "build/wordcram.#{version}.zip"
+  tarfile = "build/wordcram.#{version}.tar.gz"
+
+  puts "zipping & tarring..."
+  puts `zip -5Tr #{zipfile} build/p5lib/WordCram`
+  puts `tar -cvz build/p5lib/WordCram > #{tarfile}`
+
+  puts "uploading to github..."
+  puts `github-downloads create -u danbernier -r WordCram -f #{zipfile} -d "#{summary}"`
+  puts `github-downloads create -u danbernier -r WordCram -f #{tarfile} -d "#{summary}"`
+end
+
+def ask(message)
+  puts message
+  STDIN.gets.chomp
+end
+
+def git_tag(tag_name, commit_message)
+  puts "git tagging..."
+  puts `git tag #{tag_name} -m "#{commit_message}"`
+end
 
 def build_properties
   @props ||= JSON(File.read('build.json'))
