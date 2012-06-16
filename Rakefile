@@ -10,7 +10,7 @@ TODO: for releases, auto-tweet
 TODO: point blog, etc at http://danbernier.github.com/WordCram and http://danbernier.github.com/WordCram/javadoc
 =end
 
-task :bundleForProcessing => :test do   # TODO rename to bundle?
+task :bundle => :test do
 
   # TODO version # in build file - property? Or rather, pass it as an arg, and have it default to 'latest' or something.
   # TODO put these in if it ever seems useful:
@@ -45,7 +45,7 @@ end
 
 namespace :publish do
   desc "Copies a fresh WordCram library into your Processing environment. See build.json!"
-  task :local => :bundleForProcessing do
+  task :local => :bundle do
     sketch_folder = build_properties['processing.sketchFolder']
     lib_folder = File.join(sketch_folder, 'libraries')
     wc_folder = File.join(lib_folder, 'WordCram')
@@ -55,7 +55,7 @@ namespace :publish do
   end
 
   desc "Publish & git-tag a fresh WordCram library to github downloads."
-  task :daily => :bundleForProcessing do
+  task :daily => :bundle do
     summary = ask "Give us a quick summary of the release:"
     tstamp = Time.now.strftime '%Y%m%d'
 
@@ -64,7 +64,7 @@ namespace :publish do
   end
 
   desc "Release WordCram: git-tag, upload to github, update github pages javadoc. And later, Tweet! (And blog?)"
-  task :release => :bundleForProcessing do
+  task :release => :bundle do
 
     # git checkout master, first? Warn if you're not on master?
 
