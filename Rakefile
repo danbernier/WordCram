@@ -8,6 +8,8 @@ http://stackoverflow.com/questions/3939595/making-javadocs-available-with-github
 
 TODO: for releases, auto-tweet
 TODO: point blog, etc at http://danbernier.github.com/WordCram and http://danbernier.github.com/WordCram/javadoc
+TODO: add a task to generate a sample build.json.
+TODO: add some kind of 'verbose' flag to this. Factor those puts-es into an announce method, which observes the -v flag.
 =end
 
 desc "Clean the build artifacts: delete the build directory."
