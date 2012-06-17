@@ -10,6 +10,12 @@ TODO: for releases, auto-tweet
 TODO: point blog, etc at http://danbernier.github.com/WordCram and http://danbernier.github.com/WordCram/javadoc
 =end
 
+desc "Clean the build artifacts: delete the build directory."
+task :clean do
+  puts "Cleaning..."
+  FileUtils.rm_rf('build')
+end
+
 desc "Compile the WordCram java files."
 task :compile => :clean do
   compile('src', 'build/classes', main_classpath)
@@ -108,15 +114,6 @@ namespace :publish do
   end
 end
 task :publish => 'publish:local'
-
-%w[clean].each do |task_name|
-
-  desc "Run ant task #{task_name}"
-  task task_name.to_sym do
-    puts `ant #{task_name}`
-  end
-
-end
 
 task :default => :test
 
