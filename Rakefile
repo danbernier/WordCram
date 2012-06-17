@@ -10,24 +10,22 @@ TODO: for releases, auto-tweet
 TODO: point blog, etc at http://danbernier.github.com/WordCram and http://danbernier.github.com/WordCram/javadoc
 =end
 
+desc "Compile the WordCram java files."
+task :compile => :clean do
+  compile('src', 'build/classes', main_classpath)
+end
+
+desc "Compile and run the WordCram unit tests. Aborts the build if there are failures."
 task :test => :compile do
-  Dir.mkdir 'build/tests'
 
-  javac_opts = {
-    :d => 'build/tests',  # d = destination
-    :source => '1.5',
-    :target => '1.5',
-    :classpath => test_classpath
-  }
+  compile('test', 'build/tests', test_classpath)
 
-  cmd = "javac #{to_flags(javac_opts)} -Xlint test/**/*.java"
-  puts `#{cmd}`
-
+  puts "Running tests..."
   junit_opts = {
     :cp => test_classpath + ':build/tests'
   }
   cmd = "java #{to_flags(junit_opts)} org.junit.runner.JUnitCore #{unit_test_classes}"
-  puts cmd
+  #puts cmd
   test_results = `#{cmd}`
   puts test_results
 
@@ -37,6 +35,7 @@ task :test => :compile do
   end
 end
 
+desc "Bundle WordCram source, jars, examples, and javadoc in the typical Processing format."
 task :bundle => :test do
 
   # TODO version # in build file - property? Or rather, pass it as an arg, and have it default to 'latest' or something.
@@ -110,7 +109,7 @@ namespace :publish do
 end
 task :publish => 'publish:local'
 
-%w[clean compile].each do |task_name|
+%w[clean].each do |task_name|
 
   desc "Run ant task #{task_name}"
   task task_name.to_sym do
@@ -120,6 +119,29 @@ task :publish => 'publish:local'
 end
 
 task :default => :test
+
+def compile(src_dir, dest_dir, classpath)
+  puts "Compiling #{src_dir} into #{dest_dir}..."
+  FileUtils.mkdir_p dest_dir
+
+  javac_opts = {
+    :d => dest_dir,  # d = destination
+    :source => '1.5',
+    :target => '1.5',
+    :classpath => classpath
+  }
+
+  src_files = Dir.glob(File.join(src_dir, '**/*.java')).join(' ')
+  cmd = "javac #{to_flags(javac_opts)} -Xlint #{src_files} 2>&1"
+  #puts cmd
+
+  output = `#{cmd}`
+  if output =~ /\d+ error/
+    puts output
+    puts "Abort the mission! You have compile errors."
+    exit
+  end
+end
 
 def main_classpath
   ['lib/processing/core.jar', 'lib/jsoup-1.3.3.jar', 'lib/cue.language.jar'] * ':'

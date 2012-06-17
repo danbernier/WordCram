@@ -40,11 +40,4 @@ svnant task: http://subclipse.tigris.org/svnant/svn.html
 	<target name="clean">
 		<delete dir="build" />
 	</target>
-
-	<target name="compile" depends="clean">
-	  <mkdir dir="build/classes" />
-	  <javac srcdir="src" destdir="build/classes" classpath="${classpath}" source="1.5" target="1.5" includeantruntime="false">
-	    <compilerarg value="-Xlint" />
-	  </javac>
-	</target>
 </project>
