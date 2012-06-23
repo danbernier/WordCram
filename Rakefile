@@ -52,7 +52,7 @@ task :bundle => :test do
   #  - http://developer.java.sun.com/developer/products/xml/docs/api/
 
   FileUtils.mkdir_p 'build/p5lib/WordCram/library'
-  `jar -cvf build/p5lib/WordCram/library/WordCram.jar build/classes`
+  `jar -cvf build/p5lib/WordCram/library/WordCram.jar -C build/classes .`
   FileUtils.cp 'lib/jsoup-1.3.3.jar', 'build/p5lib/WordCram/library'
   FileUtils.cp 'lib/cue.language.jar', 'build/p5lib/WordCram/library'
 
