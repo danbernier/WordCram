@@ -113,6 +113,7 @@ namespace :publish do
     puts `git add javadoc`
     puts `git commit -m "Updating javadoc for #{release_number} release."`
     puts `git push`
+    puts `git checkout master`
   end
 end
 task :publish => 'publish:local'
