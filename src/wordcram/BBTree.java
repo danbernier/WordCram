@@ -13,7 +13,7 @@ import processing.core.*;
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-public class BBTree {
+class BBTree {
     private int x;
     private int y;
     private int right;
