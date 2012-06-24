@@ -21,13 +21,11 @@ task :clean_source do
     new_src = src
     new_src.gsub!(/\r/, '')
     new_src.gsub!(/\t/, ' ' * 4)
-    new_src = new_src.each_line.map(&:rstrip)
+    new_src = new_src.each_line.map(&:rstrip).join("\n")
 
-    if src != new_src
-      puts file
-      File.open(file, 'w') do |f|
-        f.puts new_src
-      end
+    #puts file
+    File.open(file, 'w') do |f|
+      f.puts new_src
     end
   end
 end
