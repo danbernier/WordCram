@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import cue.lang.stop.StopWords;
 
-public class WordCounterTest {
+public class AWordCounter {
 	
 	private Comparator<Word> alphabetically = new Comparator<Word>() {
 		public int compare(Word word1, Word word2) {

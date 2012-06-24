@@ -14,7 +14,7 @@ import org.junit.Test;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
-public class WordCramEngineTest {
+public class AWordCramEngine {
 	
 	private PGraphics destination;
 	private WordFonter fonter;
