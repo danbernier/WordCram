@@ -12,8 +12,28 @@ TODO: add a task to generate a sample build.json.
 TODO: add some kind of 'verbose' flag to this. Factor those puts-es into an announce method, which observes the -v flag.
 =end
 
+desc "Clean the source files: trim trailing whitespace, & \t -> 4 spaces"
+task :clean_source do
+  puts "Cleaning source files..."
+  Dir.glob('src/**/*.java').each do |file|
+    src = File.read(file)
+
+    new_src = src
+    new_src.gsub!(/\r/, '')
+    new_src.gsub!(/\t/, ' ' * 4)
+    new_src = new_src.each_line.map(&:rstrip)
+
+    if src != new_src
+      puts file
+      File.open(file, 'w') do |f|
+        f.puts new_src
+      end
+    end
+  end
+end
+
 desc "Clean the build artifacts: delete the build directory."
-task :clean do
+task :clean => :clean_source do
   puts "Cleaning..."
   FileUtils.rm_rf('build')
 end
