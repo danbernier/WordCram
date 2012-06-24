@@ -19,7 +19,7 @@ package wordcram;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
-class BBTreeBuilder {
+public class BBTreeBuilder {
     public BBTree makeTree(Shape shape, int swelling) {
         Rectangle2D bounds = shape.getBounds2D();
         int minBoxSize = 1;

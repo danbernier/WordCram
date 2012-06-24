@@ -25,10 +25,10 @@ import java.awt.geom.Rectangle2D;
 
 import processing.core.PFont;
 
-class WordShaper {
+public class WordShaper {
     private FontRenderContext frc = new FontRenderContext(null, true, true);
 
-    Shape getShapeFor(String word, PFont font, float fontSize, float angle, int minShapeSize) {
+    public Shape getShapeFor(String word, PFont font, float fontSize, float angle, int minShapeSize) {
 
         Shape shape = makeShape(word, font, fontSize);
 
