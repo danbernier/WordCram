@@ -1,23 +1,17 @@
 package wordcram;
-
 /*
  Copyright 2010 Daniel Bernier
-
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
  http://www.apache.org/licenses/LICENSE-2.0
-
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-
 import processing.core.PVector;
-
 /**
  * Once a WordPlacer tells WordCram where a word <i>should</i> go, a WordNudger
  * tells WordCram how to nudge it around the field, until it fits in with the
@@ -36,25 +30,24 @@ import processing.core.PVector;
  * This is why the WordCram passes in <code>attemptNumber</code>: it's the
  * number of times it's attempted to place the word. This could (for example)
  * scale the PVector, since the nudges don't accumulate (see above).
- * 
+ *
  * @see RandomWordNudger
  * @see SpiralWordNudger
- * 
+ *
  * @author Dan Bernier
  */
 public interface WordNudger {
-
-	/**
-	 * How should this word be nudged, this time?
-	 * 
-	 * @param word
-	 *            the word to nudge
-	 * @param attemptNumber
-	 *            how many times WordCram has tried to place this word; starts
-	 *            at zero, and ends at
-	 *            <code>(int)((1.0-word.weight) * 600) + 100</code>
-	 * @return the PVector to add to the word's desired location, to get the
-	 *         next spot to try fitting the word
-	 */
-	public PVector nudgeFor(Word word, int attemptNumber);
+    /**
+     * How should this word be nudged, this time?
+     *
+     * @param word
+     *            the word to nudge
+     * @param attemptNumber
+     *            how many times WordCram has tried to place this word; starts
+     *            at zero, and ends at
+     *            <code>(int)((1.0-word.weight) * 600) + 100</code>
+     * @return the PVector to add to the word's desired location, to get the
+     *         next spot to try fitting the word
+     */
+    public PVector nudgeFor(Word word, int attemptNumber);
 }
