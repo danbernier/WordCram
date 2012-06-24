@@ -26,16 +26,16 @@ package wordcram;
  * target="blank">color</a> method.
  * <p>
  * Some useful implementations are available in {@link Colorers}.
- * 
+ *
  * @author Dan Bernier
  */
 public interface WordColorer {
 
-	/**
-	 * What color should this {@link Word} be?
-	 * 
-	 * @param word the word to pick the color for
-	 * @return the color for the word
-	 */
-	public int colorFor(Word word);
+    /**
+     * What color should this {@link Word} be?
+     *
+     * @param word the word to pick the color for
+     * @return the color for the word
+     */
+    public int colorFor(Word word);
 }

@@ -46,9 +46,11 @@ void draw() {
   
   // If the user's last click was on a word, render it big and blue:
   if (lastClickedWord != null) {
-    fill(255, 100);
-    rect(0, height/3, width, height/3);
-    fill(0, 0, 255, 100);
+    noStroke();
+    fill(255, 190);
+    rect(0, height/2 - textAscent()/2, width, textAscent() + textDescent());
+
+    fill(30, 144, 13, 150);
     text(lastClickedWord.word, width/2, height/2);
   }
 }

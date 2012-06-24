@@ -20,17 +20,17 @@ import processing.core.PApplet;
 
 public class WebPage implements TextSource {
 
-	private String url;
-	private PApplet parent;
+    private String url;
+    private PApplet parent;
 
-	public WebPage(String url, PApplet parent) {
-		this.url = url;
-		this.parent = parent;
-	}
+    public WebPage(String url, PApplet parent) {
+        this.url = url;
+        this.parent = parent;
+    }
 
-	public String getText() {
-		String html = PApplet.join(parent.loadStrings(url), ' ');
-		return new Html2Text().text(html);
-	}
+    public String getText() {
+        String html = PApplet.join(parent.loadStrings(url), ' ');
+        return new Html2Text().text(html);
+    }
 
 }

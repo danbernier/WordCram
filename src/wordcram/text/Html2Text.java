@@ -19,7 +19,7 @@ limitations under the License.
 import org.jsoup.Jsoup;
 
 class Html2Text {
-	public String text(String html) {
-		return Jsoup.parse(html).text();
-	}
+    public String text(String html) {
+        return Jsoup.parse(html).text();
+    }
 }

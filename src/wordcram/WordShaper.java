@@ -26,54 +26,54 @@ import java.awt.geom.Rectangle2D;
 import processing.core.PFont;
 
 class WordShaper {
-	private FontRenderContext frc = new FontRenderContext(null, true, true);
-	
-	Shape getShapeFor(String word, PFont font, float fontSize, float angle, int minShapeSize) {
+    private FontRenderContext frc = new FontRenderContext(null, true, true);
 
-		Shape shape = makeShape(word, font, fontSize);
-		
-		if (isTooSmall(shape, minShapeSize)) {
-			return null;		
-		}
-		
-		return moveToOrigin(rotate(shape, angle));
-	}
+    Shape getShapeFor(String word, PFont font, float fontSize, float angle, int minShapeSize) {
 
-	private Shape makeShape(String word, PFont pFont, float fontSize) {
-		Font font = pFont.getFont().deriveFont(fontSize);
-		
-		char[] chars = word.toCharArray();
-		
-		// TODO hmm: this doesn't render newlines.  Hrm.  If you're word text is "foo\nbar", you get "foobar".
-		GlyphVector gv = font.layoutGlyphVector(frc, chars, 0, chars.length,
-				Font.LAYOUT_LEFT_TO_RIGHT);
+        Shape shape = makeShape(word, font, fontSize);
 
-		return gv.getOutline();
-	}
-	
-	private boolean isTooSmall(Shape shape, int minShapeSize) {
-		Rectangle2D r = shape.getBounds2D();
-		
-		// Most words will be wider than tall, so this basically boils down to height.
-		// For the odd word like "I", we check width, too.
-		return r.getHeight() < minShapeSize || r.getWidth() < minShapeSize;
-	}
-	
-	private Shape rotate(Shape shape, float rotation) {
-		if (rotation == 0) {
-			return shape;
-		}
+        if (isTooSmall(shape, minShapeSize)) {
+            return null;
+        }
 
-		return AffineTransform.getRotateInstance(rotation).createTransformedShape(shape);
-	}
+        return moveToOrigin(rotate(shape, angle));
+    }
 
-	private Shape moveToOrigin(Shape shape) {
-		Rectangle2D rect = shape.getBounds2D();
-		
-		if (rect.getX() == 0 && rect.getY() == 0) {
-			return shape;
-		}
-		
-		return AffineTransform.getTranslateInstance(-rect.getX(), -rect.getY()).createTransformedShape(shape);
-	}
+    private Shape makeShape(String word, PFont pFont, float fontSize) {
+        Font font = pFont.getFont().deriveFont(fontSize);
+
+        char[] chars = word.toCharArray();
+
+        // TODO hmm: this doesn't render newlines.  Hrm.  If you're word text is "foo\nbar", you get "foobar".
+        GlyphVector gv = font.layoutGlyphVector(frc, chars, 0, chars.length,
+                Font.LAYOUT_LEFT_TO_RIGHT);
+
+        return gv.getOutline();
+    }
+
+    private boolean isTooSmall(Shape shape, int minShapeSize) {
+        Rectangle2D r = shape.getBounds2D();
+
+        // Most words will be wider than tall, so this basically boils down to height.
+        // For the odd word like "I", we check width, too.
+        return r.getHeight() < minShapeSize || r.getWidth() < minShapeSize;
+    }
+
+    private Shape rotate(Shape shape, float rotation) {
+        if (rotation == 0) {
+            return shape;
+        }
+
+        return AffineTransform.getRotateInstance(rotation).createTransformedShape(shape);
+    }
+
+    private Shape moveToOrigin(Shape shape) {
+        Rectangle2D rect = shape.getBounds2D();
+
+        if (rect.getX() == 0 && rect.getY() == 0) {
+            return shape;
+        }
+
+        return AffineTransform.getTranslateInstance(-rect.getX(), -rect.getY()).createTransformedShape(shape);
+    }
 }

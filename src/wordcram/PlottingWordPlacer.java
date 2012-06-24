@@ -27,25 +27,25 @@ import processing.core.PVector;
  * finally rendered.
  */
 public class PlottingWordPlacer implements WordPlacer {
-	
-	private PApplet parent;
-	private WordPlacer wrappedPlacer;
-	
-	public PlottingWordPlacer(PApplet _parent, WordPlacer _wrappedPlacer) {
-		parent = _parent;
-		wrappedPlacer = _wrappedPlacer;
-	}
-	
-	public PVector place(Word word, int wordIndex, int wordsCount, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
-		PVector v = wrappedPlacer.place(word, wordIndex, wordsCount, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
-		parent.pushStyle();
-		parent.noFill();
-		
-		parent.stroke(15, 255, 255, 200);
-		
-		parent.ellipse(v.x, v.y, 10, 10);
-		parent.popStyle();
-		return v;
-	}
-	
+
+    private PApplet parent;
+    private WordPlacer wrappedPlacer;
+
+    public PlottingWordPlacer(PApplet _parent, WordPlacer _wrappedPlacer) {
+        parent = _parent;
+        wrappedPlacer = _wrappedPlacer;
+    }
+
+    public PVector place(Word word, int wordIndex, int wordsCount, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
+        PVector v = wrappedPlacer.place(word, wordIndex, wordsCount, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
+        parent.pushStyle();
+        parent.noFill();
+
+        parent.stroke(15, 255, 255, 200);
+
+        parent.ellipse(v.x, v.y, 10, 10);
+        parent.popStyle();
+        return v;
+    }
+
 }

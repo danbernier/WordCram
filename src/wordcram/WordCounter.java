@@ -25,70 +25,70 @@ import cue.lang.stop.StopWords;
 
 class WordCounter {
 
-	private StopWords cueStopWords;
-	private Set<String> extraStopWords = new HashSet<String>();
-	private boolean excludeNumbers;
-	
-	public WordCounter() {
-		this(null);
-	}
-	public WordCounter(StopWords cueStopWords) {
-		this.cueStopWords = cueStopWords;
-	}
-	
-	public WordCounter withExtraStopWords(String extraStopWordsString) {
-		String[] stopWordsArray = extraStopWordsString.toLowerCase().split(" ");
-		extraStopWords = new HashSet<String>(Arrays.asList(stopWordsArray));
-		return this;
-	}
-	
-	public WordCounter shouldExcludeNumbers(boolean shouldExcludeNumbers) {
-		excludeNumbers = shouldExcludeNumbers;
-		return this;
-	}
+    private StopWords cueStopWords;
+    private Set<String> extraStopWords = new HashSet<String>();
+    private boolean excludeNumbers;
 
-	public Word[] count(String text) {
-		if (cueStopWords == null) {
-			cueStopWords = StopWords.guess(text);
-		}
-		return countWords(text);
-	}
+    public WordCounter() {
+        this(null);
+    }
+    public WordCounter(StopWords cueStopWords) {
+        this.cueStopWords = cueStopWords;
+    }
 
-	private Word[] countWords(String text) {
-		Counter<String> counter = new Counter<String>();
-		
-		for (String word : new WordIterator(text)) {
-			if (shouldCountWord(word)) {
-				counter.note(word);
-			}
-		}
-		
-		List<Word> words = new ArrayList<Word>();
-		
-		for (Entry<String, Integer> entry : counter.entrySet()) {
-			words.add(new Word(entry.getKey(), (int)entry.getValue()));
-		}
-		
-		return words.toArray(new Word[0]);
-	}
+    public WordCounter withExtraStopWords(String extraStopWordsString) {
+        String[] stopWordsArray = extraStopWordsString.toLowerCase().split(" ");
+        extraStopWords = new HashSet<String>(Arrays.asList(stopWordsArray));
+        return this;
+    }
 
-	private boolean shouldCountWord(String word) {
-		return !isStopWord(word) && !(excludeNumbers && isNumeric(word));
-	}
+    public WordCounter shouldExcludeNumbers(boolean shouldExcludeNumbers) {
+        excludeNumbers = shouldExcludeNumbers;
+        return this;
+    }
 
-	private boolean isNumeric(String word) {
-		try {
-			Double.parseDouble(word);
-			return true;
-		}
-		catch (NumberFormatException x) {
-			return false;
-		}
-	}
+    public Word[] count(String text) {
+        if (cueStopWords == null) {
+            cueStopWords = StopWords.guess(text);
+        }
+        return countWords(text);
+    }
 
-	private boolean isStopWord(String word) {
-		return cueStopWords.isStopWord(word) || 
-				extraStopWords.contains(word.toLowerCase());
-	}
+    private Word[] countWords(String text) {
+        Counter<String> counter = new Counter<String>();
+
+        for (String word : new WordIterator(text)) {
+            if (shouldCountWord(word)) {
+                counter.note(word);
+            }
+        }
+
+        List<Word> words = new ArrayList<Word>();
+
+        for (Entry<String, Integer> entry : counter.entrySet()) {
+            words.add(new Word(entry.getKey(), (int)entry.getValue()));
+        }
+
+        return words.toArray(new Word[0]);
+    }
+
+    private boolean shouldCountWord(String word) {
+        return !isStopWord(word) && !(excludeNumbers && isNumeric(word));
+    }
+
+    private boolean isNumeric(String word) {
+        try {
+            Double.parseDouble(word);
+            return true;
+        }
+        catch (NumberFormatException x) {
+            return false;
+        }
+    }
+
+    private boolean isStopWord(String word) {
+        return cueStopWords.isStopWord(word) ||
+                extraStopWords.contains(word.toLowerCase());
+    }
 
 }

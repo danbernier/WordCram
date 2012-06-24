@@ -36,25 +36,25 @@ import processing.core.PVector;
  * This is why the WordCram passes in <code>attemptNumber</code>: it's the
  * number of times it's attempted to place the word. This could (for example)
  * scale the PVector, since the nudges don't accumulate (see above).
- * 
+ *
  * @see RandomWordNudger
  * @see SpiralWordNudger
- * 
+ *
  * @author Dan Bernier
  */
 public interface WordNudger {
 
-	/**
-	 * How should this word be nudged, this time?
-	 * 
-	 * @param word
-	 *            the word to nudge
-	 * @param attemptNumber
-	 *            how many times WordCram has tried to place this word; starts
-	 *            at zero, and ends at
-	 *            <code>(int)((1.0-word.weight) * 600) + 100</code>
-	 * @return the PVector to add to the word's desired location, to get the
-	 *         next spot to try fitting the word
-	 */
-	public PVector nudgeFor(Word word, int attemptNumber);
+    /**
+     * How should this word be nudged, this time?
+     *
+     * @param word
+     *            the word to nudge
+     * @param attemptNumber
+     *            how many times WordCram has tried to place this word; starts
+     *            at zero, and ends at
+     *            <code>(int)((1.0-word.weight) * 600) + 100</code>
+     * @return the PVector to add to the word's desired location, to get the
+     *         next spot to try fitting the word
+     */
+    public PVector nudgeFor(Word word, int attemptNumber);
 }
