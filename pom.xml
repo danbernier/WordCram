@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+
+  <!-- This is so I can upload to Sonatype -->
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.wordcram</groupId>
+  <artifactId>wordcram</artifactId>
+  <version>0.5.0</version>
+  <name>wordcram</name>
+  <description>WordCram lets you generate word clouds from text.</description>
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+  <packaging>jar</packaging>
+  <url>http://wordcram.org</url>
+
+  <scm>
+    <connection>scm:git:git@github.com:danbernier/WordCram.git</connection>
+    <developerConnection>scm:git:git@github.com:danbernier/WordCram.git</developerConnection>
+    <url>git@github.com:danbernier/WordCram.git</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <id>danbernier</id>
+      <name>Dan Bernier</name>
+      <email>danbernier@gmail.com</email>
+      <url>http://invisibleblocks.com</url>
+      <organization>WordCram</organization>
+      <organizationUrl>http://wordcram.org</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-5</timezone>
+    </developer>
+  </developers>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>resources</directory>
+      </resource>
+    </resources>
+    <!--
+    <testResources>
+      <testResource>
+        <directory>test-resources</directory>
+      </testResource>
+    </testResources>
+    -->
+    
+    <plugins>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-javadoc-plugin</artifactId>
+	<executions>
+	  <execution>
+	    <id>attach-javadocs</id>
+	    <goals>
+	      <goal>jar</goal>
+	    </goals>
+	  </execution>
+	</executions>
+      </plugin>
+
+      <!-- run this thing with: mvn exec:exec -->
+      <plugin>
+	<groupId>org.codehaus.mojo</groupId>
+	<artifactId>exec-maven-plugin</artifactId>
+	<version>1.1.1</version>
+	<executions>
+	  <execution>
+            <id>some-execution</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+	  </execution>
+	</executions>
+	<configuration>
+	  <!-- ...and it runs this command: -->
+	  <executable>pwd</executable>
+	</configuration>
+      </plugin>
+
+
+    </plugins>
+    
+  </build>
+
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>http://repo1.maven.org/maven2</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.processing</groupId>
+      <artifactId>processing-core</artifactId>
+      <version>1.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.processing</groupId>
+      <artifactId>itext</artifactId>
+      <version>1.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.processing</groupId>
+      <artifactId>processing-pdf</artifactId>
+      <version>1.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>1.3.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.cue</groupId>
+      <artifactId>cue-language</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.8.5</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+</project>
