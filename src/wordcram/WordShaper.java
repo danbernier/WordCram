@@ -44,7 +44,7 @@ class WordShaper {
 
         char[] chars = word.toCharArray();
 
-        // TODO hmm: this doesn't render newlines.  Hrm.  If you're word text is "foo\nbar", you get "foobar".
+        // TODO hmm: this doesn't render newlines.  Hrm.  If your word text is "foo\nbar", you get "foobar".
         GlyphVector gv = font.layoutGlyphVector(frc, chars, 0, chars.length,
                 Font.LAYOUT_LEFT_TO_RIGHT);
 
