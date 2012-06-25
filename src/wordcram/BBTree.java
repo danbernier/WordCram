@@ -48,7 +48,7 @@ public class BBTree {
         kids = kidList.toArray(new BBTree[0]);
     }
 
-    void setLocation(int x, int y) {
+    public void setLocation(int x, int y) {
         rootX = x;
         rootY = y;
 
@@ -59,7 +59,7 @@ public class BBTree {
         }
     }
 
-    boolean overlaps(BBTree otherTree) {
+    public boolean overlaps(BBTree otherTree) {
         if (rectCollide(this, otherTree)) {
             if (this.isLeaf() && otherTree.isLeaf()) {
                 return true;
