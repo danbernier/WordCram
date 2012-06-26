@@ -21,8 +21,8 @@ import processing.core.*;
  */
 
 public class BBTree {
-    private int x;
-    private int y;
+    private int left;
+    private int top;
     private int right;
     private int bottom;
     private BBTree[] kids;
@@ -32,9 +32,9 @@ public class BBTree {
 
     private int swelling = 0;
 
-    BBTree(int x, int y, int right, int bottom) {
-        this.x = x;
-        this.y = y;
+    BBTree(int left, int top, int right, int bottom) {
+        this.left = left;
+        this.top = top;
         this.right = right;
         this.bottom = bottom;
     }
@@ -50,13 +50,13 @@ public class BBTree {
         kids = kidList.toArray(new BBTree[0]);
     }
 
-    public void setLocation(int x, int y) {
-        rootX = x;
-        rootY = y;
+    public void setLocation(int left, int top) {
+        rootX = left;
+        rootY = top;
 
         if (!isLeaf()) {
             for (BBTree kid : kids) {
-                kid.setLocation(x, y);
+                kid.setLocation(left, top);
             }
         }
     }
@@ -86,8 +86,8 @@ public class BBTree {
 
     private int[] getPoints() {
         return new int[] {
-                rootX - swelling + x,
-                rootY - swelling + y,
+                rootX - swelling + left,
+                rootY - swelling + top,
                 rootX + swelling + right,
                 rootY + swelling + bottom
         };
@@ -101,9 +101,9 @@ public class BBTree {
     }
 
     boolean containsPoint(float x, float y) {
-        return this.rootX + this.x < x &&
+        return this.rootX + this.left < x &&
             this.rootX + this.right > x &&
-            this.rootY + this.y < y &&
+            this.rootY + this.top < y &&
             this.rootY + this.bottom > y;
     }
 
