@@ -30,7 +30,7 @@ public class BBTree {
     private int rootX;
     private int rootY;
 
-    int swelling = 0;
+    private int swelling = 0;
 
     BBTree(int x, int y, int right, int bottom) {
         this.x = x;
