@@ -119,7 +119,7 @@ public class BBTree {
         }
     }
 
-    void draw(PGraphics g) {
+    public void draw(PGraphics g) {
         g.pushStyle();
         g.noFill();
 
