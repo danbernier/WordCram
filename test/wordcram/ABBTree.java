@@ -80,7 +80,7 @@ public class ABBTree {
 	Assert.assertFalse(b.overlaps(a));
     }
 
-    BBTree makeTree(int x, int y, int right, int bottom) {
-	return new BBTree(x, y, right, bottom);
+    BBTree makeTree(int left, int top, int right, int bottom) {
+	return new BBTree(left, top, right, bottom);
     }
 }
