@@ -21,12 +21,14 @@ import processing.core.*;
  */
 
 public class BBTree {
+
     private int left;
     private int top;
     private int right;
     private int bottom;
     private BBTree[] kids;
 
+    private BBTree parent;
     private int rootX;
     private int rootY;
 
@@ -44,6 +46,7 @@ public class BBTree {
         for (BBTree kid : _kids) {
             if (kid != null) {
                 kidList.add(kid);
+		kid.parent = this;
             }
         }
 
@@ -51,14 +54,12 @@ public class BBTree {
     }
 
     public void setLocation(int left, int top) {
-        rootX = left;
-        rootY = top;
+	rootX = left;
+	rootY = top;
+    }
 
-        if (!isLeaf()) {
-            for (BBTree kid : kids) {
-                kid.setLocation(left, top);
-            }
-        }
+    private BBTree getRoot() {
+	return parent == null ? this : parent.getRoot();
     }
 
     public boolean overlaps(BBTree otherTree) {
@@ -84,15 +85,6 @@ public class BBTree {
         return false;
     }
 
-    private int[] getPoints() {
-        return new int[] {
-                rootX - swelling + left,
-                rootY - swelling + top,
-                rootX + swelling + right,
-                rootY + swelling + bottom
-        };
-    }
-
     private boolean rectCollide(BBTree aTree, BBTree bTree) {
         int[] a = aTree.getPoints();
         int[] b = bTree.getPoints();
@@ -100,11 +92,22 @@ public class BBTree {
         return a[3] > b[1] && a[1] < b[3] && a[2] > b[0] && a[0] < b[2];
     }
 
+    private int[] getPoints() {
+	BBTree root = getRoot();
+        return new int[] {
+                root.rootX - swelling + left,
+                root.rootY - swelling + top,
+                root.rootX + swelling + right,
+                root.rootY + swelling + bottom
+        };
+    }
+
     boolean containsPoint(float x, float y) {
-        return this.rootX + this.left < x &&
-            this.rootX + this.right > x &&
-            this.rootY + this.top < y &&
-            this.rootY + this.bottom > y;
+	BBTree root = getRoot();
+        return root.rootX + this.left < x &&
+            root.rootX + this.right > x &&
+            root.rootY + this.top < y &&
+            root.rootY + this.bottom > y;
     }
 
     boolean isLeaf() {
