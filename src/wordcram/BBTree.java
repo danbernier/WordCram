@@ -101,10 +101,10 @@ public class BBTree {
     }
 
     boolean containsPoint(float x, float y) {
-    return this.rootX + this.x < x &&
-        this.rootX + this.right > x &&
-        this.rootY + this.y < y &&
-        this.rootY + this.bottom > y;
+        return this.rootX + this.x < x &&
+            this.rootX + this.right > x &&
+            this.rootY + this.y < y &&
+            this.rootY + this.bottom > y;
     }
 
     boolean isLeaf() {
