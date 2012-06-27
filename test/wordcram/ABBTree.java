@@ -23,7 +23,7 @@ import org.junit.Test;
 public class ABBTree {
 
     @Test
-    public void testContainsPoint() {
+    public void testContainsPointWithASingleTreeNode() {
 	// TODO Could this be done better w/ a theory?
 	// (Or whatever those JUnit things are called.)
 	BBTree testTree = makeTree(20, 20, 100, 100);
@@ -52,35 +52,79 @@ public class ABBTree {
     }
 
     @Test
-    public void testOverlaps() {
+    public void testOverlapsWithASingleTreeNode() {
 	BBTree a = makeTree(0, 0, 30, 30);
 	BBTree b = makeTree(0, 0, 5, 5);
 
-	Assert.assertTrue(a.overlaps(b));
-	Assert.assertTrue(b.overlaps(a));
+	assertOverlap(a, b);
 
 	b.setLocation(40, 40);
-	Assert.assertFalse(a.overlaps(b));
-	Assert.assertFalse(b.overlaps(a));
+	assertNoOverlap(a, b);
 
 	b.setLocation(29, 29);
-	Assert.assertTrue(a.overlaps(b));
-	Assert.assertTrue(b.overlaps(a));
+	assertOverlap(a, b);
 
 	a.setLocation(32, 0);
-	Assert.assertTrue(a.overlaps(b));
-	Assert.assertTrue(b.overlaps(a));
+	assertOverlap(a, b);
 
 	a.setLocation(32, 33);
-	Assert.assertTrue(a.overlaps(b));
-	Assert.assertTrue(b.overlaps(a));
+	assertOverlap(a, b);
 
 	a.setLocation(32, 34);
-	Assert.assertFalse(a.overlaps(b));
-	Assert.assertFalse(b.overlaps(a));
+	assertNoOverlap(a, b);
+    }
+
+    /*
+      Tests with a pattern kind of like this:
+      --------
+      |***   |
+      |***   |
+      |   ***|
+      |   ***|
+      --------
+      (Though they're squares.)
+     */
+    @Test
+    public void testOverlapsWithNestedTreeNodes() {
+	BBTree root      = makeTree(10, 10, 20, 20);
+	BBTree upLeft    = makeTree(10, 10, 15, 15);
+	BBTree downRight = makeTree(15, 15, 20, 20);
+	root.addKids(upLeft, downRight);
+
+	BBTree mobile = makeTree(0, 0, 4, 4);
+
+	assertNoOverlap(root, mobile);
+
+	mobile.setLocation(8, 8);
+	assertOverlap(root, mobile);
+
+	mobile.setLocation(16, 8);
+	assertNoOverlap(root, mobile);
+
+	mobile.setLocation(8, 16);
+	assertNoOverlap(root, mobile);
+
+	mobile.setLocation(13, 13);
+	assertOverlap(root, mobile);
+
+	mobile.setLocation(16, 16);
+	assertOverlap(root, mobile);
+
+	mobile.setLocation(22, 22);
+	assertNoOverlap(root, mobile);
     }
 
     BBTree makeTree(int left, int top, int right, int bottom) {
 	return new BBTree(left, top, right, bottom);
+    }
+
+    private void assertOverlap(BBTree a, BBTree b) {
+	Assert.assertEquals(true, a.overlaps(b));
+	Assert.assertEquals(true, b.overlaps(a));
+    }
+
+    private void assertNoOverlap(BBTree a, BBTree b) {
+	Assert.assertEquals(false, a.overlaps(b));
+	Assert.assertEquals(false, b.overlaps(a));
     }
 }
