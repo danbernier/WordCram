@@ -43,7 +43,7 @@ public class ABBTree {
 	Assert.assertTrue(testTree.containsPoint(98, 22));
 	Assert.assertFalse(testTree.containsPoint(98, 18));
 	Assert.assertFalse(testTree.containsPoint(102, 22));
-   
+
 	for (int i = 21; i < 100; i++) {
 	    for (int j = 21; j < 100; j++) {
 		Assert.assertTrue(testTree.containsPoint(i, j));
