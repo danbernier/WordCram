@@ -25,7 +25,7 @@ task :clean_source do
 
     #puts file
     File.open(file, 'w') do |f|
-      f.puts new_src
+      f.puts new_src.strip + "\n"
     end
   end
 end
