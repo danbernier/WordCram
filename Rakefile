@@ -15,7 +15,7 @@ TODO: add some kind of 'verbose' flag to this. Factor those puts-es into an anno
 desc "Clean the source files: trim trailing whitespace, & \t -> 4 spaces"
 task :clean_source do
   puts "Cleaning source files..."
-  Dir.glob('src/**/*.java').each do |file|
+  (Dir.glob('src/**/*.java') + Dir.glob('test/**/*.java')).each do |file|
     src = File.read(file)
 
     new_src = src
@@ -25,8 +25,7 @@ task :clean_source do
 
     #puts file
     File.open(file, 'w') do |f|
-      f.puts new_src
-      f.puts
+      f.puts new_src.strip + "\n"
     end
   end
 end
