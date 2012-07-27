@@ -41,11 +41,6 @@ class WordCramEngine {
     private RenderOptions renderOptions;
 
     WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
-
-        if (destination.getClass().equals(PGraphics2D.class)) {
-            throw new Error("WordCram can't work with P2D buffers, sorry - try using JAVA2D.");
-        }
-
         this.destination = destination;
 
         this.fonter = fonter;
