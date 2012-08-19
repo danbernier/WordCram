@@ -16,7 +16,8 @@ package example;
  limitations under the License.
  */
 
-import processing.core.*;
+import processing.core.PApplet;
+import processing.core.PFont;
 import processing.pdf.PGraphicsPDF;
 import wordcram.*;
 
