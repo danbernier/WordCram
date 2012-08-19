@@ -2,7 +2,7 @@ package wordcram;
 
 import java.util.ArrayList;
 
-import processing.core.*;
+import processing.core.PGraphics;
 
 /*
  Copyright 2010 Daniel Bernier
@@ -29,6 +29,8 @@ public class BBTree {
 
     private int rootX;
     private int rootY;
+
+    int swelling = 0;
 
     BBTree(int x, int y, int right, int bottom) {
         this.x = x;
@@ -99,17 +101,16 @@ public class BBTree {
     }
 
     boolean containsPoint(float x, float y) {
-    return this.rootX + this.x < x &&
-        this.rootX + this.right > x &&
-        this.rootY + this.y < y &&
-        this.rootY + this.bottom > y;
+	return this.rootX + this.x < x &&
+	    this.rootX + this.right > x &&
+	    this.rootY + this.y < y &&
+	    this.rootY + this.bottom > y;
     }
 
     boolean isLeaf() {
         return kids == null;
     }
 
-    int swelling = 0;
     void swell(int extra) {
         swelling += extra;
         if (!isLeaf()) {

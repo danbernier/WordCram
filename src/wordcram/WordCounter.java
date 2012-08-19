@@ -87,8 +87,9 @@ class WordCounter {
     }
 
     private boolean isStopWord(String word) {
-        return cueStopWords.isStopWord(word) ||
-                extraStopWords.contains(word.toLowerCase());
+    	boolean cueSaysStopWord = cueStopWords != null && cueStopWords.isStopWord(word);
+    	boolean extraSaysStopWord = extraStopWords.contains(word.toLowerCase());
+        return  cueSaysStopWord || extraSaysStopWord;
     }
 
 }

@@ -15,23 +15,23 @@ TODO: add some kind of 'verbose' flag to this. Factor those puts-es into an anno
 desc "Clean the source files: trim trailing whitespace, & \t -> 4 spaces"
 task :clean_source do
   puts "Cleaning source files..."
-  Dir.glob('src/**/*.java').each do |file|
+  (Dir.glob('src/**/*.java') + Dir.glob('test/**/*.java')).each do |file|
     src = File.read(file)
 
     new_src = src
     new_src.gsub!(/\r/, '')
-    new_src.gsub!(/\t/, ' ' * 4)
+    # new_src.gsub!(/\t/, ' ' * 4)
     new_src = new_src.each_line.map(&:rstrip).join("\n")
 
     #puts file
     File.open(file, 'w') do |f|
-      f.puts new_src
+      f.puts new_src.strip + "\n"
     end
   end
 end
 
 desc "Clean the build artifacts: delete the build directory."
-task :clean => :clean_source do
+task :clean do
   puts "Cleaning..."
   FileUtils.rm_rf('build')
 end
