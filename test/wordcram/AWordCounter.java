@@ -104,6 +104,16 @@ public class AWordCounter {
 
 		assertWeightedWordsAre(weightedWords, "all 1", "am 1", "are 1", "him 1", "in 1", "she 1");
 	}
+	
+	@Test
+	public void canWorkEvenWhenItCannotGuessTheLanguage() {
+		WordCounter wc = new WordCounter();
+		
+		Word[] weightedWords = wc.count("axonify founding manolo binomscmy");
+
+		Arrays.sort(weightedWords, alphabetically);
+		assertWeightedWordsAre(weightedWords, "axonify 1", "binomscmy 1", "founding 1", "manolo 1");
+	}
 
 	private void assertWeightedWordsAre(Word[] actualWords, String... expectedCases) {
 
