@@ -31,7 +31,7 @@ task :clean_source do
 end
 
 desc "Clean the build artifacts: delete the build directory."
-task :clean => :clean_source do
+task :clean do
   puts "Cleaning..."
   FileUtils.rm_rf('build')
 end

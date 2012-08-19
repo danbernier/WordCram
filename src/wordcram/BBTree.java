@@ -2,7 +2,7 @@ package wordcram;
 
 import java.util.ArrayList;
 
-import processing.core.*;
+import processing.core.PGraphics;
 
 /*
  Copyright 2010 Daniel Bernier

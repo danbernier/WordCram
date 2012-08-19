@@ -16,7 +16,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import cue.lang.stop.StopWords;
 import processing.core.*;
 import wordcram.text.*;
 
@@ -360,9 +359,10 @@ public class WordCram {
      * @return The WordCram, for further setup or drawing.
      */
     //example fromTextString(loadStrings("my.txt"))
+    //example fromTextString("one", "two", "three")
     //example fromTextString("Hello there!")
     public WordCram fromTextString(String... text) {
-        return fromText(new Text(PApplet.join(text, "")));
+        return fromText(new Text(PApplet.join(text, " ")));
     }
 
     /**
