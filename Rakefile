@@ -89,7 +89,7 @@ task :bundle => :test do
   }
 
   # puts "javadoc #{to_flags(javadoc_opts)}"
-  `javadoc #{to_flags(javadoc_opts)}`
+  `javadoc #{to_flags(javadoc_opts)} -use -version`
 
   FileUtils.cp 'wordcram.png', 'build/p5lib/WordCram/reference'
 end
@@ -127,7 +127,8 @@ namespace :publish do
 
     puts "uploading javadoc to github..."
     puts `git checkout gh-pages`
-    puts `cp -r build/p5lib/WordCram/reference javadoc`
+    puts `rm -rf javadoc`
+    puts `cp -r build/p5lib/WordCram/reference/* javadoc`
     puts `git add javadoc`
     puts `git commit -m "Updating javadoc for #{release_number} release."`
     puts `git push`
