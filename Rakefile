@@ -51,7 +51,6 @@ task :test => :compile do
     :cp => test_classpath + ':build/tests'
   }
   cmd = "java #{to_flags(junit_opts)} org.junit.runner.JUnitCore #{unit_test_classes}"
-  #puts cmd
   test_results = `#{cmd}`
   puts test_results
 
@@ -68,6 +67,7 @@ task :bundle => :test do
   #  - http://processing.googlecode.com/svn/trunk/processing/build/javadoc/
   #  - http://developer.java.sun.com/developer/products/xml/docs/api/
 
+  puts "Bundling files together..."
   FileUtils.mkdir_p 'build/p5lib/WordCram/library'
   `jar -cvf build/p5lib/WordCram/library/WordCram.jar -C build/classes .`
   FileUtils.cp 'lib/jsoup-1.3.3.jar', 'build/p5lib/WordCram/library'
@@ -87,7 +87,7 @@ task :bundle => :test do
     :subpackages => 'wordcram'
   }
 
-  # puts "javadoc #{to_flags(javadoc_opts)}"
+  puts "Generating javadocs..."
   `javadoc #{to_flags(javadoc_opts)} -use -version`
 
   FileUtils.cp 'wordcram.png', 'build/p5lib/WordCram/reference'
@@ -102,6 +102,7 @@ namespace :publish do
 
     FileUtils.rm_rf(wc_folder)
     FileUtils.cp_r('build/p5lib/WordCram', File.join(lib_folder))
+    puts "Copied files to #{wc_folder}."
   end
 
   desc "Publish & git-tag a fresh WordCram library to github downloads."
@@ -203,7 +204,7 @@ def zip_and_tar_and_upload(version, summary)
   puts `zip -5Tr #{zipfile} build/p5lib/WordCram`
   puts `tar -cvz build/p5lib/WordCram > #{tarfile}`
 
-  puts "uploading to github..."
+  puts "uploading #{zipfile} and #{tarfile} to github..."
   puts `github-downloads create -u danbernier -r WordCram -f #{zipfile} -d "#{summary}"`
   puts `github-downloads create -u danbernier -r WordCram -f #{tarfile} -d "#{summary}"`
 end
