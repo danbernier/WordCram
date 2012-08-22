@@ -64,7 +64,6 @@ end
 desc "Bundle WordCram source, jars, examples, and javadoc in the typical Processing format."
 task :bundle => :test do
 
-  # TODO version # in build file - property? Or rather, pass it as an arg, and have it default to 'latest' or something.
   # TODO put these in if it ever seems useful:
   #  - http://processing.googlecode.com/svn/trunk/processing/build/javadoc/
   #  - http://developer.java.sun.com/developer/products/xml/docs/api/
@@ -120,7 +119,7 @@ namespace :publish do
     # git checkout master, first? Warn if you're not on master?
 
     summary = ask "Give us a quick summary of the release:"
-    release_number = ask "...and the release number:"
+    release_number = File.read('VERSION')
 
     git_tag "release/#{release_number}", "Tagging the #{release_number} release"
     zip_and_tar_and_upload release_number, summary
@@ -136,6 +135,32 @@ namespace :publish do
   end
 end
 task :publish => 'publish:local'
+
+namespace :bump_version do
+  task :tiny do
+    bump_version(2)
+  end
+
+  task :minor do
+    bump_version(1)
+  end
+
+  task :major do
+    bump_version(0)
+  end
+
+  def bump_version(index)
+    version = File.read('VERSION').split('.').map(&:to_i)
+    version[index] = version[index] + 1
+    (index+1).upto(2) do |i|
+      version[i] = 0
+    end
+    version = version.join('.')
+    File.open('VERSION', 'w') { |f| f.puts version }
+    puts "Bumped version to #{version}"
+  end
+end
+task :bump_version => 'bump_version:tiny'
 
 task :default => :test
 
