@@ -50,8 +50,7 @@ task :test => :compile do
   junit_opts = {
     :cp => test_classpath + ':build/tests'
   }
-  cmd = "java #{to_flags(junit_opts)} org.junit.runner.JUnitCore #{unit_test_classes}"
-  test_results = `#{cmd}`
+  test_results = run "java #{to_flags(junit_opts)} org.junit.runner.JUnitCore #{unit_test_classes}"
   puts test_results
 
   if test_results.include? 'FAILURES!!!'
@@ -69,7 +68,7 @@ task :bundle => :test do
 
   puts "Bundling files together..."
   FileUtils.mkdir_p 'build/p5lib/WordCram/library'
-  `jar -cvf build/p5lib/WordCram/library/WordCram.jar -C build/classes .`
+  run "jar -cvf build/p5lib/WordCram/library/WordCram.jar -C build/classes ."
   FileUtils.cp 'lib/jsoup-1.3.3.jar', 'build/p5lib/WordCram/library'
   FileUtils.cp 'lib/cue.language.jar', 'build/p5lib/WordCram/library'
 
@@ -88,7 +87,7 @@ task :bundle => :test do
   }
 
   puts "Generating javadocs..."
-  `javadoc #{to_flags(javadoc_opts)} -use -version`
+  run "javadoc #{to_flags(javadoc_opts)} -use -version"
 
   FileUtils.cp 'wordcram.png', 'build/p5lib/WordCram/reference'
 end
@@ -177,10 +176,7 @@ def compile(src_dir, dest_dir, classpath)
   }
 
   src_files = Dir.glob(File.join(src_dir, '**/*.java')).join(' ')
-  cmd = "javac #{to_flags(javac_opts)} -Xlint #{src_files} 2>&1"
-  #puts cmd
-
-  output = `#{cmd}`
+  output = run "javac #{to_flags(javac_opts)} -Xlint #{src_files} 2>&1"
   if output =~ /\d+ error/
     puts output
     puts "Abort the mission! You have compile errors."
@@ -212,6 +208,16 @@ end
 def ask(message)
   puts message
   STDIN.gets.chomp
+end
+
+def run(cmd)
+  File.open('build/log', 'a') do |f|
+    f.puts "$ #{cmd}"
+    `#{cmd}`.tap do |results|
+      f.puts results
+      f.puts
+    end
+  end
 end
 
 def git_tag(tag_name, commit_message)
