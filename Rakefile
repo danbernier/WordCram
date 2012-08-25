@@ -50,9 +50,7 @@ task :test => :compile do
   junit_opts = {
     :cp => test_classpath + ':build/tests'
   }
-  cmd = "java #{to_flags(junit_opts)} org.junit.runner.JUnitCore #{unit_test_classes}"
-  #puts cmd
-  test_results = `#{cmd}`
+  test_results = run "java #{to_flags(junit_opts)} org.junit.runner.JUnitCore #{unit_test_classes}"
   puts test_results
 
   if test_results.include? 'FAILURES!!!'
@@ -64,13 +62,13 @@ end
 desc "Bundle WordCram source, jars, examples, and javadoc in the typical Processing format."
 task :bundle => :test do
 
-  # TODO version # in build file - property? Or rather, pass it as an arg, and have it default to 'latest' or something.
   # TODO put these in if it ever seems useful:
   #  - http://processing.googlecode.com/svn/trunk/processing/build/javadoc/
   #  - http://developer.java.sun.com/developer/products/xml/docs/api/
 
+  puts "Bundling files together..."
   FileUtils.mkdir_p 'build/p5lib/WordCram/library'
-  `jar -cvf build/p5lib/WordCram/library/WordCram.jar -C build/classes .`
+  run "jar -cvf build/p5lib/WordCram/library/WordCram.jar -C build/classes ."
   FileUtils.cp 'lib/jsoup-1.3.3.jar', 'build/p5lib/WordCram/library'
   FileUtils.cp 'lib/cue.language.jar', 'build/p5lib/WordCram/library'
 
@@ -88,8 +86,8 @@ task :bundle => :test do
     :subpackages => 'wordcram'
   }
 
-  # puts "javadoc #{to_flags(javadoc_opts)}"
-  `javadoc #{to_flags(javadoc_opts)}`
+  puts "Generating javadocs..."
+  run "javadoc #{to_flags(javadoc_opts)} -use -version"
 
   FileUtils.cp 'wordcram.png', 'build/p5lib/WordCram/reference'
 end
@@ -103,6 +101,7 @@ namespace :publish do
 
     FileUtils.rm_rf(wc_folder)
     FileUtils.cp_r('build/p5lib/WordCram', File.join(lib_folder))
+    puts "Copied files to #{wc_folder}."
   end
 
   desc "Publish & git-tag a fresh WordCram library to github downloads."
@@ -120,14 +119,15 @@ namespace :publish do
     # git checkout master, first? Warn if you're not on master?
 
     summary = ask "Give us a quick summary of the release:"
-    release_number = ask "...and the release number:"
+    release_number = File.read('VERSION')
 
     git_tag "release/#{release_number}", "Tagging the #{release_number} release"
     zip_and_tar_and_upload release_number, summary
 
     puts "uploading javadoc to github..."
     puts `git checkout gh-pages`
-    puts `cp -r build/p5lib/WordCram/reference javadoc`
+    puts `rm -rf javadoc`
+    puts `cp -r build/p5lib/WordCram/reference/* javadoc`
     puts `git add javadoc`
     puts `git commit -m "Updating javadoc for #{release_number} release."`
     puts `git push`
@@ -135,6 +135,32 @@ namespace :publish do
   end
 end
 task :publish => 'publish:local'
+
+namespace :bump_version do
+  task :tiny do
+    bump_version(2)
+  end
+
+  task :minor do
+    bump_version(1)
+  end
+
+  task :major do
+    bump_version(0)
+  end
+
+  def bump_version(index)
+    version = File.read('VERSION').split('.').map(&:to_i)
+    version[index] = version[index] + 1
+    (index+1).upto(2) do |i|
+      version[i] = 0
+    end
+    version = version.join('.')
+    File.open('VERSION', 'w') { |f| f.puts version }
+    puts "Bumped version to #{version}"
+  end
+end
+task :bump_version => 'bump_version:tiny'
 
 task :default => :test
 
@@ -150,10 +176,7 @@ def compile(src_dir, dest_dir, classpath)
   }
 
   src_files = Dir.glob(File.join(src_dir, '**/*.java')).join(' ')
-  cmd = "javac #{to_flags(javac_opts)} -Xlint #{src_files} 2>&1"
-  #puts cmd
-
-  output = `#{cmd}`
+  output = run "javac #{to_flags(javac_opts)} -Xlint #{src_files} 2>&1"
   if output =~ /\d+ error/
     puts output
     puts "Abort the mission! You have compile errors."
@@ -177,7 +200,7 @@ def zip_and_tar_and_upload(version, summary)
   puts `zip -5Tr #{zipfile} build/p5lib/WordCram`
   puts `tar -cvz build/p5lib/WordCram > #{tarfile}`
 
-  puts "uploading to github..."
+  puts "uploading #{zipfile} and #{tarfile} to github..."
   puts `github-downloads create -u danbernier -r WordCram -f #{zipfile} -d "#{summary}"`
   puts `github-downloads create -u danbernier -r WordCram -f #{tarfile} -d "#{summary}"`
 end
@@ -185,6 +208,16 @@ end
 def ask(message)
   puts message
   STDIN.gets.chomp
+end
+
+def run(cmd)
+  File.open('build/log', 'a') do |f|
+    f.puts "$ #{cmd}"
+    `#{cmd}`.tap do |results|
+      f.puts results
+      f.puts
+    end
+  end
 end
 
 def git_tag(tag_name, commit_message)

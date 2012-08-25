@@ -64,10 +64,9 @@ import wordcram.text.*;
  * "3.14159", you can remove them with {@link #excludeNumbers()} (the
  * default), or include them with {@link #includeNumbers()}.
  *
- * <p><b>Stop words:</b> <a
- * href="../constant-values.html#wordcram.text.StopWords.ENGLISH">Common
- * English words</a> are removed from the text by default, but you can
- * use your own list of stop words with {@link #withStopWords(String)}.
+ * <p><b>Stop words:</b> WordCram uses <a
+ * href="https://github.com/jdf/cue.language">cue.language</a> to remove common words from the text by default, but you can
+ * add your own stop words with {@link #withStopWords(String)}.
  *
  *
  * <h3>Weight Your Own Words</h3>
@@ -723,9 +722,12 @@ public class WordCram {
                      : text;
 
                 words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text);
+                
+                if (words.length == 0) {
+                	warnScripterAboutEmptyWordArray();
+                }
             }
             words = new WordSorterAndScaler().sortAndScale(words);
-
 
             if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
             if (sizer == null) sizer = Sizers.byWeight(5, 70);
@@ -739,6 +741,13 @@ public class WordCram {
         }
 
         return wordCramEngine;
+    }
+    
+    private void warnScripterAboutEmptyWordArray() {
+    	System.out.println();
+    	System.out.println("cue.language can't find any non-stop words in your text. This could be because your file encoding is wrong, or because all your words are single characters, among other things.");
+    	System.out.println("Since cue.language can't find any words in your text, WordCram won't display any, but your Processing sketch will continue as normal.");
+    	System.out.println("See https://github.com/danbernier/WordCram/issues/8 for more information.");
     }
 
 

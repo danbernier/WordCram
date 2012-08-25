@@ -54,7 +54,7 @@ under File > Examples > Contributed Libraries > WordCram.
 
 If you're running into problems, see the
 [FAQ](https://github.com/danbernier/WordCram/wiki/FAQ), or read the
-[javadocs](http://wordcram.googlecode.com/svn/javadoc/index.html).
+[javadocs](http://danbernier.github.com/WordCram/javadoc/).
 
 If a question has you stumped, and the
 [FAQ](https://github.com/danbernier/WordCram/wiki/FAQ) is no help,

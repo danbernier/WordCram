@@ -65,4 +65,12 @@ public class AWordSorterAndScaler {
 		Assert.assertEquals("crayter", weighted[1].word);
 		Assert.assertEquals("critter", weighted[2].word);
 	}
+
+	@Test
+	public void testEmptyArrayOfWordsReturnsSameEmptyArray() {
+		Word[] words = new Word[0];
+		Word[] sorted = new WordSorterAndScaler().sortAndScale(words);
+
+		Assert.assertEquals(words, sorted);
+	}
 }
