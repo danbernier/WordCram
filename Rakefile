@@ -137,14 +137,17 @@ end
 task :publish => 'publish:local'
 
 namespace :bump_version do
+  desc "Bump the lowest version number"
   task :tiny do
     bump_version(2)
   end
 
+  desc "Bump the middle version number"
   task :minor do
     bump_version(1)
   end
 
+  desc "Bump the highest version number"
   task :major do
     bump_version(0)
   end
@@ -160,6 +163,8 @@ namespace :bump_version do
     puts "Bumped version to #{version}"
   end
 end
+
+desc "Bump the lowest version number"
 task :bump_version => 'bump_version:tiny'
 
 task :default => :test
