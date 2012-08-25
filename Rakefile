@@ -82,7 +82,7 @@ task :bundle => :test do
     :d => 'build/p5lib/WordCram/reference',  # d = destination
     :windowtitle => "WordCram API",
     :overview => 'src/overview.html',
-    :header => "WordCram 0.5",
+    :header => "WordCram #{version}",
     :subpackages => 'wordcram'
   }
 
