@@ -1,3 +1,19 @@
+Release notes for WordCram 0.5.6, 2012-08-25:
+
+* Bug fix for issue #6: clean up old SVN references in javadoc & wiki
+  pages.
+
+* Bug fix for issue #7: remove old StopWords.ENGLISH code from
+  examples.
+
+* Bug fix for issue #8: improve error messages for when cue.language
+  can't guess your language, and you get an empty Word[].
+
+* Faster BBTrees, by moving some of the data to the root node, so it
+  doesn't have to recursively copy it down to all the children nodes.
+
+* Improvements to Rakefile.
+
 Release notes for WordCram 0.5.5, 2012-08-19:
 
 * Bug fix for issue #4: don't throw exceptions if cue.language can't
