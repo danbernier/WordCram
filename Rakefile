@@ -199,18 +199,16 @@ def test_classpath
 end
 
 def zip_and_tar_and_upload(version, summary)
-  zipfile = "build/wordcram.#{version}.zip"
-  tarfile = "build/wordcram.#{version}.tar.gz"
+  zipfile = "wordcram.#{version}.zip"
+  tarfile = "wordcram.#{version}.tar.gz"
 
   puts "zipping & tarring..."
-  run "cd build/p5lib"
-  run "zip -5Tr ../../#{zipfile} WordCram"
-  run "cd ../.."
-  run "tar -cvz -Cbuild/p5lib/ WordCram > #{tarfile}"
+  run "cd build/p5lib; zip -5Tr ../#{zipfile} WordCram; cd ../.."
+  run "tar -cvz -Cbuild/p5lib/ WordCram > build/#{tarfile}"
 
   puts "uploading #{zipfile} and #{tarfile} to github..."
-  run "github-downloads create -u danbernier -r WordCram -f #{zipfile} -d \"#{summary}\""
-  run "github-downloads create -u danbernier -r WordCram -f #{tarfile} -d \"#{summary}\""
+  run "github-downloads create -u danbernier -r WordCram -f build/#{zipfile} -d \"#{summary}\""
+  run "github-downloads create -u danbernier -r WordCram -f build/#{tarfile} -d \"#{summary}\""
 end
 
 def ask(message)
