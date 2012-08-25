@@ -47,12 +47,22 @@ class WordCounter {
         return this;
     }
 
-    public Word[] count(String text) {
-        if (cueStopWords == null) {
-            cueStopWords = StopWords.guess(text);
-        }
-        return countWords(text);
-    }
+	public Word[] count(String text) {
+		if (cueStopWords == null) {
+			cueStopWords = StopWords.guess(text);
+			tellScripterAboutTheGuess(cueStopWords);
+		}
+		return countWords(text);
+	}
+
+	private void tellScripterAboutTheGuess(StopWords stopWords) {
+		// TODO Find a better way to do this; it prints out during the tests. =p
+		if (stopWords == null) {
+			System.out.println("cue.language can't guess what language your text is in.");
+		} else {
+			System.out.println("cue.language guesses your text is in " + stopWords);
+		}
+	}
 
     private Word[] countWords(String text) {
         Counter<String> counter = new Counter<String>();
