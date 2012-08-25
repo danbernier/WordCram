@@ -128,7 +128,7 @@ namespace :publish do
     puts "uploading javadoc to github..."
     run "git checkout gh-pages"
     run "rm -rf javadoc"
-    run "cp -r build/p5lib/WordCram/reference/* javadoc"
+    run "cp -r build/p5lib/WordCram/reference javadoc"
     run "git add javadoc"
     run "git commit -m \"Updating javadoc for #{release_number} release.\""
     run "git push"
