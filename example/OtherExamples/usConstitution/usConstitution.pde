@@ -19,7 +19,6 @@ void setup() {
 void initWordCram() {
   wordCram = new WordCram(this)
       .fromTextFile("../../usconst.txt")
-      .withStopWords(StopWords.ENGLISH + " shall")
       .withFont(createFont("../../LiberationSerif-Regular.ttf", 1))
       .sizedByWeight(10, 90)
       .withColors(color(0, 250, 200), color(30), color(170, 230, 200));

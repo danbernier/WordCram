@@ -35,14 +35,4 @@ new WordCram(this)
    */
   //.withStopWords("Kari jungle Elephant")
   
-  /*
-   * By default, WordCram already filters out common
-   * English words, but you don't have to. You can
-   * pass it any list you want as a space-delimited
-   * string.
-   * Or, you can weed out common English words plus
-   * a few others, like this:
-   */
-  //.withStopWords(StopWords.ENGLISH + "Kari jungle elephant")
-  
   .drawAll();
