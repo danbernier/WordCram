@@ -203,8 +203,10 @@ def zip_and_tar_and_upload(version, summary)
   tarfile = "build/wordcram.#{version}.tar.gz"
 
   puts "zipping & tarring..."
-  run "zip -5Tr #{zipfile} build/p5lib/WordCram"
-  run "tar -cvz build/p5lib/WordCram > #{tarfile}"
+  run "cd build/p5lib"
+  run "zip -5Tr ../../#{zipfile} WordCram"
+  run "cd ../.."
+  run "tar -cvz -Cbuild/p5lib/ WordCram > #{tarfile}"
 
   puts "uploading #{zipfile} and #{tarfile} to github..."
   run "github-downloads create -u danbernier -r WordCram -f #{zipfile} -d \"#{summary}\""
