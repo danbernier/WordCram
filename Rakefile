@@ -119,19 +119,20 @@ namespace :publish do
     # git checkout master, first? Warn if you're not on master?
 
     summary = ask "Give us a quick summary of the release:"
-    release_number = File.read('VERSION')
+    release_number = version
+    puts "Release number: #{release_number}"
 
     git_tag "release/#{release_number}", "Tagging the #{release_number} release"
     zip_and_tar_and_upload release_number, summary
 
     puts "uploading javadoc to github..."
-    puts `git checkout gh-pages`
-    puts `rm -rf javadoc`
-    puts `cp -r build/p5lib/WordCram/reference/* javadoc`
-    puts `git add javadoc`
-    puts `git commit -m "Updating javadoc for #{release_number} release."`
-    puts `git push`
-    puts `git checkout master`
+    run "git checkout gh-pages"
+    run "rm -rf javadoc"
+    run "cp -r build/p5lib/WordCram/reference/* javadoc"
+    run "git add javadoc"
+    run "git commit -m \"Updating javadoc for #{release_number} release.\""
+    run "git push"
+    run "git checkout master"
   end
 end
 task :publish => 'publish:local'
@@ -202,12 +203,12 @@ def zip_and_tar_and_upload(version, summary)
   tarfile = "build/wordcram.#{version}.tar.gz"
 
   puts "zipping & tarring..."
-  puts `zip -5Tr #{zipfile} build/p5lib/WordCram`
-  puts `tar -cvz build/p5lib/WordCram > #{tarfile}`
+  run "zip -5Tr #{zipfile} build/p5lib/WordCram"
+  run "tar -cvz build/p5lib/WordCram > #{tarfile}"
 
   puts "uploading #{zipfile} and #{tarfile} to github..."
-  puts `github-downloads create -u danbernier -r WordCram -f #{zipfile} -d "#{summary}"`
-  puts `github-downloads create -u danbernier -r WordCram -f #{tarfile} -d "#{summary}"`
+  run "github-downloads create -u danbernier -r WordCram -f #{zipfile} -d \"#{summary}\""
+  run "github-downloads create -u danbernier -r WordCram -f #{tarfile} -d \"#{summary}\""
 end
 
 def ask(message)
@@ -227,7 +228,7 @@ end
 
 def git_tag(tag_name, commit_message)
   puts "git tagging..."
-  puts `git tag #{tag_name} -m "#{commit_message}"`
+  run "git tag #{tag_name} -m \"#{commit_message}\""
   # TODO Um, git pull && git push?
 end
 
@@ -242,6 +243,10 @@ def to_flags(opts)
     value = "\"#{value}\"" if value.to_s.include? ' '
     "-#{flag} #{value}"
   }.join(' ')
+end
+
+def version
+  File.read('VERSION').strip
 end
 
 def build_properties
