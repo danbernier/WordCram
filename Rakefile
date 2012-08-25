@@ -120,18 +120,19 @@ namespace :publish do
 
     summary = ask "Give us a quick summary of the release:"
     release_number = File.read('VERSION')
+    puts "Release number: #{release_number}"
 
     git_tag "release/#{release_number}", "Tagging the #{release_number} release"
     zip_and_tar_and_upload release_number, summary
 
     puts "uploading javadoc to github..."
-    puts `git checkout gh-pages`
-    puts `rm -rf javadoc`
-    puts `cp -r build/p5lib/WordCram/reference/* javadoc`
-    puts `git add javadoc`
-    puts `git commit -m "Updating javadoc for #{release_number} release."`
-    puts `git push`
-    puts `git checkout master`
+    run "git checkout gh-pages"
+    run "rm -rf javadoc"
+    run "cp -r build/p5lib/WordCram/reference/* javadoc"
+    run "git add javadoc"
+    run "git commit -m \"Updating javadoc for #{release_number} release.\""
+    run "git push"
+    run "git checkout master"
   end
 end
 task :publish => 'publish:local'
