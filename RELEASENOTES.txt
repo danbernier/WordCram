@@ -1,3 +1,37 @@
+Release notes for WordCram 0.5.5, 2012-08-19:
+
+* Bug fix for issue #4: don't throw exceptions if cue.language can't
+  guess what language a text is in. Now, if cue can't guess the
+  language, it won't count *any* word as a stop word.
+
+* Make BBTree, BBTreeBuilder, and WordShaper all public. These
+  internal classes are the core of how WordCram detects whether two
+  words overlap. I made them public a) in case they're useful to
+  anyone else, and b) so I can stop making them public whenever I want
+  to experiment with them in a Processing sketch.
+
+Release notes for WordCram 0.5.4, 2012-07-31:
+
+* Bug fix for issue #3: if you pass multiple Strings to
+  fromTextString, join them with a space (' '), not the empty
+  string. Originally, this was meant to join lines from a file, like
+  what's returned by Processing's loadFile method. But if you pass an
+  array of word Strings to it, it should work just as well. This fix
+  enables that.
+
+Release notes for WordCram 0.5.3, 2012-07-26:
+
+* Enable Processing 2.0 compatibility.
+
+Release notes for WordCram 0.5.2, 2012-06-22:
+
+* Make it easier to click on words. Rather than strictly checking
+  whether a point is inside a word's shape (which excludes, for
+  example, the center of an 'O'), check whether the point is inside
+  its bounding box - which is how I imagine most things (like web
+  browsers) handle it. If the bounding boxes for multiple words
+  overlap the point, it returns the smallest: the most-specific.
+
 Release notes for WordCram 0.5.1, 2012-04-20:
 
 * Bug fix for issue 13 (on googlecode): don't consider skipped words
