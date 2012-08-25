@@ -723,9 +723,12 @@ public class WordCram {
                      : text;
 
                 words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text);
+                
+                if (words.length == 0) {
+                	warnScripterAboutEmptyWordArray();
+                }
             }
             words = new WordSorterAndScaler().sortAndScale(words);
-
 
             if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
             if (sizer == null) sizer = Sizers.byWeight(5, 70);
@@ -739,6 +742,13 @@ public class WordCram {
         }
 
         return wordCramEngine;
+    }
+    
+    private void warnScripterAboutEmptyWordArray() {
+    	System.out.println();
+    	System.out.println("cue.language can't find any non-stop words in your text. This could be because your file encoding is wrong, or because all your words are single characters, among other things.");
+    	System.out.println("Since cue.language can't find any words in your text, WordCram won't display any, but your Processing sketch will continue as normal.");
+    	System.out.println("See https://github.com/danbernier/WordCram/issues/8 for more information.");
     }
 
 
