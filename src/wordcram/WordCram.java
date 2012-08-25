@@ -64,10 +64,9 @@ import wordcram.text.*;
  * "3.14159", you can remove them with {@link #excludeNumbers()} (the
  * default), or include them with {@link #includeNumbers()}.
  *
- * <p><b>Stop words:</b> <a
- * href="../constant-values.html#wordcram.text.StopWords.ENGLISH">Common
- * English words</a> are removed from the text by default, but you can
- * use your own list of stop words with {@link #withStopWords(String)}.
+ * <p><b>Stop words:</b> WordCram uses <a
+ * href="https://github.com/jdf/cue.language">cue.language</a> to remove common words from the text by default, but you can
+ * add your own stop words with {@link #withStopWords(String)}.
  *
  *
  * <h3>Weight Your Own Words</h3>
