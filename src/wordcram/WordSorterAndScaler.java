@@ -21,6 +21,9 @@ import java.util.Arrays;
 class WordSorterAndScaler {
 
     public Word[] sortAndScale(Word[] rawWords) {
+    	if (rawWords.length == 0) {
+    		return rawWords;
+    	}
 
         Word[] words = copy(rawWords);
         Arrays.sort(words);
