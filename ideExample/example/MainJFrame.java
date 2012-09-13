@@ -12,7 +12,7 @@ public class MainJFrame {
 		//PApplet.main (new String[] { "--present", "--bgcolor=#000000", "--stop-color=#cccccc", "example.Main"});
 		
         // But now this method.
-        JFrame frame = new JFrame ();
+        JFrame frame = new JFrame();
         frame.setLayout(new BorderLayout());
         PApplet sketch = new example.Main();
         frame.add(sketch, BorderLayout.CENTER);
