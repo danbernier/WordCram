@@ -20,7 +20,7 @@ import org.junit.Test;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
-public class AWordCramEngine {
+public class AnIterativeLayoutEngine {
 
 	private PGraphics destination;
 	private WordFonter fonter;
@@ -67,7 +67,7 @@ public class AWordCramEngine {
 			when(angler.angleFor(words[i])).thenReturn(angles[i]);
 		}
 
-		WordCramEngine engine = getEngine(words);
+		IterativeLayoutEngine engine = getEngine(words);
 
 		for (int i = 0; i < words.length; i++) {
 			verify(shaper).getShapeFor(words[i].word, pFont, sizes[i], angles[i], renderOptions.minShapeSize);
@@ -83,7 +83,7 @@ public class AWordCramEngine {
 		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(bigShape);
 		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(null);
 
-		WordCramEngine engine = getEngine(big, small);
+		IterativeLayoutEngine engine = getEngine(big, small);
 		Word[] skippedWords = engine.getSkippedWords();
 
 		Assert.assertEquals(1, skippedWords.length);
@@ -104,7 +104,7 @@ public class AWordCramEngine {
 
 		when(shaper.getShapeFor(anyString(), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(new Rectangle());
 
-		WordCramEngine engine = getEngine(words);
+		IterativeLayoutEngine engine = getEngine(words);
 		Word[] skippedWords = engine.getSkippedWords();
 
 		Assert.assertEquals(3, skippedWords.length);
@@ -113,7 +113,7 @@ public class AWordCramEngine {
 		Assert.assertSame(words[4], skippedWords[2]);
 	}
 
-	private WordCramEngine getEngine(Word... words) {
-		return new WordCramEngine(destination, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
+	private IterativeLayoutEngine getEngine(Word... words) {
+		return new IterativeLayoutEngine(destination, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
 	}
 }
