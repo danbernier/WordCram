@@ -197,6 +197,7 @@ public class WordCram {
 
     private PGraphics destination = null;
     private RenderOptions renderOptions = new RenderOptions();
+    private boolean useSimulatedAnnealing = false;
 
     /**
      * Make a new WordCram.
@@ -709,6 +710,11 @@ public class WordCram {
         renderOptions.wordPadding = padding;
         return this;
     }
+    
+    public WordCram useSimulatedAnnealing() {
+    	this.useSimulatedAnnealing = true;
+    	return this;
+    }
 
 
     private WordCramEngine getWordCramEngine() {
@@ -737,7 +743,13 @@ public class WordCram {
             if (nudger == null) nudger = new SpiralWordNudger();
 
             PGraphics canvas = destination == null? parent.g : destination;
-            wordCramEngine = new IterativeLayoutEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
+            
+            if (useSimulatedAnnealing) {
+            	wordCramEngine = new SimulatedAnnealingEngine(); 
+            }
+            else {
+            	wordCramEngine = new IterativeLayoutEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
+            }
         }
 
         return wordCramEngine;
