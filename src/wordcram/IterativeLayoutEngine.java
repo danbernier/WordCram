@@ -19,80 +19,17 @@ limitations under the License.
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 
 import processing.core.*;
 
-class IterativeLayoutEngine implements WordCramEngine {
+class IterativeLayoutEngine extends AbstractWordCramEngine implements WordCramEngine {
 
-    private PGraphics destination;
-
-    private WordFonter fonter;
-    private WordSizer sizer;
-    private WordColorer colorer;
-    private WordAngler angler;
-    private WordPlacer placer;
-    private WordNudger nudger;
-
-    private Word[] words; // just a safe copy
-    private EngineWord[] eWords;
-    private int eWordIndex = -1;
-
-    private RenderOptions renderOptions;
-
-    IterativeLayoutEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
-        this.destination = destination;
-
-        this.fonter = fonter;
-        this.sizer = sizer;
-        this.colorer = colorer;
-        this.angler = angler;
-        this.placer = placer;
-        this.nudger = nudger;
-
-        this.renderOptions = renderOptions;
-        this.words = words;
-        this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
-    }
-
-    private EngineWord[] wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
-        ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
-
-        int maxNumberOfWords = words.length;
-        if (renderOptions.maxNumberOfWordsToDraw >= 0) {
-            maxNumberOfWords = Math.min(maxNumberOfWords, renderOptions.maxNumberOfWordsToDraw);
-        }
-
-        for (int i = 0; i < maxNumberOfWords; i++) {
-            Word word = words[i];
-            EngineWord eWord = new EngineWord(word, i, words.length, bbTreeBuilder);
-
-            PFont wordFont = word.getFont(fonter);
-            float wordSize = word.getSize(sizer, i, words.length);
-            float wordAngle = word.getAngle(angler);
-
-            Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle, renderOptions.minShapeSize);
-            if (shape == null) {
-                skipWord(word, WordCram.SHAPE_WAS_TOO_SMALL);
-            }
-            else {
-                eWord.setShape(shape, renderOptions.wordPadding);
-                engineWords.add(eWord);  // DON'T add eWords with no shape.
-            }
-        }
-
-        for (int i = maxNumberOfWords; i < words.length; i++) {
-            skipWord(words[i], WordCram.WAS_OVER_MAX_NUMBER_OF_WORDS);
-        }
-
-        return engineWords.toArray(new EngineWord[0]);
-    }
-
-    private void skipWord(Word word, int reason) {
-        // TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
-        // NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
-        word.wasSkippedBecause(reason);
-    }
+    IterativeLayoutEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer,
+			WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder,
+			RenderOptions renderOptions)
+	{
+		super(destination, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
+	}
 
     public boolean hasMore() {
         return eWordIndex < eWords.length-1;
@@ -176,27 +113,6 @@ class IterativeLayoutEngine implements WordCramEngine {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setPaint(new Color(word.word.getColor(colorer), true));
         g2.fill(path2d);
-    }
-
-    public Word getWordAt(float x, float y) {
-        for (int i = eWords.length-1; i >= 0; i--) {
-            if (eWords[i].wasPlaced()) {
-                if (eWords[i].containsPoint(x, y)) {
-                    return eWords[i].word;
-                }
-            }
-        }
-        return null;
-    }
-
-    public Word[] getSkippedWords() {
-        ArrayList<Word> skippedWords = new ArrayList<Word>();
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].wasSkipped()) {
-                skippedWords.add(words[i]);
-            }
-        }
-        return skippedWords.toArray(new Word[0]);
     }
 
     public float getProgress() {

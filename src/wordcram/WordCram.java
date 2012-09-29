@@ -745,7 +745,7 @@ public class WordCram {
             PGraphics canvas = destination == null? parent.g : destination;
             
             if (useSimulatedAnnealing) {
-            	wordCramEngine = new SimulatedAnnealingEngine(); 
+            	wordCramEngine = new SimulatedAnnealingEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions); 
             }
             else {
             	wordCramEngine = new IterativeLayoutEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);

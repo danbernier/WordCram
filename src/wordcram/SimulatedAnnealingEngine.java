@@ -1,24 +1,22 @@
 package wordcram;
 
-public class SimulatedAnnealingEngine implements WordCramEngine {
+import processing.core.PGraphics;
+
+public class SimulatedAnnealingEngine extends AbstractWordCramEngine implements WordCramEngine {
+
+	SimulatedAnnealingEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer,
+			WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper,
+			BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions)
+	{
+		super(destination, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
+	}
 
 	//====================================================================
 	// definite keepers:
 	
 	public void drawAll() {
-		// TODO Auto-generated method stub
-	}
-
-	public Word getWordAt(float x, float y) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Word[] getSkippedWords() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+		
+	}	
 	
 	//====================================================================
 	// not so sure:
