@@ -16,6 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import java.awt.Shape;
 import java.util.HashMap;
 
 import processing.core.PFont;
@@ -336,5 +337,39 @@ public class Word implements Comparable<Word> {
             return 1;
         }
         else return 0;
+    }
+    
+    // Note: these are only so we can delegate to EngineWord for getShape().
+    private EngineWord engineWord;
+    void setEngineWord(EngineWord engineWord) {
+    	this.engineWord = engineWord;
+    }
+    
+
+    // These are down here, because it comes from the EngineWord, *not* from the Fonter, Angler, etc.
+    /**
+     * Gets the width, in pixels, of the java.awt.Shape that will be rendered for 
+     * this Word, based on the Font, Angle, and Size for this Word.
+     * If that all hasn't been figured out yet, then this returns 0.
+     * @return The width in pixels of this Word's Shape, or 0, if it hasn't 
+     * been rendered yet.
+     * @see #getRenderedHeight()
+     */
+    public float getRenderedWidth() {
+    	if (engineWord == null) return 0.0f;
+    	return (float)engineWord.getShape().getBounds2D().getWidth();
+    }
+
+    /**
+     * Gets the height, in pixels, of the java.awt.Shape that will be rendered for 
+     * this Word, based on the Font, Angle, and Size for this Word.
+     * If that all hasn't been figured out yet, then this returns 0.
+     * @return The height in pixels of this Word's Shape, or 0, if it hasn't 
+     * been rendered yet.
+     * @see #getRenderedWidth()
+     */
+    public float getRenderedHeight() {
+    	if (engineWord == null) return 0.0f;
+    	return (float)engineWord.getShape().getBounds2D().getHeight();
     }
 }

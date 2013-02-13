@@ -36,6 +36,7 @@ class EngineWord {
         this.word = word;
         this.rank = rank;
         this.bbTreeBuilder = bbTreeBuilder;
+        word.setEngineWord(this);
     }
 
     void setShape(Shape shape, int swelling) {
