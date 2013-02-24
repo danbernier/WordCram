@@ -1,3 +1,9 @@
+Release notes for WordCram 0.5.7, date TBD:
+
+* Fix for issue #13: give Words a way to know their rendered width and height.
+
+* Fix for issue #12: default space between words to 1 pixel (was 0).
+
 Release notes for WordCram 0.5.6, 2012-08-25:
 
 * Bug fix for issue #6: clean up old SVN references in javadoc & wiki
@@ -159,9 +165,9 @@ finer control over the rendering process.
 
 Release notes for WordCram 0.3.1, 2010-11-10:
 
-* Bug fix: in 0.3, the WordCram library folder under Processing was 
-  renamed from wordcram to WordCram, but the .jar was still 
-  wordcram.jar, so Processing didn't load it.  Renamed it to 
+* Bug fix: in 0.3, the WordCram library folder under Processing was
+  renamed from wordcram to WordCram, but the .jar was still
+  wordcram.jar, so Processing didn't load it.  Renamed it to
   WordCram.jar.
 
 
@@ -169,7 +175,7 @@ Release notes for WordCram 0.3, 2010-11-07:
 
 * Added TextSource, so WordCram can count words from different kinds
   of source, including web pages and text files.
-* Added a fluent API for building WordCrams: 
+* Added a fluent API for building WordCrams:
   new WordCram(this).forWebPage("{url}").sizedByWeight(10, 100).
 * Added case-sensitive word counting, and the ability to exclude
   numeric words.
