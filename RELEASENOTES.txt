@@ -4,6 +4,11 @@ Release notes for WordCram 0.5.7, date TBD:
 
 * Fix for issue #12: default space between words to 1 pixel (was 0).
 
+* Fix for issue #5: make it easier to make a wordcram from multiple text
+  sources. If you call fromWebPage, fromTextFile, fromTextSource, etc, multiple
+  times, instead of overwriting the previous text source, it collects them.
+  You can mix and match text sources. They're still loaded at the same time.
+
 Release notes for WordCram 0.5.6, 2012-08-25:
 
 * Bug fix for issue #6: clean up old SVN references in javadoc & wiki
