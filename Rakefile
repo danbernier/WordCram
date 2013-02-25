@@ -69,7 +69,7 @@ task :bundle => :test do
   puts "Bundling files together..."
   FileUtils.mkdir_p 'build/p5lib/WordCram/library'
   run "jar -cvf build/p5lib/WordCram/library/WordCram.jar -C build/classes ."
-  FileUtils.cp 'lib/jsoup-1.3.3.jar', 'build/p5lib/WordCram/library'
+  FileUtils.cp 'lib/jsoup-1.7.2.jar', 'build/p5lib/WordCram/library'
   FileUtils.cp 'lib/cue.language.jar', 'build/p5lib/WordCram/library'
 
   FileUtils.cp_r 'example', 'build/p5lib/WordCram/examples'
@@ -195,7 +195,7 @@ def compile(src_dir, dest_dir, classpath)
 end
 
 def main_classpath
-  ['lib/processing/core.jar', 'lib/jsoup-1.3.3.jar', 'lib/cue.language.jar'] * ':'
+  ['lib/processing/core.jar', 'lib/jsoup-1.7.2.jar', 'lib/cue.language.jar'] * ':'
 end
 
 def test_classpath
