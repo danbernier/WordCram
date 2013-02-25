@@ -132,6 +132,7 @@ namespace :publish do
     run "git add javadoc"
     run "git commit -m \"Updating javadoc for #{release_number} release.\""
     run "git push"
+    run "git push --tags"
     run "git checkout master"
   end
 end
