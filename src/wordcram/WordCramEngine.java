@@ -39,6 +39,8 @@ class WordCramEngine {
     private int eWordIndex = -1;
 
     private RenderOptions renderOptions;
+    private WordShaper shaper;
+    private BBTreeBuilder bbTreeBuilder;
 
     WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
         this.destination = destination;
@@ -52,7 +54,9 @@ class WordCramEngine {
 
         this.renderOptions = renderOptions;
         this.words = words;
-        this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
+
+        this.shaper = shaper;
+        this.bbTreeBuilder = bbTreeBuilder;
     }
 
     private EngineWord[] wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
@@ -95,10 +99,15 @@ class WordCramEngine {
     }
 
     boolean hasMore() {
+        // If you're sketching with hasMore() & drawNext(), this will probably
+        // be called first, so make sure reset() has been called.
+        if (eWords == null) { reset(); }
+
         return eWordIndex < eWords.length-1;
     }
 
     void drawAll() {
+        reset();
         while(hasMore()) {
             drawNext();
         }
@@ -113,6 +122,15 @@ class WordCramEngine {
         if (wasPlaced) { // TODO unit test (somehow)
             drawWordImage(eWord);
         }
+    }
+
+    void reset() {
+        for (Word word : words) {
+            word.reset();
+        }
+
+        this.eWordIndex = -1;
+        this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
     }
 
     private boolean placeWord(EngineWord eWord) {

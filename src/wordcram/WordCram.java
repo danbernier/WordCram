@@ -838,6 +838,10 @@ public class WordCram {
         getWordCramEngine().drawAll();
     }
 
+    public void reset() {
+        getWordCramEngine().reset();
+    }
+
     /**
      * Get the Words that WordCram is drawing. This can be useful
      * if you want to inspect exactly how the words were weighted,

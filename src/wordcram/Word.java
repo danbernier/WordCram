@@ -90,6 +90,7 @@ public class Word implements Comparable<Word> {
     private PVector targetPlace;
     private PVector renderedPlace;
     private Integer skippedBecause;
+    private EngineWord engineWord;
 
     private HashMap<String,Object> properties = new HashMap<String,Object>();
 
@@ -338,20 +339,19 @@ public class Word implements Comparable<Word> {
         }
         else return 0;
     }
-    
-    // Note: these are only so we can delegate to EngineWord for getShape().
-    private EngineWord engineWord;
+
+    // Note: this is only so we can delegate to EngineWord for getShape().
     void setEngineWord(EngineWord engineWord) {
     	this.engineWord = engineWord;
     }
-    
+
 
     // These are down here, because it comes from the EngineWord, *not* from the Fonter, Angler, etc.
     /**
-     * Gets the width, in pixels, of the java.awt.Shape that will be rendered for 
+     * Gets the width, in pixels, of the java.awt.Shape that will be rendered for
      * this Word, based on the Font, Angle, and Size for this Word.
      * If that all hasn't been figured out yet, then this returns 0.
-     * @return The width in pixels of this Word's Shape, or 0, if it hasn't 
+     * @return The width in pixels of this Word's Shape, or 0, if it hasn't
      * been rendered yet.
      * @see #getRenderedHeight()
      */
@@ -361,15 +361,26 @@ public class Word implements Comparable<Word> {
     }
 
     /**
-     * Gets the height, in pixels, of the java.awt.Shape that will be rendered for 
+     * Gets the height, in pixels, of the java.awt.Shape that will be rendered for
      * this Word, based on the Font, Angle, and Size for this Word.
      * If that all hasn't been figured out yet, then this returns 0.
-     * @return The height in pixels of this Word's Shape, or 0, if it hasn't 
+     * @return The height in pixels of this Word's Shape, or 0, if it hasn't
      * been rendered yet.
      * @see #getRenderedWidth()
      */
     public float getRenderedHeight() {
     	if (engineWord == null) return 0.0f;
     	return (float)engineWord.getShape().getBounds2D().getHeight();
+    }
+
+    void reset() {
+        renderedSize = null;
+        renderedAngle = null;
+        renderedFont = null;
+        renderedColor = null;
+        targetPlace = null;
+        renderedPlace = null;
+        skippedBecause = null;
+        engineWord = null;
     }
 }

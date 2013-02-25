@@ -17,6 +17,9 @@ Release notes for WordCram 0.5.7, date TBD:
 * Fix for issue #14: support filtering HTML by CSS selectors. (Maybe we'll add
   xpath filtering, if there's demand for it.)
 
+* Fix for issue #17: add WordCram#reset(), so you can re-render a WordCram
+  without loading all the text over and over again.
+
 Release notes for WordCram 0.5.6, 2012-08-25:
 
 * Bug fix for issue #6: clean up old SVN references in javadoc & wiki
