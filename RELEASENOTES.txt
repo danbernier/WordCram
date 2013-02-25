@@ -9,6 +9,9 @@ Release notes for WordCram 0.5.7, date TBD:
   times, instead of overwriting the previous text source, it collects them.
   You can mix and match text sources. They're still loaded at the same time.
 
+* Fix for issue #15: move binaries from github downloads to AWS S3.
+  (This was all rake changes.)
+
 Release notes for WordCram 0.5.6, 2012-08-25:
 
 * Bug fix for issue #6: clean up old SVN references in javadoc & wiki
