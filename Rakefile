@@ -9,7 +9,6 @@ http://stackoverflow.com/questions/3939595/making-javadocs-available-with-github
 
 TODO: for releases, auto-tweet
 TODO: point blog, etc at http://danbernier.github.com/WordCram
-TODO: add a task to generate a sample build.json.
 TODO: add some kind of 'verbose' flag to this. Factor those puts-es into an announce method, which observes the -v flag.
 =end
 
@@ -163,7 +162,10 @@ namespace :bump_version do
     end
     version = version.join('.')
     File.open('VERSION', 'w') { |f| f.puts version }
+    run "git add VERSION"
+    run "git commit -m \"Bump version to #{version}\""
     puts "Bumped version to #{version}"
+    puts `git log -1`
   end
 end
 
@@ -248,7 +250,6 @@ end
 def git_tag(tag_name, commit_message)
   puts "git tagging..."
   run "git tag #{tag_name} -m \"#{commit_message}\""
-  # TODO Um, git pull && git push?
 end
 
 def unit_test_classes
