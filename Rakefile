@@ -162,7 +162,10 @@ namespace :bump_version do
     end
     version = version.join('.')
     File.open('VERSION', 'w') { |f| f.puts version }
+    run "git add VERSION"
+    run "git commit -m \"Bump version to #{version}\""
     puts "Bumped version to #{version}"
+    puts `git log -1`
   end
 end
 
