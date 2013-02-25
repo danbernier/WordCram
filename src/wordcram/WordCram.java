@@ -301,7 +301,27 @@ public class WordCram {
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram fromWebPage(String webPageAddress) {
-        return fromText(new WebPage(webPageAddress, parent));
+        return fromWebPage(webPageAddress, null);
+    }
+
+    /**
+     * Make a WordCram from the text in any elements on a web page that match the
+     * <tt>cssSelector</tt>.
+     * Just before the WordCram is drawn, it'll load the web page's HTML, scrape
+     * out the text, and count and sort the words.
+     *
+     * HTML parsing is handled by Jsoup, so see
+     * <a href="http://jsoup.org/cookbook/extracting-data/selector-syntax">the
+     * Jsoup selector documentation</a> if you're having trouble writing your
+     * selector.
+     *
+     * @param webPageAddress the URL of the web page to load
+     * @param cssSelector a CSS selector to filter the HTML by, before extracting
+     * text
+     * @return The WordCram, for further setup or drawing.
+     */
+    public WordCram fromWebPage(String webPageAddress, String cssSelector) {
+        return fromText(new WebPage(webPageAddress, cssSelector, parent));
     }
 
     /**
@@ -313,7 +333,27 @@ public class WordCram {
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram fromHtmlFile(String htmlFilePath) {
-        return fromText(new WebPage(htmlFilePath, parent));
+        return fromHtmlFile(htmlFilePath, null);
+    }
+
+    /**
+     * Make a WordCram from the text in any elements on a web page that match the
+     * <tt>cssSelector</tt>.
+     * Just before the WordCram is drawn, it'll load the file's HTML, scrape out the text,
+     * and count and sort the words.
+     *
+     * HTML parsing is handled by Jsoup, so see
+     * <a href="http://jsoup.org/cookbook/extracting-data/selector-syntax">the
+     * Jsoup selector documentation</a> if you're having trouble writing your
+     * selector.
+     *
+     * @param htmlFilePath the path of the html file to load
+     * @param cssSelector a CSS selector to filter the HTML by, before extracting
+     * text
+     * @return The WordCram, for further setup or drawing.
+     */
+    public WordCram fromHtmlFile(String htmlFilePath, String cssSelector) {
+        return fromText(new WebPage(htmlFilePath, cssSelector, parent));
     }
 
     // TODO from an inputstream!  or reader, anyway
@@ -327,11 +367,18 @@ public class WordCram {
      * href="http://processing.org/reference/loadStrings_.html"
      * target="blank">loadStrings()</a>.
      *
+     * @deprecated because its signature is annoying, and makes it hard to
+     * pass a CSS Selector. If you love this method, and want it to stick around,
+     * let me know: <a href="http://github.com/danbernier/WordCram/issues">open
+     * a github issue</a>, send me a
+     * <a href="http://twitter.com/wordcram">tweet</a>,
+     * or say hello at wordcram at gmail.
+     * Otherwise, it'll be deleted in a future release, probably 0.6.
+     *
      * @param html the String(s) of HTML
      * @return The WordCram, for further setup or drawing.
      */
-    //example fromHtmlString(loadStrings("my.html"))
-    //example fromHtmlString("<html><p>Hello there!</p></html>")
+    @Deprecated
     public WordCram fromHtmlString(String... html) {
         return fromText(new Html(PApplet.join(html, "")));
     }

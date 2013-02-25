@@ -25,6 +25,6 @@ public class Html implements TextSource {
     }
 
     public String getText() {
-        return new Html2Text().text(src);
+        return new Html2Text().text(src, null);
     }
 }
