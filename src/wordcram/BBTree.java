@@ -114,13 +114,15 @@ public class BBTree {
         return kids == null;
     }
 
-    void swell(int extra) {
+    BBTree swell(int extra) {
         swelling += extra;
         if (!isLeaf()) {
             for (int i = 0; i < kids.length; i++) {
                 kids[i].swell(extra);
             }
         }
+
+        return this;
     }
 
     public void draw(PGraphics g) {

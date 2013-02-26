@@ -28,9 +28,7 @@ public class BBTreeBuilder {
         int right = x + (int) bounds.getWidth();
         int bottom = y + (int) bounds.getHeight();
 
-        BBTree tree = makeTree(shape, minBoxSize, x, y, right, bottom);
-        tree.swell(swelling);
-        return tree;
+        return makeTree(shape, minBoxSize, x, y, right, bottom).swell(swelling);
     }
 
     private BBTree makeTree(Shape shape, int minBoxSize, int x, int y,
