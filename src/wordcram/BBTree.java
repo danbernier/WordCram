@@ -54,12 +54,12 @@ public class BBTree {
     }
 
     public void setLocation(int left, int top) {
-	rootX = left;
-	rootY = top;
+    	rootX = left;
+    	rootY = top;
     }
 
     private BBTree getRoot() {
-	return parent == null ? this : parent.getRoot();
+	   return parent == null ? this : parent.getRoot();
     }
 
     public boolean overlaps(BBTree otherTree) {
@@ -103,7 +103,7 @@ public class BBTree {
     }
 
     boolean containsPoint(float x, float y) {
-	BBTree root = getRoot();
+        BBTree root = getRoot();
         return root.rootX + this.left < x &&
             root.rootX + this.right > x &&
             root.rootY + this.top < y &&
