@@ -24,6 +24,12 @@ public class WebPage implements TextSource {
     private String cssSelector;
     private PApplet parent;
 
+    private String cachedHtml;
+
+    public WebPage(String url, PApplet parent) {
+        this(url, null, parent);
+    }
+
     public WebPage(String url, String cssSelector, PApplet parent) {
         this.url = url;
         this.cssSelector = cssSelector;
@@ -31,8 +37,14 @@ public class WebPage implements TextSource {
     }
 
     public String getText() {
-        String html = PApplet.join(parent.loadStrings(url), ' ');
-        return new Html2Text().text(html, cssSelector);
+        return new Html2Text().text(loadHtml(), cssSelector);
+    }
+
+    private String loadHtml() {
+        if (cachedHtml == null) {
+            cachedHtml = PApplet.join(parent.loadStrings(url), ' ');
+        }
+        return cachedHtml;
     }
 
 }
