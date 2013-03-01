@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 
 import junit.framework.Assert;
 
@@ -78,7 +79,7 @@ public class AWordCramEngine {
 	public void willSkipWordsWhoseShapesAreTooSmall() {
 		Word big = new Word("big", 10);
 		Word small = new Word("small", 1);
-		Shape bigShape = mock(Shape.class);
+		Shape bigShape = new Rectangle2D.Float(0, 0, 100, 100);
 
 		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(bigShape);
 		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(null);

@@ -16,44 +16,40 @@ package wordcram;
  limitations under the License.
  */
 
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
-
 public class BBTreeBuilder {
-    public BBTree makeTree(Shape shape, int swelling) {
-        Rectangle2D bounds = shape.getBounds2D();
-        int minBoxSize = 1;
-        int x = (int) bounds.getX();
-        int y = (int) bounds.getY();
-        int right = x + (int) bounds.getWidth();
-        int bottom = y + (int) bounds.getHeight();
+    public BBTree makeTree(ShapeForBBTree shape, int swelling) {
+        int left = shape.getLeft();
+        int top = shape.getTop();
+        int right = shape.getRight();
+        int bottom = shape.getBottom();
 
-        return makeTree(shape, minBoxSize, x, y, right, bottom).swell(swelling);
+        int minBoxSize = 1;
+        return makeTree(shape, minBoxSize, left, top, right, bottom).swell(swelling);
     }
 
-    private BBTree makeTree(Shape shape, int minBoxSize, int x, int y,
-            int right, int bottom) {
+    private BBTree makeTree(ShapeForBBTree shape, int minBoxSize, int left, int top,
+                            int right, int bottom) {
 
-        int width = right - x;
-        int height = bottom - y;
+        int width = right - left;
+        int height = bottom - top;
 
-        if (shape.contains(x, y, width, height)) {
-            return new BBTree(x, y, right, bottom);
+        if (shape.contains(left, top, width, height)) {
+            return new BBTree(left, top, right, bottom);
         }
-        else if (shape.intersects(x, y, width, height)) {
-            BBTree tree = new BBTree(x, y, right, bottom);
+        else if (shape.intersects(left, top, width, height)) {
+            BBTree tree = new BBTree(left, top, right, bottom);
 
             boolean tooSmallToContinue = width <= minBoxSize;
             if (!tooSmallToContinue) {
-                int centerX = avg(x, right);
-                int centerY = avg(y, bottom);
+                int centerX = avg(left, right);
+                int centerY = avg(top, bottom);
 
                 // upper left
-                BBTree t0 = makeTree(shape, minBoxSize, x, y, centerX, centerY);
+                BBTree t0 = makeTree(shape, minBoxSize, left, top, centerX, centerY);
                 // upper right
-                BBTree t1 = makeTree(shape, minBoxSize, centerX, y, right, centerY);
+                BBTree t1 = makeTree(shape, minBoxSize, centerX, top, right, centerY);
                 // lower left
-                BBTree t2 = makeTree(shape, minBoxSize, x, centerY, centerX, bottom);
+                BBTree t2 = makeTree(shape, minBoxSize, left, centerY, centerX, bottom);
                 // lower right
                 BBTree t3 = makeTree(shape, minBoxSize, centerX, centerY, right, bottom);
 

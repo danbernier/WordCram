@@ -41,7 +41,7 @@ class EngineWord {
 
     void setShape(Shape shape, int swelling) {
         this.shape = shape;
-        this.bbTree = bbTreeBuilder.makeTree(shape, swelling);
+        this.bbTree = bbTreeBuilder.makeTree(new ShapeAdapter(shape), swelling);
     }
 
     Shape getShape() {
@@ -54,7 +54,7 @@ class EngineWord {
 
 
     boolean containsPoint(float x, float y) {
-    return bbTree.containsPoint(x, y);
+    	return bbTree.containsPoint(x, y);
     }
 
     void setDesiredLocation(WordPlacer placer, int count, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
