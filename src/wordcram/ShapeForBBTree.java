@@ -1,9 +1,9 @@
 package wordcram;
 
-interface ShapeForBBTree {
+public interface ShapeForBBTree {
 
-	boolean contains(int x, int y, int width, int height);
-	boolean intersects(int x, int y, int width, int height);
+	boolean contains(float x, float y, float width, float height);
+	boolean intersects(float x, float y, float width, float height);
 	
 	int getLeft();
 	int getTop();

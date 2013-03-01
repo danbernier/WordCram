@@ -21,11 +21,11 @@ public class ShapeAdapter implements ShapeForBBTree {
         this.bottom = top + (int) bounds.getHeight();
 	}
 
-	public boolean contains(int x, int y, int width, int height) {
+	public boolean contains(float x, float y, float width, float height) {
 		return shape.contains(x, y, width, height);
 	}
 
-	public boolean intersects(int x, int y, int width, int height) {
+	public boolean intersects(float x, float y, float width, float height) {
 		return shape.intersects(x, y, width, height);
 	}
 
