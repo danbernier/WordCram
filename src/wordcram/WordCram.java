@@ -739,8 +739,7 @@ public class WordCram {
             PGraphics canvas = destination == null? parent.g : destination;
             wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
         }
-
-        return wordCramEngine;
+     return wordCramEngine;
     }
     
     private void warnScripterAboutEmptyWordArray() {
@@ -779,6 +778,16 @@ public class WordCram {
      */
     public void drawAll() {
         getWordCramEngine().drawAll();
+    }
+    
+    /**
+     * Just like {@link #drawAll()} but with a constant debug output
+     * about the progress. Needless to say this is way slower than
+     * drawing without debug output.
+     * @see #drawAll()
+     */
+    public void drawAllVerbose() {
+    	getWordCramEngine().drawAllVerbose();
     }
 
     /**
