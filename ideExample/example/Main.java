@@ -143,7 +143,7 @@ public class Main extends PApplet {
 	}
 	
 	private String textFilePath() {
-		return "/Users/dan/projects/wordcram/ideExample/tao-te-ching.txt";
+		return "../ideExample/tao-te-ching.txt";
 	}
 	
 	private Word[] alphabet() {
