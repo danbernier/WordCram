@@ -46,7 +46,6 @@ class WordCramEngine {
     private int eWordIndex = -1;
 
     private RenderOptions renderOptions;
-    private PrintStream debugStream;
 
     WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
         this.destination = destination;
@@ -61,8 +60,6 @@ class WordCramEngine {
         this.renderOptions = renderOptions;
         this.words = words;
         this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
-        
-        debugStream = System.out;
     }
 
     private EngineWord[] wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
@@ -109,6 +106,10 @@ class WordCramEngine {
     }
     
     void drawAllVerbose() {
+    	drawAllVerbose(System.out);
+    }
+    
+    void drawAllVerbose(PrintStream debugStream) {
     	debugStream.println("Start drawing words.");
     	while (hasMore()) {
     		drawNext();
@@ -116,10 +117,10 @@ class WordCramEngine {
     				"/" + eWords.length + "(" + ((int) (getProgress() * 100)) + "%)");
     	}
     	debugStream.println("Finished drawing words. Results:");
-    	printResult();
+    	printResult(debugStream);
     }
     
-    void printResult() {
+    void printResult(PrintStream debugStream) {
     	Word[] skippedWords = getSkippedWords();
     	debugStream.println("Total Words: " + words.length);
     	debugStream.println("Placed % (of those tried): " + ((int) (getProgress()*100)));
@@ -142,10 +143,6 @@ class WordCramEngine {
     	debugStream.println("Skipped because too Small: " + tooSmall);
     	debugStream.println("Skipped because max Number reached: " + overNumber);
     }
-    
-    public void setDebugStream(PrintStream debugStream) {
-		this.debugStream = debugStream;
-	}
 
     void drawAll() {
         while(hasMore()) {
