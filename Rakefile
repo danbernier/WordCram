@@ -1,5 +1,6 @@
 require 'json'
 require 'fileutils'
+require 'aws-sdk'
 
 =begin
 Github Pages:
@@ -68,7 +69,7 @@ task :bundle => :test do
   puts "Bundling files together..."
   FileUtils.mkdir_p 'build/p5lib/WordCram/library'
   run "jar -cvf build/p5lib/WordCram/library/WordCram.jar -C build/classes ."
-  FileUtils.cp 'lib/jsoup-1.3.3.jar', 'build/p5lib/WordCram/library'
+  FileUtils.cp 'lib/jsoup-1.7.2.jar', 'build/p5lib/WordCram/library'
   FileUtils.cp 'lib/cue.language.jar', 'build/p5lib/WordCram/library'
 
   FileUtils.cp_r 'example', 'build/p5lib/WordCram/examples'
@@ -103,7 +104,7 @@ namespace :publish do
     puts "Copied files to #{wc_folder}."
   end
 
-  desc "Publish & git-tag a fresh WordCram library to github downloads."
+  desc "Publish & git-tag a fresh WordCram library for public download."
   task :daily => :bundle do
     summary = ask "Give us a quick summary of the release:"
     tstamp = Time.now.strftime '%Y%m%d'
@@ -112,14 +113,14 @@ namespace :publish do
     zip_and_tar_and_upload tstamp, summary
   end
 
-  desc "Release WordCram: git-tag, upload to github, update github pages javadoc. And later, Tweet! (And blog?)"
+  desc "Release WordCram: git-tag, upload binaries, update github pages javadoc. And later, Tweet! (And blog?)"
   task :release => :bundle do
 
     # git checkout master, first? Warn if you're not on master?
 
-    summary = ask "Give us a quick summary of the release:"
     release_number = version
     puts "Release number: #{release_number}"
+    summary = ask "Give us a quick summary of the release:"
 
     git_tag "release/#{release_number}", "Tagging the #{release_number} release"
     zip_and_tar_and_upload release_number, summary
@@ -194,7 +195,7 @@ def compile(src_dir, dest_dir, classpath)
 end
 
 def main_classpath
-  ['lib/processing/core.jar', 'lib/jsoup-1.3.3.jar', 'lib/cue.language.jar'] * ':'
+  ['lib/processing/core.jar', 'lib/jsoup-1.7.2.jar', 'lib/cue.language.jar'] * ':'
 end
 
 def test_classpath
@@ -209,9 +210,26 @@ def zip_and_tar_and_upload(version, summary)
   run "cd build/p5lib; zip -5Tr ../#{zipfile} WordCram; cd ../.."
   run "tar -cvz -Cbuild/p5lib/ WordCram > build/#{tarfile}"
 
-  puts "uploading #{zipfile} and #{tarfile} to github..."
-  run "github-downloads create -u danbernier -r WordCram -f build/#{zipfile} -d \"#{summary}\""
-  run "github-downloads create -u danbernier -r WordCram -f build/#{tarfile} -d \"#{summary}\""
+  puts "uploading build/#{zipfile} and build/#{tarfile} to AWS..."
+  urls = aws_upload("build/#{zipfile}", "build/#{tarfile}")
+  puts "uploaded to: #{urls.inspect}"
+end
+
+def aws_upload(*filepaths)
+  access_key = build_properties.fetch('aws.access_key_id')
+  secret_key = build_properties.fetch('aws.secret_access_key')
+  AWS.config(:access_key_id => access_key, :secret_access_key => secret_key)
+
+  s3 = AWS::S3.new
+  b = s3.buckets['wordcram']
+
+  filepaths.map do |filepath|
+    filename = File.basename(filepath)
+    release = b.objects["downloads/#{filename}"]
+    release.write(File.read(filepath))
+    release.acl = :public_read
+    release.public_url.to_s
+  end
 end
 
 def ask(message)

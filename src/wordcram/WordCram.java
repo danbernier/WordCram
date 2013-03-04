@@ -18,6 +18,7 @@ limitations under the License.
 
 import processing.core.*;
 import wordcram.text.*;
+import java.util.ArrayList;
 
 /**
  * The main API for WordCram.
@@ -178,7 +179,7 @@ public class WordCram {
     public static final int NO_SPACE = 303;
 
     private Word[] words;
-    private TextSource textSource;
+    private ArrayList<TextSource> textSources = new ArrayList<TextSource>();
     private String extraStopWords = "";
     private boolean excludeNumbers = true;
     private enum TextCase { Lower, Upper, Keep };
@@ -300,7 +301,27 @@ public class WordCram {
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram fromWebPage(String webPageAddress) {
-        return fromText(new WebPage(webPageAddress, parent));
+        return fromWebPage(webPageAddress, null);
+    }
+
+    /**
+     * Make a WordCram from the text in any elements on a web page that match the
+     * <tt>cssSelector</tt>.
+     * Just before the WordCram is drawn, it'll load the web page's HTML, scrape
+     * out the text, and count and sort the words.
+     *
+     * HTML parsing is handled by Jsoup, so see
+     * <a href="http://jsoup.org/cookbook/extracting-data/selector-syntax">the
+     * Jsoup selector documentation</a> if you're having trouble writing your
+     * selector.
+     *
+     * @param webPageAddress the URL of the web page to load
+     * @param cssSelector a CSS selector to filter the HTML by, before extracting
+     * text
+     * @return The WordCram, for further setup or drawing.
+     */
+    public WordCram fromWebPage(String webPageAddress, String cssSelector) {
+        return fromText(new WebPage(webPageAddress, cssSelector, parent));
     }
 
     /**
@@ -312,7 +333,27 @@ public class WordCram {
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram fromHtmlFile(String htmlFilePath) {
-        return fromText(new WebPage(htmlFilePath, parent));
+        return fromHtmlFile(htmlFilePath, null);
+    }
+
+    /**
+     * Make a WordCram from the text in any elements on a web page that match the
+     * <tt>cssSelector</tt>.
+     * Just before the WordCram is drawn, it'll load the file's HTML, scrape out the text,
+     * and count and sort the words.
+     *
+     * HTML parsing is handled by Jsoup, so see
+     * <a href="http://jsoup.org/cookbook/extracting-data/selector-syntax">the
+     * Jsoup selector documentation</a> if you're having trouble writing your
+     * selector.
+     *
+     * @param htmlFilePath the path of the html file to load
+     * @param cssSelector a CSS selector to filter the HTML by, before extracting
+     * text
+     * @return The WordCram, for further setup or drawing.
+     */
+    public WordCram fromHtmlFile(String htmlFilePath, String cssSelector) {
+        return fromText(new WebPage(htmlFilePath, cssSelector, parent));
     }
 
     // TODO from an inputstream!  or reader, anyway
@@ -326,11 +367,18 @@ public class WordCram {
      * href="http://processing.org/reference/loadStrings_.html"
      * target="blank">loadStrings()</a>.
      *
+     * @deprecated because its signature is annoying, and makes it hard to
+     * pass a CSS Selector. If you love this method, and want it to stick around,
+     * let me know: <a href="http://github.com/danbernier/WordCram/issues">open
+     * a github issue</a>, send me a
+     * <a href="http://twitter.com/wordcram">tweet</a>,
+     * or say hello at wordcram at gmail.
+     * Otherwise, it'll be deleted in a future release, probably 0.6.
+     *
      * @param html the String(s) of HTML
      * @return The WordCram, for further setup or drawing.
      */
-    //example fromHtmlString(loadStrings("my.html"))
-    //example fromHtmlString("<html><p>Hello there!</p></html>")
+    @Deprecated
     public WordCram fromHtmlString(String... html) {
         return fromText(new Html(PApplet.join(html, "")));
     }
@@ -367,7 +415,7 @@ public class WordCram {
     /**
      * Makes a WordCram from any TextSource.
      *
-         * <p> It only caches the TextSource - it won't load the text
+     * <p> It only caches the TextSource - it won't load the text
      * from it until {@link #drawAll()} or {@link #drawNext()} is
      * called.
      *
@@ -375,7 +423,7 @@ public class WordCram {
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram fromText(TextSource textSource) {
-        this.textSource = textSource;
+        this.textSources.add(textSource);
         return this;
     }
 
@@ -714,15 +762,15 @@ public class WordCram {
     private WordCramEngine getWordCramEngine() {
         if (wordCramEngine == null) {
 
-            if (words == null && textSource != null) {
-                String text = textSource.getText();
+            if (words == null && !textSources.isEmpty()) {
+                String text = joinTextSources();
 
                 text = textCase == TextCase.Lower ? text.toLowerCase()
                      : textCase == TextCase.Upper ? text.toUpperCase()
                      : text;
 
                 words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text);
-                
+
                 if (words.length == 0) {
                 	warnScripterAboutEmptyWordArray();
                 }
@@ -741,7 +789,16 @@ public class WordCram {
         }
      return wordCramEngine;
     }
-    
+
+    private String joinTextSources() {
+        StringBuffer buffer = new StringBuffer();
+        for (TextSource textSource : textSources) {
+            buffer.append(textSource.getText());
+            buffer.append("\n");
+        }
+        return buffer.toString();
+    }
+
     private void warnScripterAboutEmptyWordArray() {
     	System.out.println();
     	System.out.println("cue.language can't find any non-stop words in your text. This could be because your file encoding is wrong, or because all your words are single characters, among other things.");
