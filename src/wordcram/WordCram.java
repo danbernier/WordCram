@@ -16,9 +16,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import processing.core.*;
-import wordcram.text.*;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
+
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
+
+import processing.core.PApplet;
+import processing.core.PFont;
+import processing.core.PGraphics;
+import processing.core.PVector;
+import wordcram.text.Html;
+import wordcram.text.Text;
+import wordcram.text.TextFile;
+import wordcram.text.TextSource;
+import wordcram.text.WebPage;
 
 /**
  * The main API for WordCram.
@@ -191,13 +208,14 @@ public class WordCram {
 
     private WordFonter fonter;
     private WordSizer sizer;
-    private WordColorer colorer;
+    public WordColorer colorer;
     private WordAngler angler;
     private WordPlacer placer;
     private WordNudger nudger;
 
     private PGraphics destination = null;
     private RenderOptions renderOptions = new RenderOptions();
+    
 
     /**
      * Make a new WordCram.
@@ -737,7 +755,7 @@ public class WordCram {
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram withCustomCanvas(PGraphics canvas) {
-        this.destination = canvas;
+        this.setDestination(canvas);
         return this;
     }
 
@@ -761,8 +779,7 @@ public class WordCram {
 
     private WordCramEngine getWordCramEngine() {
         if (wordCramEngine == null) {
-
-            if (words == null && !textSources.isEmpty()) {
+        	if (words == null && !textSources.isEmpty()) {
                 String text = joinTextSources();
 
                 text = textCase == TextCase.Lower ? text.toLowerCase()
@@ -784,13 +801,21 @@ public class WordCram {
             if (placer == null) placer = Placers.horizLine();
             if (nudger == null) nudger = new SpiralWordNudger();
 
-            PGraphics canvas = destination == null? parent.g : destination;
+            PGraphics canvas = getDestination() == null? parent.g : getDestination();
             wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
         }
      return wordCramEngine;
     }
 
-    private String joinTextSources() {
+    private PGraphics getDestination() {
+		return destination;
+	}
+    
+    private void setDestination(PGraphics dest) {
+    	destination = dest;
+    }
+
+	private String joinTextSources() {
         StringBuffer buffer = new StringBuffer();
         for (TextSource textSource : textSources) {
             buffer.append(textSource.getText());
@@ -890,5 +915,26 @@ public class WordCram {
      */
     public float getProgress() {
         return getWordCramEngine().getProgress();
+    }
+    
+    public void writeToSVG(String fileName) {
+    	DOMImplementation domImpl = GenericDOMImplementation
+				.getDOMImplementation();
+		Document document = domImpl.createDocument(null, "svg", null);
+		SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
+		EngineWord[] eWords = getWordCramEngine().eWords;
+		for (EngineWord eWord: eWords) {
+			if (eWord.word.wasPlaced()) {
+				getWordCramEngine().drawWordImage(eWord, svgGenerator);
+			}
+		}
+	    OutputStream os;
+		try {
+			os = new FileOutputStream(fileName);
+			Writer w = new OutputStreamWriter(os, "iso-8859-1");
+			svgGenerator.stream(w, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 }

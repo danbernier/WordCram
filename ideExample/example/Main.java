@@ -16,15 +16,26 @@ package example;
  limitations under the License.
  */
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.w3c.dom.Document;
 
 import processing.core.PApplet;
 import processing.core.PFont;
-import wordcram.*;
+import wordcram.Anglers;
+import wordcram.Placers;
+import wordcram.Sizers;
+import wordcram.Word;
+import wordcram.WordCram;
 
 public class Main extends PApplet {
 	
 	WordCram wordcram;
+	private SVGGraphics2D svgGenerator = null;
+	private Document document = null;
 	
 	public void setup() {
 
@@ -86,18 +97,12 @@ public class Main extends PApplet {
 					
 //					.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
 //					.withNudger(new RandomWordNudger())
-					
 					;
 	}
 	
 	private void finishUp() {
-		//pg.endDraw();
-		//image(pg, 0, 0);
-		
-		//println(wordcram.getSkippedWords());
-		
+		wordcram.writeToSVG("wordcram.svg");
 		println("Done");
-		save("wordcram.png");
 		noLoop();
 	}
 	
@@ -107,7 +112,8 @@ public class Main extends PApplet {
 		
 		boolean allAtOnce = true;
 		if (allAtOnce) {
-			wordcram.drawAll();
+//			wordcram.drawAll();
+			wordcram.drawAllVerbose();
 			finishUp();
 		}
 		else {

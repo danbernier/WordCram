@@ -22,15 +22,21 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.ArrayList;
+
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.svggen.SVGGraphics2DIOException;
 
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
 import processing.core.PVector;
 
-class WordCramEngine {
+public class WordCramEngine {
 
     private PGraphics destination;
 
@@ -42,7 +48,7 @@ class WordCramEngine {
     private WordNudger nudger;
 
     private Word[] words; // just a safe copy
-    private EngineWord[] eWords;
+    public EngineWord[] eWords;
     private int eWordIndex = -1;
 
     private RenderOptions renderOptions;
@@ -50,7 +56,6 @@ class WordCramEngine {
 
     WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
         this.destination = destination;
-
         this.fonter = fonter;
         this.sizer = sizer;
         this.colorer = colorer;
@@ -215,13 +220,13 @@ class WordCramEngine {
     private int calculateMaxAttemptsFromWordWeight(Word word) {
         return (int)((1.0 - word.weight) * 600) + 100;
     }
-
+    
     private void drawWordImage(EngineWord word) {
+    	drawWordImage(word, ((PGraphicsJava2D)destination).g2);
+    }
+
+    public void drawWordImage(EngineWord word, Graphics2D g2) {
         GeneralPath path2d = new GeneralPath(word.getShape());
-
-//        Graphics2D g2 = (Graphics2D)destination.image.getGraphics();
-        Graphics2D g2 = ((PGraphicsJava2D)destination).g2;
-
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setPaint(new Color(word.word.getColor(colorer), true));
         g2.fill(path2d);
@@ -251,4 +256,8 @@ class WordCramEngine {
     float getProgress() {
         return (float) (this.eWordIndex+1) / this.eWords.length;
     }
+
+	public PGraphics getDestination() {
+		return destination;
+	}
 }
