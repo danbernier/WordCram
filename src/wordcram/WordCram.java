@@ -922,12 +922,7 @@ public class WordCram {
 				.getDOMImplementation();
 		Document document = domImpl.createDocument(null, "svg", null);
 		SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
-		EngineWord[] eWords = getWordCramEngine().eWords;
-		for (EngineWord eWord: eWords) {
-			if (eWord.word.wasPlaced()) {
-				getWordCramEngine().drawWordImage(eWord, svgGenerator);
-			}
-		}
+		getWordCramEngine().drawToGraphics(svgGenerator);
 	    OutputStream os;
 		try {
 			os = new FileOutputStream(fileName);

@@ -48,7 +48,7 @@ public class WordCramEngine {
     private WordNudger nudger;
 
     private Word[] words; // just a safe copy
-    public EngineWord[] eWords;
+    private EngineWord[] eWords;
     private int eWordIndex = -1;
 
     private RenderOptions renderOptions;
@@ -224,8 +224,16 @@ public class WordCramEngine {
     private void drawWordImage(EngineWord word) {
     	drawWordImage(word, ((PGraphicsJava2D)destination).g2);
     }
+    
+    public void drawToGraphics(Graphics2D g2) {
+    	for (EngineWord eWord: eWords) {
+			if (eWord.word.wasPlaced()) {
+				drawWordImage(eWord, g2);
+			}
+		}
+    }
 
-    public void drawWordImage(EngineWord word, Graphics2D g2) {
+    private void drawWordImage(EngineWord word, Graphics2D g2) {
         GeneralPath path2d = new GeneralPath(word.getShape());
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setPaint(new Color(word.word.getColor(colorer), true));
