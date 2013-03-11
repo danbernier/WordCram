@@ -48,16 +48,11 @@ class ShapeBasedPlacer implements WordPlacer, WordNudger {
 	}
 	
 	public static ShapeBasedPlacer fromTextGlyphs(String text, String fontName) {
-		Font font = null;
-		Graphics2D g2d;
-		FontRenderContext frc;
-		GlyphVector gv;
-		font = new Font(fontName,FONT_STYLE,GLYPH_SIZE);
+		Font font = new Font(fontName, FONT_STYLE, GLYPH_SIZE);
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-		g2d = img.createGraphics();
-		frc = g2d.getFontRenderContext();
-		gv = font.createGlyphVector(frc, text);
-		return new ShapeBasedPlacer(gv.getOutline(GLYPH_SIZE / 10,GLYPH_SIZE));
+		FontRenderContext frc = img.createGraphics().getFontRenderContext();
+		GlyphVector glyphVector = font.createGlyphVector(frc, text);
+		return new ShapeBasedPlacer(glyphVector.getOutline(GLYPH_SIZE / 10, GLYPH_SIZE));
 	}
 	
 	private ShapeBasedPlacer(BufferedImage image) {
