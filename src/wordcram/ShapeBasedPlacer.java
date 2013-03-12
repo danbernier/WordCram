@@ -41,7 +41,7 @@ public class ShapeBasedPlacer implements WordPlacer, WordNudger {
 		Font font = new Font(fontName, FONT_STYLE, GLYPH_SIZE);
 		
 		WordShaper shaper = new WordShaper();
-		Shape shape = shaper.getShapeFor(text, font, GLYPH_SIZE, 0, 1);
+		Shape shape = shaper.getShapeFor(text, font, GLYPH_SIZE, 0);
 		return new ShapeBasedPlacer(shape);
 	}
 	

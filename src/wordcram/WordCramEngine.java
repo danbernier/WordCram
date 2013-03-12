@@ -78,8 +78,8 @@ class WordCramEngine {
             float wordSize = word.getSize(sizer, i, words.length);
             float wordAngle = word.getAngle(angler);
 
-            Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle, renderOptions.minShapeSize);
-            if (shape == null) {
+            Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle);
+            if (isTooSmall(shape, renderOptions.minShapeSize)) {
                 skipWord(word, WordCram.SHAPE_WAS_TOO_SMALL);
             }
             else {
@@ -93,6 +93,14 @@ class WordCramEngine {
         }
 
         return engineWords.toArray(new EngineWord[0]);
+    }
+
+    private boolean isTooSmall(Shape shape, int minShapeSize) {
+        Rectangle2D r = shape.getBounds2D();
+
+        // Most words will be wider than tall, so this basically boils down to height.
+        // For the odd word like "I", we check width, too.
+        return r.getHeight() < minShapeSize || r.getWidth() < minShapeSize;
     }
 
     private void skipWord(Word word, int reason) {

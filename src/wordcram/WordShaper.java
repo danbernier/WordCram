@@ -28,18 +28,12 @@ import processing.core.PFont;
 public class WordShaper {
     private FontRenderContext frc = new FontRenderContext(null, true, true);
 
-    public Shape getShapeFor(String word, PFont font, float fontSize, float angle, int minShapeSize) {
-    	return getShapeFor(word, font.getFont(), fontSize, angle, minShapeSize);
+    public Shape getShapeFor(String word, PFont font, float fontSize, float angle) {
+    	return getShapeFor(word, font.getFont(), fontSize, angle);
     }
     
-    public Shape getShapeFor(String word, Font font, float fontSize, float angle, int minShapeSize) {
-
+    public Shape getShapeFor(String word, Font font, float fontSize, float angle) {
         Shape shape = makeShape(word, sizeFont(font, fontSize));
-
-        if (isTooSmall(shape, minShapeSize)) {
-            return null;
-        }
-
         return moveToOrigin(rotate(shape, angle));
     }
     
@@ -55,14 +49,6 @@ public class WordShaper {
                 Font.LAYOUT_LEFT_TO_RIGHT);
 
         return gv.getOutline();
-    }
-
-    private boolean isTooSmall(Shape shape, int minShapeSize) {
-        Rectangle2D r = shape.getBounds2D();
-
-        // Most words will be wider than tall, so this basically boils down to height.
-        // For the odd word like "I", we check width, too.
-        return r.getHeight() < minShapeSize || r.getWidth() < minShapeSize;
     }
 
     private Shape rotate(Shape shape, float rotation) {
