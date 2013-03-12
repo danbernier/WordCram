@@ -29,8 +29,12 @@ public class WordShaper {
     private FontRenderContext frc = new FontRenderContext(null, true, true);
 
     public Shape getShapeFor(String word, PFont font, float fontSize, float angle, int minShapeSize) {
+    	return getShapeFor(word, font.getFont(), fontSize, angle, minShapeSize);
+    }
+    
+    public Shape getShapeFor(String word, Font font, float fontSize, float angle, int minShapeSize) {
 
-        Shape shape = makeShape(word, font, fontSize);
+        Shape shape = makeShape(word, sizeFont(font, fontSize));
 
         if (isTooSmall(shape, minShapeSize)) {
             return null;
@@ -38,10 +42,12 @@ public class WordShaper {
 
         return moveToOrigin(rotate(shape, angle));
     }
+    
+    private Font sizeFont(Font unsizedFont, float fontSize) {
+    	return unsizedFont.deriveFont(fontSize);
+    }
 
-    private Shape makeShape(String word, PFont pFont, float fontSize) {
-        Font font = pFont.getFont().deriveFont(fontSize);
-
+    private Shape makeShape(String word, Font font) {
         char[] chars = word.toCharArray();
 
         // TODO hmm: this doesn't render newlines.  Hrm.  If your word text is "foo\nbar", you get "foobar".
