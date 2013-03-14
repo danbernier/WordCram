@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
 
 import processing.core.PVector;
 
-class ShapeBasedPlacer implements WordPlacer, WordNudger {
+public class ShapeBasedPlacer implements WordPlacer, WordNudger {
 
 	public static int TOLERANCE = 5;
 	public static boolean PRECISE = false;
@@ -92,6 +92,7 @@ class ShapeBasedPlacer implements WordPlacer, WordNudger {
 				}
 			}
 		}
+		
 		this.area = area;
 	}
 
@@ -176,5 +177,9 @@ class ShapeBasedPlacer implements WordPlacer, WordNudger {
 		return ((rP - TOLERANCE <= rT) && (rT <= rP + TOLERANCE)
 				&& (gP - TOLERANCE <= gT) && (gT <= gP + TOLERANCE)
 				&& (bP - TOLERANCE <= bT) && (bT <= bP + TOLERANCE));
+	}
+
+	public Area getArea() {
+		return area;
 	}
 }

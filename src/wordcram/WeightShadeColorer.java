@@ -5,6 +5,7 @@ import processing.core.PApplet;
 public class WeightShadeColorer implements WordColorer {
 	
 	PApplet host;
+	int highest = 0;
 	
 	public WeightShadeColorer(PApplet host) {
 		super();
@@ -12,7 +13,16 @@ public class WeightShadeColorer implements WordColorer {
 	}
 
 	public int colorFor(Word word) {
-		return host.color(new Float((int) 255 - (255*word.weight)).intValue());
+		int shade = new Float((int) highest - (highest*word.weight)).intValue();
+		return host.color(shade);
+	}
+
+	public int getHighest() {
+		return highest;
+	}
+
+	public void setHighest(int highest) {
+		this.highest = highest;
 	}
 
 }
