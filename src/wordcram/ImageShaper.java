@@ -7,8 +7,6 @@ import java.util.ArrayList;
 
 public class ImageShaper {
 
-	public static int TOLERANCE = 5;
-
 	public Shape shape(PImage image, int color) {
 		RectTree tree = new RectTree(0, 0, image.width, image.height);
 		return tree.toShape(image, color);
