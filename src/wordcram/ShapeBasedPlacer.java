@@ -37,14 +37,6 @@ public class ShapeBasedPlacer implements WordPlacer, WordNudger {
 		this.maxY = (float) areaBounds.getMaxY();
 	}
 
-	public static ShapeBasedPlacer fromTextGlyphs(String text, String fontName) {
-		Font font = new Font(fontName, FONT_STYLE, GLYPH_SIZE);
-
-		WordShaper shaper = new WordShaper();
-		Shape shape = shaper.getShapeFor(text, font, 0);
-		return new ShapeBasedPlacer(shape);
-	}
-
 	public static ShapeBasedPlacer fromImageFile(String imageFilePath, Color color) {
 		BufferedImage image = null;
 		try {

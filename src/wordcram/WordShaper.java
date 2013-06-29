@@ -28,20 +28,32 @@ import processing.core.PFont;
 public class WordShaper {
     private FontRenderContext frc = new FontRenderContext(null, true, true);
 
-    public Shape getShapeFor(String word, PFont pFont, float fontSize, float angle) {
-    	return getShapeFor(word, sizeFont(pFont.getFont(), fontSize), angle);
-    }
 
-    public Shape getShapeFor(String word, PFont pFont, float angle) {
-		return getShapeFor(word, pFont.getFont(), angle);
-    }
 
-    public Shape getShapeFor(String word, Font font, float angle) {
-        Shape shape = makeShape(word, font);
+    public Shape getShapeFor(String word, Font font, float fontSize, float angle) {
+        Shape shape = makeShape(word, sizeFont(font, fontSize));
         return moveToOrigin(rotate(shape, angle));
     }
 
+    public Shape getShapeFor(String word, Font font) {
+        return getShapeFor(word, font, font.getSize2D(), 0);
+    }
+
+    public Shape getShapeFor(String word, PFont pFont, float fontSize, float angle) {
+        return getShapeFor(word, pFont.getFont(), fontSize, angle);
+    }
+
+    public Shape getShapeFor(String word, PFont pFont) {
+        return getShapeFor(word, pFont.getFont());
+    }
+
+
+
+
     private Font sizeFont(Font unsizedFont, float fontSize) {
+        if (fontSize == unsizedFont.getSize2D()) {
+            return unsizedFont;
+        }
     	return unsizedFont.deriveFont(fontSize);
     }
 
