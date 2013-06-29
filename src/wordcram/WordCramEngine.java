@@ -16,19 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import processing.core.PFont;
-import processing.core.PGraphics;
-import processing.core.PGraphicsJava2D;
-import processing.core.PVector;
+import processing.core.*;
 
 class WordCramEngine {
 
@@ -112,11 +106,11 @@ class WordCramEngine {
     boolean hasMore() {
         return eWordIndex < eWords.length-1;
     }
-    
+
     void drawAllVerbose() {
     	drawAllVerbose(System.out);
     }
-    
+
     void drawAllVerbose(PrintStream debugStream) {
     	debugStream.println("Start drawing words.");
     	while (hasMore()) {
@@ -127,7 +121,7 @@ class WordCramEngine {
     	debugStream.println("Finished drawing words. Results:");
     	printResult(debugStream);
     }
-    
+
     void printResult(PrintStream debugStream) {
     	Word[] skippedWords = getSkippedWords();
     	debugStream.println("Total Words: " + words.length);
