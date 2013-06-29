@@ -17,8 +17,6 @@ import processing.core.PVector;
 public class ShapeBasedPlacer implements WordPlacer, WordNudger {
 
 	public static boolean PRECISE = false;
-	public static int GLYPH_SIZE = 500;
-	public static int FONT_STYLE = Font.BOLD;
 
 	Area area;
 	float minX;
