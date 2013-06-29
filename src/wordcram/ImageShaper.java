@@ -12,6 +12,7 @@ public class ImageShaper {
 		return tree.toShape(image, color);
 	}
 
+	// TODO combine this somehow with BBTree(Builder). It's the same idea.
 	class RectTree {
 		ArrayList<RectTree> kids = null;
 
