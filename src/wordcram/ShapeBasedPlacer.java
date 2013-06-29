@@ -1,7 +1,5 @@
 package wordcram;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
