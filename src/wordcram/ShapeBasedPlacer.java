@@ -39,12 +39,12 @@ public class ShapeBasedPlacer implements WordPlacer, WordNudger {
 
 	public static ShapeBasedPlacer fromTextGlyphs(String text, String fontName) {
 		Font font = new Font(fontName, FONT_STYLE, GLYPH_SIZE);
-		
+
 		WordShaper shaper = new WordShaper();
 		Shape shape = shaper.getShapeFor(text, font, 0);
 		return new ShapeBasedPlacer(shape);
 	}
-	
+
 	public static ShapeBasedPlacer fromImageFile(String imageFilePath, Color color) {
 		BufferedImage image = null;
 		try {
@@ -52,10 +52,10 @@ public class ShapeBasedPlacer implements WordPlacer, WordNudger {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		ImageShaper shaper = new ImageShaper();
 		Shape shape = PRECISE ? shaper.shapePrecisely(image, color) : shaper.shapeSloppily(image, color);
-		
+
 		return new ShapeBasedPlacer(shape);
 	}
 

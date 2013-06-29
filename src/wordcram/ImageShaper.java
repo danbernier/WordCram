@@ -102,9 +102,9 @@ public class ImageShaper {
 
 
 	public Shape shapePrecisely(BufferedImage image, Color color) {
-		
+
 		Area area = new Area();
-		
+
 		for (int x = 0; x < image.getWidth(); x++) {
 			for (int y = 0; y < image.getHeight(); y++) {
 				Color pixel = new Color(image.getRGB(x, y));
@@ -116,7 +116,7 @@ public class ImageShaper {
 		}
 		return area;
 	}
-	
+
 	public Shape shapeSloppily(BufferedImage image, Color color) {
 		Area area = new Area();
 		Rectangle r;
@@ -147,7 +147,7 @@ public class ImageShaper {
 		}
 		return area;
 	}
-	
+
 	private boolean isIncluded(Color target, Color pixel) {
 		int rT = target.getRed();
 		int gT = target.getGreen();
@@ -159,5 +159,4 @@ public class ImageShaper {
 				&& (gP - TOLERANCE <= gT) && (gT <= gP + TOLERANCE)
 				&& (bP - TOLERANCE <= bT) && (bT <= bP + TOLERANCE));
 	}
-
 }

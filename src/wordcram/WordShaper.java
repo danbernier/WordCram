@@ -31,16 +31,16 @@ public class WordShaper {
     public Shape getShapeFor(String word, PFont pFont, float fontSize, float angle) {
     	return getShapeFor(word, sizeFont(pFont.getFont(), fontSize), angle);
     }
-    
+
     public Shape getShapeFor(String word, PFont pFont, float angle) {
 		return getShapeFor(word, pFont.getFont(), angle);
     }
-    
+
     public Shape getShapeFor(String word, Font font, float angle) {
         Shape shape = makeShape(word, font);
         return moveToOrigin(rotate(shape, angle));
     }
-    
+
     private Font sizeFont(Font unsizedFont, float fontSize) {
     	return unsizedFont.deriveFont(fontSize);
     }
