@@ -5,18 +5,10 @@ import java.awt.Font;
 import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
-
 import processing.core.PVector;
 
 public class ShapeBasedPlacer implements WordPlacer, WordNudger {
-
-	public static boolean PRECISE = false;
 
 	Area area;
 	float minX;
@@ -33,20 +25,6 @@ public class ShapeBasedPlacer implements WordPlacer, WordNudger {
 		this.minY = (float) areaBounds.getMinY();
 		this.maxX = (float) areaBounds.getMaxX();
 		this.maxY = (float) areaBounds.getMaxY();
-	}
-
-	public static ShapeBasedPlacer fromImageFile(String imageFilePath, Color color) {
-		BufferedImage image = null;
-		try {
-			image = ImageIO.read(new File(imageFilePath));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		ImageShaper shaper = new ImageShaper();
-		Shape shape = PRECISE ? shaper.shapePrecisely(image, color) : shaper.shapeSloppily(image, color);
-
-		return new ShapeBasedPlacer(shape);
 	}
 
 	public PVector place(Word w, int rank, int count, int ww, int wh, int fw,
