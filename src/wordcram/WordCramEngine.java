@@ -16,15 +16,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Observable;
 
-import processing.core.*;
+import processing.core.PFont;
+import processing.core.PGraphics;
+import processing.core.PGraphicsJava2D;
+import processing.core.PVector;
 
-class WordCramEngine {
+class WordCramEngine extends Observable{
 
     private PGraphics destination;
 
@@ -107,25 +114,11 @@ class WordCramEngine {
         return eWordIndex < eWords.length-1;
     }
 
-    void drawAllVerbose() {
-    	drawAllVerbose(System.out);
-    }
-
-    void drawAllVerbose(PrintStream debugStream) {
-    	debugStream.println("Start drawing words.");
-    	while (hasMore()) {
-    		drawNext();
-    		debugStream.println("Drew a word. Progress: " + (eWordIndex + 1) +
-    				"/" + eWords.length + "(" + ((int) (getProgress() * 100)) + "%)");
-    	}
-    	debugStream.println("Finished drawing words. Results:");
-    	printResult(debugStream);
-    }
-
-    void printResult(PrintStream debugStream) {
+    String gatherResults() {
+    	String result = "";
     	Word[] skippedWords = getSkippedWords();
-    	debugStream.println("Total Words: " + words.length);
-    	debugStream.println("Placed % (of those tried): " + ((int) (getProgress()*100)));
+    	result += "Total Words: " + words.length + "\n";
+    	result += "Placed % (of those tried): " + ((int) (getProgress()*100))+ "\n";
     	int overNumber = 0;
     	int tooSmall = 0;
     	int noSpace = 0;
@@ -141,15 +134,27 @@ class WordCramEngine {
     			throw new RuntimeException("Word skip reason not present in WordCram: " + w.wasSkippedBecause());
     		}
     	}
-    	debugStream.println("Skipped because no Space: " + noSpace);
-    	debugStream.println("Skipped because too Small: " + tooSmall);
-    	debugStream.println("Skipped because max Number reached: " + overNumber);
+    	result += "Skipped because no Space: " + noSpace+ "\n";
+    	result += "Skipped because too Small: " + tooSmall+ "\n";
+    	result += "Skipped because max Number reached: " + overNumber+ "\n";
+    	return result;
     }
 
     void drawAll() {
+    	setChanged();
+    	notifyObservers("Start drawing words.");
         while(hasMore()) {
             drawNext();
+            setChanged();
+            notifyObservers("Drew a word. Progress: " + (eWordIndex + 1) +
+            "/" + eWords.length + "(" + ((int) (getProgress() * 100)) + "%)");
         }
+        setChanged();
+        notifyObservers("Finished drawing words.");
+        setChanged();
+        notifyObservers("Results:");
+        setChanged();
+        notifyObservers(gatherResults());
     }
 
     void drawNext() {
