@@ -1,4 +1,4 @@
-Release notes for WordCram 0.5.7, date TBD:
+Release notes for WordCram 0.5.7, date 2013-03-03:
 
 * Fix for issue #13: give Words a way to know their rendered width and height.
 
