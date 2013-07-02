@@ -27,7 +27,7 @@ import wordcram.Placers;
 import wordcram.Sizers;
 import wordcram.Word;
 import wordcram.WordCram;
-import wordcram.observer.DrawObservers;
+import wordcram.observer.PrintStreamObserver;
 
 public class Main extends PApplet {
 	
@@ -84,7 +84,7 @@ public class Main extends PApplet {
 					.withPlacer(Placers.horizLine())
 //					.withPlacer(Placers.centerClump())
 					.withSizer(Sizers.byWeight(5, 90))
-					.withObserver(new DrawObservers.PrintStreamObserver(System.out))
+					.withObserver(new PrintStreamObserver())
 					.withWordPadding(1)
 					
 //					.minShapeSize(0)

@@ -22,16 +22,15 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
-import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Observable;
 
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
 import processing.core.PVector;
+import wordcram.observer.Observer;
 
-class WordCramEngine extends Observable{
+class WordCramEngine {
 
     private PGraphics destination;
 
@@ -47,6 +46,7 @@ class WordCramEngine extends Observable{
     private int eWordIndex = -1;
 
     private RenderOptions renderOptions;
+    private Observer observer;
 
     WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
         this.destination = destination;
@@ -81,7 +81,7 @@ class WordCramEngine extends Observable{
 
             Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle);
             if (isTooSmall(shape, renderOptions.minShapeSize)) {
-                skipWord(word, WordCram.SHAPE_WAS_TOO_SMALL);
+                skipWord(word, WordSkipReason.SHAPE_TOO_SMALL);
             }
             else {
                 eWord.setShape(shape, renderOptions.wordPadding);
@@ -90,7 +90,7 @@ class WordCramEngine extends Observable{
         }
 
         for (int i = maxNumberOfWords; i < words.length; i++) {
-            skipWord(words[i], WordCram.WAS_OVER_MAX_NUMBER_OF_WORDS);
+            skipWord(words[i], WordSkipReason.OVER_MAX_WORDS);
         }
 
         return engineWords.toArray(new EngineWord[0]);
@@ -104,7 +104,7 @@ class WordCramEngine extends Observable{
         return r.getHeight() < minShapeSize || r.getWidth() < minShapeSize;
     }
 
-    private void skipWord(Word word, int reason) {
+    private void skipWord(Word word, WordSkipReason reason) {
         // TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
         // NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
         word.wasSkippedBecause(reason);
@@ -123,11 +123,11 @@ class WordCramEngine extends Observable{
     	int tooSmall = 0;
     	int noSpace = 0;
     	for (Word w: skippedWords) {
-    		if (w.wasSkippedBecause() == WordCram.NO_SPACE) {
+    		if (w.wasSkippedBecause() == WordSkipReason.NO_SPACE) {
     			noSpace++;
-    		} else if (w.wasSkippedBecause() == WordCram.SHAPE_WAS_TOO_SMALL) {
+    		} else if (w.wasSkippedBecause() == WordSkipReason.SHAPE_TOO_SMALL) {
     			tooSmall++;
-    		} else if (w.wasSkippedBecause() == WordCram.WAS_OVER_MAX_NUMBER_OF_WORDS) {
+    		} else if (w.wasSkippedBecause() == WordSkipReason.OVER_MAX_WORDS) {
     			overNumber++;
     		} else {
     			//That should not happen
@@ -141,24 +141,19 @@ class WordCramEngine extends Observable{
     }
 
     void drawAll() {
-    	setChanged();
-    	notifyObservers("Start drawing words.");
+    	getObserver().beginDraw();
+    	Word current;
         while(hasMore()) {
-            drawNext();
-            setChanged();
-            notifyObservers("Drew a word. Progress: " + (eWordIndex + 1) +
-            "/" + eWords.length + "(" + ((int) (getProgress() * 100)) + "%)");
+            current = drawNext();
+            getObserver().wordDrawn(current);
+//            "Drew a word. Progress: " + (eWordIndex + 1) +
+//            "/" + eWords.length + "(" + ((int) (getProgress() * 100)) + "%)";
         }
-        setChanged();
-        notifyObservers("Finished drawing words.");
-        setChanged();
-        notifyObservers("Results:");
-        setChanged();
-        notifyObservers(gatherResults());
+        getObserver().endDraw();
     }
 
-    void drawNext() {
-        if (!hasMore()) return;
+    Word drawNext() {
+        if (!hasMore()) return null;
 
         EngineWord eWord = eWords[++eWordIndex];
 
@@ -166,6 +161,7 @@ class WordCramEngine extends Observable{
         if (wasPlaced) { // TODO unit test (somehow)
             drawWordImage(eWord);
         }
+        return eWord.word;
     }
 
     private boolean placeWord(EngineWord eWord) {
@@ -212,7 +208,7 @@ class WordCramEngine extends Observable{
             }
         }
 
-        skipWord(eWord.word, WordCram.NO_SPACE);
+        skipWord(eWord.word, WordSkipReason.NO_SPACE);
         return false;
     }
 
@@ -255,4 +251,12 @@ class WordCramEngine extends Observable{
     float getProgress() {
         return (float) (this.eWordIndex+1) / this.eWords.length;
     }
+
+	public Observer getObserver() {
+		return observer;
+	}
+
+	public void setObserver(Observer observer) {
+		this.observer = observer;
+	}
 }

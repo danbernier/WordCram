@@ -17,12 +17,12 @@ limitations under the License.
 */
 
 import java.util.ArrayList;
-import java.util.Observer;
 
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import wordcram.observer.Observer;
 import wordcram.text.Html;
 import wordcram.text.Text;
 import wordcram.text.TextFile;
@@ -163,30 +163,6 @@ public class WordCram {
      * to the WordCramEngine, where all the work happens.  This separation keeps the classes
      * focused on only one thing, but still gives the user a pretty nice API.
      */
-
-    /**
-     * Skip Reason: the Word was skipped because {@link #maxNumberOfWordsToDraw(int)}
-     * was set to some value, and the Word came in over that limit.
-     * It's really about the Word's rank, its position in the list once the words are
-     * sorted by weight: if its rank is greater than the value passed to maxNumberOfWordsToDraw(),
-     * then it'll be skipped, and this will be the reason code.
-     */
-    public static final int WAS_OVER_MAX_NUMBER_OF_WORDS = 301;
-
-    /**
-     * Skip Reason: the Word's shape was too small. WordCram will only render
-     * words so small, for performance reasons. You can set the minimum Word shape
-     * size via {@link #minShapeSize(int)}.
-     */
-    public static final int SHAPE_WAS_TOO_SMALL = 302;
-
-    /**
-     * Skip Reason: WordCram tried placing the Word, but it couldn't find a clear
-     * spot. The {@link WordNudger} nudged it around a bunch (according to
-     * {@link #maxAttemptsToPlaceWord(int)}, if it was set), but there was just no room.
-     */
-    public static final int NO_SPACE = 303;
-
     private Word[] words;
     private ArrayList<TextSource> textSources = new ArrayList<TextSource>();
     private String extraStopWords = "";
@@ -893,7 +869,7 @@ public class WordCram {
     }
     
     public WordCram withObserver(Observer observer) {
-    	getWordCramEngine().addObserver(observer);
+    	getWordCramEngine().setObserver(observer);
     	return this;
     }
 }
