@@ -24,16 +24,10 @@ import wordcram.*;
 public class MainPdf extends PApplet {
 	
 	public void setup() {
-		size(700, 800, PDF, "/home/dan/Desktop/wordcram.pdf");
+		size(700, 800, PDF, "wordcram.pdf");
 	}
 	
 	public void draw() {
-		//beginRecord(PDF, "wordcram.pdf");
-		
-		//((PGraphicsPDF)this.g).addFonts("/home/dan/.fonts");
-		//println("fonts we can use with PDF:");
-		//println(PGraphicsPDF.listFonts());
-		
 		smooth();
 		colorMode(HSB);
 		background(30);
@@ -55,10 +49,7 @@ public class MainPdf extends PApplet {
 	}
 		
 	private String textFilePath() {
-		boolean linux = true;
-		String projDir = linux ? "/home/dan/projects/" : "c:/dan/";
-		String path = projDir + "eclipse/wordcram/trunk/ideExample/tao-te-ching.txt";
-		return path;		
+		return "../tao-te-ching.txt";		
 	}
 	
 	private PFont randomFont() {
