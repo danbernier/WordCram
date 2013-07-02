@@ -21,8 +21,8 @@ import java.awt.geom.AffineTransform;
 
 import processing.core.PVector;
 
-class EngineWord {
-    Word word;
+public class EngineWord {
+    private Word word;
     int rank;
 
     private Shape shape;
@@ -33,7 +33,7 @@ class EngineWord {
     private PVector currentLocation;
 
     EngineWord(Word word, int rank, int wordCount, BBTreeBuilder bbTreeBuilder) {
-        this.word = word;
+        this.setWord(word);
         this.rank = rank;
         this.bbTreeBuilder = bbTreeBuilder;
         word.setEngineWord(this);
@@ -44,7 +44,7 @@ class EngineWord {
         this.bbTree = bbTreeBuilder.makeTree(shape, swelling);
     }
 
-    Shape getShape() {
+    public Shape getShape() {
         return shape;
     }
 
@@ -58,7 +58,7 @@ class EngineWord {
     }
 
     void setDesiredLocation(WordPlacer placer, int count, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
-        desiredLocation = word.getTargetPlace(placer, rank, count, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
+        desiredLocation = getWord().getTargetPlace(placer, rank, count, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
         currentLocation = desiredLocation.get();
     }
 
@@ -72,7 +72,7 @@ class EngineWord {
                 currentLocation.x, currentLocation.y);
         shape = transform.createTransformedShape(shape);
         bbTree.setLocation((int)currentLocation.x, (int)currentLocation.y);
-        word.setRenderedPlace(currentLocation);
+        getWord().setRenderedPlace(currentLocation);
     }
 
     PVector getCurrentLocation() {
@@ -80,10 +80,18 @@ class EngineWord {
     }
 
     boolean wasPlaced() {
-        return word.wasPlaced();
+        return getWord().wasPlaced();
     }
 
     boolean wasSkipped() {
-        return word.wasSkipped();
+        return getWord().wasSkipped();
     }
+
+	public Word getWord() {
+		return word;
+	}
+
+	public void setWord(Word word) {
+		this.word = word;
+	}
 }

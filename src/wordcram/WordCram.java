@@ -16,9 +16,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import processing.core.*;
-import wordcram.text.*;
 import java.util.ArrayList;
+
+import processing.core.PApplet;
+import processing.core.PFont;
+import processing.core.PGraphics;
+import processing.core.PVector;
+import wordcram.renderer.ProcessingSketchRenderer;
+import wordcram.renderer.Renderer;
+import wordcram.text.Html;
+import wordcram.text.Text;
+import wordcram.text.TextFile;
+import wordcram.text.TextSource;
+import wordcram.text.WebPage;
 
 /**
  * The main API for WordCram.
@@ -196,8 +206,9 @@ public class WordCram {
     private WordPlacer placer;
     private WordNudger nudger;
 
-    private PGraphics destination = null;
+//    private PGraphics destination = null;
     private RenderOptions renderOptions = new RenderOptions();
+    private Renderer renderer;
 
     /**
      * Make a new WordCram.
@@ -728,20 +739,13 @@ public class WordCram {
         renderOptions.minShapeSize = minShapeSize;
         return this;
     }
-
-    /**
-     * Use a custom canvas instead of the applet's default one.
-     * This may be needed if rendering in background or in other
-     * dimensions than the applet size is needed.
-     * @param canvas the canvas to draw to
-     * @return The WordCram, for further setup or drawing.
-     */
-    public WordCram withCustomCanvas(PGraphics canvas) {
-        this.destination = canvas;
-        return this;
+    
+    public WordCram withRenderer(Renderer renderer) {
+    	this.renderer = renderer;
+    	return this;
     }
 
-
+ 
     /**
      * Add padding around each word, so they stand out from each other more.
      * If you call this multiple times, the last value will be used.
@@ -777,6 +781,7 @@ public class WordCram {
             }
             words = new WordSorterAndScaler().sortAndScale(words);
 
+            if (renderer == null) renderer = new ProcessingSketchRenderer(parent);
             if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
             if (sizer == null) sizer = Sizers.byWeight(5, 70);
             if (colorer == null) colorer = Colorers.alwaysUse(parent.color(0));
@@ -784,8 +789,9 @@ public class WordCram {
             if (placer == null) placer = Placers.horizLine();
             if (nudger == null) nudger = new SpiralWordNudger();
 
-            PGraphics canvas = destination == null? parent.g : destination;
-            wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
+            renderer.setColorer(colorer);
+            wordCramEngine = new WordCramEngine(words, fonter, sizer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
+            wordCramEngine.setRenderer(renderer);
         }
      return wordCramEngine;
     }

@@ -16,21 +16,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import java.awt.*;
-import java.awt.geom.GeneralPath;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import processing.core.*;
+import processing.core.PFont;
+import processing.core.PGraphics;
+import processing.core.PVector;
+import wordcram.renderer.Renderer;
 
 class WordCramEngine {
 
-    private PGraphics destination;
-
     private WordFonter fonter;
     private WordSizer sizer;
-    private WordColorer colorer;
     private WordAngler angler;
     private WordPlacer placer;
     private WordNudger nudger;
@@ -40,13 +39,11 @@ class WordCramEngine {
     private int eWordIndex = -1;
 
     private RenderOptions renderOptions;
+    private Renderer renderer;
 
-    WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
-        this.destination = destination;
-
+    WordCramEngine(Word[] words, WordFonter fonter, WordSizer sizer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
         this.fonter = fonter;
         this.sizer = sizer;
-        this.colorer = colorer;
         this.angler = angler;
         this.placer = placer;
         this.nudger = nudger;
@@ -72,7 +69,7 @@ class WordCramEngine {
             float wordSize = word.getSize(sizer, i, words.length);
             float wordAngle = word.getAngle(angler);
 
-            Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle);
+            Shape shape = wordShaper.getShapeFor(eWord.getWord().word, wordFont, wordSize, wordAngle);
             if (isTooSmall(shape, renderOptions.minShapeSize)) {
                 skipWord(word, WordCram.SHAPE_WAS_TOO_SMALL);
             }
@@ -87,6 +84,10 @@ class WordCramEngine {
         }
 
         return engineWords.toArray(new EngineWord[0]);
+    }
+    
+    public void setRenderer(Renderer renderer) {
+    	this.renderer = renderer;
     }
 
     private boolean isTooSmall(Shape shape, int minShapeSize) {
@@ -164,12 +165,12 @@ class WordCramEngine {
     }
 
     private boolean placeWord(EngineWord eWord) {
-        Word word = eWord.word;
+        Word word = eWord.getWord();
         Rectangle2D rect = eWord.getShape().getBounds2D(); // TODO can we move these into EngineWord.setDesiredLocation? Does that make sense?
         int wordImageWidth = (int)rect.getWidth();
         int wordImageHeight = (int)rect.getHeight();
 
-        eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, destination.width, destination.height);
+        eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, renderer.getWidth(), renderer.getHeight());
 
         // Set maximum number of placement trials
         int maxAttemptsToPlace = renderOptions.maxAttemptsToPlaceWord > 0 ?
@@ -182,7 +183,7 @@ class WordCramEngine {
             eWord.nudge(nudger.nudgeFor(word, attempt));
 
             PVector loc = eWord.getCurrentLocation();
-            if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= destination.width || loc.y + wordImageHeight >= destination.height) {
+            if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= renderer.getWidth() || loc.y + wordImageHeight >= renderer.getHeight()) {
                 continue;
             }
 
@@ -207,7 +208,7 @@ class WordCramEngine {
             }
         }
 
-        skipWord(eWord.word, WordCram.NO_SPACE);
+        skipWord(eWord.getWord(), WordCram.NO_SPACE);
         return false;
     }
 
@@ -216,21 +217,14 @@ class WordCramEngine {
     }
 
     private void drawWordImage(EngineWord word) {
-        GeneralPath path2d = new GeneralPath(word.getShape());
-
-//        Graphics2D g2 = (Graphics2D)destination.image.getGraphics();
-        Graphics2D g2 = ((PGraphicsJava2D)destination).g2;
-
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setPaint(new Color(word.word.getColor(colorer), true));
-        g2.fill(path2d);
+        renderer.drawEngineWord(word);
     }
 
     Word getWordAt(float x, float y) {
         for (int i = eWords.length-1; i >= 0; i--) {
             if (eWords[i].wasPlaced()) {
                 if (eWords[i].containsPoint(x, y)) {
-                    return eWords[i].word;
+                    return eWords[i].getWord();
                 }
             }
         }

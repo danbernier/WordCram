@@ -116,6 +116,7 @@ public class AWordCramEngine {
 	}
 
 	private WordCramEngine getEngine(Word... words) {
-		return new WordCramEngine(destination, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
+		return null;
+//		return new WordCramEngine(destination, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
 	}
 }
