@@ -21,6 +21,7 @@ import java.util.*;
 import processing.core.PApplet;
 import processing.core.PFont;
 import wordcram.*;
+import wordcram.renderer.SVGDocumentRenderer;
 
 public class Main extends PApplet {
 	
@@ -83,7 +84,7 @@ public class Main extends PApplet {
 //					.minShapeSize(0)
 //					.withMaxAttemptsForPlacement(10)
 					.maxNumberOfWordsToDraw(1000)
-					
+					.withRenderer(new SVGDocumentRenderer("test.svg"));
 //					.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
 //					.withNudger(new RandomWordNudger())
 					

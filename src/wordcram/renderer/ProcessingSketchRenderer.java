@@ -40,5 +40,9 @@ public class ProcessingSketchRenderer implements Renderer {
 		g2.setPaint(new Color(eWord.getWord().getColor(colorer), true));
 		g2.fill(path2d);
 	}
+	
+	public void close() {
+		
+	}
 
 }
