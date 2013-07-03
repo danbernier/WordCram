@@ -1,21 +1,17 @@
 package wordcram;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.geom.GeneralPath;
-
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
 
-public class ProcessingSketchRenderer implements Renderer {
+public class ProcessingSketchRenderer extends AbstractGraphics2DRenderer {
 
 	private PGraphics canvas;
-	WordColorer colorer;
+	
 
 	public ProcessingSketchRenderer(PApplet parent) {
 		canvas = parent.g;
+		graphics = ((PGraphicsJava2D) parent.g).g2;
 	}
 
 	public int getWidth() {
@@ -26,21 +22,7 @@ public class ProcessingSketchRenderer implements Renderer {
 		return canvas.height;
 	}
 
-	public void setColorer(WordColorer colorer) {
-		this.colorer = colorer;
-	}
-
-	public void drawEngineWord(EngineWord eWord) {
-		GeneralPath path2d = new GeneralPath(eWord.getShape());
-		Graphics2D g2 = ((PGraphicsJava2D) canvas).g2;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setPaint(new Color(eWord.getWord().getColor(colorer), true));
-		g2.fill(path2d);
-	}
-	
 	public void close() {
-		
 	}
 
 }

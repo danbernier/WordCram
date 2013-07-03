@@ -21,7 +21,7 @@ import java.awt.geom.AffineTransform;
 
 import processing.core.PVector;
 
-public class EngineWord {
+class EngineWord {
     private Word word;
     int rank;
 
