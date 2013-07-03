@@ -1,7 +1,5 @@
-package wordcram.renderer;
+package wordcram;
 
-import wordcram.EngineWord;
-import wordcram.WordColorer;
 
 public interface Renderer {
 	

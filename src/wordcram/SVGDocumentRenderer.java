@@ -1,4 +1,4 @@
-package wordcram.renderer;
+package wordcram;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -14,8 +14,6 @@ import org.apache.batik.svggen.SVGGraphics2D;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 
-import wordcram.EngineWord;
-import wordcram.WordColorer;
 
 public class SVGDocumentRenderer implements Renderer {
 

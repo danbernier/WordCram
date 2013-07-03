@@ -1,4 +1,4 @@
-package wordcram.renderer;
+package wordcram;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -8,8 +8,6 @@ import java.awt.geom.GeneralPath;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
-import wordcram.EngineWord;
-import wordcram.WordColorer;
 
 public class ProcessingSketchRenderer implements Renderer {
 

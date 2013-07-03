@@ -21,7 +21,6 @@ import java.util.*;
 import processing.core.PApplet;
 import processing.core.PFont;
 import wordcram.*;
-import wordcram.renderer.SVGDocumentRenderer;
 
 public class Main extends PApplet {
 	

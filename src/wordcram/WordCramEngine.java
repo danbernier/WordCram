@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import wordcram.renderer.Renderer;
 
 class WordCramEngine {
 
