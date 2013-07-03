@@ -173,7 +173,7 @@ public class Word implements Comparable<Word> {
         return renderedFont;
     }
 
-    Integer getColor(WordColorer colorer) {
+    public Integer getColor(WordColorer colorer) {
         renderedColor = presetColor != null ? presetColor : colorer.colorFor(this);
         return renderedColor;
     }

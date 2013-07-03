@@ -71,7 +71,7 @@ public class Main extends PApplet {
 //					.upperCase()
 //					.excludeNumbers()
 					.withFonts(randomFont())
-//					.withColorer(Colorers.twoHuesRandomSats(this))
+					.withColorer(Colorers.twoHuesRandomSats(this))
 //					.withColorer(Colorers.complement(this, random(255), 200, 220))
 					.withAngler(Anglers.mostlyHoriz())
 					.withPlacer(Placers.horizLine())
@@ -83,7 +83,7 @@ public class Main extends PApplet {
 //					.minShapeSize(0)
 //					.withMaxAttemptsForPlacement(10)
 					.maxNumberOfWordsToDraw(1000)
-					
+					.withRenderer(new SVGDocumentRenderer("test.svg"));
 //					.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
 //					.withNudger(new RandomWordNudger())
 					
