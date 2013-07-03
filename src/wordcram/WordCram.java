@@ -22,7 +22,6 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import wordcram.observer.Observer;
 import wordcram.text.Html;
 import wordcram.text.Text;
 import wordcram.text.TextFile;

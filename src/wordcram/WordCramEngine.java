@@ -28,7 +28,6 @@ import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
 import processing.core.PVector;
-import wordcram.observer.Observer;
 
 class WordCramEngine {
 

@@ -24,10 +24,10 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import wordcram.Anglers;
 import wordcram.Placers;
+import wordcram.PrintStreamObserver;
 import wordcram.Sizers;
 import wordcram.Word;
 import wordcram.WordCram;
-import wordcram.observer.PrintStreamObserver;
 
 public class Main extends PApplet {
 	
