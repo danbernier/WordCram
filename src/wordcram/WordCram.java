@@ -182,6 +182,7 @@ public class WordCram {
 
     private PGraphics destination = null;
     private RenderOptions renderOptions = new RenderOptions();
+    private Observer observer;
 
     /**
      * Make a new WordCram.
@@ -745,7 +746,7 @@ public class WordCram {
 
     private WordCramEngine getWordCramEngine() {
         if (wordCramEngine == null) {
-
+        	if (observer == null) observer = new VoidObserver();
             if (words == null && !textSources.isEmpty()) {
                 String text = joinTextSources();
 
@@ -754,22 +755,21 @@ public class WordCram {
                      : text;
 
                 words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text);
-
+                observer.wordsCounted(words);
                 if (words.length == 0) {
                 	warnScripterAboutEmptyWordArray();
                 }
             }
             words = new WordSorterAndScaler().sortAndScale(words);
-
+            observer.wordsScaled(words);
             if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
             if (sizer == null) sizer = Sizers.byWeight(5, 70);
             if (colorer == null) colorer = Colorers.alwaysUse(parent.color(0));
             if (angler == null) angler = Anglers.mostlyHoriz();
             if (placer == null) placer = Placers.horizLine();
             if (nudger == null) nudger = new SpiralWordNudger();
-
             PGraphics canvas = destination == null? parent.g : destination;
-            wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
+            wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions, observer);
         }
      return wordCramEngine;
     }
@@ -868,7 +868,7 @@ public class WordCram {
     }
     
     public WordCram withObserver(Observer observer) {
-    	getWordCramEngine().setObserver(observer);
+    	this.observer = observer;
     	return this;
     }
 }

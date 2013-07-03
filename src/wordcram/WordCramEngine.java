@@ -47,7 +47,7 @@ class WordCramEngine {
     private RenderOptions renderOptions;
     private Observer observer;
 
-    WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
+    WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions, Observer observer) {
         this.destination = destination;
 
         this.fonter = fonter;
@@ -56,10 +56,12 @@ class WordCramEngine {
         this.angler = angler;
         this.placer = placer;
         this.nudger = nudger;
+        this.observer = observer;
 
         this.renderOptions = renderOptions;
         this.words = words;
         this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
+        observer.wordsShaped();
     }
 
     private EngineWord[] wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
@@ -107,60 +109,31 @@ class WordCramEngine {
         // TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
         // NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
         word.wasSkippedBecause(reason);
+        observer.wordSkipped(word);
     }
 
     boolean hasMore() {
         return eWordIndex < eWords.length-1;
     }
 
-    String gatherResults() {
-    	String result = "";
-    	Word[] skippedWords = getSkippedWords();
-    	result += "Total Words: " + words.length + "\n";
-    	result += "Placed % (of those tried): " + ((int) (getProgress()*100))+ "\n";
-    	int overNumber = 0;
-    	int tooSmall = 0;
-    	int noSpace = 0;
-    	for (Word w: skippedWords) {
-    		if (w.wasSkippedBecause() == WordSkipReason.NO_SPACE) {
-    			noSpace++;
-    		} else if (w.wasSkippedBecause() == WordSkipReason.SHAPE_TOO_SMALL) {
-    			tooSmall++;
-    		} else if (w.wasSkippedBecause() == WordSkipReason.OVER_MAX_WORDS) {
-    			overNumber++;
-    		} else {
-    			//That should not happen
-    			throw new RuntimeException("Word skip reason not present in WordCram: " + w.wasSkippedBecause());
-    		}
-    	}
-    	result += "Skipped because no Space: " + noSpace+ "\n";
-    	result += "Skipped because too Small: " + tooSmall+ "\n";
-    	result += "Skipped because max Number reached: " + overNumber+ "\n";
-    	return result;
-    }
-
     void drawAll() {
-    	getObserver().beginDraw();
-    	Word current;
-        while(hasMore()) {
-            current = drawNext();
-            getObserver().wordDrawn(current);
-//            "Drew a word. Progress: " + (eWordIndex + 1) +
+    	observer.beginDraw();
+    	while(hasMore()) {
+            drawNext();
+//              "Drew a word. Progress: " + (eWordIndex + 1) +
 //            "/" + eWords.length + "(" + ((int) (getProgress() * 100)) + "%)";
         }
-        getObserver().endDraw();
+        observer.endDraw(words);
     }
 
-    Word drawNext() {
-        if (!hasMore()) return null;
-
+    void drawNext() {
+        if (!hasMore()) return;
         EngineWord eWord = eWords[++eWordIndex];
-
         boolean wasPlaced = placeWord(eWord);
         if (wasPlaced) { // TODO unit test (somehow)
             drawWordImage(eWord);
+            observer.wordDrawn(eWord.word);
         }
-        return eWord.word;
     }
 
     private boolean placeWord(EngineWord eWord) {
@@ -251,10 +224,7 @@ class WordCramEngine {
         return (float) (this.eWordIndex+1) / this.eWords.length;
     }
 
-	public Observer getObserver() {
-		return observer;
-	}
-
+	
 	public void setObserver(Observer observer) {
 		this.observer = observer;
 	}
