@@ -742,6 +742,11 @@ public class WordCram {
         return this;
     }
 
+    public WordCram toSvg(String filename, int width, int height) throws java.io.FileNotFoundException {
+        this.renderer = new SvgWordRenderer(parent.sketchPath(filename), width, height);
+        return this;
+    }
+
 
     /**
      * Add padding around each word, so they stand out from each other more.

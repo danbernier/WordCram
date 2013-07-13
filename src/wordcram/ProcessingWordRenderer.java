@@ -49,4 +49,6 @@ class ProcessingWordRenderer implements WordRenderer {
         g2.setPaint(color);
         g2.fill(path2d);
 	}
+
+	public void finish() {}
 }

@@ -102,6 +102,7 @@ class WordCramEngine {
         while(hasMore()) {
             drawNext();
         }
+        renderer.finish();
     }
 
     void drawNext() {
