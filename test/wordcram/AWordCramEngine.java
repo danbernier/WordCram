@@ -22,7 +22,7 @@ import processing.core.PGraphics;
 
 public class AWordCramEngine {
 
-	private PGraphics destination;
+	private WordRenderer renderer;
 	private WordFonter fonter;
 	private WordSizer sizer;
 	private WordColorer colorer;
@@ -35,7 +35,7 @@ public class AWordCramEngine {
 
 	@Before
 	public void SetUp() {
-		destination = mock(PGraphics.class);
+		renderer = mock(WordRenderer.class);
 		fonter = mock(WordFonter.class);
 		sizer = mock(WordSizer.class);
 		colorer = mock(WordColorer.class);
@@ -114,6 +114,6 @@ public class AWordCramEngine {
 	}
 
 	private WordCramEngine getEngine(Word... words) {
-		return new WordCramEngine(destination, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
+		return new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
 	}
 }

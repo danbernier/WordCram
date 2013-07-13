@@ -40,8 +40,8 @@ class WordCramEngine {
 
     private RenderOptions renderOptions;
 
-    WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
-        this.renderer = new ProcessingWordRenderer(destination);
+    WordCramEngine(WordRenderer renderer, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
+        this.renderer = renderer;
 
         this.fonter = fonter;
         this.sizer = sizer;
