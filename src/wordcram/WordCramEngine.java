@@ -16,8 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import java.awt.*;
-import java.awt.geom.GeneralPath;
+import java.awt.Color;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ import processing.core.*;
 
 class WordCramEngine {
 
-    private PGraphics destination;
+    private WordRenderer renderer;
 
     private WordFonter fonter;
     private WordSizer sizer;
@@ -41,7 +41,7 @@ class WordCramEngine {
     private RenderOptions renderOptions;
 
     WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
-        this.destination = destination;
+        this.renderer = new ProcessingWordRenderer(destination);
 
         this.fonter = fonter;
         this.sizer = sizer;
@@ -121,7 +121,7 @@ class WordCramEngine {
         int wordImageWidth = (int)rect.getWidth();
         int wordImageHeight = (int)rect.getHeight();
 
-        eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, destination.width, destination.height);
+        eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, renderer.getWidth(), renderer.getHeight());
 
         // Set maximum number of placement trials
         int maxAttemptsToPlace = renderOptions.maxAttemptsToPlaceWord > 0 ?
@@ -134,7 +134,7 @@ class WordCramEngine {
             eWord.nudge(nudger.nudgeFor(word, attempt));
 
             PVector loc = eWord.getCurrentLocation();
-            if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= destination.width || loc.y + wordImageHeight >= destination.height) {
+            if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= renderer.getWidth() || loc.y + wordImageHeight >= renderer.getHeight()) {
                 continue;
             }
 
@@ -168,14 +168,7 @@ class WordCramEngine {
     }
 
     private void drawWordImage(EngineWord word) {
-        GeneralPath path2d = new GeneralPath(word.getShape());
-
-//        Graphics2D g2 = (Graphics2D)destination.image.getGraphics();
-        Graphics2D g2 = ((PGraphicsJava2D)destination).g2;
-
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setPaint(new Color(word.word.getColor(colorer), true));
-        g2.fill(path2d);
+        renderer.drawWord(word, new Color(word.word.getColor(colorer), true));
     }
 
     Word getWordAt(float x, float y) {
