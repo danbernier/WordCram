@@ -195,7 +195,7 @@ def compile(src_dir, dest_dir, classpath)
 end
 
 def main_classpath
-  ['lib/processing/core.jar', 'lib/jsoup-1.7.2.jar', 'lib/cue.language.jar', 'lib/batik.jar'] * ':'
+  ['lib/processing/core.jar', 'lib/jsoup-1.7.2.jar', 'lib/cue.language.jar'] * ':'
 end
 
 def test_classpath
