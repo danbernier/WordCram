@@ -84,15 +84,15 @@ class SvgWordRenderer implements WordRenderer {
 
 			switch(type) {
 				case PathIterator.SEG_MOVETO:
-					p(" M " + coords[0] + " " + coords[1]);
+					p("M" + coords[0] + " " + coords[1]);
 
 					break;
 				case PathIterator.SEG_LINETO:
-					p(" L " + coords[0] + " " + coords[1]);
+					p("L" + coords[0] + " " + coords[1]);
 					break;
 
 				case PathIterator.SEG_CLOSE:
-					pl(" Z");
+					pl("Z");
 					break;
 			}
 
