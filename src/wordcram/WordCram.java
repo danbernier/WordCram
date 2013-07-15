@@ -769,7 +769,7 @@ public class WordCram {
                      : textCase == TextCase.Upper ? text.toUpperCase()
                      : text;
 
-                words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text);
+                words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text, renderOptions);
 
                 if (words.length == 0) {
                 	warnScripterAboutEmptyWordArray();

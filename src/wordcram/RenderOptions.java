@@ -5,4 +5,6 @@ class RenderOptions {
     int maxNumberOfWordsToDraw = -1; // default: unlimited
     int minShapeSize = 7;
     int wordPadding = 1;
+
+    boolean rightToLeft = false;
 }
