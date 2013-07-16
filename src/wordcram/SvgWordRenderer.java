@@ -19,6 +19,7 @@ limitations under the License.
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Path2D;
 import java.io.PrintWriter;
 import java.io.FileNotFoundException;
 
@@ -35,7 +36,7 @@ class SvgWordRenderer implements WordRenderer {
 		pl("<?xml version=\"1.0\"?>");
 		pl("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">");
 		// TODO add wordcram metadata
-		pl("<svg width=\"" + width + "\" height=\"" + height + "\">");
+		pl("<svg width=\"" + width + "\" height=\"" + height + "\" fill-rule=\"evenodd\">");   // or nonzero
 	}
 
 	public int getWidth() {
@@ -67,35 +68,40 @@ class SvgWordRenderer implements WordRenderer {
 		return "rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ")";
 	}
 
-
 	private void renderShape(Shape shape) {
 
-		PathIterator pathIter = shape.getPathIterator(null, 1.0);
-		p("<path d=\"");
-
-		// TODO try using the fuller style w/ bezier curves
-		// Since we passed 1.0 (flatness) to getPathIterator, pathIter
-		// will only contain: SEG_MOVETO, SEG_LINETO, and SEG_CLOSE
+		Path2D.Double path2d = new Path2D.Double(shape);
+		path2d.setWindingRule(Path2D.WIND_EVEN_ODD);   // or WIND_NON_ZERO
+		PathIterator pathIter = path2d.getPathIterator(null);
 
 		float[] coords = new float[6];
 
-		while (!pathIter.isDone ()) {
+		p("<path d=\"");
+		while (!pathIter.isDone()) {
+
 			int type = pathIter.currentSegment(coords);
 
 			switch(type) {
 				case PathIterator.SEG_MOVETO:
 					p("M" + coords[0] + " " + coords[1]);
-
 					break;
+
 				case PathIterator.SEG_LINETO:
 					p("L" + coords[0] + " " + coords[1]);
 					break;
 
+				case PathIterator.SEG_QUADTO:
+					p("Q" + coords[0] + " " + coords[1] + " " + coords[2] + " " + coords[3]);
+					break;
+
+				case PathIterator.SEG_CUBICTO:
+					p("C" + coords[0] + " " + coords[1] + " " + coords[2] + " " + coords[3] + " " + coords[4] + " " + coords[5]);
+					break;
+
 				case PathIterator.SEG_CLOSE:
-					pl("Z");
+					p("Z");
 					break;
 			}
-
 
 			pathIter.next();
 		}
