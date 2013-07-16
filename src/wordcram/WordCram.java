@@ -775,7 +775,7 @@ public class WordCram {
                      : textCase == TextCase.Upper ? text.toUpperCase()
                      : text;
 
-                words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text);
+                words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text, renderOptions);
 
                 if (words.length == 0) {
                 	warnScripterAboutEmptyWordArray();
@@ -789,8 +789,7 @@ public class WordCram {
             if (angler == null) angler = Anglers.mostlyHoriz();
             if (placer == null) placer = Placers.horizLine();
             if (nudger == null) nudger = new SpiralWordNudger();
-
-            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
+            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(renderOptions), new BBTreeBuilder(), renderOptions);
         }
      return wordCramEngine;
     }
