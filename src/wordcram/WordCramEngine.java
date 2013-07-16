@@ -19,6 +19,7 @@ limitations under the License.
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 import processing.core.*;
@@ -71,8 +72,8 @@ class WordCramEngine {
             float wordSize = word.getSize(sizer, i, words.length);
             float wordAngle = word.getAngle(angler);
 
-            Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle, renderOptions.minShapeSize);
-            if (shape == null) {
+            Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle);
+            if (isTooSmall(shape, renderOptions.minShapeSize)) {
                 skipWord(word, WordCram.SHAPE_WAS_TOO_SMALL);
             }
             else {
@@ -88,6 +89,14 @@ class WordCramEngine {
         return engineWords.toArray(new EngineWord[0]);
     }
 
+    private boolean isTooSmall(Shape shape, int minShapeSize) {
+        Rectangle2D r = shape.getBounds2D();
+
+        // Most words will be wider than tall, so this basically boils down to height.
+        // For the odd word like "I", we check width, too.
+        return r.getHeight() < minShapeSize || r.getWidth() < minShapeSize;
+    }
+
     private void skipWord(Word word, int reason) {
         // TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
         // NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
@@ -96,6 +105,45 @@ class WordCramEngine {
 
     boolean hasMore() {
         return eWordIndex < eWords.length-1;
+    }
+
+    void drawAllVerbose() {
+    	drawAllVerbose(System.out);
+    }
+
+    void drawAllVerbose(PrintStream debugStream) {
+    	debugStream.println("Start drawing words.");
+    	while (hasMore()) {
+    		drawNext();
+    		debugStream.println("Drew a word. Progress: " + (eWordIndex + 1) +
+    				"/" + eWords.length + "(" + ((int) (getProgress() * 100)) + "%)");
+    	}
+    	debugStream.println("Finished drawing words. Results:");
+    	printResult(debugStream);
+    }
+
+    void printResult(PrintStream debugStream) {
+    	Word[] skippedWords = getSkippedWords();
+    	debugStream.println("Total Words: " + words.length);
+    	debugStream.println("Placed % (of those tried): " + ((int) (getProgress()*100)));
+    	int overNumber = 0;
+    	int tooSmall = 0;
+    	int noSpace = 0;
+    	for (Word w: skippedWords) {
+    		if (w.wasSkippedBecause() == WordCram.NO_SPACE) {
+    			noSpace++;
+    		} else if (w.wasSkippedBecause() == WordCram.SHAPE_WAS_TOO_SMALL) {
+    			tooSmall++;
+    		} else if (w.wasSkippedBecause() == WordCram.WAS_OVER_MAX_NUMBER_OF_WORDS) {
+    			overNumber++;
+    		} else {
+    			//That should not happen
+    			throw new RuntimeException("Word skip reason not present in WordCram: " + w.wasSkippedBecause());
+    		}
+    	}
+    	debugStream.println("Skipped because no Space: " + noSpace);
+    	debugStream.println("Skipped because too Small: " + tooSmall);
+    	debugStream.println("Skipped because max Number reached: " + overNumber);
     }
 
     void drawAll() {
@@ -194,6 +242,6 @@ class WordCramEngine {
     }
 
     float getProgress() {
-        return (float)this.eWordIndex / this.eWords.length;
+        return (float) (this.eWordIndex+1) / this.eWords.length;
     }
 }
