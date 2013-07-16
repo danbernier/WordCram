@@ -16,6 +16,7 @@ package example;
  limitations under the License.
  */
 
+import java.io.FileNotFoundException;
 import java.util.*;
 
 import processing.core.PApplet;
@@ -39,7 +40,12 @@ public class Main extends PApplet {
 		size(700, 400); // (int)random(300, 800)); //1200, 675); //1600, 900);
 		smooth();
 		colorMode(HSB);
-		initWordCram();
+		try {
+			initWordCram();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//frameRate(1);
 	}
 	
@@ -58,7 +64,7 @@ public class Main extends PApplet {
 	}
 	
 	//PGraphics pg;
-	private void initWordCram() {
+	private void initWordCram() throws FileNotFoundException {
 		background(100);
 		
 		//pg = createGraphics(800, 600, JAVA2D);
@@ -83,7 +89,7 @@ public class Main extends PApplet {
 //					.minShapeSize(0)
 //					.withMaxAttemptsForPlacement(10)
 					.maxNumberOfWordsToDraw(1000)
-					
+					.toSvg("test.svg", 1000, 1000)
 //					.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
 //					.withNudger(new RandomWordNudger())
 					
@@ -132,7 +138,12 @@ public class Main extends PApplet {
 	}
 		
 	public void mouseClicked() {
-		initWordCram();
+		try {
+			initWordCram();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		loop();
 	}
 	
