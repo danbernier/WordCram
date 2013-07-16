@@ -22,7 +22,7 @@ import processing.core.PGraphics;
 
 public class AWordCramEngine {
 
-	private PGraphics destination;
+	private WordRenderer renderer;
 	private WordFonter fonter;
 	private WordSizer sizer;
 	private WordColorer colorer;
@@ -35,7 +35,7 @@ public class AWordCramEngine {
 
 	@Before
 	public void SetUp() {
-		destination = mock(PGraphics.class);
+		renderer = mock(WordRenderer.class);
 		fonter = mock(WordFonter.class);
 		sizer = mock(WordSizer.class);
 		colorer = mock(WordColorer.class);
@@ -65,23 +65,25 @@ public class AWordCramEngine {
 			when(fonter.fontFor(words[i])).thenReturn(pFont);
 			when(sizer.sizeFor(eq(words[i]), anyInt(), anyInt())).thenReturn(sizes[i]);
 			when(angler.angleFor(words[i])).thenReturn(angles[i]);
+			when(shaper.getShapeFor(words[i].word, pFont, sizes[i], angles[i])).thenReturn(new Rectangle(0, 0, 20, 20));
 		}
 
 		WordCramEngine engine = getEngine(words);
 
 		for (int i = 0; i < words.length; i++) {
-			verify(shaper).getShapeFor(words[i].word, pFont, sizes[i], angles[i], renderOptions.minShapeSize);
+			verify(shaper).getShapeFor(words[i].word, pFont, sizes[i], angles[i]);
 		}
 	}
-
+	
 	@Test
 	public void willSkipWordsWhoseShapesAreTooSmall() {
 		Word big = new Word("big", 10);
 		Word small = new Word("small", 1);
-		Shape bigShape = mock(Shape.class);
+		Shape bigShape = new Rectangle(0, 0, 20, 20);
+		Shape smallShape = new Rectangle(0, 0, 1, 1);
 
-		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(bigShape);
-		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(null);
+		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(bigShape);
+		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(smallShape);
 
 		WordCramEngine engine = getEngine(big, small);
 		Word[] skippedWords = engine.getSkippedWords();
@@ -102,7 +104,7 @@ public class AWordCramEngine {
 
 		renderOptions.maxNumberOfWordsToDraw = 2;
 
-		when(shaper.getShapeFor(anyString(), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(new Rectangle());
+		when(shaper.getShapeFor(anyString(), any(PFont.class), anyFloat(), anyFloat())).thenReturn(new Rectangle(0, 0, 20, 20));
 
 		WordCramEngine engine = getEngine(words);
 		Word[] skippedWords = engine.getSkippedWords();
@@ -114,6 +116,6 @@ public class AWordCramEngine {
 	}
 
 	private WordCramEngine getEngine(Word... words) {
-		return new WordCramEngine(destination, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
+		return new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
 	}
 }

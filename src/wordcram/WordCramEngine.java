@@ -16,16 +16,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import java.awt.*;
-import java.awt.geom.GeneralPath;
+import java.awt.Color;
+import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 import processing.core.*;
 
 class WordCramEngine {
 
-    private PGraphics destination;
+    private WordRenderer renderer;
 
     private WordFonter fonter;
     private WordSizer sizer;
@@ -40,8 +41,8 @@ class WordCramEngine {
 
     private RenderOptions renderOptions;
 
-    WordCramEngine(PGraphics destination, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
-        this.destination = destination;
+    WordCramEngine(WordRenderer renderer, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions) {
+        this.renderer = renderer;
 
         this.fonter = fonter;
         this.sizer = sizer;
@@ -71,8 +72,8 @@ class WordCramEngine {
             float wordSize = word.getSize(sizer, i, words.length);
             float wordAngle = word.getAngle(angler);
 
-            Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle, renderOptions.minShapeSize);
-            if (shape == null) {
+            Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle);
+            if (isTooSmall(shape, renderOptions.minShapeSize)) {
                 skipWord(word, WordCram.SHAPE_WAS_TOO_SMALL);
             }
             else {
@@ -88,6 +89,14 @@ class WordCramEngine {
         return engineWords.toArray(new EngineWord[0]);
     }
 
+    private boolean isTooSmall(Shape shape, int minShapeSize) {
+        Rectangle2D r = shape.getBounds2D();
+
+        // Most words will be wider than tall, so this basically boils down to height.
+        // For the odd word like "I", we check width, too.
+        return r.getHeight() < minShapeSize || r.getWidth() < minShapeSize;
+    }
+
     private void skipWord(Word word, int reason) {
         // TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
         // NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
@@ -98,10 +107,50 @@ class WordCramEngine {
         return eWordIndex < eWords.length-1;
     }
 
+    void drawAllVerbose() {
+    	drawAllVerbose(System.out);
+    }
+
+    void drawAllVerbose(PrintStream debugStream) {
+    	debugStream.println("Start drawing words.");
+    	while (hasMore()) {
+    		drawNext();
+    		debugStream.println("Drew a word. Progress: " + (eWordIndex + 1) +
+    				"/" + eWords.length + "(" + ((int) (getProgress() * 100)) + "%)");
+    	}
+    	debugStream.println("Finished drawing words. Results:");
+    	printResult(debugStream);
+    }
+
+    void printResult(PrintStream debugStream) {
+    	Word[] skippedWords = getSkippedWords();
+    	debugStream.println("Total Words: " + words.length);
+    	debugStream.println("Placed % (of those tried): " + ((int) (getProgress()*100)));
+    	int overNumber = 0;
+    	int tooSmall = 0;
+    	int noSpace = 0;
+    	for (Word w: skippedWords) {
+    		if (w.wasSkippedBecause() == WordCram.NO_SPACE) {
+    			noSpace++;
+    		} else if (w.wasSkippedBecause() == WordCram.SHAPE_WAS_TOO_SMALL) {
+    			tooSmall++;
+    		} else if (w.wasSkippedBecause() == WordCram.WAS_OVER_MAX_NUMBER_OF_WORDS) {
+    			overNumber++;
+    		} else {
+    			//That should not happen
+    			throw new RuntimeException("Word skip reason not present in WordCram: " + w.wasSkippedBecause());
+    		}
+    	}
+    	debugStream.println("Skipped because no Space: " + noSpace);
+    	debugStream.println("Skipped because too Small: " + tooSmall);
+    	debugStream.println("Skipped because max Number reached: " + overNumber);
+    }
+
     void drawAll() {
         while(hasMore()) {
             drawNext();
         }
+        renderer.finish();
     }
 
     void drawNext() {
@@ -121,7 +170,7 @@ class WordCramEngine {
         int wordImageWidth = (int)rect.getWidth();
         int wordImageHeight = (int)rect.getHeight();
 
-        eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, destination.width, destination.height);
+        eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, renderer.getWidth(), renderer.getHeight());
 
         // Set maximum number of placement trials
         int maxAttemptsToPlace = renderOptions.maxAttemptsToPlaceWord > 0 ?
@@ -134,7 +183,7 @@ class WordCramEngine {
             eWord.nudge(nudger.nudgeFor(word, attempt));
 
             PVector loc = eWord.getCurrentLocation();
-            if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= destination.width || loc.y + wordImageHeight >= destination.height) {
+            if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= renderer.getWidth() || loc.y + wordImageHeight >= renderer.getHeight()) {
                 continue;
             }
 
@@ -168,14 +217,7 @@ class WordCramEngine {
     }
 
     private void drawWordImage(EngineWord word) {
-        GeneralPath path2d = new GeneralPath(word.getShape());
-
-//        Graphics2D g2 = (Graphics2D)destination.image.getGraphics();
-        Graphics2D g2 = ((PGraphicsJava2D)destination).g2;
-
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setPaint(new Color(word.word.getColor(colorer), true));
-        g2.fill(path2d);
+        renderer.drawWord(word, new Color(word.word.getColor(colorer), true));
     }
 
     Word getWordAt(float x, float y) {
@@ -200,6 +242,6 @@ class WordCramEngine {
     }
 
     float getProgress() {
-        return (float)this.eWordIndex / this.eWords.length;
+        return (float) (this.eWordIndex+1) / this.eWords.length;
     }
 }

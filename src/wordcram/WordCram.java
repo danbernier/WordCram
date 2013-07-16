@@ -196,7 +196,7 @@ public class WordCram {
     private WordPlacer placer;
     private WordNudger nudger;
 
-    private PGraphics destination = null;
+    private WordRenderer renderer;
     private RenderOptions renderOptions = new RenderOptions();
 
     /**
@@ -208,6 +208,7 @@ public class WordCram {
      */
     public WordCram(PApplet parent) {
         this.parent = parent;
+        this.renderer = new ProcessingWordRenderer(parent.g);
     }
 
     /**
@@ -737,7 +738,12 @@ public class WordCram {
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram withCustomCanvas(PGraphics canvas) {
-        this.destination = canvas;
+        this.renderer = new ProcessingWordRenderer(canvas);
+        return this;
+    }
+
+    public WordCram toSvg(String filename, int width, int height) throws java.io.FileNotFoundException {
+        this.renderer = new SvgWordRenderer(parent.sketchPath(filename), width, height);
         return this;
     }
 
@@ -784,11 +790,9 @@ public class WordCram {
             if (placer == null) placer = Placers.horizLine();
             if (nudger == null) nudger = new SpiralWordNudger();
 
-            PGraphics canvas = destination == null? parent.g : destination;
-            wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
+            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
         }
-
-        return wordCramEngine;
+     return wordCramEngine;
     }
 
     private String joinTextSources() {
@@ -836,6 +840,16 @@ public class WordCram {
      */
     public void drawAll() {
         getWordCramEngine().drawAll();
+    }
+    
+    /**
+     * Just like {@link #drawAll()} but with a constant debug output
+     * about the progress. Needless to say this is way slower than
+     * drawing without debug output.
+     * @see #drawAll()
+     */
+    public void drawAllVerbose() {
+    	getWordCramEngine().drawAllVerbose();
     }
 
     /**
