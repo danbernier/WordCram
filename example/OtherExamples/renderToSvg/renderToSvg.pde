@@ -19,7 +19,7 @@ void setup() {
       withColors(#0033ff, #0055ff, #0088ff, #00bbff, #00ffdd).  // Colors come through, too.
       drawAll();
   }
-  catch (FileNotFoundException x) {
+  catch (java.io.FileNotFoundException x) {
     println(x.getMessage());
   }
 
