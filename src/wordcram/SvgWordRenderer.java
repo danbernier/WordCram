@@ -36,6 +36,7 @@ class SvgWordRenderer implements WordRenderer {
 		pl("<?xml version=\"1.0\"?>");
 		pl("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">");
 		// TODO add wordcram metadata
+		pl("<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"" + width + "\" height=\"" + height + "\">");
 		pl("<svg width=\"" + width + "\" height=\"" + height + "\" fill-rule=\"evenodd\">");   // or nonzero
 	}
 
