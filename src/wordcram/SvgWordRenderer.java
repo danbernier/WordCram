@@ -63,9 +63,12 @@ class SvgWordRenderer implements WordRenderer {
 	private String getColor(Color color) {
 		// rgb(30, 200, 90)
 		// #ff0023
-		// TODO use hex format, for smaller file sizes
+		return "#" + decToHex(color.getRed()) + decToHex(color.getGreen()) + decToHex(color.getBlue());
+	}
 
-		return "rgb(" + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + ")";
+	private String decToHex(int dec) {
+		return dec > 16 ? Integer.toHexString(dec) :
+				          "0" + Integer.toHexString(dec);
 	}
 
 	private void renderShape(Shape shape) {
