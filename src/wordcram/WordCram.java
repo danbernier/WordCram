@@ -734,10 +734,22 @@ public class WordCram {
      * Use a custom canvas instead of the applet's default one.
      * This may be needed if rendering in background or in other
      * dimensions than the applet size is needed.
+     * @deprecated for more consistent naming. Use {@link #toCanvas()} instead.
      * @param canvas the canvas to draw to
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram withCustomCanvas(PGraphics canvas) {
+        return toCanvas(canvas);
+    }
+
+    /**
+     * Use a custom canvas instead of the applet's default one.
+     * This may be needed if rendering in background or in other
+     * dimensions than the applet size is needed.
+     * @param canvas the canvas to draw to
+     * @return The WordCram, for further setup or drawing.
+     */
+    public WordCram toCanvas(PGraphics canvas) {
         this.renderer = new ProcessingWordRenderer(canvas);
         return this;
     }

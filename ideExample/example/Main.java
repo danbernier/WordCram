@@ -71,7 +71,7 @@ public class Main extends PApplet {
 		//pg.beginDraw();
 
 		wordcram = new WordCram(this)
-//					.withCustomCanvas(pg)
+//					.toCanvas(pg)
 					.fromTextFile(textFilePath())
 //					.fromWords(alphabet())
 //					.upperCase()
