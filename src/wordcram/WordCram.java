@@ -182,7 +182,7 @@ public class WordCram {
 
     private WordRenderer renderer;
     private RenderOptions renderOptions = new RenderOptions();
-    private Observer observer = new VoidObserver();
+    private Observer observer;
 
     /**
      * Make a new WordCram.
@@ -194,6 +194,7 @@ public class WordCram {
     public WordCram(PApplet parent) {
         this.parent = parent;
         this.renderer = new ProcessingWordRenderer(parent.g);
+        this.observer = new SketchCallbackObserver(parent);
     }
 
     /**
