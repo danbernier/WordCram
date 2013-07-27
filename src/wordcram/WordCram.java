@@ -801,7 +801,9 @@ public class WordCram {
             if (angler == null) angler = Anglers.mostlyHoriz();
             if (placer == null) placer = Placers.horizLine();
             if (nudger == null) nudger = new SpiralWordNudger();
-            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(renderOptions), new BBTreeBuilder(), renderOptions);
+
+            WordShaper shaper = new WordShaper(renderOptions.rightToLeft);
+            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, new BBTreeBuilder(), renderOptions);
         }
      return wordCramEngine;
     }

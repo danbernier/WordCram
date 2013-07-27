@@ -29,12 +29,12 @@ public class WordShaper {
     private FontRenderContext frc = new FontRenderContext(null, true, true);
 
 
-    private RenderOptions renderOptions;
-    public WordShaper(RenderOptions renderOptions) { // ick
-        this.renderOptions = renderOptions;
+    private boolean rightToLeft;
+    public WordShaper(boolean rightToLeft) {
+        this.rightToLeft = rightToLeft;
     }
     public WordShaper() {
-        this(new RenderOptions());  // For anyone using this to create Shapes outside. \:(
+        this(false);
     }
 
 
@@ -69,7 +69,7 @@ public class WordShaper {
 
         // TODO hmm: this doesn't render newlines.  Hrm.  If your word text is "foo\nbar", you get "foobar".
         GlyphVector gv = font.layoutGlyphVector(frc, chars, 0, chars.length,
-                renderOptions.rightToLeft ? Font.LAYOUT_RIGHT_TO_LEFT : Font.LAYOUT_LEFT_TO_RIGHT);
+                this.rightToLeft ? Font.LAYOUT_RIGHT_TO_LEFT : Font.LAYOUT_LEFT_TO_RIGHT);
 
         return gv.getOutline();
     }
