@@ -16,17 +16,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+import processing.core.*;
+import wordcram.text.*;
 import java.util.ArrayList;
-
-import processing.core.PApplet;
-import processing.core.PFont;
-import processing.core.PGraphics;
-import processing.core.PVector;
-import wordcram.text.Html;
-import wordcram.text.Text;
-import wordcram.text.TextFile;
-import wordcram.text.TextSource;
-import wordcram.text.WebPage;
 
 /**
  * The main API for WordCram.
