@@ -38,9 +38,9 @@ public class PrintStreamObserver implements Observer {
 		    	if (w.wasSkipped()) {
 		    		if (w.wasSkippedBecause() == WordSkipReason.NO_SPACE) {
 		    			noSpace++;
-		    		} else if (w.wasSkippedBecause() == WordSkipReason.SHAPE_TOO_SMALL) {
+		    		} else if (w.wasSkippedBecause() == WordSkipReason.SHAPE_WAS_TOO_SMALL) {
 		    			tooSmall++;
-		    		} else if (w.wasSkippedBecause() == WordSkipReason.OVER_MAX_WORDS) {
+		    		} else if (w.wasSkippedBecause() == WordSkipReason.WAS_OVER_MAX_NUMBER_OF_WORDS) {
 		    			overNumber++;
 		    		} 
 		    	} else {

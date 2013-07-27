@@ -79,7 +79,7 @@ class WordCramEngine {
 
             Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle);
             if (isTooSmall(shape, renderOptions.minShapeSize)) {
-                skipWord(word, WordSkipReason.SHAPE_TOO_SMALL);
+                skipWord(word, WordSkipReason.SHAPE_WAS_TOO_SMALL);
             }
             else {
                 eWord.setShape(shape, renderOptions.wordPadding);
@@ -88,7 +88,7 @@ class WordCramEngine {
         }
 
         for (int i = maxNumberOfWords; i < words.length; i++) {
-            skipWord(words[i], WordSkipReason.OVER_MAX_WORDS);
+            skipWord(words[i], WordSkipReason.WAS_OVER_MAX_NUMBER_OF_WORDS);
         }
 
         return engineWords.toArray(new EngineWord[0]);
