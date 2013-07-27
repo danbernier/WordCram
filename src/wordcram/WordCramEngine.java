@@ -212,9 +212,4 @@ class WordCramEngine {
     float getProgress() {
         return (float) (this.eWordIndex+1) / this.eWords.length;
     }
-
-	
-	public void setObserver(Observer observer) {
-		this.observer = observer;
-	}
 }
