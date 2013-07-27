@@ -92,6 +92,9 @@ public class AWordCramEngine {
 
 		Assert.assertEquals(1, skippedWords.length);
 		Assert.assertSame(small, skippedWords[0]);
+
+		Assert.assertEquals(WordSkipReason.SHAPE_WAS_TOO_SMALL, small.wasSkippedBecause());
+		Assert.assertNull(big.wasSkippedBecause());
 	}
 
 	@Test
@@ -115,6 +118,10 @@ public class AWordCramEngine {
 		Assert.assertSame(words[2], skippedWords[0]);
 		Assert.assertSame(words[3], skippedWords[1]);
 		Assert.assertSame(words[4], skippedWords[2]);
+
+		for (Word skippedWord : skippedWords) {
+			Assert.assertEquals(WordSkipReason.WAS_OVER_MAX_NUMBER_OF_WORDS, skippedWord.wasSkippedBecause());
+		}
 	}
 
 	private WordCramEngine getEngine(Word... words) {
