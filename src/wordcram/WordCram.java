@@ -182,7 +182,7 @@ public class WordCram {
 
     private WordRenderer renderer;
     private RenderOptions renderOptions = new RenderOptions();
-    private Observer observer;
+    private Observer observer = new VoidObserver();
 
     /**
      * Make a new WordCram.
@@ -764,7 +764,6 @@ public class WordCram {
 
     private WordCramEngine getWordCramEngine() {
         if (wordCramEngine == null) {
-        	if (observer == null) observer = new VoidObserver();
             if (words == null && !textSources.isEmpty()) {
                 String text = joinTextSources();
 
