@@ -259,12 +259,14 @@ public class Word implements Comparable<Word> {
     /**
      * Tells you why this Word was skipped.
      *
-     * If the word was skipped,
+     * If the word was skipped, this will return a {@link WordSkipReason}
+     * explaining why.
      * 
      * If the word was successfully placed, or WordCram hasn't
      * gotten to this word yet, this will return null.
      *
-     * @return the code for the reason the word was skipped, or null if it wasn't skipped.
+     * @return the {@link WordSkipReason} why the word was skipped, or null if
+     * it wasn't skipped.
      */
     public WordSkipReason wasSkippedBecause() {
         return skippedBecause;
