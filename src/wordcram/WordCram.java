@@ -734,7 +734,7 @@ public class WordCram {
      * Use a custom canvas instead of the applet's default one.
      * This may be needed if rendering in background or in other
      * dimensions than the applet size is needed.
-     * @deprecated for more consistent naming. Use {@link #toCanvas()} instead.
+     * @deprecated for more consistent naming. Use {@link #toCanvas(PGraphics canvas)} instead.
      * @param canvas the canvas to draw to
      * @return The WordCram, for further setup or drawing.
      */
