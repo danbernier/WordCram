@@ -32,6 +32,7 @@ public class AWordCramEngine {
 	private RenderOptions renderOptions;
 	private WordShaper shaper;
 	private BBTreeBuilder bbTreeBuilder;
+	private Observer observer;
 
 	@Before
 	public void SetUp() {
@@ -45,6 +46,7 @@ public class AWordCramEngine {
 		renderOptions = new RenderOptions();
 		shaper = mock(WordShaper.class);
 		bbTreeBuilder = mock(BBTreeBuilder.class);
+		observer = mock(Observer.class);
 	}
 
 	// http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html
@@ -116,6 +118,6 @@ public class AWordCramEngine {
 	}
 
 	private WordCramEngine getEngine(Word... words) {
-		return new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
+		return new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions, observer);
 	}
 }
