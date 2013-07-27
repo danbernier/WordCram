@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import processing.core.PFont;
-import processing.core.PGraphics;
 
 public class AWordCramEngine {
 
