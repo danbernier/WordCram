@@ -56,12 +56,4 @@ public class PrintStreamObserver implements Observer {
 	public void wordsCounted(Word[] words) {
 		stream.println("Counted " + words.length + " words.");
 	}
-
-	public void wordsScaled(Word[] words) {
-		stream.println("Scaled " + words.length + " words.");
-	}
-
-	public void wordsShaped() {
-		stream.println("Words shaped.");
-	}
 }

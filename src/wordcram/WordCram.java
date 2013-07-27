@@ -778,7 +778,7 @@ public class WordCram {
                 }
             }
             words = new WordSorterAndScaler().sortAndScale(words);
-            observer.wordsScaled(words);
+
             if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
             if (sizer == null) sizer = Sizers.byWeight(5, 70);
             if (colorer == null) colorer = Colorers.alwaysUse(parent.color(0));
