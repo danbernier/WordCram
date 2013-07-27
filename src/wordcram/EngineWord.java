@@ -54,7 +54,7 @@ class EngineWord {
 
 
     boolean containsPoint(float x, float y) {
-    return bbTree.containsPoint(x, y);
+        return bbTree.containsPoint(x, y);
     }
 
     void setDesiredLocation(WordPlacer placer, int count, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
