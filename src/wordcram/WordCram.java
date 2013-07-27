@@ -787,7 +787,8 @@ public class WordCram {
             if (placer == null) placer = Placers.horizLine();
             if (nudger == null) nudger = new SpiralWordNudger();
 
-            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(renderOptions), new BBTreeBuilder(), renderOptions, observer);
+            WordShaper shaper = new WordShaper(renderOptions.rightToLeft);
+            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, new BBTreeBuilder(), renderOptions, observer);
         }
         return wordCramEngine;
     }
