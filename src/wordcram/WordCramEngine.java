@@ -118,7 +118,7 @@ class WordCramEngine {
             drawNext();
         }
         renderer.finish();
-        observer.endDraw(words);
+        observer.endDraw();
     }
 
     void drawNext() {
