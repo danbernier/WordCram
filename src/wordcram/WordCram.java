@@ -789,7 +789,7 @@ public class WordCram {
 
             wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(renderOptions), new BBTreeBuilder(), renderOptions, observer);
         }
-     return wordCramEngine;
+        return wordCramEngine;
     }
 
     private String joinTextSources() {

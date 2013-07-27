@@ -117,8 +117,6 @@ class WordCramEngine {
     	observer.beginDraw();
     	while(hasMore()) {
             drawNext();
-//              "Drew a word. Progress: " + (eWordIndex + 1) +
-//            "/" + eWords.length + "(" + ((int) (getProgress() * 100)) + "%)";
         }
         renderer.finish();
         observer.endDraw(words);
