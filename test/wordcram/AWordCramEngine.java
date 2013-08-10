@@ -18,11 +18,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import processing.core.PFont;
-import processing.core.PGraphics;
 
 public class AWordCramEngine {
 
-	private PGraphics destination;
+	private WordRenderer renderer;
 	private WordFonter fonter;
 	private WordSizer sizer;
 	private WordColorer colorer;
@@ -32,10 +31,11 @@ public class AWordCramEngine {
 	private RenderOptions renderOptions;
 	private WordShaper shaper;
 	private BBTreeBuilder bbTreeBuilder;
+	private Observer observer;
 
 	@Before
 	public void SetUp() {
-		destination = mock(PGraphics.class);
+		renderer = mock(WordRenderer.class);
 		fonter = mock(WordFonter.class);
 		sizer = mock(WordSizer.class);
 		colorer = mock(WordColorer.class);
@@ -45,6 +45,7 @@ public class AWordCramEngine {
 		renderOptions = new RenderOptions();
 		shaper = mock(WordShaper.class);
 		bbTreeBuilder = mock(BBTreeBuilder.class);
+		observer = mock(Observer.class);
 	}
 
 	// http://docs.mockito.googlecode.com/hg/org/mockito/Mockito.html
@@ -65,12 +66,13 @@ public class AWordCramEngine {
 			when(fonter.fontFor(words[i])).thenReturn(pFont);
 			when(sizer.sizeFor(eq(words[i]), anyInt(), anyInt())).thenReturn(sizes[i]);
 			when(angler.angleFor(words[i])).thenReturn(angles[i]);
+			when(shaper.getShapeFor(words[i].word, pFont, sizes[i], angles[i])).thenReturn(new Rectangle(0, 0, 20, 20));
 		}
 
 		WordCramEngine engine = getEngine(words);
 
 		for (int i = 0; i < words.length; i++) {
-			verify(shaper).getShapeFor(words[i].word, pFont, sizes[i], angles[i], renderOptions.minShapeSize);
+			verify(shaper).getShapeFor(words[i].word, pFont, sizes[i], angles[i]);
 		}
 	}
 
@@ -78,16 +80,41 @@ public class AWordCramEngine {
 	public void willSkipWordsWhoseShapesAreTooSmall() {
 		Word big = new Word("big", 10);
 		Word small = new Word("small", 1);
-		Shape bigShape = mock(Shape.class);
+		Shape bigShape = new Rectangle(0, 0, 20, 20);
+		Shape smallShape = new Rectangle(0, 0, 1, 1);
 
-		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(bigShape);
-		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(null);
+		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(bigShape);
+		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(smallShape);
 
 		WordCramEngine engine = getEngine(big, small);
 		Word[] skippedWords = engine.getSkippedWords();
 
 		Assert.assertEquals(1, skippedWords.length);
 		Assert.assertSame(small, skippedWords[0]);
+
+		Assert.assertEquals(WordSkipReason.SHAPE_WAS_TOO_SMALL, small.wasSkippedBecause());
+		Assert.assertNull(big.wasSkippedBecause());
+	}
+
+	@Test
+	public void willSkipWordsWhoseShapesAreTooSmallEvenWhenMinShapeSizeIsZero() {
+		Word big = new Word("big", 10);
+		Word small = new Word("small", 1);
+		Shape bigShape = new Rectangle(0, 0, 20, 20);
+		Shape smallShape = new Rectangle(0, 0, 0, 1);
+		renderOptions.minShapeSize = 0;
+
+		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(bigShape);
+		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(smallShape);
+
+		WordCramEngine engine = getEngine(big, small);
+		Word[] skippedWords = engine.getSkippedWords();
+
+		Assert.assertEquals(1, skippedWords.length);
+		Assert.assertSame(small, skippedWords[0]);
+
+		Assert.assertEquals(WordSkipReason.SHAPE_WAS_TOO_SMALL, small.wasSkippedBecause());
+		Assert.assertNull(big.wasSkippedBecause());
 	}
 
 	@Test
@@ -102,7 +129,7 @@ public class AWordCramEngine {
 
 		renderOptions.maxNumberOfWordsToDraw = 2;
 
-		when(shaper.getShapeFor(anyString(), any(PFont.class), anyFloat(), anyFloat(), anyInt())).thenReturn(new Rectangle());
+		when(shaper.getShapeFor(anyString(), any(PFont.class), anyFloat(), anyFloat())).thenReturn(new Rectangle(0, 0, 20, 20));
 
 		WordCramEngine engine = getEngine(words);
 		Word[] skippedWords = engine.getSkippedWords();
@@ -111,9 +138,13 @@ public class AWordCramEngine {
 		Assert.assertSame(words[2], skippedWords[0]);
 		Assert.assertSame(words[3], skippedWords[1]);
 		Assert.assertSame(words[4], skippedWords[2]);
+
+		for (Word skippedWord : skippedWords) {
+			Assert.assertEquals(WordSkipReason.WAS_OVER_MAX_NUMBER_OF_WORDS, skippedWord.wasSkippedBecause());
+		}
 	}
 
 	private WordCramEngine getEngine(Word... words) {
-		return new WordCramEngine(destination, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions);
+		return new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, bbTreeBuilder, renderOptions, observer);
 	}
 }

@@ -47,9 +47,16 @@ class WordCounter {
         return this;
     }
 
-	public Word[] count(String text) {
+	public Word[] count(String text, RenderOptions renderOptions) {
 		if (cueStopWords == null) {
 			cueStopWords = StopWords.guess(text);
+
+            if (cueStopWords == StopWords.Arabic ||
+                cueStopWords == StopWords.Farsi ||
+                cueStopWords == StopWords.Hebrew) {
+                renderOptions.rightToLeft = true;
+            }
+
 			tellScripterAboutTheGuess(cueStopWords);
 		}
 		return countWords(text);

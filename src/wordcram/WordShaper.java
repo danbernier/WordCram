@@ -28,35 +28,50 @@ import processing.core.PFont;
 public class WordShaper {
     private FontRenderContext frc = new FontRenderContext(null, true, true);
 
-    public Shape getShapeFor(String word, PFont font, float fontSize, float angle, int minShapeSize) {
 
-        Shape shape = makeShape(word, font, fontSize);
+    private boolean rightToLeft;
+    public WordShaper(boolean rightToLeft) {
+        this.rightToLeft = rightToLeft;
+    }
+    public WordShaper() {
+        this(false);
+    }
 
-        if (isTooSmall(shape, minShapeSize)) {
-            return null;
-        }
 
+    public Shape getShapeFor(String word, Font font, float fontSize, float angle) {
+        Shape shape = makeShape(word, sizeFont(font, fontSize));
         return moveToOrigin(rotate(shape, angle));
     }
 
-    private Shape makeShape(String word, PFont pFont, float fontSize) {
-        Font font = pFont.getFont().deriveFont(fontSize);
+    public Shape getShapeFor(String word, Font font) {
+        return getShapeFor(word, font, font.getSize2D(), 0);
+    }
 
+    public Shape getShapeFor(String word, PFont pFont, float fontSize, float angle) {
+        return getShapeFor(word, pFont.getFont(), fontSize, angle);
+    }
+
+    public Shape getShapeFor(String word, PFont pFont) {
+        return getShapeFor(word, pFont.getFont());
+    }
+
+
+
+    private Font sizeFont(Font unsizedFont, float fontSize) {
+        if (fontSize == unsizedFont.getSize2D()) {
+            return unsizedFont;
+        }
+    	return unsizedFont.deriveFont(fontSize);
+    }
+
+    private Shape makeShape(String word, Font font) {
         char[] chars = word.toCharArray();
 
         // TODO hmm: this doesn't render newlines.  Hrm.  If your word text is "foo\nbar", you get "foobar".
         GlyphVector gv = font.layoutGlyphVector(frc, chars, 0, chars.length,
-                Font.LAYOUT_LEFT_TO_RIGHT);
+                this.rightToLeft ? Font.LAYOUT_RIGHT_TO_LEFT : Font.LAYOUT_LEFT_TO_RIGHT);
 
         return gv.getOutline();
-    }
-
-    private boolean isTooSmall(Shape shape, int minShapeSize) {
-        Rectangle2D r = shape.getBounds2D();
-
-        // Most words will be wider than tall, so this basically boils down to height.
-        // For the odd word like "I", we check width, too.
-        return r.getHeight() < minShapeSize || r.getWidth() < minShapeSize;
     }
 
     private Shape rotate(Shape shape, float rotation) {
