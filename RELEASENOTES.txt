@@ -6,7 +6,7 @@ Goals for this release:
 - [x] Write to SVG files, instead of just outputting to the Processing sketch. This is almost done; see https://github.com/danbernier/WordCram/pull/23.
 - [ ] A fix for [Issue #30](https://github.com/danbernier/WordCram/issues/30), "How to include Stop words?"
 - [ ] When re-rendering a WordCram, don't reload web URL downloads - cache them on the file system. See https://github.com/danbernier/WordCram/issues/17.
-- [ ] Add an observer interface, so you can get progress feedback as your sketch runs. See particularly https://github.com/danbernier/WordCram/pull/32#issuecomment-20315871.
+- [x] Add an observer interface, so you can get progress feedback as your sketch runs. See particularly https://github.com/danbernier/WordCram/pull/32#issuecomment-20315871.  _Done onhttps://github.com/danbernier/WordCram/pull/40_
 - [x] Fix for Right-to-Left languages. See #37.
 
 * Rename `withCustomCanvas` to `toCanvas`. `withCustomCanvas
