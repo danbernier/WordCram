@@ -8,6 +8,7 @@ Goals for this release:
 - [ ] When re-rendering a WordCram, don't reload web URL downloads - cache them on the file system. See https://github.com/danbernier/WordCram/issues/17.
 - [x] Add an observer interface, so you can get progress feedback as your sketch runs. See particularly https://github.com/danbernier/WordCram/pull/32#issuecomment-20315871.  _Done onhttps://github.com/danbernier/WordCram/pull/40_
 - [x] Fix for Right-to-Left languages. See #37.
+- [x] Fix for issue #42, setting minShapeSize to 0 causing NullPointerExceptions.
 
 * Rename `withCustomCanvas` to `toCanvas`. `withCustomCanvas
   is deprecated, and will stick around for a bit. This is to
