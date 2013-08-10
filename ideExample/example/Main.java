@@ -83,7 +83,6 @@ public class Main extends PApplet {
 					.withPlacer(Placers.horizLine())
 //					.withPlacer(Placers.centerClump())
 					.withSizer(Sizers.byWeight(5, 90))
-					
 					.withWordPadding(1)
 					
 //					.minShapeSize(0)
