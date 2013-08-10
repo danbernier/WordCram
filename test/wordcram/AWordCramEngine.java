@@ -75,13 +75,34 @@ public class AWordCramEngine {
 			verify(shaper).getShapeFor(words[i].word, pFont, sizes[i], angles[i]);
 		}
 	}
-	
+
 	@Test
 	public void willSkipWordsWhoseShapesAreTooSmall() {
 		Word big = new Word("big", 10);
 		Word small = new Word("small", 1);
 		Shape bigShape = new Rectangle(0, 0, 20, 20);
 		Shape smallShape = new Rectangle(0, 0, 1, 1);
+
+		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(bigShape);
+		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(smallShape);
+
+		WordCramEngine engine = getEngine(big, small);
+		Word[] skippedWords = engine.getSkippedWords();
+
+		Assert.assertEquals(1, skippedWords.length);
+		Assert.assertSame(small, skippedWords[0]);
+
+		Assert.assertEquals(WordSkipReason.SHAPE_WAS_TOO_SMALL, small.wasSkippedBecause());
+		Assert.assertNull(big.wasSkippedBecause());
+	}
+
+	@Test
+	public void willSkipWordsWhoseShapesAreTooSmallEvenWhenMinShapeSizeIsZero() {
+		Word big = new Word("big", 10);
+		Word small = new Word("small", 1);
+		Shape bigShape = new Rectangle(0, 0, 20, 20);
+		Shape smallShape = new Rectangle(0, 0, 0, 1);
+		renderOptions.minShapeSize = 0;
 
 		when(shaper.getShapeFor(eq(big.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(bigShape);
 		when(shaper.getShapeFor(eq(small.word), any(PFont.class), anyFloat(), anyFloat())).thenReturn(smallShape);

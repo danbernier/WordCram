@@ -94,6 +94,9 @@ class WordCramEngine {
     }
 
     private boolean isTooSmall(Shape shape, int minShapeSize) {
+        if (minShapeSize < 1) {
+            minShapeSize = 1;
+        }
         Rectangle2D r = shape.getBounds2D();
 
         // Most words will be wider than tall, so this basically boils down to height.
