@@ -16,6 +16,7 @@ package example;
  limitations under the License.
  */
 
+import java.io.FileNotFoundException;
 import java.util.*;
 
 import processing.core.PApplet;
@@ -39,7 +40,12 @@ public class Main extends PApplet {
 		size(700, 400); // (int)random(300, 800)); //1200, 675); //1600, 900);
 		smooth();
 		colorMode(HSB);
-		initWordCram();
+		try {
+			initWordCram();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//frameRate(1);
 	}
 	
@@ -58,14 +64,14 @@ public class Main extends PApplet {
 	}
 	
 	//PGraphics pg;
-	private void initWordCram() {
+	private void initWordCram() throws FileNotFoundException {
 		background(100);
 		
 		//pg = createGraphics(800, 600, JAVA2D);
 		//pg.beginDraw();
 
 		wordcram = new WordCram(this)
-//					.withCustomCanvas(pg)
+//					.toCanvas(pg)
 					.fromTextFile(textFilePath())
 //					.fromWords(alphabet())
 //					.upperCase()
@@ -77,13 +83,12 @@ public class Main extends PApplet {
 					.withPlacer(Placers.horizLine())
 //					.withPlacer(Placers.centerClump())
 					.withSizer(Sizers.byWeight(5, 90))
-					
 					.withWordPadding(1)
 					
 //					.minShapeSize(0)
 //					.withMaxAttemptsForPlacement(10)
 					.maxNumberOfWordsToDraw(1000)
-					
+					.toSvg("test.svg", 1000, 1000)
 //					.withNudger(new PlottingWordNudger(this, new SpiralWordNudger()))
 //					.withNudger(new RandomWordNudger())
 					
@@ -132,7 +137,12 @@ public class Main extends PApplet {
 	}
 		
 	public void mouseClicked() {
-		initWordCram();
+		try {
+			initWordCram();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		loop();
 	}
 	
@@ -143,7 +153,7 @@ public class Main extends PApplet {
 	}
 	
 	private String textFilePath() {
-		return "/Users/dan/projects/wordcram/ideExample/tao-te-ching.txt";
+		return "../ideExample/tao-te-ching.txt";
 	}
 	
 	private Word[] alphabet() {

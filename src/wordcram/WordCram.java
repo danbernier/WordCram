@@ -154,30 +154,6 @@ public class WordCram {
      * to the WordCramEngine, where all the work happens.  This separation keeps the classes
      * focused on only one thing, but still gives the user a pretty nice API.
      */
-
-    /**
-     * Skip Reason: the Word was skipped because {@link #maxNumberOfWordsToDraw(int)}
-     * was set to some value, and the Word came in over that limit.
-     * It's really about the Word's rank, its position in the list once the words are
-     * sorted by weight: if its rank is greater than the value passed to maxNumberOfWordsToDraw(),
-     * then it'll be skipped, and this will be the reason code.
-     */
-    public static final int WAS_OVER_MAX_NUMBER_OF_WORDS = 301;
-
-    /**
-     * Skip Reason: the Word's shape was too small. WordCram will only render
-     * words so small, for performance reasons. You can set the minimum Word shape
-     * size via {@link #minShapeSize(int)}.
-     */
-    public static final int SHAPE_WAS_TOO_SMALL = 302;
-
-    /**
-     * Skip Reason: WordCram tried placing the Word, but it couldn't find a clear
-     * spot. The {@link WordNudger} nudged it around a bunch (according to
-     * {@link #maxAttemptsToPlaceWord(int)}, if it was set), but there was just no room.
-     */
-    public static final int NO_SPACE = 303;
-
     private Word[] words;
     private ArrayList<TextSource> textSources = new ArrayList<TextSource>();
     private String extraStopWords = "";
@@ -196,8 +172,9 @@ public class WordCram {
     private WordPlacer placer;
     private WordNudger nudger;
 
-    private PGraphics destination = null;
+    private WordRenderer renderer;
     private RenderOptions renderOptions = new RenderOptions();
+    private Observer observer;
 
     /**
      * Make a new WordCram.
@@ -208,6 +185,8 @@ public class WordCram {
      */
     public WordCram(PApplet parent) {
         this.parent = parent;
+        this.renderer = new ProcessingWordRenderer(parent.g);
+        this.observer = new SketchCallbackObserver(parent);
     }
 
     /**
@@ -733,11 +712,28 @@ public class WordCram {
      * Use a custom canvas instead of the applet's default one.
      * This may be needed if rendering in background or in other
      * dimensions than the applet size is needed.
+     * @deprecated for more consistent naming. Use {@link #toCanvas(PGraphics canvas)} instead.
      * @param canvas the canvas to draw to
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram withCustomCanvas(PGraphics canvas) {
-        this.destination = canvas;
+        return toCanvas(canvas);
+    }
+
+    /**
+     * Use a custom canvas instead of the applet's default one.
+     * This may be needed if rendering in background or in other
+     * dimensions than the applet size is needed.
+     * @param canvas the canvas to draw to
+     * @return The WordCram, for further setup or drawing.
+     */
+    public WordCram toCanvas(PGraphics canvas) {
+        this.renderer = new ProcessingWordRenderer(canvas);
+        return this;
+    }
+
+    public WordCram toSvg(String filename, int width, int height) throws java.io.FileNotFoundException {
+        this.renderer = new SvgWordRenderer(parent.sketchPath(filename), width, height);
         return this;
     }
 
@@ -761,7 +757,6 @@ public class WordCram {
 
     private WordCramEngine getWordCramEngine() {
         if (wordCramEngine == null) {
-
             if (words == null && !textSources.isEmpty()) {
                 String text = joinTextSources();
 
@@ -769,8 +764,8 @@ public class WordCram {
                      : textCase == TextCase.Upper ? text.toUpperCase()
                      : text;
 
-                words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text);
-
+                words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text, renderOptions);
+                observer.wordsCounted(words);
                 if (words.length == 0) {
                 	warnScripterAboutEmptyWordArray();
                 }
@@ -784,10 +779,9 @@ public class WordCram {
             if (placer == null) placer = Placers.horizLine();
             if (nudger == null) nudger = new SpiralWordNudger();
 
-            PGraphics canvas = destination == null? parent.g : destination;
-            wordCramEngine = new WordCramEngine(canvas, words, fonter, sizer, colorer, angler, placer, nudger, new WordShaper(), new BBTreeBuilder(), renderOptions);
+            WordShaper shaper = new WordShaper(renderOptions.rightToLeft);
+            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, new BBTreeBuilder(), renderOptions, observer);
         }
-
         return wordCramEngine;
     }
 
@@ -837,6 +831,7 @@ public class WordCram {
     public void drawAll() {
         getWordCramEngine().drawAll();
     }
+    
 
     /**
      * Get the Words that WordCram is drawing. This can be useful
@@ -881,5 +876,10 @@ public class WordCram {
      */
     public float getProgress() {
         return getWordCramEngine().getProgress();
+    }
+    
+    public WordCram withObserver(Observer observer) {
+    	this.observer = observer;
+    	return this;
     }
 }
