@@ -106,11 +106,10 @@ namespace :publish do
 
   desc "Publish & git-tag a fresh WordCram library for public download."
   task :daily => :bundle do
-    summary = ask "Give us a quick summary of the release:"
     tstamp = Time.now.strftime '%Y%m%d'
 
     git_tag "daily/#{tstamp}", "Tagging the #{tstamp} daily build"
-    zip_and_tar_and_upload tstamp, summary
+    zip_and_tar_and_upload tstamp
   end
 
   desc "Release WordCram: git-tag, upload binaries, update github pages javadoc. And later, Tweet! (And blog?)"
@@ -120,10 +119,9 @@ namespace :publish do
 
     release_number = version
     puts "Release number: #{release_number}"
-    summary = ask "Give us a quick summary of the release:"
 
     git_tag "release/#{release_number}", "Tagging the #{release_number} release"
-    zip_and_tar_and_upload release_number, summary
+    zip_and_tar_and_upload release_number
 
     puts "uploading javadoc to github..."
     run "git checkout gh-pages"
@@ -202,7 +200,7 @@ def test_classpath
   [main_classpath, 'lib/junit/junit-4.8.2.jar', 'lib/mockito-all-1.8.5.jar', 'build/classes'] * ':'
 end
 
-def zip_and_tar_and_upload(version, summary)
+def zip_and_tar_and_upload(version)
   zipfile = "wordcram.#{version}.zip"
   tarfile = "wordcram.#{version}.tar.gz"
 
@@ -230,11 +228,6 @@ def aws_upload(*filepaths)
     release.acl = :public_read
     release.public_url.to_s
   end
-end
-
-def ask(message)
-  puts message
-  STDIN.gets.chomp
 end
 
 def run(cmd)
