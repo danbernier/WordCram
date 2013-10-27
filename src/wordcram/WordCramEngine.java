@@ -140,6 +140,9 @@ class WordCramEngine {
         int wordImageWidth = (int)rect.getWidth();
         int wordImageHeight = (int)rect.getHeight();
 
+        // We are about to place the word. Reset its wasSkipped value is case it was skipped during a previous WordCram
+        skipWord(eWord.word,null);
+
         eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, renderer.getWidth(), renderer.getHeight());
 
         // Set maximum number of placement trials
