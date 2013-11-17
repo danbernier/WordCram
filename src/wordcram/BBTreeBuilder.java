@@ -25,39 +25,36 @@ public class BBTreeBuilder {
         int minBoxSize = 1;
         int x = (int) bounds.getX();
         int y = (int) bounds.getY();
-        int right = x + (int) bounds.getWidth();
-        int bottom = y + (int) bounds.getHeight();
+        int width = (int) bounds.getWidth();
+        int height = (int) bounds.getHeight();
 
-        BBTree tree = makeTree(shape, minBoxSize, x, y, right, bottom);
-        tree.swell(swelling);
+        BBTree tree = makeTree(shape, minBoxSize, x, y, width, height);
+         tree.swell(swelling);
         return tree;
     }
 
     private BBTree makeTree(Shape shape, int minBoxSize, int x, int y,
-            int right, int bottom) {
-
-        int width = right - x;
-        int height = bottom - y;
+            int width, int height) {
 
         if (shape.contains(x, y, width, height)) {
-            return new BBTree(x, y, right, bottom);
+            return new BBTree(x, y, width, height);
         }
         else if (shape.intersects(x, y, width, height)) {
-            BBTree tree = new BBTree(x, y, right, bottom);
+            BBTree tree = new BBTree(x, y, width, height);
 
             boolean tooSmallToContinue = width <= minBoxSize;
             if (!tooSmallToContinue) {
-                int centerX = avg(x, right);
-                int centerY = avg(y, bottom);
+                int halfHeight = height/2;
+                int halfWidth = width/2;
 
                 // upper left
-                BBTree t0 = makeTree(shape, minBoxSize, x, y, centerX, centerY);
+                BBTree t0 = makeTree(shape, minBoxSize, x, y, halfWidth, halfHeight);
                 // upper right
-                BBTree t1 = makeTree(shape, minBoxSize, centerX, y, right, centerY);
+                BBTree t1 = makeTree(shape, minBoxSize, x+halfWidth, y, halfWidth, halfHeight);
                 // lower left
-                BBTree t2 = makeTree(shape, minBoxSize, x, centerY, centerX, bottom);
+                BBTree t2 = makeTree(shape, minBoxSize, x, y+halfHeight, halfWidth, halfHeight);
                 // lower right
-                BBTree t3 = makeTree(shape, minBoxSize, centerX, centerY, right, bottom);
+                BBTree t3 = makeTree(shape, minBoxSize, x+halfWidth, y+halfHeight, halfWidth, halfHeight);
 
                 tree.addKids(t0, t1, t2, t3);
             }
