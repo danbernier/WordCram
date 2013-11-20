@@ -741,7 +741,6 @@ public class WordCram {
     	return this.renderer;
     }
 
-
     /**
      * Add padding around each word, so they stand out from each other more.
      * If you call this multiple times, the last value will be used.

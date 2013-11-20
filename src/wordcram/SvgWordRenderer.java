@@ -56,9 +56,7 @@ class SvgWordRenderer implements WordRenderer {
 
 	public void finish() {
 		pl("</svg>");
-		System.out.println("Starting Flush");
 		out.flush();
-		System.out.println("Closing");
 		out.close();
 	}
 

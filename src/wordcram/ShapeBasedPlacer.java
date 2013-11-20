@@ -30,7 +30,6 @@ public class ShapeBasedPlacer extends AbstractPlacer implements WordPlacer, Word
 
 		w.setProperty("width", ww);
 		w.setProperty("height", wh);
-	
 		for (int i = 0; i < 1000; i++) {
 			float newX = randomBetween(minX, maxX);
 			float newY = randomBetween(minY, maxY);

@@ -75,7 +75,6 @@ public class Placers {
 
 			@Override
 			public WordPlacer withFilter(SketchFilter filter) {
-				// TODO Automatisch generierter Methodenstub
 				return null;
 			}
         };
@@ -94,7 +93,6 @@ public class Placers {
 
 			@Override
 			public WordPlacer withFilter(SketchFilter filter) {
-				// TODO Automatisch generierter Methodenstub
 				return null;
 			}
         };

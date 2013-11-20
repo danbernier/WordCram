@@ -27,7 +27,6 @@ import processing.core.PVector;
  * finally rendered.
  */
 public class PlottingWordPlacer extends AbstractPlacer implements WordPlacer {
-
     private PApplet parent;
     private WordPlacer wrappedPlacer;
 

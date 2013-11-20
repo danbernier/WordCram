@@ -1,0 +1,225 @@
+Release notes for WordCram 0.6.0, ETA ~August 2013:
+
+Goals for this release:
+
+- [x] Place words into arbitrary shapes, via image masks. _Done: https://github.com/danbernier/WordCram/pull/32._
+- [x] Write to SVG files, instead of just outputting to the Processing sketch. This is almost done; see https://github.com/danbernier/WordCram/pull/23.
+- [ ] A fix for [Issue #30](https://github.com/danbernier/WordCram/issues/30), "How to include Stop words?"
+- [ ] When re-rendering a WordCram, don't reload web URL downloads - cache them on the file system. See https://github.com/danbernier/WordCram/issues/17.
+- [x] Add an observer interface, so you can get progress feedback as your sketch runs. See particularly https://github.com/danbernier/WordCram/pull/32#issuecomment-20315871.  _Done onhttps://github.com/danbernier/WordCram/pull/40_
+- [x] Fix for Right-to-Left languages. See #37.
+- [x] Fix for issue #42, setting minShapeSize to 0 causing NullPointerExceptions.
+
+* Rename `withCustomCanvas` to `toCanvas`. `withCustomCanvas
+  is deprecated, and will stick around for a bit. This is to
+  better match `toSvg`.
+
+Release notes for WordCram 0.5.7, date 2013-03-03:
+
+* Fix for issue #13: give Words a way to know their rendered width and height.
+
+* Fix for issue #12: default space between words to 1 pixel (was 0).
+
+* Fix for issue #5: make it easier to make a wordcram from multiple text
+  sources. If you call fromWebPage, fromTextFile, fromTextSource, etc, multiple
+  times, instead of overwriting the previous text source, it collects them.
+  You can mix and match text sources. They're still loaded at the same time.
+
+* Fix for issue #15: move binaries from github downloads to AWS S3.
+  (This was all rake changes.)
+
+* Upgrade Jsoup from 1.3.3 to 1.7.2.
+
+* Fix for issue #14: support filtering HTML by CSS selectors. (Maybe we'll add
+  xpath filtering, if there's demand for it.)
+
+Release notes for WordCram 0.5.6, 2012-08-25:
+
+* Bug fix for issue #6: clean up old SVN references in javadoc & wiki
+  pages.
+
+* Bug fix for issue #7: remove old StopWords.ENGLISH code from
+  examples.
+
+* Bug fix for issue #8: improve error messages for when cue.language
+  can't guess your language, and you get an empty Word[].
+
+* Faster BBTrees, by moving some of the data to the root node, so it
+  doesn't have to recursively copy it down to all the children nodes.
+
+* Improvements to Rakefile.
+
+Release notes for WordCram 0.5.5, 2012-08-19:
+
+* Bug fix for issue #4: don't throw exceptions if cue.language can't
+  guess what language a text is in. Now, if cue can't guess the
+  language, it won't count *any* word as a stop word.
+
+* Make BBTree, BBTreeBuilder, and WordShaper all public. These
+  internal classes are the core of how WordCram detects whether two
+  words overlap. I made them public a) in case they're useful to
+  anyone else, and b) so I can stop making them public whenever I want
+  to experiment with them in a Processing sketch.
+
+Release notes for WordCram 0.5.4, 2012-07-31:
+
+* Bug fix for issue #3: if you pass multiple Strings to
+  fromTextString, join them with a space (' '), not the empty
+  string. Originally, this was meant to join lines from a file, like
+  what's returned by Processing's loadFile method. But if you pass an
+  array of word Strings to it, it should work just as well. This fix
+  enables that.
+
+Release notes for WordCram 0.5.3, 2012-07-26:
+
+* Enable Processing 2.0 compatibility.
+
+Release notes for WordCram 0.5.2, 2012-06-22:
+
+* Make it easier to click on words. Rather than strictly checking
+  whether a point is inside a word's shape (which excludes, for
+  example, the center of an 'O'), check whether the point is inside
+  its bounding box - which is how I imagine most things (like web
+  browsers) handle it. If the bounding boxes for multiple words
+  overlap the point, it returns the smallest: the most-specific.
+
+Release notes for WordCram 0.5.1, 2012-04-20:
+
+* Bug fix for issue 13 (on googlecode): don't consider skipped words
+  when checking for overlaps.
+
+* Bug fix for issue 1 (on github): don't let maxNumberOfWords go past
+  the actual number of words available.
+
+Release notes for WordCram 0.5, 2011-05-11:
+
+* PDF support! It's simple to use: just output your sketch to a
+  PDF. None of your WordCram code has to change. If you'd like to see
+  an example, go to Processing's Examples menu, and check out WordCram
+  > OtherExamples > renderToPdf.
+
+  My ignorance of Processing's internals made this feature take much
+  longer than it needed to. The fix turned out to be a one-line change
+  (an improvement, really) to the way word-shapes are rendered. But
+  it's here now, ready for you to make something amazing and hi-res.
+
+* Works with Processing 1.5. This was largely a side-effect of the PDF
+  support, but it also meant moving the tutorials & examples around to
+  fit in Processing's new floating "Examples" menu.
+
+* Added word-padding, so words don't get so close. The method is
+  WordCram.withWordPadding(int padding).
+
+* Updated all the examples, to make sure they work properly. Some of
+  them were using black backgrounds, and since the default word color
+  was changed to black (back in March), these were pretty unhelpful.
+
+
+Release notes for WordCram 0.4.1, 2011-03-27:
+
+* Bug fix for issue 10: unicode characters in text don't show up in
+  the image.
+
+
+Release notes for WordCram 0.4, 2011-03-17:
+
+WordCram 0.4 changes center around three themes: styling words
+directly; knowing whether a Word was placed or skipped, and why; and
+finer control over the rendering process.
+
+* If you're creating and weighting your own Words, you can pre-set
+  their styles by calling setAngle(), setColor(), setFont(),
+  setSize(), and/or setPlace(). These values will pre-empt the rules
+  set by the WordAngler, etc. Added getRenderedAngle(),
+  getRenderedColor(), etc, so you can tell how it all turned out.
+
+* Back-ported to run on Java 1.5, to match Processing, and updated the
+  source build to use Processing 1.2.1.
+
+* Added tutorial sketches, which walk you through WordCram in a more
+  orderly way than the examples. Also added a few examples, and moved
+  the sample text files & font files up, to shrink the download size.
+
+* Added getWordAt(x,y).
+
+* Added getSkippedWords(), which returns a Word[] of all words that
+  were (so far) skipped, and getWords(), which returns a Word[] of all
+  words the WordCram is looking at.
+
+* Added wasPlaced(), wasSkipped(), and wasSkippedBecause() to Word,
+  along with static ints on WordCram for the reasons (NO_SPACE,
+  etc). Also added this info to Word's toString() method, so you can
+  just println(yourWord) and see some good info.
+
+* Dropped BBTree minimum size from 7 to 1 - there's no noticable
+  slow-down, and it should make more accurate collision detection.
+
+* Added withCustomCanvas(PGraphics), so a WordCram can be drawn to a
+  PGraphics besides the sketch it's running in, and getProgress(), to
+  provide feedback while it's rendering to the customCanvas. WordCram
+  throws an exception if you try to pass it a P2D buffer, though -
+  only JAVA2D works.
+
+* Added maxAttemptsForPlacement(int), which tells WordCram to only
+  try so many times to place a word.
+
+* Added maxNumberOfWordsToDraw(int), which limits how many words
+  WordCram will try to draw.
+
+* Added minShapeSize(int), to weed out words that render to Shapes
+  smaller than the given size.
+
+* Added WordCram methods fromHtmlFile() and withColor(); made
+  fromTextString() and fromHtmlString() n-arity (so they can be used
+  w/ loadStrings() more easily).
+
+* Changed Word.weight from a double to a float, so we can all stop
+  casting.
+
+* Added StopWords.GERMAN. Thank you, Felix, Marco, and Steffen!
+
+* Deleted deprecated methods currentWord() and currentWordIndex().
+
+* Reorganized text-parsing classes to make some classes (Html2Text)
+  unavailable in the Processing sketch, to declutter the API.
+
+* RandomWordNudger: you can now pass the standard deviation to use as
+  a constructor parameter.
+
+* Word now has methods getProperty(String name) and setProperty(String
+  name, Object value).  The firstnamesUsingWordProperties example
+  sketch shows how it works. Properties can be useful with a custom
+  WordPlacer, WordColorer, etc.
+
+
+Release notes for WordCram 0.3.1, 2010-11-10:
+
+* Bug fix: in 0.3, the WordCram library folder under Processing was
+  renamed from wordcram to WordCram, but the .jar was still
+  wordcram.jar, so Processing didn't load it.  Renamed it to
+  WordCram.jar.
+
+
+Release notes for WordCram 0.3, 2010-11-07:
+
+* Added TextSource, so WordCram can count words from different kinds
+  of source, including web pages and text files.
+* Added a fluent API for building WordCrams:
+  new WordCram(this).forWebPage("{url}").sizedByWeight(10, 100).
+* Added case-sensitive word counting, and the ability to exclude
+  numeric words.
+* Added javadoc comments for lots of classes -- more to come.
+* Added Processing examples: in Processing, look under File >
+  Sketchbook > libraries > WordCram > examples.
+* Bug fix: issue 1, Stop-words with punctuation have no effect.
+* Added StopWords.JAVA for making WordCrams from java source code.
+* Added Anglers.heaped(), Anglers.randomBetween(min,max),
+  Colorers.twoHuesRandomSatsOnWhite(), and
+  Placers.horizBandAnchoredLeft().
+* Deprecated old WordCram constructors, WordCram.currentWord(), and
+  WordCram.currentWordIndex().
+* Changed minimum shape size from 4 to 7, to speed up rendering.
+* WaveWordPlacer and SwirlWordPlacer no longer randomly offset
+  placement, so they should look crisper.
+* Improved SpiralWordNudger's spiralling, so more words should show,
+  and faster.

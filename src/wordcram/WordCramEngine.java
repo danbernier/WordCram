@@ -44,6 +44,7 @@ class WordCramEngine {
     private RenderOptions renderOptions;
     private Observer observer;
 
+    // TODO Damn, really need to break down that list of arguments.
     WordCramEngine(WordRenderer renderer, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions, Observer observer) {
         this.renderer = renderer;
 
