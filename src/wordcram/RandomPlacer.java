@@ -12,7 +12,6 @@ public class RandomPlacer extends AbstractPlacer implements WordPlacer {
 		random = new Random();
 	}
 
-	@Override
 	public PVector place(Word word, int wordIndex, int wordsCount,
 			int wordImageWidth, int wordImageHeight, int fieldWidth,
 			int fieldHeight) {

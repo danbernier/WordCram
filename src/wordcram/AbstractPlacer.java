@@ -9,7 +9,6 @@ public abstract class AbstractPlacer implements WordPlacer {
 		filter = new DefaultSketchFilter();
 	}
 
-	@Override
 	public WordPlacer withFilter(SketchFilter filter) {
 		this.filter = filter;
 		return this;

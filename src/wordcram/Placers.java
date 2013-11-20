@@ -49,7 +49,6 @@ public class Placers {
 */
             }
 
-			@Override
 			public WordPlacer withFilter(SketchFilter filter) {
 				return null;
 			}
@@ -73,7 +72,6 @@ public class Placers {
                         * stdev, -2, 2, 0, upperLimit));
             }
 
-			@Override
 			public WordPlacer withFilter(SketchFilter filter) {
 				return null;
 			}
@@ -91,7 +89,6 @@ public class Placers {
                 return new PVector(x, y);
             }
 
-			@Override
 			public WordPlacer withFilter(SketchFilter filter) {
 				return null;
 			}

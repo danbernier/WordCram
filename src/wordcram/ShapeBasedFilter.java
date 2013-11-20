@@ -12,13 +12,12 @@ public class ShapeBasedFilter implements SketchFilter {
 		this.area = new Area(shape);
 	}
 
-	@Override
 	public boolean filter(Word word) {
 		return area.contains(
-				(float) word.getProperty("x"), 
-				(float) word.getProperty("y"), 
-				new Float((int) word.getProperty("width")), 
-				new Float((int) word.getProperty("height")));
+				(Float) word.getProperty("x"), 
+				(Float) word.getProperty("y"), 
+				new Float((Integer) word.getProperty("width")), 
+				new Float((Integer) word.getProperty("height")));
 	}
 
 }
