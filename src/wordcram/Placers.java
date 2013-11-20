@@ -48,6 +48,11 @@ public class Placers {
                                     PApplet.map(yOff, -2, 2, 0, adjFieldHeight));
 */
             }
+
+			@Override
+			public WordPlacer withFilter(SketchFilter filter) {
+				return null;
+			}
         };
     }
 
@@ -67,6 +72,12 @@ public class Placers {
                 return PApplet.round(PApplet.map((float) r.nextGaussian()
                         * stdev, -2, 2, 0, upperLimit));
             }
+
+			@Override
+			public WordPlacer withFilter(SketchFilter filter) {
+				// TODO Automatisch generierter Methodenstub
+				return null;
+			}
         };
     }
 
@@ -80,6 +91,12 @@ public class Placers {
                 float y = ((float) fieldHeight) * 0.5f;
                 return new PVector(x, y);
             }
+
+			@Override
+			public WordPlacer withFilter(SketchFilter filter) {
+				// TODO Automatisch generierter Methodenstub
+				return null;
+			}
         };
     }
 

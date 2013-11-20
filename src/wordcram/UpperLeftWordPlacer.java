@@ -21,7 +21,7 @@ import java.util.Random;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class UpperLeftWordPlacer implements WordPlacer {
+public class UpperLeftWordPlacer extends AbstractPlacer implements WordPlacer {
 
     private Random r = new Random();
 

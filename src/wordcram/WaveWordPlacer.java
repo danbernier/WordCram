@@ -18,7 +18,7 @@ package wordcram;
 
 import processing.core.*;
 
-public class WaveWordPlacer implements WordPlacer {
+public class WaveWordPlacer extends AbstractPlacer implements WordPlacer {
 
     public PVector place(Word word, int wordIndex, int wordsCount,
             int wordImageWidth, int wordImageHeight, int fieldWidth,

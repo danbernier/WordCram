@@ -57,4 +57,6 @@ public interface WordPlacer {
     public abstract PVector place(Word word, int wordIndex, int wordsCount,
             int wordImageWidth, int wordImageHeight, int fieldWidth,
             int fieldHeight);
+    
+    public WordPlacer withFilter(SketchFilter filter);
 }
