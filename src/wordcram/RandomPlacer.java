@@ -15,8 +15,6 @@ public class RandomPlacer extends AbstractPlacer implements WordPlacer {
 	public PVector place(Word word, int wordIndex, int wordsCount,
 			int wordImageWidth, int wordImageHeight, int fieldWidth,
 			int fieldHeight) {
-		word.setProperty("width", wordImageWidth);
-		word.setProperty("height", wordImageHeight);
 		for (int i = 0; i < 1000; i++) {
 			float newX = randomBetween(0, fieldWidth);
 			float newY = randomBetween(0, fieldHeight);
