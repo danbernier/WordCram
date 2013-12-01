@@ -24,6 +24,7 @@ class WordCramEngine {
     private Word[] words; // just a safe copy
     private EngineWord[] eWords;
     private int eWordIndex = -1;
+    private ArrayList<EngineWord> drawnWords = new ArrayList<EngineWord>();
 
     private RenderOptions renderOptions;
     private Observer observer;
@@ -147,10 +148,7 @@ class WordCramEngine {
             }
 
             boolean foundOverlap = false;
-            for (int i = 0; !foundOverlap && i < eWordIndex; i++) {
-                EngineWord otherWord = eWords[i];
-                if (otherWord.wasSkipped()) continue; //can't overlap with skipped word
-
+            for (EngineWord otherWord : drawnWords) {
                 if (eWord.overlaps(otherWord)) {
                     foundOverlap = true;
                     lastCollidedWith = otherWord;
@@ -172,15 +170,16 @@ class WordCramEngine {
     }
 
     private void drawWordImage(EngineWord word) {
+        drawnWords.add(word);
         renderer.drawWord(word, new Color(word.word.getColor(colorer), true));
     }
 
     Word getWordAt(float x, float y) {
-        for (int i = eWords.length-1; i >= 0; i--) {
-            if (eWords[i].wasPlaced()) {
-                if (eWords[i].containsPoint(x, y)) {
-                    return eWords[i].word;
-                }
+        int size = drawnWords.size() - 1;
+        for (int i = size; i >= 0; i--) {
+            EngineWord eWord = drawnWords.get(i);
+            if (eWord.containsPoint(x, y)) {
+                return eWord.word;
             }
         }
         return null;
