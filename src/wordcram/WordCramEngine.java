@@ -22,7 +22,7 @@ class WordCramEngine {
     private WordNudger nudger;
 
     private Word[] words; // just a safe copy
-    private EngineWord[] eWords;
+    private ArrayList<EngineWord> eWords;
     private int eWordIndex = -1;
     private ArrayList<EngineWord> drawnWords = new ArrayList<EngineWord>();
 
@@ -46,7 +46,7 @@ class WordCramEngine {
         this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
     }
 
-    private EngineWord[] wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
+    private ArrayList<EngineWord> wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
         ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
 
         int maxNumberOfWords = words.length;
@@ -76,7 +76,7 @@ class WordCramEngine {
             skipWord(words[i], WordSkipReason.WAS_OVER_MAX_NUMBER_OF_WORDS);
         }
 
-        return engineWords.toArray(new EngineWord[0]);
+        return engineWords;
     }
 
     private boolean isTooSmall(Shape shape, int minShapeSize) {
@@ -98,7 +98,7 @@ class WordCramEngine {
     }
 
     boolean hasMore() {
-        return eWordIndex < eWords.length-1;
+        return eWordIndex < eWords.size()-1;
     }
 
     void drawAll() {
@@ -112,7 +112,7 @@ class WordCramEngine {
 
     void drawNext() {
         if (!hasMore()) return;
-        EngineWord eWord = eWords[++eWordIndex];
+        EngineWord eWord = eWords.get(++eWordIndex);
         boolean wasPlaced = placeWord(eWord);
         if (wasPlaced) { // TODO unit test (somehow)
             drawWordImage(eWord);
@@ -126,7 +126,7 @@ class WordCramEngine {
         int wordImageWidth = (int)rect.getWidth();
         int wordImageHeight = (int)rect.getHeight();
 
-        eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, renderer.getWidth(), renderer.getHeight());
+        eWord.setDesiredLocation(placer, eWords.size(), wordImageWidth, wordImageHeight, renderer.getWidth(), renderer.getHeight());
 
         // Set maximum number of placement trials
         int maxAttemptsToPlace = renderOptions.maxAttemptsToPlaceWord > 0 ?
@@ -196,6 +196,6 @@ class WordCramEngine {
     }
 
     float getProgress() {
-        return (float) (this.eWordIndex+1) / this.eWords.length;
+        return (float) (this.eWordIndex+1) / this.eWords.size();
     }
 }
