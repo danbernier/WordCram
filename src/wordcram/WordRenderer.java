@@ -18,7 +18,7 @@ limitations under the License.
 
 import java.awt.Color;
 
-public interface WordRenderer {
+interface WordRenderer {
 	int getWidth();
 	int getHeight();
 	void drawWord(EngineWord word, Color color);

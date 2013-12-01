@@ -1,12 +1,12 @@
 package wordcram;
 
 
-public class DefaultSketchFilter implements SketchFilter {
+public class DefaultSketchFilter implements WordPlaceFilter {
 
 	public DefaultSketchFilter() {
 	}
 
-	public boolean filter(Word word) {
+	public boolean canFit(Word word) {
 		return true;
 	}
 

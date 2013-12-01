@@ -26,7 +26,7 @@ public class Placers {
     public static WordPlacer horizLine() {
         final Random r = new Random();
 
-        return new WordPlacer() {
+        return new AbstractPlacer() {
             public PVector place(Word word, int wordIndex, int wordsCount,
                     int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
                 int centerHorizLine = (int) ((fieldHeight - wordImageHeight) * 0.5);
@@ -48,18 +48,14 @@ public class Placers {
                                     PApplet.map(yOff, -2, 2, 0, adjFieldHeight));
 */
             }
-
-			public WordPlacer withFilter(SketchFilter filter) {
-				return null;
-			}
-        };
+    };
     }
 
     public static WordPlacer centerClump() {
         final Random r = new Random();
         final float stdev = 0.4f;
 
-        return new WordPlacer() {
+        return new AbstractPlacer() {
 
             public PVector place(Word word, int wordIndex, int wordsCount,
                     int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
@@ -71,16 +67,12 @@ public class Placers {
                 return PApplet.round(PApplet.map((float) r.nextGaussian()
                         * stdev, -2, 2, 0, upperLimit));
             }
-
-			public WordPlacer withFilter(SketchFilter filter) {
-				return null;
-			}
         };
     }
 
     public static WordPlacer horizBandAnchoredLeft() {
         final Random r = new Random();
-        return new WordPlacer() {
+        return new AbstractPlacer() {
             public PVector place(Word word, int wordIndex, int wordsCount,
                     int wordImageWidth, int wordImageHeight, int fieldWidth,
                     int fieldHeight) {
@@ -89,9 +81,6 @@ public class Placers {
                 return new PVector(x, y);
             }
 
-			public WordPlacer withFilter(SketchFilter filter) {
-				return null;
-			}
         };
     }
 

@@ -58,5 +58,5 @@ public interface WordPlacer {
             int wordImageWidth, int wordImageHeight, int fieldWidth,
             int fieldHeight);
     
-    public WordPlacer withFilter(SketchFilter filter);
+    public WordPlacer withFilter(WordPlaceFilter filter);
 }

@@ -3,21 +3,21 @@ package wordcram;
 import java.awt.Shape;
 import java.awt.geom.Area;
 
-public class ShapeBasedFilter implements SketchFilter {
+public class ShapeBasedFilter implements WordPlaceFilter {
 
 	Area area;
-	float minY, minX, maxY, maxX;
 	
 	public ShapeBasedFilter(Shape shape) {
 		this.area = new Area(shape);
 	}
 
-	public boolean filter(Word word) {
+	public boolean canFit(Word word) {
 		return area.contains(
 				(Float) word.getProperty("x"), 
 				(Float) word.getProperty("y"), 
-				new Float((Integer) word.getProperty("width")), 
-				new Float((Integer) word.getProperty("height")));
+				word.getRenderedWidth(), 
+				word.getRenderedHeight()
+				);
 	}
 
 }

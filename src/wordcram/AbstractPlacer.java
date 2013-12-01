@@ -3,13 +3,13 @@ package wordcram;
 
 public abstract class AbstractPlacer implements WordPlacer {
 
-	SketchFilter filter;
+	WordPlaceFilter filter;
 	
 	public AbstractPlacer() {
 		filter = new DefaultSketchFilter();
 	}
 
-	public WordPlacer withFilter(SketchFilter filter) {
+	public WordPlacer withFilter(WordPlaceFilter filter) {
 		this.filter = filter;
 		return this;
 	}

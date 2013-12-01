@@ -20,7 +20,7 @@ public class RandomPlacer extends AbstractPlacer implements WordPlacer {
 			float newY = randomBetween(0, fieldHeight);
 			word.setProperty("x", newX);
 			word.setProperty("y", newY);
-			if (filter.filter(word)) {
+			if (filter.canFit(word)) {
 				return new PVector(newX, newY);
 			}
 		}
