@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -23,7 +24,7 @@ class WordCramEngine {
 
     private Word[] words; // just a safe copy
     private ArrayList<EngineWord> eWords;
-    private int eWordIndex = -1;
+    private ListIterator<EngineWord> eWordIter;
     private ArrayList<EngineWord> drawnWords = new ArrayList<EngineWord>();
 
     private RenderOptions renderOptions;
@@ -44,6 +45,7 @@ class WordCramEngine {
         this.renderOptions = renderOptions;
         this.words = words;
         this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
+        this.eWordIter = eWords.listIterator();
     }
 
     private ArrayList<EngineWord> wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
@@ -98,7 +100,7 @@ class WordCramEngine {
     }
 
     boolean hasMore() {
-        return eWordIndex < eWords.size()-1;
+        return eWordIter.hasNext();
     }
 
     void drawAll() {
@@ -112,7 +114,7 @@ class WordCramEngine {
 
     void drawNext() {
         if (!hasMore()) return;
-        EngineWord eWord = eWords.get(++eWordIndex);
+        EngineWord eWord = eWordIter.next();
         boolean wasPlaced = placeWord(eWord);
         if (wasPlaced) { // TODO unit test (somehow)
             drawWordImage(eWord);
@@ -196,6 +198,6 @@ class WordCramEngine {
     }
 
     float getProgress() {
-        return (float) (this.eWordIndex+1) / this.eWords.size();
+        return (float) eWordIter.nextIndex() / eWords.size();
     }
 }
