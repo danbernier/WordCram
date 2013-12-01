@@ -6,7 +6,7 @@ public abstract class AbstractPlacer implements WordPlacer {
 	WordPlaceFilter filter;
 	
 	public AbstractPlacer() {
-		filter = new DefaultSketchFilter();
+		filter = new DefaultWordPlaceFilter();
 	}
 
 	public WordPlacer withFilter(WordPlaceFilter filter) {

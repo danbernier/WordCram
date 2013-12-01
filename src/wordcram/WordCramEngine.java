@@ -36,6 +36,7 @@ class WordCramEngine {
     private WordAngler angler;
     private WordPlacer placer;
     private WordNudger nudger;
+    private WordPlaceFilter filter;
 
     private Word[] words; // just a safe copy
     private EngineWord[] eWords;
@@ -45,7 +46,7 @@ class WordCramEngine {
     private Observer observer;
 
     // TODO Damn, really need to break down that list of arguments.
-    WordCramEngine(WordRenderer renderer, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions, Observer observer) {
+    WordCramEngine(WordRenderer renderer, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, WordPlaceFilter filter, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions, Observer observer) {
         this.renderer = renderer;
 
         this.fonter = fonter;
@@ -55,7 +56,8 @@ class WordCramEngine {
         this.placer = placer;
         this.nudger = nudger;
         this.observer = observer;
-
+        this.filter = filter;
+      
         this.renderOptions = renderOptions;
         this.words = words;
         this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
@@ -118,6 +120,9 @@ class WordCramEngine {
 
     void drawAll() {
     	observer.beginDraw();
+    	if (renderer instanceof SvgWordRenderer) {
+    		((SvgWordRenderer) renderer).drawDebugShape(((ShapeBasedFilter) filter).area);
+    	}
     	while(hasMore()) {
             drawNext();
         }
@@ -157,6 +162,9 @@ class WordCramEngine {
             PVector loc = eWord.getCurrentLocation();
             if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= renderer.getWidth() || loc.y + wordImageHeight >= renderer.getHeight()) {
                 continue;
+            }
+            if (!filter.canFit(word)) {
+            	continue;
             }
 
             if (lastCollidedWith != null && eWord.overlaps(lastCollidedWith)) {

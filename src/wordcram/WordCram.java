@@ -171,6 +171,7 @@ public class WordCram {
     private WordAngler angler;
     private WordPlacer placer;
     private WordNudger nudger;
+    private WordPlaceFilter filter;
 
     private WordRenderer renderer;
     private RenderOptions renderOptions = new RenderOptions();
@@ -781,9 +782,10 @@ public class WordCram {
             if (angler == null) angler = Anglers.mostlyHoriz();
             if (placer == null) placer = Placers.horizLine();
             if (nudger == null) nudger = new SpiralWordNudger();
+            if (filter == null) filter = new DefaultWordPlaceFilter();
 
             WordShaper shaper = new WordShaper(renderOptions.rightToLeft);
-            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, new BBTreeBuilder(), renderOptions, observer);
+            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, filter, new BBTreeBuilder(), renderOptions, observer);
         }
         return wordCramEngine;
     }
@@ -883,6 +885,11 @@ public class WordCram {
     
     public WordCram withObserver(Observer observer) {
     	this.observer = observer;
+    	return this;
+    }
+    
+    public WordCram withFilter(WordPlaceFilter filter) {
+    	this.filter = filter;
     	return this;
     }
 }

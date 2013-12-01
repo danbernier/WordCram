@@ -3,6 +3,8 @@ package wordcram;
 import java.awt.Shape;
 import java.awt.geom.Area;
 
+import processing.core.PVector;
+
 public class ShapeBasedFilter implements WordPlaceFilter {
 
 	Area area;
@@ -12,9 +14,10 @@ public class ShapeBasedFilter implements WordPlaceFilter {
 	}
 
 	public boolean canFit(Word word) {
+		PVector place = word.getTargetPlace();
 		return area.contains(
-				(Float) word.getProperty("x"), 
-				(Float) word.getProperty("y"), 
+				place.x, 
+				place.y, 
 				word.getRenderedWidth(), 
 				word.getRenderedHeight()
 				);
