@@ -879,12 +879,25 @@ public class WordCram {
         return getWordCramEngine().getProgress();
     }
     
+    /**
+     * Register an observer implementation to receive updates during the process.
+     * 
+     * @param observer
+     * @return The WordCram, for further setup or drawing.
+     */
     public WordCram withObserver(Observer observer) {
     	this.observer = observer;
     	return this;
     }
     
-    public WordCram withFilter(WordPlaceFilter filter) {
+    /**
+     * Register a WordPlaceFilter to limit the possible valid places for the
+     * <code>WordCramEngine</code> to place to <code>Word</code>s in.
+     * 
+     * @param filter
+     * @return The WordCram, for further setup or drawing.
+     */
+    public WordCram withWordPlaceFilter(WordPlaceFilter filter) {
     	this.filter = filter;
     	return this;
     }
