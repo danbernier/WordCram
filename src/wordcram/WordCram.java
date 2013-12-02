@@ -155,6 +155,7 @@ public class WordCram {
     private WordAngler angler;
     private WordPlacer placer;
     private WordNudger nudger;
+    private WordPlaceFilter filter;
 
     private WordRenderer renderer;
     private RenderOptions renderOptions = new RenderOptions();
@@ -720,9 +721,8 @@ public class WordCram {
         this.renderer = new SvgWordRenderer(parent.sketchPath(filename), width, height);
         return this;
     }
-
-
-    /**
+    
+     /**
      * Add padding around each word, so they stand out from each other more.
      * If you call this multiple times, the last value will be used.
      *
@@ -762,9 +762,10 @@ public class WordCram {
             if (angler == null) angler = Anglers.mostlyHoriz();
             if (placer == null) placer = Placers.horizLine();
             if (nudger == null) nudger = new SpiralWordNudger();
+            if (filter == null) filter = new DefaultWordPlaceFilter();
 
             WordShaper shaper = new WordShaper(renderOptions.rightToLeft);
-            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, new BBTreeBuilder(), renderOptions, observer);
+            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, filter, new BBTreeBuilder(), renderOptions, observer);
         }
         return wordCramEngine;
     }
@@ -862,8 +863,26 @@ public class WordCram {
         return getWordCramEngine().getProgress();
     }
     
+    /**
+     * Register an observer implementation to receive updates during the process.
+     * 
+     * @param observer
+     * @return The WordCram, for further setup or drawing.
+     */
     public WordCram withObserver(Observer observer) {
     	this.observer = observer;
+    	return this;
+    }
+    
+    /**
+     * Register a WordPlaceFilter to limit the possible valid places for the
+     * <code>WordCramEngine</code> to place to <code>Word</code>s in.
+     * 
+     * @param filter
+     * @return The WordCram, for further setup or drawing.
+     */
+    public WordCram withWordPlaceFilter(WordPlaceFilter filter) {
+    	this.filter = filter;
     	return this;
     }
 }

@@ -37,7 +37,7 @@ class SvgWordRenderer implements WordRenderer {
 		renderShape(word.getShape());
 		pl("</g>");
 	}
-
+	
 	public void finish() {
 		pl("</svg>");
 		out.flush();

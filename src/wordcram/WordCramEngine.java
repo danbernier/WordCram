@@ -20,6 +20,7 @@ class WordCramEngine {
     private WordAngler angler;
     private WordPlacer placer;
     private WordNudger nudger;
+    private WordPlaceFilter filter;
 
     private Word[] words; // just a safe copy
     private EngineWord[] eWords;
@@ -29,7 +30,7 @@ class WordCramEngine {
     private Observer observer;
 
     // TODO Damn, really need to break down that list of arguments.
-    WordCramEngine(WordRenderer renderer, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions, Observer observer) {
+    WordCramEngine(WordRenderer renderer, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, WordPlaceFilter filter, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions, Observer observer) {
         this.renderer = renderer;
 
         this.fonter = fonter;
@@ -39,7 +40,8 @@ class WordCramEngine {
         this.placer = placer;
         this.nudger = nudger;
         this.observer = observer;
-
+        this.filter = filter;
+      
         this.renderOptions = renderOptions;
         this.words = words;
         this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
@@ -124,8 +126,9 @@ class WordCramEngine {
         Rectangle2D rect = eWord.getShape().getBounds2D(); // TODO can we move these into EngineWord.setDesiredLocation? Does that make sense?
         int wordImageWidth = (int)rect.getWidth();
         int wordImageHeight = (int)rect.getHeight();
-
-        eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, renderer.getWidth(), renderer.getHeight());
+        word.setProperty("width", wordImageWidth);
+		word.setProperty("height", wordImageHeight);
+		eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, renderer.getWidth(), renderer.getHeight());
 
         // Set maximum number of placement trials
         int maxAttemptsToPlace = renderOptions.maxAttemptsToPlaceWord > 0 ?
@@ -140,6 +143,9 @@ class WordCramEngine {
             PVector loc = eWord.getCurrentLocation();
             if (loc.x < 0 || loc.y < 0 || loc.x + wordImageWidth >= renderer.getWidth() || loc.y + wordImageHeight >= renderer.getHeight()) {
                 continue;
+            }
+            if (!filter.canFit(word)) {
+            	continue;
             }
 
             if (lastCollidedWith != null && eWord.overlaps(lastCollidedWith)) {

@@ -32,7 +32,7 @@ public class Placers {
                                     PApplet.map(yOff, -2, 2, 0, adjFieldHeight));
 */
             }
-        };
+    };
     }
 
     public static WordPlacer centerClump() {
@@ -64,6 +64,7 @@ public class Placers {
                 float y = ((float) fieldHeight) * 0.5f;
                 return new PVector(x, y);
             }
+
         };
     }
 

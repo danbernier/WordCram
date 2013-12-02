@@ -11,7 +11,6 @@ import processing.core.PVector;
  * finally rendered.
  */
 public class PlottingWordPlacer implements WordPlacer {
-
     private PApplet parent;
     private WordPlacer wrappedPlacer;
 
