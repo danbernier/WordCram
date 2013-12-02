@@ -54,12 +54,6 @@ class SvgWordRenderer implements WordRenderer {
 		pl("</g>");
 	}
 	
-	void drawDebugShape(Shape shape) {
-		pl("<g style=\"fill:#EEEEEE; stroke-width:0px\">");
-		renderShape(shape);
-		pl("</g>");
-	}
-
 	public void finish() {
 		pl("</svg>");
 		out.flush();

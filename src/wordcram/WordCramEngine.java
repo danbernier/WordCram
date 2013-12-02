@@ -120,9 +120,6 @@ class WordCramEngine {
 
     void drawAll() {
     	observer.beginDraw();
-    	if (renderer instanceof SvgWordRenderer) {
-    		((SvgWordRenderer) renderer).drawDebugShape(((ShapeBasedFilter) filter).area);
-    	}
     	while(hasMore()) {
             drawNext();
         }
