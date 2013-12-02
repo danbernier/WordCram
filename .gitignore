@@ -4,3 +4,4 @@ bin
 build
 build.json
 target
+*.swp
