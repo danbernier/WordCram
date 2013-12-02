@@ -4,7 +4,7 @@ import java.util.Random;
 
 import processing.core.PVector;
 
-public class RandomPlacer extends AbstractPlacer implements WordPlacer {
+public class RandomPlacer implements WordPlacer {
 
 	Random random;
 

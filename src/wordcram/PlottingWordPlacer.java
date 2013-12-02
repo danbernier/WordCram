@@ -26,7 +26,7 @@ import processing.core.PVector;
  * location, so you can sort-of see how far off they are when they're
  * finally rendered.
  */
-public class PlottingWordPlacer extends AbstractPlacer implements WordPlacer {
+public class PlottingWordPlacer implements WordPlacer {
     private PApplet parent;
     private WordPlacer wrappedPlacer;
 

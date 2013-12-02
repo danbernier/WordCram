@@ -26,7 +26,7 @@ public class Placers {
     public static WordPlacer horizLine() {
         final Random r = new Random();
 
-        return new AbstractPlacer() {
+        return new WordPlacer() {
             public PVector place(Word word, int wordIndex, int wordsCount,
                     int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
                 int centerHorizLine = (int) ((fieldHeight - wordImageHeight) * 0.5);
@@ -55,7 +55,7 @@ public class Placers {
         final Random r = new Random();
         final float stdev = 0.4f;
 
-        return new AbstractPlacer() {
+        return new WordPlacer() {
 
             public PVector place(Word word, int wordIndex, int wordsCount,
                     int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
@@ -72,7 +72,7 @@ public class Placers {
 
     public static WordPlacer horizBandAnchoredLeft() {
         final Random r = new Random();
-        return new AbstractPlacer() {
+        return new WordPlacer() {
             public PVector place(Word word, int wordIndex, int wordsCount,
                     int wordImageWidth, int wordImageHeight, int fieldWidth,
                     int fieldHeight) {
