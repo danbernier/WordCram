@@ -22,10 +22,10 @@ class WordCramEngine {
     private WordPlacer placer;
     private WordNudger nudger;
 
-    private Word[] words; // just a safe copy
     private ArrayList<EngineWord> eWords;
     private ListIterator<EngineWord> eWordIter;
     private ArrayList<EngineWord> drawnWords = new ArrayList<EngineWord>();
+    private ArrayList<Word> skippedWords = new ArrayList<Word>();
 
     private RenderOptions renderOptions;
     private Observer observer;
@@ -43,7 +43,6 @@ class WordCramEngine {
         this.observer = observer;
 
         this.renderOptions = renderOptions;
-        this.words = words;
         this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
         this.eWordIter = eWords.listIterator();
     }
@@ -96,6 +95,7 @@ class WordCramEngine {
         // TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
         // NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
         word.wasSkippedBecause(reason);
+        skippedWords.add(word);
         observer.wordSkipped(word);
     }
 
@@ -188,12 +188,6 @@ class WordCramEngine {
     }
 
     Word[] getSkippedWords() {
-        ArrayList<Word> skippedWords = new ArrayList<Word>();
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].wasSkipped()) {
-                skippedWords.add(words[i]);
-            }
-        }
         return skippedWords.toArray(new Word[0]);
     }
 
