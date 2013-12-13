@@ -33,7 +33,7 @@ class SvgWordRenderer implements WordRenderer {
 
 	public void drawWord(EngineWord word, Color color) {
 		// TODO add word metadata
-		pl("<g style=\"fill:" + getColor(color) + "; stroke-width:0px\">");
+		pl("<g id=\""+word.word.word+""\" style=\"fill:" + getColor(color) + "; stroke-width:0px\">");
 		renderShape(word.getShape());
 		pl("</g>");
 	}
