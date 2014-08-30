@@ -738,35 +738,59 @@ public class WordCram {
         return this;
     }
 
+    /**
+     * Render a heatmap of the locations where your WordPlacer
+     * places words. This is pretty accurate: it renders all your words
+     * according to your sizer, fonter, angler, and placer, without
+     * nudging them, to an in-memory buffer. Then it splits your sketch
+     * into 10x10 pixel squares, and counts how many words overlap each
+     * square, and renders a heatmap: black for 0 words, green for 1,
+     * and red for more than 8. Rendering too many words at the same
+     * spot will make your WordCram run slower, and skip more words,
+     * so learning where your hotspots are can be helpful.
+     *
+     * This is very experimental, and could be changed or removed in a
+     * future release.
+     */
+    public void testPlacer() {
+      initComponents();
+      WordShaper shaper = new WordShaper(renderOptions.rightToLeft);
+      PlacerHeatMap heatMap = new PlacerHeatMap(words, fonter, sizer, angler, placer, nudger, shaper);
+      heatMap.draw(parent);
+    }
 
     private WordCramEngine getWordCramEngine() {
         if (wordCramEngine == null) {
-            if (words == null && !textSources.isEmpty()) {
-                String text = joinTextSources();
-
-                text = textCase == TextCase.Lower ? text.toLowerCase()
-                     : textCase == TextCase.Upper ? text.toUpperCase()
-                     : text;
-
-                words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text, renderOptions);
-                observer.wordsCounted(words);
-                if (words.length == 0) {
-                	warnScripterAboutEmptyWordArray();
-                }
-            }
-            words = new WordSorterAndScaler().sortAndScale(words);
-
-            if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
-            if (sizer == null) sizer = Sizers.byWeight(5, 70);
-            if (colorer == null) colorer = Colorers.alwaysUse(parent.color(0));
-            if (angler == null) angler = Anglers.mostlyHoriz();
-            if (placer == null) placer = Placers.horizLine();
-            if (nudger == null) nudger = new SpiralWordNudger();
-
+            initComponents();
             WordShaper shaper = new WordShaper(renderOptions.rightToLeft);
             wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, new BBTreeBuilder(), renderOptions, observer);
         }
         return wordCramEngine;
+    }
+
+    private void initComponents() {
+
+      if (words == null && !textSources.isEmpty()) {
+        String text = joinTextSources();
+
+        text = textCase == TextCase.Lower ? text.toLowerCase()
+          : textCase == TextCase.Upper ? text.toUpperCase()
+          : text;
+
+        words = new WordCounter().withExtraStopWords(extraStopWords).shouldExcludeNumbers(excludeNumbers).count(text, renderOptions);
+        observer.wordsCounted(words);
+        if (words.length == 0) {
+          warnScripterAboutEmptyWordArray();
+        }
+      }
+      words = new WordSorterAndScaler().sortAndScale(words);
+
+      if (fonter == null) fonter = Fonters.alwaysUse(parent.createFont("sans", 1));
+      if (sizer == null) sizer = Sizers.byWeight(5, 70);
+      if (colorer == null) colorer = Colorers.alwaysUse(parent.color(0));
+      if (angler == null) angler = Anglers.mostlyHoriz();
+      if (placer == null) placer = Placers.horizLine();
+      if (nudger == null) nudger = new SpiralWordNudger();
     }
 
     private String joinTextSources() {

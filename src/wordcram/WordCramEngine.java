@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.ListIterator;
 
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -21,9 +22,10 @@ class WordCramEngine {
     private WordPlacer placer;
     private WordNudger nudger;
 
-    private Word[] words; // just a safe copy
-    private EngineWord[] eWords;
-    private int eWordIndex = -1;
+    private ArrayList<EngineWord> eWords;
+    private ListIterator<EngineWord> eWordIter;
+    private ArrayList<EngineWord> drawnWords = new ArrayList<EngineWord>();
+    private ArrayList<Word> skippedWords = new ArrayList<Word>();
 
     private RenderOptions renderOptions;
     private Observer observer;
@@ -41,11 +43,11 @@ class WordCramEngine {
         this.observer = observer;
 
         this.renderOptions = renderOptions;
-        this.words = words;
         this.eWords = wordsIntoEngineWords(words, shaper, bbTreeBuilder);
+        this.eWordIter = eWords.listIterator();
     }
 
-    private EngineWord[] wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
+    private ArrayList<EngineWord> wordsIntoEngineWords(Word[] words, WordShaper wordShaper, BBTreeBuilder bbTreeBuilder) {
         ArrayList<EngineWord> engineWords = new ArrayList<EngineWord>();
 
         int maxNumberOfWords = words.length;
@@ -75,7 +77,7 @@ class WordCramEngine {
             skipWord(words[i], WordSkipReason.WAS_OVER_MAX_NUMBER_OF_WORDS);
         }
 
-        return engineWords.toArray(new EngineWord[0]);
+        return engineWords;
     }
 
     private boolean isTooSmall(Shape shape, int minShapeSize) {
@@ -93,11 +95,12 @@ class WordCramEngine {
         // TODO delete these properties when starting a sketch, in case it's a re-run w/ the same words.
         // NOTE: keep these as properties, because they (will be) deleted when the WordCramEngine re-runs.
         word.wasSkippedBecause(reason);
+        skippedWords.add(word);
         observer.wordSkipped(word);
     }
 
     boolean hasMore() {
-        return eWordIndex < eWords.length-1;
+        return eWordIter.hasNext();
     }
 
     void drawAll() {
@@ -111,7 +114,7 @@ class WordCramEngine {
 
     void drawNext() {
         if (!hasMore()) return;
-        EngineWord eWord = eWords[++eWordIndex];
+        EngineWord eWord = eWordIter.next();
         boolean wasPlaced = placeWord(eWord);
         if (wasPlaced) { // TODO unit test (somehow)
             drawWordImage(eWord);
@@ -125,7 +128,7 @@ class WordCramEngine {
         int wordImageWidth = (int)rect.getWidth();
         int wordImageHeight = (int)rect.getHeight();
 
-        eWord.setDesiredLocation(placer, eWords.length, wordImageWidth, wordImageHeight, renderer.getWidth(), renderer.getHeight());
+        eWord.setDesiredLocation(placer, eWords.size(), wordImageWidth, wordImageHeight, renderer.getWidth(), renderer.getHeight());
 
         // Set maximum number of placement trials
         int maxAttemptsToPlace = renderOptions.maxAttemptsToPlaceWord > 0 ?
@@ -147,10 +150,7 @@ class WordCramEngine {
             }
 
             boolean foundOverlap = false;
-            for (int i = 0; !foundOverlap && i < eWordIndex; i++) {
-                EngineWord otherWord = eWords[i];
-                if (otherWord.wasSkipped()) continue; //can't overlap with skipped word
-
+            for (EngineWord otherWord : drawnWords) {
                 if (eWord.overlaps(otherWord)) {
                     foundOverlap = true;
                     lastCollidedWith = otherWord;
@@ -172,31 +172,26 @@ class WordCramEngine {
     }
 
     private void drawWordImage(EngineWord word) {
+        drawnWords.add(word);
         renderer.drawWord(word, new Color(word.word.getColor(colorer), true));
     }
 
     Word getWordAt(float x, float y) {
-        for (int i = eWords.length-1; i >= 0; i--) {
-            if (eWords[i].wasPlaced()) {
-                if (eWords[i].containsPoint(x, y)) {
-                    return eWords[i].word;
-                }
+        int size = drawnWords.size() - 1;
+        for (int i = size; i >= 0; i--) {
+            EngineWord eWord = drawnWords.get(i);
+            if (eWord.containsPoint(x, y)) {
+                return eWord.word;
             }
         }
         return null;
     }
 
     Word[] getSkippedWords() {
-        ArrayList<Word> skippedWords = new ArrayList<Word>();
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].wasSkipped()) {
-                skippedWords.add(words[i]);
-            }
-        }
         return skippedWords.toArray(new Word[0]);
     }
 
     float getProgress() {
-        return (float) (this.eWordIndex+1) / this.eWords.length;
+        return (float) eWordIter.nextIndex() / eWords.size();
     }
 }
