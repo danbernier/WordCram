@@ -31,7 +31,7 @@ void setup() {
   if (word.wasSkipped()) {
     println(word.word + " was skipped!");
     
-    if (word.wasSkippedBecause() == WordCram.NO_SPACE) {
+    if (word.wasSkippedBecause() == WordSkipReason.NO_SPACE) {
       println(word.word + " was skipped because there was no room");
     }
   }
