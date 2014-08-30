@@ -19,6 +19,8 @@ void setup() {
     .minShapeSize(1)
     .withWordPadding(1)
     .drawAll();
+
+  println("Done! Open usconst.pdf to see the results.");
   
   exit();
 }
