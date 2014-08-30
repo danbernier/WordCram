@@ -6,8 +6,8 @@ void setup() {
   background(255);
 
   new WordCram(this)
-    .fromWebPage("http://wordcram.org")
-      .drawAll();
+    .fromTextFile("../kari-the-elephant.txt")
+    .drawAll();
 }
 
 void wordsCounted(Word[] words) {
@@ -20,13 +20,11 @@ void beginDraw() {
 
 int wordsDrawn = 0;
 void wordDrawn(Word word) {
-  //println("drew this word! " + word.word);
   wordsDrawn++;
 }
 
 int wordsSkipped = 0;
 void wordSkipped(Word word) {
-  //println("skipped " + word.word + " because " + word.wasSkippedBecause());
   wordsSkipped++;
 }
 
