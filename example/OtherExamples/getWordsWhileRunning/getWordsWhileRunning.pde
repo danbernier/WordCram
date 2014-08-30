@@ -34,16 +34,16 @@ void report() {
     Word word = words[i];
     if (word.wasSkipped()) {
 
-      int skipReason = word.wasSkippedBecause().intValue();
+      WordSkipReason skipReason = word.wasSkippedBecause();
 
       switch(skipReason) {
-      case WordCram.WAS_OVER_MAX_NUMBER_OF_WORDS: 
+      case WAS_OVER_MAX_NUMBER_OF_WORDS:
         tooMany++;
         break;
-      case WordCram.SHAPE_WAS_TOO_SMALL: 
+      case SHAPE_WAS_TOO_SMALL:
         tooSmall++; 
         break;
-      case WordCram.NO_SPACE: 
+      case NO_SPACE:
         couldNotPlace++; 
         break;
       }
