@@ -14,7 +14,7 @@ void setup() {
     fromTextFile("../kari-the-elephant.txt").
     withPlacer(placer).
     withNudger(placer).
-    sizedByWeight(8, 40).
+    sizedByWeight(7, 40).
     withColor(#ffffff).
     drawAll();
     
@@ -26,7 +26,7 @@ void setup() {
     fromTextFile("../kari-the-elephant.txt").
     withPlacer(placer).
     withNudger(placer).
-    sizedByWeight(8, 40).
+    sizedByWeight(7, 40).
     withColor(#000000).
     drawAll();
 }
