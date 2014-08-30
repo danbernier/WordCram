@@ -28,9 +28,6 @@ public class ShapeBasedPlacer implements WordPlacer, WordNudger {
 	public PVector place(Word w, int rank, int count, int ww, int wh, int fw,
 			int fh) {
 
-		w.setProperty("width", ww);
-		w.setProperty("height", wh);
-
 		for (int i = 0; i < 1000; i++) {
 			float newX = randomBetween(minX, maxX);
 			float newY = randomBetween(minY, maxY);
@@ -46,8 +43,8 @@ public class ShapeBasedPlacer implements WordPlacer, WordNudger {
 		PVector target = word.getTargetPlace();
 		float wx = target.x;
 		float wy = target.y;
-		float ww = (Integer) word.getProperty("width");
-		float wh = (Integer) word.getProperty("height");
+		float ww = word.getRenderedWidth();
+		float wh = word.getRenderedHeight();
 
 		for (int i = 0; i < 1000; i++) {
 			float newX = randomBetween(minX, maxX);
