@@ -763,7 +763,18 @@ public class WordCram {
         if (wordCramEngine == null) {
             initComponents();
             WordShaper shaper = new WordShaper(renderOptions.rightToLeft);
-            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, new BBTreeBuilder(), renderOptions, observer);
+            wordCramEngine = new WordCramEngine(renderer,
+                words,
+                fonter,
+                sizer,
+                colorer,
+                angler,
+                placer,
+                nudger,
+                shaper,
+                new BBTreeBuilder(),
+                renderOptions,
+                observer);
         }
         return wordCramEngine;
     }
