@@ -140,6 +140,7 @@ public class WordCram {
      * gives the user a pretty nice API.
      */
     private Word[] words;
+    private WordSource wordSource;
     private ArrayList<TextSource> textSources = new ArrayList<TextSource>();
     private String extraStopWords = "";
     private boolean excludeNumbers = true;
@@ -405,7 +406,11 @@ public class WordCram {
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram fromWords(Word[] words) {
-        this.words = words;
+      return fromWords(new WordArray(words));
+    }
+
+    public WordCram fromWords(WordSource wordSource) {
+        this.wordSource = wordSource;
         return this;
     }
 
@@ -781,6 +786,10 @@ public class WordCram {
     }
 
     private void initComponents() {
+
+      if (words == null && wordSource != null) {
+        words = wordSource.getWords();
+      }
 
       if (words == null && !textSources.isEmpty()) {
         String text = joinTextSources();
