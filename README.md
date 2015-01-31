@@ -9,23 +9,21 @@ WordCram](https://github.com/danbernier/WordCram/raw/master/wordcram.png)
 
 ## Make a Word Cloud
 
-```java
-import wordcram.*;
+    import wordcram.*;
 
-// Set up the Processing sketch
-size(1000, 600);
-colorMode(HSB);
-background(230);
+    // Set up the Processing sketch
+    size(1000, 600);
+    colorMode(HSB);
+    background(230);
 
-// Make a wordcram from a random wikipedia page.
-new WordCram(this)
-  .fromWebPage("http://en.wikipedia.org/wiki/Special:Random")
-  .withColors(color(30), color(110),
-              color(random(255), 240, 200))
-  .sizedByWeight(5, 120)
-  .withFont("Copse")
-  .drawAll();
-```
+    // Make a wordcram from a random wikipedia page.
+    new WordCram(this)
+      .fromWebPage("http://en.wikipedia.org/wiki/Special:Random")
+      .withColors(color(30), color(110),
+                  color(random(255), 240, 200))
+      .sizedByWeight(5, 120)
+      .withFont("Copse")
+      .drawAll();
 
 You can control where words appear, what angle they're at, their font,
 their color, and how they're sized.
