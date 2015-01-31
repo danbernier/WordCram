@@ -76,20 +76,7 @@ task :bundle => :test do
 
   FileUtils.cp_r 'src', 'build/p5lib/WordCram/src'
 
-  javadoc_opts = {
-    :classpath => main_classpath,
-    :sourcepath => 'src',
-    :d => 'build/p5lib/WordCram/reference',  # d = destination
-    :windowtitle => "WordCram API",
-    :overview => 'src/overview.html',
-    :header => "WordCram #{version}",
-    :subpackages => 'wordcram'
-  }
-
-  puts "Generating javadocs..."
-  run "javadoc #{to_flags(javadoc_opts)} -use -version"
-
-  FileUtils.cp 'wordcram.png', 'build/p5lib/WordCram/reference'
+  generate_javadoc_to('build/p5lib/WordCram/reference')
 end
 
 namespace :publish do
@@ -117,24 +104,52 @@ namespace :publish do
 
     # git checkout master, first? Warn if you're not on master?
 
-    release_number = version
-    puts "Release number: #{release_number}"
+    puts "Release number: #{version}"
 
-    git_tag "release/#{release_number}", "Tagging the #{release_number} release"
-    zip_and_tar_and_upload release_number
+    git_tag "release/#{version}", "Tagging the #{version} release"
+    zip_and_tar_and_upload version
 
-    puts "uploading javadoc to github..."
-    run "git checkout gh-pages"
-    run "rm -rf javadoc"
-    run "cp -r build/p5lib/WordCram/reference javadoc"
-    run "git add javadoc"
-    run "git commit -m \"Updating javadoc for #{release_number} release.\""
-    run "git push"
-    run "git push --tags"
-    run "git checkout master"
+    upload_javadoc_to_github
   end
 end
 task :publish => 'publish:local'
+
+desc "Re-generate javadoc, and upload it to the github pages site"
+task :upload_javadoc_to_github do
+  upload_javadoc_to_github
+end
+
+def upload_javadoc_to_github
+  puts "uploading javadoc to github..."
+  run "git stash save stashed-while-generating-javadoc"
+  run "git checkout gh-pages"
+  run "git rebase master"
+  run "rm -rf javadoc"
+  generate_javadoc_to('javadoc')
+  run "git add -A javadoc"
+  run "git commit -m \"Updating javadoc for #{version} release.\""
+  run "git push origin : --tags"
+  run "git checkout -"
+  run "git stash pop"
+end
+
+def generate_javadoc_to(folder)
+  javadoc_opts = {
+    :classpath => main_classpath,
+    :sourcepath => 'src',
+    :d => folder,  # d = destination
+    :windowtitle => "WordCram API",
+    :overview => 'src/overview.html',
+    :header => "WordCram #{version}",
+    :subpackages => 'wordcram'
+  }
+
+  puts "Generating javadocs..."
+  run "javadoc #{to_flags(javadoc_opts)} -use -version"
+
+  FileUtils.cp 'wordcram.png', folder
+end
+
 
 namespace :bump_version do
   desc "Bump the lowest version number"
@@ -231,6 +246,7 @@ def aws_upload(*filepaths)
 end
 
 def run(cmd)
+  Dir.mkdir('build') unless Dir.exists?('build')
   File.open('build/log', 'a') do |f|
     f.puts "$ #{cmd}"
     `#{cmd}`.tap do |results|
