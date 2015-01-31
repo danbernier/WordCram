@@ -34,6 +34,7 @@ desc "Clean the build artifacts: delete the build directory."
 task :clean do
   puts "Cleaning..."
   FileUtils.rm_rf('build')
+  FileUtils.rm_rf('_site')
 end
 
 desc "Compile the WordCram java files."
