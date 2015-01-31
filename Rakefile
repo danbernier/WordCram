@@ -109,28 +109,50 @@ namespace :publish do
     git_tag "release/#{version}", "Tagging the #{version} release"
     zip_and_tar_and_upload version
 
-    upload_javadoc_to_github
+    update_gh_pages_and_push
   end
 end
 task :publish => 'publish:local'
 
 desc "Re-generate javadoc, and upload it to the github pages site"
-task :upload_javadoc_to_github do
-  upload_javadoc_to_github
+task :update_gh_pages_and_push do
+  update_gh_pages_and_push
 end
 
-def upload_javadoc_to_github
-  puts "uploading javadoc to github..."
-  run "git stash save stashed-while-generating-javadoc"
+def transform_file(origin, into:, &transformer)
+  File.open(into, 'w') do |f|
+    f.puts transformer.call(File.read(origin))
+  end
+end
+
+def update_gh_pages_and_push
+  puts "updating gh-pages site and sending it to github..."
+  run "git stash save stashed-while-generating-gh-pages"
   run "git checkout gh-pages"
   run "git rebase master"
+
+  turn_readme_into_index
+
   run "rm -rf javadoc"
   generate_javadoc_to('javadoc')
-  run "git add -A javadoc"
-  run "git commit -m \"Updating javadoc for #{version} release.\""
+
+  run "git add -A index.md javadoc"
+  run "git commit -m \"Updating gh-pages for #{version} release.\""
   run "git push origin : --tags"
   run "git checkout -"
   run "git stash pop"
+end
+
+def turn_readme_into_index
+  transform_file('README.md', into: 'index.md') { |readme|
+    [
+      '---',
+      'layout: default',
+      '---',
+      '',
+      readme
+    ].join("\n")
+  }
 end
 
 def generate_javadoc_to(folder)
