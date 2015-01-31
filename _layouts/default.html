@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>{% if page.title %}{{ page.title }} | {% endif %}WordCram by danbernier</title>
+
+    <link rel="stylesheet" href="{{site.baseurl}}/stylesheets/styles.css">
+    <link rel="stylesheet" href="{{site.baseurl}}/stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="{{site.baseurl}}/">WordCram</a></h1>
+        <p>open-source word clouds for <a href="http://processing.org">Processing</a></p>
+
+        <ul>
+          <li><a href="{{ site.baseurl }}/gallery">See the <strong>Gallery</strong></a></li>
+          <li><a href="{{ site.baseurl }}/javadoc">Read the <strong>javadoc</strong></a></li>
+          <li><a href="https://wordcram.s3.amazonaws.com/downloads/wordcram.0.6.1.zip">Download the <strong>Zipfile</strong></a></li>
+        </ul>
+
+        <p class="view"><a href="http://twitter.com/wordcram">Follow WordCram on Twitter <small>@wordcram</small></a></p>
+        <p class="view"><a href="https://groups.google.com/forum/#!forum/wordcram">Ask a Question in the Forum <small>/wordcram</small></a></p>
+        <p class="view"><a href="https://github.com/danbernier/WordCram">Pull Requests Welcome on GitHub <small>danbernier/WordCram</small></a></p>
+
+        <h2>Latest News</h2>
+        {% for post in site.posts limit:3 %}
+        <p><a href="{{site.baseurl}}{{post.url}}">{{post.title}}</a></p>
+        {% endfor %}
+
+        <p><a href="{{site.baseurl}}/blog">All posts</a></p>
+      </header>
+      <section>
+        {{ content }}
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/danbernier">danbernier</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="{{site.baseurl}}/javascripts/scale.fix.js"></script>
+
+  </body>
+</html>

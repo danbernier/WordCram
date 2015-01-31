@@ -1,0 +1,15 @@
+baseurl: /WordCram
+exclude: [src, lib, example, ideExample, Rakefile, Gemfile, Gemfile.lock, build.json, build.json.example, test]
+defaults:
+  -
+    scope:
+      path: ""   # an empty string here means all files in the project
+      type: ""   # or "pages"
+    values:
+      layout: default
+  -
+    scope:
+      path: ""   # an empty string here means all files in the project
+      type: "posts"   # or "pages"
+    values:
+      layout: post
