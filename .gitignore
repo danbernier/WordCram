@@ -6,3 +6,4 @@ build.json
 target
 *.swp
 _site
+sketch.properties

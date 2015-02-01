@@ -1,6 +1,7 @@
 require 'json'
 require 'fileutils'
 require 'aws-sdk'
+require 'csv'
 
 =begin
 Github Pages:
@@ -137,11 +138,39 @@ def update_gh_pages_and_push
   run "rm -rf javadoc"
   generate_javadoc_to('javadoc')
 
-  run "git add -A index.md javadoc"
+  import_the_gallery
+
+  run "git add -A index.md javadoc _data gallery"
   run "git commit -m \"Updating gh-pages for #{version} release.\""
   run "git push origin : --tags"
   run "git checkout -"
   run "git stash pop"
+end
+
+task :import_the_gallery do import_the_gallery end
+def import_the_gallery
+  gallery_paths = Dir.glob('example/gallery/*').map { |p| File.basename(p) }
+  p gallery_paths
+
+  # create _data/gallery.csv
+  CSV.open('_data/gallery.csv', 'w') do |csv|
+    csv << %w(path title)
+    gallery_paths.each do |path|
+      title = path.gsub(/([A-Z])/, ' \1').split(' ').map(&:capitalize).join(' ')
+      csv << [path, title]
+    end
+  end
+
+  # run the sketches
+  run "mkdir gallery"
+  run "rm gallery/*.pde"
+  run "rm gallery/*.png"
+  gallery_paths.each do |gallery_path|
+    run "processing-java --sketch=example/gallery/#{gallery_path} --output=output --run --force"
+    run "mv example/gallery/#{gallery_path}/#{gallery_path}.png gallery/"
+    run "cp example/gallery/#{gallery_path}/#{gallery_path}.pde gallery/#{gallery_path}.pde"
+  end
+  run "rm -rf output"
 end
 
 def turn_readme_into_index
