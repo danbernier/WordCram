@@ -175,17 +175,17 @@ end
 
 
 namespace :bump_version do
-  desc "Bump the lowest version number"
-  task :tiny do
+  desc "Bump the patch version number"
+  task :patch do
     bump_version(2)
   end
 
-  desc "Bump the middle version number"
+  desc "Bump the minor version number"
   task :minor do
     bump_version(1)
   end
 
-  desc "Bump the highest version number"
+  desc "Bump the major version number"
   task :major do
     bump_version(0)
   end
@@ -205,8 +205,8 @@ namespace :bump_version do
   end
 end
 
-desc "Bump the lowest version number"
-task :bump_version => 'bump_version:tiny'
+desc "Bump the patch version number"
+task :bump_version => 'bump_version:patch'
 
 task :default => :test
 
