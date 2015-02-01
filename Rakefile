@@ -142,7 +142,7 @@ def update_gh_pages_and_push
 
   run "git add -A index.md javadoc _data gallery"
   run "git commit -m \"Updating gh-pages for #{version} release.\""
-  run "git push origin : --tags"
+  run "git push -f origin gh-pages"
   run "git checkout -"
   run "git stash pop"
 end
