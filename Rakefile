@@ -150,7 +150,6 @@ end
 task :import_the_gallery do import_the_gallery end
 def import_the_gallery
   gallery_paths = Dir.glob('example/gallery/*').map { |p| File.basename(p) }
-  p gallery_paths
 
   # create _data/gallery.csv
   CSV.open('_data/gallery.csv', 'w') do |csv|
