@@ -1,4 +1,3 @@
-baseurl: /WordCram
 exclude: [src, lib, example, ideExample, Rakefile, Gemfile, Gemfile.lock, build.json, build.json.example, test]
 defaults:
   -
