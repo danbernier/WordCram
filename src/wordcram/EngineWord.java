@@ -1,11 +1,12 @@
 package wordcram;
 
 import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.AffineTransform;
 
 import processing.core.PVector;
 
-class EngineWord {
+class EngineWord implements HasRectangle {
     Word word;
     int rank;
 
@@ -32,10 +33,13 @@ class EngineWord {
         return shape;
     }
 
+    public Rectangle2D getRectangle() {  // public just for HasRectangle. :p
+      return bbTree.getRectangle();
+    }
+
     boolean overlaps(EngineWord other) {
         return bbTree.overlaps(other.bbTree);
     }
-
 
     boolean containsPoint(float x, float y) {
         return bbTree.containsPoint(x, y);

@@ -14,6 +14,7 @@ import processing.core.PVector;
 class WordCramEngine {
 
     private WordRenderer renderer;
+    private SpanTree<EngineWord> spanTree;
 
     private WordFonter fonter;
     private WordSizer sizer;
@@ -33,6 +34,7 @@ class WordCramEngine {
     // TODO Damn, really need to break down that list of arguments.
     WordCramEngine(WordRenderer renderer, Word[] words, WordFonter fonter, WordSizer sizer, WordColorer colorer, WordAngler angler, WordPlacer placer, WordNudger nudger, WordShaper shaper, BBTreeBuilder bbTreeBuilder, RenderOptions renderOptions, Observer observer) {
         this.renderer = renderer;
+        this.spanTree = new SpanTree<EngineWord>(0, 0, renderer.getWidth(), renderer.getHeight());
 
         this.fonter = fonter;
         this.sizer = sizer;
@@ -122,7 +124,7 @@ class WordCramEngine {
         }
     }
 
-    private boolean placeWord(EngineWord eWord) {
+    private boolean placeWord(final EngineWord eWord) {
         Word word = eWord.word;
         Rectangle2D rect = eWord.getShape().getBounds2D(); // TODO can we move these into EngineWord.setDesiredLocation? Does that make sense?
         int wordImageWidth = (int)rect.getWidth();
@@ -150,15 +152,27 @@ class WordCramEngine {
             }
 
             boolean foundOverlap = false;
+            /*
             for (EngineWord otherWord : drawnWords) {
                 if (eWord.overlaps(otherWord)) {
                     foundOverlap = true;
                     lastCollidedWith = otherWord;
                 }
             }
+            */
+            EngineWord overlapping = spanTree.findFirstMatch(eWord, new Predicate<EngineWord>() {
+              public boolean matches(EngineWord otherWord) {
+                return eWord.overlaps(otherWord);
+              }
+            });
+            if (overlapping != null) {
+              foundOverlap = true;
+              lastCollidedWith = overlapping;
+            }
 
             if (!foundOverlap) {
                 eWord.finalizeLocation();
+                spanTree.add(eWord);
                 return true;
             }
         }

@@ -2,6 +2,8 @@ package wordcram;
 
 import java.util.ArrayList;
 
+import java.awt.geom.Rectangle2D;
+
 import processing.core.PGraphics;
 
 public class BBTree {
@@ -74,6 +76,11 @@ public class BBTree {
         int[] b = bTree.getPoints();
 
         return a[3] > b[1] && a[1] < b[3] && a[2] > b[0] && a[0] < b[2];
+    }
+
+    public Rectangle2D getRectangle() {
+      int[] points = getPoints();
+      return new Rectangle2D.Double(points[0], points[1], points[2]-points[0], points[3]-points[1]);
     }
 
     private int[] getPoints() {
