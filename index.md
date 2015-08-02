@@ -22,7 +22,7 @@ WordCram](https://github.com/danbernier/WordCram/raw/master/wordcram.png)
 
     // Make a wordcram from a random wikipedia page.
     new WordCram(this)
-      .fromWebPage("http://en.wikipedia.org/wiki/Special:Random")
+      .fromWebPage("https://en.wikipedia.org/wiki/Special:Random")
       .withColors(color(30), color(110),
                   color(random(255), 240, 200))
       .sizedByWeight(5, 120)
