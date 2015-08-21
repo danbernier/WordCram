@@ -1,0 +1,68 @@
+==================================================================
+https://keybase.io/danbernier
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://wordcram.org
+  * I am danbernier (https://keybase.io/danbernier) on keybase.
+  * I have a public key with fingerprint 1FAA B199 F574 EF19 B109  5666 05EF 0F12 A572 A5FA
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "1faab199f574ef19b109566605ef0f12a572a5fa",
+            "host": "keybase.io",
+            "key_id": "05ef0f12a572a5fa",
+            "kid": "0101093496c208345a1734b1843d68c8843a5366e944fd57907283fd1a4f7bbd3ecd0a",
+            "uid": "1cad426788b713b1f40c158d4bb09f19",
+            "username": "danbernier"
+        },
+        "service": {
+            "hostname": "wordcram.org",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1440123430,
+    "expire_in": 157680000,
+    "prev": "172072502802477b73a85bfef963d79655f95e3fd19754a54d72e33515e9a8fd",
+    "seqno": 4,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.43
+Comment: https://keybase.io/crypto
+
+yMIcAnicbVJrSBVBFL4+Ku5FKUqsyCi38IE32dmd2dm9Rj+kKIiofgR6LS6zuzO3
+7erude9V84VJEmmBPwoKIiPqVyUlJURYZEQPs6yUCu1pb+ghFIk/imat/jXDcDjn
+fN835xzO9cw0XyClP6uQdK3LhCl3+ktrfFsedeQ1Crpj1guhRiFGpw2z7Ch1465l
+J4WQABghOtA0hjCkDGg6EDWkKIqIKBMZkAjC/DEiBIXtTsJjcBmdJGix5fAYdyKW
+yaP/wcf+JAC/mgw1xZBEVYaIACxDHahQNhXVULklSFYUqkHITIQ1EUuqzExAIMO6
+bsrUMEVPrmZaDhjEhJKCVVXHQNYBg6IBkGpCXRc1Xr8HTFDXJlWUo01i69yxqCs0
+BwUer7UM6g3B6+Uvps5xTcMlVcWOG+XsuOskHcOp5JntyWQ85BGT9fFpJNUjfzUi
+umWbfJCcUEvdhOXYQghwpJG0PFEAoQgkGcpiUKA745ZLI5aHQFhRRX68b2it1w6W
+eL9IlFRRghjrWCYq0hllmiKbWFMQYhqi3jg0jCBB0MQSlWUEENWIykzB66radoQQ
+5GWSKJdMWFGbJGtcKjRfu7o13ZcS8M2ckeqtgi/gn/NvQcpPzfoFlhTeLtp4uGv3
+mc892mhTXxoaONq699Jk36IPRwp71paMjJ0IH4Ejl9Ok2IyjgVv3/e/8LeZNPHGn
++cwtPNXUPV6w/qW8fO7YAeV87ntmPPOnDA5XlDUufLyq99watu7kt5zLrUWPCo5/
+fXWvOruyYMmu7w8uLm7bkNX3PO1gV+7g+63RLy9W7tufP9T8ZKqle8JNFB9PrdtU
+cMhouGCf/okm5o8t32yXDwyV+iPvRgNXRicz2ksiDTi2Izt9xdlwXjxD+3Ts+42D
+RjWqejO8uuxjx9SCQ6lzdzzN2taU03u3YfabzHBne8Ug2t0q14ed5wNvxzPaRucF
+90SXLX2Y/6Pz9W9nyySI
+=IGai
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/danbernier
+
+==================================================================
+
