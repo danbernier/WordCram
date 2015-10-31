@@ -1,7 +1,7 @@
 package wordcram;
 
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
+import java.awt.Shape;  // awt: holds it; from the Word
+import java.awt.geom.AffineTransform;  // awt: for translating shapes
 
 import processing.core.PVector;
 

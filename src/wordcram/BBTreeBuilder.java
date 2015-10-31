@@ -1,7 +1,7 @@
 package wordcram;
 
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
+import java.awt.Shape; // awt: getBounds2D(), contains(box), intersects(box)
+import java.awt.geom.Rectangle2D; // awt: from shape bounding box, getX() and Y(), width() and height()
 
 public class BBTreeBuilder {
     public BBTree makeTree(Shape shape, int swelling) {

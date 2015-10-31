@@ -1,11 +1,11 @@
 package wordcram;
 
-import java.awt.Font;
-import java.awt.Shape;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
+import java.awt.Font; // awt: font+word=shape
+import java.awt.Shape; // awt: font+word=shape
+import java.awt.font.FontRenderContext; // awt: font+word=shape
+import java.awt.font.GlyphVector; // awt: font+word=shape
+import java.awt.geom.AffineTransform; // awt: move and rotate shape
+import java.awt.geom.Rectangle2D; // awt: move shape
 
 import processing.core.PFont;
 

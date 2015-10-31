@@ -1,9 +1,9 @@
 package wordcram;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.geom.GeneralPath;
+import java.awt.Color;  // awt: for fill color
+import java.awt.Graphics2D; // awt: draws the word to the screen
+import java.awt.RenderingHints;  // awt: for constants while rendering a word
+import java.awt.geom.GeneralPath;  // awt: Shape -> Path, fill(path)
 
 import processing.core.PGraphics;
 import processing.awt.PGraphicsJava2D;

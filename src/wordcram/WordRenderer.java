@@ -1,6 +1,6 @@
 package wordcram;
 
-import java.awt.Color;
+import java.awt.Color; // awt: JUST for the interface (this IS an interface)
 
 interface WordRenderer {
 	int getWidth();

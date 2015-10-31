@@ -1,9 +1,9 @@
 package wordcram;
 
-import java.awt.Color;
-import java.awt.Shape;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Path2D;
+import java.awt.Color; // awt: color->hex
+import java.awt.Shape; // awt: shape->path
+import java.awt.geom.PathIterator; // awt: path->svg
+import java.awt.geom.Path2D; // awt: path->svg
 import java.io.PrintWriter;
 import java.io.FileNotFoundException;
 

@@ -1,7 +1,7 @@
 package wordcram;
 
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
+import java.awt.Shape; // awt: word->shape->rect
+import java.awt.geom.Rectangle2D; // awt: intersects(box), x-y-w-h, bounds
 import java.util.ArrayList;
 import java.util.HashMap;
 
