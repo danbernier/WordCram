@@ -1,6 +1,5 @@
 package wordcram;
 
-import java.awt.Shape;
 import java.util.HashMap;
 
 import processing.core.PFont;

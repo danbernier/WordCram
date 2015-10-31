@@ -1,6 +1,5 @@
 package wordcram;
 
-import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -8,8 +7,6 @@ import java.util.HashMap;
 
 import processing.core.PApplet;
 import processing.core.PFont;
-import processing.core.PGraphics;
-import processing.core.PGraphicsJava2D;
 import processing.core.PVector;
 
 public class PlacerHeatMap {

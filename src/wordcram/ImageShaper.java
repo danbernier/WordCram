@@ -1,6 +1,7 @@
 package wordcram;
 
-import java.awt.*;
+import java.awt.Shape;
+import java.awt.Rectangle;
 import java.awt.geom.Area;
 import processing.core.PImage;
 import java.util.ArrayList;

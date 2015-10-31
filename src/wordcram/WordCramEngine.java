@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import processing.core.PFont;
-import processing.core.PGraphics;
-import processing.core.PGraphicsJava2D;
 import processing.core.PVector;
 
 class WordCramEngine {
