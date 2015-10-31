@@ -152,6 +152,7 @@ class WordCramEngine {
                 if (eWord.overlaps(otherWord)) {
                     foundOverlap = true;
                     lastCollidedWith = otherWord;
+                    break;
                 }
             }
 
