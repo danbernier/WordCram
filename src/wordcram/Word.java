@@ -122,7 +122,7 @@ public class Word implements Comparable<Word> {
      * @return the Word, for more configuration
      */
     public Word setPlace(PVector place) {
-        this.presetTargetPlace = place.get();
+        this.presetTargetPlace = place.copy();
         return this;
     }
 
@@ -167,7 +167,7 @@ public class Word implements Comparable<Word> {
     }
 
     void setRenderedPlace(PVector place) {
-        renderedPlace = place.get();
+        renderedPlace = place.copy();
     }
 
     /**

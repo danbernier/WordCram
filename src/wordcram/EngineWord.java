@@ -1,7 +1,7 @@
 package wordcram;
 
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
+import java.awt.Shape;  // awt: holds it; from the Word
+import java.awt.geom.AffineTransform;  // awt: for translating shapes
 
 import processing.core.PVector;
 
@@ -43,7 +43,7 @@ class EngineWord {
 
     void setDesiredLocation(WordPlacer placer, int count, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
         desiredLocation = word.getTargetPlace(placer, rank, count, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
-        currentLocation = desiredLocation.get();
+        currentLocation = desiredLocation.copy();
     }
 
     void nudge(PVector nudge) {
@@ -60,7 +60,7 @@ class EngineWord {
     }
 
     PVector getCurrentLocation() {
-        return currentLocation.get();
+        return currentLocation.copy();
     }
 
     boolean wasPlaced() {

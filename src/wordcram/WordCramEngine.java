@@ -1,8 +1,8 @@
 package wordcram;
 
-import java.awt.Color;
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
+import java.awt.Color; // awt: turns P5-land color into awt color, for renderers
+import java.awt.Shape; // awt: word->shape, skip if too small, pass it on
+import java.awt.geom.Rectangle2D; // awt: to get bounding box width & height
 import java.util.ArrayList;
 import java.util.ListIterator;
 

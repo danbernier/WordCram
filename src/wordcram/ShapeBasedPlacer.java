@@ -1,8 +1,8 @@
 package wordcram;
 
-import java.awt.Shape;
-import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
+import java.awt.Shape; // awt: passed as arg, turned into Area
+import java.awt.geom.Area; // awt: from Shape, getBounds2D(), contains(box)
+import java.awt.geom.Rectangle2D; // awt: from Area, getMinX() and Y(), getMaxX() and Y()
 import java.util.Random;
 import processing.core.PVector;
 
