@@ -6,7 +6,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 
 import processing.core.PGraphics;
-import processing.core.PGraphicsJava2D;
+import processing.awt.PGraphicsJava2D;
 
 class ProcessingWordRenderer implements WordRenderer {
 	PGraphics destination;
