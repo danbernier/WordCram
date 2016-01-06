@@ -4,7 +4,6 @@ Liberation Serif font from RedHat: https://www.redhat.com/promo/fonts/
 */
 
 import wordcram.*;
-import wordcram.text.*;
 
 WordCram wordCram;
 
