@@ -90,6 +90,7 @@ namespace :publish do
 
     FileUtils.rm_rf(wc_folder)
     FileUtils.cp_r('build/p5lib/WordCram', File.join(lib_folder))
+    FileUtils.cp 'library.properties', 'build/p5lib/WordCram'
     puts "Copied files to #{wc_folder}."
   end
 
@@ -267,16 +268,19 @@ def test_classpath
 end
 
 def zip_and_tar_and_upload(version)
-  zipfile = "wordcram.#{version}.zip"
-  tarfile = "wordcram.#{version}.tar.gz"
+  zipfile = "wordcram.zip"
+  tarfile = "wordcram.tar.gz"
 
   puts "zipping & tarring..."
   run "cd build/p5lib; zip -5Tr ../#{zipfile} WordCram; cd ../.."
   run "tar -cvz -Cbuild/p5lib/ WordCram > build/#{tarfile}"
 
-  puts "uploading build/#{zipfile} and build/#{tarfile} to AWS..."
-  urls = aws_upload("build/#{zipfile}", "build/#{tarfile}")
+  FileUtils.cp 'library.properties', 'wordcram.txt'
+
+  puts "uploading files to AWS..."
+  urls = aws_upload("build/#{zipfile}", "build/#{tarfile}", 'wordcram.txt')
   puts "uploaded to: #{urls.inspect}"
+  FileUtils.rm 'wordcram.txt'
 end
 
 def aws_upload(*filepaths)
