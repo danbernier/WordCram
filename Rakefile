@@ -148,6 +148,7 @@ def update_gh_pages_and_push
   run "git stash pop"
 end
 
+desc "Import the gallery from examples/gallery into jekyll"
 task :import_the_gallery do import_the_gallery end
 def import_the_gallery
   gallery_paths = Dir.glob('example/gallery/*').map { |p| File.basename(p) }
