@@ -27,8 +27,3 @@ Word[] loadLetters() {
   }
   return letters;
 }
-
-void endDraw() {
-  save(new File(sketchPath("")).getName() + ".png");
-  exit();
-}
