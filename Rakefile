@@ -132,7 +132,7 @@ def update_gh_pages_and_push
   puts "updating gh-pages site and sending it to github..."
   run "git stash save stashed-while-generating-gh-pages"
   run "git checkout gh-pages"
-  run "git rebase master"
+  run "git merge master -m \"Merge master into gh-pages\""  # Merge master into gh-pages, so it's up-to-date.
 
   turn_readme_into_index
 
