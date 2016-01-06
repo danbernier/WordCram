@@ -167,7 +167,7 @@ def import_the_gallery
   run "rm gallery/*.pde"
   run "rm gallery/*.png"
   gallery_paths.each do |gallery_path|
-    run "processing-java --sketch=example/gallery/#{gallery_path} --output=output --run --force"
+    run "processing-java --sketch=example/gallery/#{gallery_path} --output=output/#{gallery_path} --run --force"
     run "mv example/gallery/#{gallery_path}/#{gallery_path}.png gallery/"
     run "cp example/gallery/#{gallery_path}/#{gallery_path}.pde gallery/#{gallery_path}.pde"
   end
