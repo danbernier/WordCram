@@ -134,11 +134,13 @@ import java.util.ArrayList;
 public class WordCram {
 
     /*
-     * This class is really only two parts: the fluent builder API, and pass-through calls
-     * to the WordCramEngine, where all the work happens.  This separation keeps the classes
-     * focused on only one thing, but still gives the user a pretty nice API.
+     * This class is really only two parts: the fluent builder API, and
+     * pass-through calls to the WordCramEngine, where all the work happens.
+     * This separation keeps the classes focused on only one thing, but still
+     * gives the user a pretty nice API.
      */
     private Word[] words;
+    private WordSource wordSource;
     private ArrayList<TextSource> textSources = new ArrayList<TextSource>();
     private String extraStopWords = "";
     private boolean excludeNumbers = true;
@@ -404,7 +406,11 @@ public class WordCram {
      * @return The WordCram, for further setup or drawing.
      */
     public WordCram fromWords(Word[] words) {
-        this.words = words;
+      return fromWords(new WordArray(words));
+    }
+
+    public WordCram fromWords(WordSource wordSource) {
+        this.wordSource = wordSource;
         return this;
     }
 
@@ -726,9 +732,9 @@ public class WordCram {
      * Add padding around each word, so they stand out from each other more.
      * If you call this multiple times, the last value will be used.
      *
-     * WordCram uses a tree of java.awt.Rectangle objects to detect whether two words overlap.
-     * What this method actually does is call <code>Rectangle.grow(padding)</code> on the
-     * leaves of that tree.
+     * WordCram uses a tree of java.awt.Rectangle objects to detect whether two
+     * words overlap.  What this method actually does is call
+     * <code>Rectangle.grow(padding)</code> on the leaves of that tree.
      *
      * @param padding The number of pixels to grow each rectangle by. Defaults to zero.
      * @return The WordCram, for further setup or drawing.
@@ -763,12 +769,27 @@ public class WordCram {
         if (wordCramEngine == null) {
             initComponents();
             WordShaper shaper = new WordShaper(renderOptions.rightToLeft);
-            wordCramEngine = new WordCramEngine(renderer, words, fonter, sizer, colorer, angler, placer, nudger, shaper, new BBTreeBuilder(), renderOptions, observer);
+            wordCramEngine = new WordCramEngine(renderer,
+                words,
+                fonter,
+                sizer,
+                colorer,
+                angler,
+                placer,
+                nudger,
+                shaper,
+                new BBTreeBuilder(),
+                renderOptions,
+                observer);
         }
         return wordCramEngine;
     }
 
     private void initComponents() {
+
+      if (words == null && wordSource != null) {
+        words = wordSource.getWords();
+      }
 
       if (words == null && !textSources.isEmpty()) {
         String text = joinTextSources();
