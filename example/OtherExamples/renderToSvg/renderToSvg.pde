@@ -8,7 +8,7 @@ void setup() {
   Word[] words = new Word[letters.length];
   for (int i = 0; i < letters.length; i++) {
     float weight = map(i, 0, letters.length, 0, 1);
-    words[i] = new Word(letters[i], i);
+    words[i] = new Word(letters[i], weight);
   }
 
   try {
