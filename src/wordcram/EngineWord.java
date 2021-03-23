@@ -43,7 +43,7 @@ class EngineWord {
 
     void setDesiredLocation(WordPlacer placer, int count, int wordImageWidth, int wordImageHeight, int fieldWidth, int fieldHeight) {
         desiredLocation = word.getTargetPlace(placer, rank, count, wordImageWidth, wordImageHeight, fieldWidth, fieldHeight);
-        currentLocation = desiredLocation.copy();
+        currentLocation = desiredLocation.get();
     }
 
     void nudge(PVector nudge) {
@@ -60,7 +60,7 @@ class EngineWord {
     }
 
     PVector getCurrentLocation() {
-        return currentLocation.copy();
+        return currentLocation.get();
     }
 
     boolean wasPlaced() {

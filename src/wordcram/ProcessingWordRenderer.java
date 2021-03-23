@@ -6,7 +6,7 @@ import java.awt.RenderingHints;  // awt: for constants while rendering a word
 import java.awt.geom.GeneralPath;  // awt: Shape -> Path, fill(path)
 
 import processing.core.PGraphics;
-import processing.awt.PGraphicsJava2D;
+import processing.core.PGraphicsJava2D;
 
 class ProcessingWordRenderer implements WordRenderer {
 	PGraphics destination;

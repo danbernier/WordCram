@@ -32,11 +32,11 @@ public class WordShaper {
     }
 
     public Shape getShapeFor(String word, PFont pFont, float fontSize, float angle) {
-        return getShapeFor(word, (Font)pFont.getNative(), fontSize, angle);
+        return getShapeFor(word, pFont.getFont(), fontSize, angle);
     }
 
     public Shape getShapeFor(String word, PFont pFont) {
-        return getShapeFor(word, (Font)pFont.getNative());
+        return getShapeFor(word, pFont.getFont());
     }
 
 
