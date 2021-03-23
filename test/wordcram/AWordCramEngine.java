@@ -69,6 +69,7 @@ public class AWordCramEngine {
 			when(shaper.getShapeFor(words[i].word, pFont, sizes[i], angles[i])).thenReturn(new Rectangle(0, 0, 20, 20));
 		}
 
+		renderOptions.minFontSize = 100;
 		WordCramEngine engine = getEngine(words);
 
 		for (int i = 0; i < words.length; i++) {

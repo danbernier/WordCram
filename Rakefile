@@ -256,8 +256,8 @@ def compile(src_dir, dest_dir, classpath)
 
   javac_opts = {
     :d => dest_dir,  # d = destination
-    :source => '1.5',
-    :target => '1.5',
+    :source => '1.6',
+    :target => '1.6',
     :classpath => classpath
   }
 

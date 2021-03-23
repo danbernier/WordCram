@@ -699,6 +699,28 @@ public class WordCram {
     }
 
     /**
+     * The smallest-sized Font the WordCram should try to draw.
+     * By default, it's 7.
+     * @param minFontSize the size of the smallest Font.
+     * @return The WordCram, for further setup or drawing.
+     */
+    public WordCram minFontSize( double minFontSize ) {
+        renderOptions.minFontSize = minFontSize;
+        return this;
+    }
+
+    /**
+     * The largest-sized Font the WordCram should try to draw.
+     * By default, it's 100.
+     * @param maxFontSize the size of the largest Font.
+     * @return The WordCram, for further setup or drawing.
+     */
+    public WordCram maxFontSize( double maxFontSize ) {
+        renderOptions.maxFontSize = maxFontSize;
+        return this;
+    }
+
+    /**
      * Use a custom canvas instead of the applet's default one.
      * This may be needed if rendering in background or in other
      * dimensions than the applet size is needed.

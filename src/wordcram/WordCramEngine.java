@@ -62,6 +62,17 @@ class WordCramEngine {
             float wordAngle = word.getAngle(angler);
 
             Shape shape = wordShaper.getShapeFor(eWord.word.word, wordFont, wordSize, wordAngle);
+            while (willFitTheImageSize( shape, wordSize )) {
+                //if the size of the words does not fit the size of the image, then its size will be reduced
+                wordSize = word.getSize( sizer, i, words.length );
+                Shape prevShape = shape;
+                word.setSize( ( float ) ( wordSize - 0.5 ) );
+                shape = wordShaper.getShapeFor( eWord.word.word, wordFont, wordSize, wordAngle );
+                if ( shape == null ) {
+                    shape = prevShape;
+                    break;
+                }
+            }
             if (isTooSmall(shape, renderOptions.minShapeSize)) {
                 skipWord(word, WordSkipReason.SHAPE_WAS_TOO_SMALL);
             }
@@ -76,6 +87,12 @@ class WordCramEngine {
         }
 
         return engineWords;
+    }
+
+    private boolean willFitTheImageSize( Shape shape, double wordSize ) {
+        Rectangle2D rect = shape.getBounds2D();
+        return Math.max( rect.getWidth(), rect.getHeight() ) > Math.max( renderer.getWidth(), renderer.getHeight() )
+                && renderOptions.minFontSize < wordSize;
     }
 
     private boolean isTooSmall(Shape shape, int minShapeSize) {
